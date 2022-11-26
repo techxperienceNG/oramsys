@@ -257,8 +257,7 @@ const Transactions = () => {
                         // { title: 'Destination Port', field: 'details.shippingOptions.destinationPort.name' },
                         // { title: 'Term Sheet', field: 'termSheet' },
                         { title: 'Term Sheet', render: rowData => <p onClick={() => { rowData.termSheet === 'Not Signed' && setShowExcelModal(true); setSendId(rowData._id) }}>{rowData.termSheet}{rowData.termSheet === 'Signed' ? <Button onClick={ () => { downloadTermSheet(rowData._id) }}><FileDownloadIcon /></Button> : <></>}</p> },
-                        // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
-                        // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
+
                     ]}
                     data={transaction}
                     actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? adminTableAction : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? userTableAction : adminTableAction.slice(1, 2)}

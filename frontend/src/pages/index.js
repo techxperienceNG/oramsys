@@ -4,6 +4,7 @@ import AuthStorage from '../helper/AuthStorage';
 import AuthLayOut from '../layout/AuthLayOut';
 import Layout from '../layout/Layout'
 import Home from './home/Home'
+import HomeLanding from './home/HomeLanding';
 import SignIn from './signIn/SignIn';
 import SignUp from './signUp/SignUp';
 import { useDispatch } from 'react-redux';
@@ -31,7 +32,7 @@ import { ApiGet, ApiPost } from '../helper/API/ApiData';
 
 const pathForLayout = ['/', '/signup', '/home', '/admin-login', '/fa-login']
 const Index = () => {
-    const pathForAuthLayout = ['/product', '/add-product', '/edit-product', "/entities", "/countries", "/products", "/rating-agencies", "/users", "/add-edit-entities", "/add-user", '/edit-user', "/rating-agencies-edit", "/transactions", '/risk-assessment', "/add-individual", '/edit-transactions']
+    const pathForAuthLayout = ['/product', '/home', 'homeLanding', '/add-product', '/edit-product', "/entities", "/countries", "/products", "/airports", "/rating-agencies", "/users", "/add-edit-entities",  "/add-user", '/edit-user', "/rating-agencies-edit", "/transactions", '/risk-assessment', "/add-individual", '/edit-transactions']
 
     const location = useLocation()
     const token = AuthStorage.getToken()
@@ -41,6 +42,10 @@ const Index = () => {
     const [role, setRole] = useState('')
 
     const userRoutes = [
+        {
+            path: "homeLanding",
+            component: HomeLanding,
+        },
         {
             path: "transactions",
             component: Transactions,
@@ -57,6 +62,10 @@ const Index = () => {
 
     const AdminRoutes = [
         {
+            path: "homeLanding",
+            component: HomeLanding,
+        },
+        {
             path: "entities",
             component: Entities,
         },
@@ -71,6 +80,10 @@ const Index = () => {
         }
     ]
     const superAdminRoutes = [
+        {
+            path: "homeLanding",
+            component: HomeLanding,
+        },
         {
             path: "add-product",
             component: Add_Edit_Product,
@@ -133,7 +146,7 @@ const Index = () => {
             component: Ports,
         },
         {
-            path: "airBases",
+            path: "airports",
             component: AirBases,
         },
         {
@@ -150,11 +163,11 @@ const Index = () => {
                     if (res.status === 200) {
                         console.log('res', res)
                         if (AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin") {
-                            navigate("/transactions")
+                            navigate("/homeLanding")
                         } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "admin") {
                             navigate("/entities")
                         } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "user") {
-                            navigate("/transactions")
+                            navigate("/homeLanding")
                         }
                     } else {
                         localStorage.clear()
@@ -175,7 +188,7 @@ const Index = () => {
             }
         } else {
             if (AuthStorage.isUserAuthenticated()) {
-                navigate("/transactions")
+                navigate("/homeLanding")
             } else {
                 navigate("/")
             }
@@ -201,8 +214,8 @@ const Index = () => {
                     <Route path="/fa-login" element={<FunctionalAdmin />} />
                 </Route>
                 <Route element={<RouteProtecter />}>
-                    {primaryLinks?.map(item =>
-                        < Route path={`/${item?.path}`} element={<item.component />} />
+                    {primaryLinks?.map((item, i) =>
+                        < Route path={`/${item?.path}`} key={i} element={<item.component />} />
                     )
                     }
                 </Route>
@@ -238,7 +251,7 @@ const PublicRoutes = () => {
                 navigate("/")
             )
         ) : (
-            pathForLayout.includes(location.pathname) ? navigate(-1) : location.pathname === "/" ? navigate("/products") : navigate('/')
+            pathForLayout.includes(location.pathname) ? navigate(-1) : location.pathname === "/" ? navigate("/homeLanding") : navigate('/')
         );
     }, [isAuthenticated]);
 

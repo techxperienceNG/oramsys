@@ -109,7 +109,7 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
                         }
                     </div>
                     <div className='form'>
-                        <h2 className='mb-3'>Exchange rate risk</h2>
+                        <h2 className='mb-3'>Performance Risk</h2>
                         <div>
                             {performanceRisk.goodCreditStanding && performanceRisk.acceptableJurisdiction && performanceRisk.cashCollateral && performanceRisk.coverageOnStock && performanceRisk.acceptableCMA ? <p>No risk</p> :
                                 <div>

@@ -73,7 +73,7 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
                                 <h3>Enter a currency hedge</h3>
                                 <img src={`../../../assets/img/about/${data.currencyHedge ? "correct-success.png" : "correct (1).png"}`} />
                             </div>
-                            <div className='risk-tab' onClick={() => setfinancingSufficientlyModal(true)}>
+                            <div className='risk-tab' onClick={() => { setfinancingSufficientlyModal(true); setSelected("marginFinancing")}}>
                                 <h3>Margin the financing sufficiently</h3>
                                 <img src={`../../../assets/img/about/${data.marginFinancing ? "correct-success.png" : "correct (1).png"}`} />
                             </div>

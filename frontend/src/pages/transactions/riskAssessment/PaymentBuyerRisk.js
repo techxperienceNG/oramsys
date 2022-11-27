@@ -71,7 +71,7 @@ const PaymentBuyerRisk = ({ hendelNext, hendelCancel }) => {
 
 
     const nextStep = () => {
-        if (paymentBuyesrRisk.internationalCreditStanding && paymentBuyesrRisk.counterparties && paymentBuyesrRisk.acceptableParty && paymentBuyesrRisk.creditInsurers && paymentBuyesrRisk.localCreditStanding) {
+        if (paymentBuyesrRisk.internationalCreditStanding || paymentBuyesrRisk.counterparties || paymentBuyesrRisk.acceptableParty || paymentBuyesrRisk.creditInsurers || paymentBuyesrRisk.localCreditStanding) {
             let body = {
                 ...riskAssessment,
                 internationalCreditStanding: paymentBuyesrRisk.internationalCreditStanding,
@@ -90,8 +90,8 @@ const PaymentBuyerRisk = ({ hendelNext, hendelCancel }) => {
         <>
             <div className='add-edit-product'>
                 <div className='d-flex align-items-center justify-content-center error-info mb-3'>
-                    <img src={`../../../assets/img/about/${paymentBuyesrRisk.internationalCreditStanding && paymentBuyesrRisk.counterparties && paymentBuyesrRisk.acceptableParty && paymentBuyesrRisk.creditInsurers && paymentBuyesrRisk.localCreditStanding ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
-                    {paymentBuyesrRisk.internationalCreditStanding && paymentBuyesrRisk.counterparties && paymentBuyesrRisk.acceptableParty && paymentBuyesrRisk.creditInsurers && paymentBuyesrRisk.localCreditStanding ?
+                    <img src={`../../../assets/img/about/${paymentBuyesrRisk.internationalCreditStanding || paymentBuyesrRisk.counterparties || paymentBuyesrRisk.acceptableParty || paymentBuyesrRisk.creditInsurers || paymentBuyesrRisk.localCreditStanding ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
+                    {paymentBuyesrRisk.internationalCreditStanding || paymentBuyesrRisk.counterparties || paymentBuyesrRisk.acceptableParty || paymentBuyesrRisk.creditInsurers || paymentBuyesrRisk.localCreditStanding ?
                         <p className='success'>Risks are acceptable due to mitigants</p> :
                         <p className='error'>The below risks require your attention</p>
                     }
@@ -99,7 +99,7 @@ const PaymentBuyerRisk = ({ hendelNext, hendelCancel }) => {
                 <div className='form'>
                     <div>
                         <h2 className='mb-3'>Payment/Buyer risk</h2>
-                        {paymentBuyesrRisk.internationalCreditStanding && paymentBuyesrRisk.counterparties && paymentBuyesrRisk.acceptableParty && paymentBuyesrRisk.creditInsurers && paymentBuyesrRisk.localCreditStanding ? <p>No risk</p> :
+                        {paymentBuyesrRisk.internationalCreditStanding || paymentBuyesrRisk.counterparties || paymentBuyesrRisk.acceptableParty || paymentBuyesrRisk.creditInsurers || paymentBuyesrRisk.localCreditStanding ? <p>No risk</p> :
                             <div>
                                 <div className='risk-tab' onClick={() => { setInternationalCreditStandingModal(true); setSelected('internationalCreditStanding') }}>
                                     <h3>If international bank, use an on-lending model with a local bank with acceptable credit standing</h3>

@@ -39,7 +39,7 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
     const getRiskAssessmentId = useSelector(state => state.riskAssessmentData.getRiskAssessment)
 
     useEffect(() => {
-        if (addRiskAssessmentData && addRiskAssessmentData.status === 200) {
+        if (addRiskAssessmentData && addRiskAssessmentData.data && addRiskAssessmentData.status === 200) {
             dispatch({
                 type: ADD_RISK_ASSESSMENT,
                 payload: []
@@ -87,7 +87,7 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
     }
 
     const saveData = () => {
-        if (marketPriceRisk.contractsBasis && marketPriceRisk.priceHedge && marketPriceRisk.financingSufficiently) {
+        if (marketPriceRisk.contractsBasis || marketPriceRisk.priceHedge || marketPriceRisk.financingSufficiently) {
 
             let body = {
                 ...riskAssessment,
@@ -107,8 +107,8 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
         <>
             <div className='add-edit-product'>
                 <div className='d-flex align-items-center justify-content-center error-info mb-3'>
-                    <img src={`../../../assets/img/about/${marketPriceRisk.contractsBasis && marketPriceRisk.priceHedge && marketPriceRisk.financingSufficiently ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
-                    {marketPriceRisk.contractsBasis && marketPriceRisk.priceHedge && marketPriceRisk.financingSufficiently ?
+                    <img src={`../../../assets/img/about/${marketPriceRisk.contractsBasis || marketPriceRisk.priceHedge || marketPriceRisk.financingSufficiently ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
+                    {marketPriceRisk.contractsBasis || marketPriceRisk.priceHedge || marketPriceRisk.financingSufficiently ?
                         <p className='success'>Risks are acceptable due to mitigants</p> :
                         <p className='error'>The below risks require your attention</p>
                     }
@@ -116,7 +116,7 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
                 <div className='form'>
                     <div>
                         <h2 className='mb-3'>Market/Price risk</h2>
-                        {marketPriceRisk.contractsBasis && marketPriceRisk.priceHedge && marketPriceRisk.financingSufficiently ? <p>No risk</p> :
+                        {marketPriceRisk.contractsBasis || marketPriceRisk.priceHedge || marketPriceRisk.financingSufficiently ? <p>No risk</p> :
                             <div>
                                 <div className='risk-tab' onClick={() => { setShowModal(true); setSelected('contractsBasis') }}>
                                     <h3>Finance only on Firm Fixed Price contracts basis</h3>

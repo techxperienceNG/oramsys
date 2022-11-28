@@ -196,7 +196,7 @@ const Transactions = () => {
             // onClick: (event, rowData) => { rowData.termSheet === 'Not Signed' ? downloadTermSheet() : converBase64toBlob(rowData.termSheetUrl) }
         },
     ]
-    const userTableAction = [
+    const tableAction = [
         {
             icon: 'edit',
             tooltip: 'Edit transaction',

@@ -76,8 +76,8 @@ const CurrencyHedgeModal = ({ show, onHide, getModalData, type }) => {
             >
                 <Fade in={show}>
                     <div className='modal-content'>
-                        <div className='d-flex justify-content-end'>
-                            {/* <h2 id="transition-modal-title" className='modal-title'>Justification</h2> */}
+                        <div className='d-flex justify-content-between'>
+                            <h2 id="transition-modal-title" className='modal-title'>Enter a currency hedge</h2>
                             <img src='../../assets/img/my-img/Close.png' onClick={() => onHide()} style={{ cursor: "pointer", width: "24px", height: "24px" }} />
                         </div>
                         <div className='add-edit-product p-0 mt-3' id="transition-modal-description" >

@@ -109,6 +109,21 @@ const DocumentFlow = ({ hendelCancel, hendelNext }) => {
                                 {error && error?.details && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.details}</span>}
                             </Col>
                         }
+                         {
+                            documentFlow.documentRemittance === "Other" &&
+                            <Col lg={6}>
+                                <TextField
+                                    label="Details"
+                                    variant="standard"
+                                    color="warning"
+                                    value={documentFlow.details}
+                                    name="details"
+                                    disabled={isView}
+                                    onChange={(e) => setdocumentFlow({ ...documentFlow, details: e.target.value })}
+                                />
+                                {error && error?.details && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.details}</span>}
+                            </Col>
+                        }
                     </Row>
                 </div>
                 <div className='footer_'>

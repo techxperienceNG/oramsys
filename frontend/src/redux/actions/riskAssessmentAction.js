@@ -27,7 +27,7 @@ export const addRiskAssessment = (body) => async (dispatch) => {
                 })
             })
             .catch((error) => {
-                console.log(error);
+                console.log(error.response.data);
             })
         dispatch({
             type: ADD_RISK_ASSESSMENT_LOADING,

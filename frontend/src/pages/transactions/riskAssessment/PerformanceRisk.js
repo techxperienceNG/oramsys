@@ -73,7 +73,7 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
     }
 
     const nextStep = () => {
-        if (performanceRisk.goodCreditStanding && performanceRisk.acceptableJurisdiction && performanceRisk.cashCollateral && performanceRisk.coverageOnStock && performanceRisk.acceptableCMA) {
+        if (performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA) {
             let body = {
                 ...riskAssessment,
                 goodCreditStanding: performanceRisk.goodCreditStanding,
@@ -102,16 +102,16 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
             <>
                 <div className='add-edit-product'>
                     <div className='d-flex align-items-center justify-content-center error-info mb-3'>
-                        <img src={`../../../assets/img/about/${performanceRisk.goodCreditStanding && performanceRisk.acceptableJurisdiction && performanceRisk.cashCollateral && performanceRisk.coverageOnStock && performanceRisk.acceptableCMA ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
-                        {performanceRisk.goodCreditStanding && performanceRisk.acceptableJurisdiction && performanceRisk.cashCollateral && performanceRisk.coverageOnStock && performanceRisk.acceptableCMA ?
+                        <img src={`../../../assets/img/about/${performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
+                        {performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA ?
                             <p className='success'>Risks are acceptable due to mitigants</p> :
                             <p className='error'>The below risks require your attention</p>
                         }
                     </div>
                     <div className='form'>
-                        <h2 className='mb-3'>Exchange rate risk</h2>
+                        <h2 className='mb-3'>Performance Risk</h2>
                         <div>
-                            {performanceRisk.goodCreditStanding && performanceRisk.acceptableJurisdiction && performanceRisk.cashCollateral && performanceRisk.coverageOnStock && performanceRisk.acceptableCMA ? <p>No risk</p> :
+                            {performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA ? <p>No risk</p> :
                                 <div>
                                     <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('goodCreditStanding') }}>
                                         <h3>Transfer risk to an entity with good credit standing (e.g the government, a Bank etc)</h3>

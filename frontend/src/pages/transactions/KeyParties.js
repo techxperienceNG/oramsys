@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import PartiesEditModal from '../../component/Modal/PartiesEditModal'
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useDispatch, useSelector } from 'react-redux';
+import { CurrencyOptions } from "../../helper/common"
 import { transactionDataAction } from '../../redux/actions/transactionDataAction'
 
 const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
@@ -21,6 +22,12 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
     const location = useLocation()
     const isView = location?.state[2]?.isView
     const [view, setView] = useState()
+    const [borrower_Applicant, setBorrower_Applicant] = useState("")
+    const [lenders, setLenders] = useState("")
+    const [error, setError] = useState({})
+    const [keyParties, setkeyParties] = useState({
+        documentRemittance: ""
+    })
 
     const transactionData = useSelector((state) => state.transactionData.transactionData)
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
@@ -34,6 +41,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
                 }
             }))
             setEditId(getTransactionByIdData?.data?.keyParties[0]?._id)
+            setBorrower_Applicant(getTransactionByIdData.data?.borrower_Applicant)
+            setLenders(getTransactionByIdData.data?.lenders)
+            setkeyParties(getTransactionByIdData.data?.documentRemittance)
         }
     }, [getTransactionByIdData])
 
@@ -75,10 +85,70 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
         dispatch(transactionDataAction(body))
         hendelNext()
     }
+    // const options = [
+    //     "Afghanistan",
+    //     "Albania",
+    //     "Algeria",
+    //     "Andorra",
+    //     "Angola",
+    //     "Antigua",
+    //     "Argentina",
+    //     "India",
+    // ];
 
     return (
         <>
             <div className='product'>
+            <div className='form'>
+                    <Row>
+                        <Col lg={6}>
+                        <TextField
+                            label='Borrower/Applicant Name'
+                            variant='standard'
+                            color='warning'
+                            name='borrower_Applicant'
+                            className='mb-3'
+                            onChange={(e) => setBorrower_Applicant(e.target.value)}
+                            value={borrower_Applicant}
+                            disabled={isView || borrower_Applicant?.length > 0}
+                        />
+                        {error && error?.borrower_Applicant && (
+                            <span
+                            style={{
+                                color: "#da251e",
+                                width: "100%",
+                                textAlign: "start",
+                            }}
+                            >
+                            {error.borrower_Applicant}
+                            </span>
+                        )}
+                        </Col>
+                        <Col lg={6}>
+                        <TextField
+                            label='lenders'
+                            variant='standard'
+                            color='warning'
+                            name='lenders'
+                            className='mb-3'
+                            onChange={(e) => setLenders(e.target.value)}
+                            value={lenders}
+                            disabled={isView || borrower_Applicant?.length > 0}
+                        />
+                        {error && error?.lenders && (
+                            <span
+                            style={{
+                                color: "#da251e",
+                                width: "100%",
+                                textAlign: "start",
+                            }}
+                            >
+                            {error.lenders}
+                            </span>
+                        )}
+                        </Col>
+                    </Row>
+            </div>
                 <div className='mb-3 d-flex justify-content-between align-items-center'>
                     <h5 className="title-color">Parties</h5>
                     <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => { setShowEditModal(!showEditModal) }}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
@@ -119,7 +189,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
             <div className='add-edit-product parties_main'>
                 <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
                     <h5 className="title-color">Related parties</h5>
-                    {/* <Row>
+                    <Row>
                         <Col lg={2}>
                             <div className='d-flex'>
                                 <img src='../../../assets/img/about/Tag.png' />
@@ -137,15 +207,18 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
                                 <p className='mb-0 title-color'>Relation</p>
                                 <Autocomplete
                                     className='ms-3 mb-3'
-                                    options={options}
-                                    getOptionLabel={(option) => option}
+                                    options={CurrencyOptions}
+                                    getOptionLabel={(option) => option.label}
                                     id="disable-clearable"
                                     label="Contract currency"
+                                    value={CurrencyOptions && setkeyParties?.documentRemittance && CurrencyOptions.find(
+                                        (ele) => ele.label === setkeyParties.documentRemittance
+                                    )}
                                     renderInput={(params) => (
                                         <TextField {...params} label="Contract currency" variant="standard" />
                                     )}
                                     onChange={(event, newValue) => {
-                                        setkeyParties({ ...keyParties, documentRemittance: newValue });
+                                        setkeyParties({ ...keyParties, documentRemittance: newValue.label });
                                     }}
                                     disableClearable
                                 />
@@ -185,15 +258,15 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
                                 <p className='mb-0 title-color'>Relation</p>
                                 <Autocomplete
                                     className='ms-3 mb-3'
-                                    options={options}
-                                    getOptionLabel={(option) => option}
+                                    options={CurrencyOptions}
+                                    getOptionLabel={(option) => option.label}
                                     id="disable-clearable"
                                     label="Contract currency"
                                     renderInput={(params) => (
                                         <TextField {...params} label="Contract currency" variant="standard" />
                                     )}
                                     onChange={(event, newValue) => {
-                                        setkeyParties({ ...keyParties, documentRemittance: newValue });
+                                        setkeyParties({ ...keyParties, documentRemittance: newValue.label });
                                     }}
                                     disableClearable
                                 />
@@ -233,15 +306,15 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
                                 <p className='mb-0 title-color'>Relation</p>
                                 <Autocomplete
                                     className='ms-3 mb-3'
-                                    options={options}
-                                    getOptionLabel={(option) => option}
+                                    options={CurrencyOptions}
+                                    getOptionLabel={(option) => option.label}
                                     id="disable-clearable"
                                     label="Contract currency"
                                     renderInput={(params) => (
                                         <TextField {...params} label="Contract currency" variant="standard" />
                                     )}
                                     onChange={(event, newValue) => {
-                                        setkeyParties({ ...keyParties, documentRemittance: newValue });
+                                        setkeyParties({ ...keyParties, documentRemittance: newValue.label });
                                     }}
                                     disableClearable
                                 />
@@ -281,15 +354,15 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
                                 <p className='mb-0 title-color'>Relation</p>
                                 <Autocomplete
                                     className='ms-3 mb-3'
-                                    options={options}
-                                    getOptionLabel={(option) => option}
+                                    options={CurrencyOptions}
+                                    getOptionLabel={(option) => option.label}
                                     id="disable-clearable"
                                     label="Contract currency"
                                     renderInput={(params) => (
                                         <TextField {...params} label="Contract currency" variant="standard" />
                                     )}
                                     onChange={(event, newValue) => {
-                                        setkeyParties({ ...keyParties, documentRemittance: newValue });
+                                        setkeyParties({ ...keyParties, documentRemittance: newValue.label });
                                     }}
                                     disableClearable
                                 />
@@ -310,7 +383,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
                                 />
                             </div>
                         </Col>
-                    </Row> */}
+                    </Row>
                 </div>
             </div>
             <div className='footer_'>

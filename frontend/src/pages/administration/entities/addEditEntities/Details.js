@@ -216,7 +216,7 @@ const Details = ({ hendelNext, entityType }) => {
             flag = true
         }
         else if (details.registrationNumber.length < 10) {
-            error.registrationNumber = "Please enter valid registration number!"
+            error.registrationNumber = "Valid registration number should be up to 10 digits!"
             flag = true
         }
         if (!details.dateOfIncorporation) {
@@ -243,14 +243,14 @@ const Details = ({ hendelNext, entityType }) => {
             error[bilingAddress.type].addressLine1 = "Please enter addressLine1!"
             flag = true
         }
-        if (!bilingAddress.addressLine2) {
-            error[bilingAddress.type].addressLine2 = "Please enter addressLine2!"
-            flag = true
-        }
-        if (!bilingAddress.addressLine3) {
-            error[bilingAddress.type].addressLine3 = "Please enter addressLine3!"
-            flag = true
-        }
+        // if (!bilingAddress.addressLine2) {
+        //     error[bilingAddress.type].addressLine2 = "Please enter addressLine2!"
+        //     flag = true
+        // }
+        // if (!bilingAddress.addressLine3) {
+        //     error[bilingAddress.type].addressLine3 = "Please enter addressLine3!"
+        //     flag = true
+        // }
         if (!bilingAddress.postcode) {
             error[bilingAddress.type].postcode = "Please enter postcode!"
             flag = true
@@ -307,14 +307,14 @@ const Details = ({ hendelNext, entityType }) => {
             error[shippingAddress.type].addressLine1 = "Please enter addressLine1!"
             flag = true
         }
-        if (!shippingAddress.addressLine2) {
-            error[shippingAddress.type].addressLine2 = "Please enter addressLine2!"
-            flag = true
-        }
-        if (!shippingAddress.addressLine3) {
-            error[shippingAddress.type].addressLine3 = "Please enter addressLine3!"
-            flag = true
-        }
+        // if (!shippingAddress.addressLine2) {
+        //     error[shippingAddress.type].addressLine2 = "Please enter addressLine2!"
+        //     flag = true
+        // }
+        // if (!shippingAddress.addressLine3) {
+        //     error[shippingAddress.type].addressLine3 = "Please enter addressLine3!"
+        //     flag = true
+        // }
         if (!shippingAddress.postcode) {
             error[shippingAddress.type].postcode = "Please enter postcode!"
             flag = true
@@ -666,6 +666,7 @@ const Details = ({ hendelNext, entityType }) => {
             <div className='add-edit-product'>
                 <div className='form'>
                     <h2 className='mb-3'>Shipping address</h2>
+                    <button className='footer_next_btn mb-3' onClick={()=> setShippingAddress({...bilingAddress, type: "Shipping"})}>Use Billing Address</button>
                     <div>
                         <Row>
                             <Col xxl={3} xl={4} lg={6} md={4} sm={6} className='mb-3'>

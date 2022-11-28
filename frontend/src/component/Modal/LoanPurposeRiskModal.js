@@ -51,7 +51,7 @@ const LoanPurposeRiskModal = ({ show, onHide, getModalData, types }) => {
                 <Fade in={show}>
                     <div className='modal-content'>
                         <div className='d-flex justify-content-between'>
-                            <h2 id="transition-modal-title" className='modal-title'>Justification</h2>
+                            <h2 id="transition-modal-title" className='modal-title'>Provide a Justification</h2>
                             <img src='../../assets/img/my-img/Close.png' onClick={() => onHide()} style={{ cursor: "pointer", width: "24px", height: "24px" }} />
                         </div>
                         <div className='add-edit-product p-0 mt-3' id="transition-modal-description" >

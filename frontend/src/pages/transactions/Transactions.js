@@ -26,6 +26,7 @@ const Transactions = () => {
     const [transaction, setTransaction] = useState([])
 
     const getAlltransactionData = useSelector((state) => state.transactionData.getAllTransaction)
+    console.log('getAll', getAlltransactionData)
     const riskAssessment = useSelector((state) => state.riskAssessmentData.getRiskAssessment)
 
     useEffect(() => {
@@ -130,6 +131,7 @@ const Transactions = () => {
             let data = res.data.data
             var blob;
             blob = converBase64toBlob(data, 'application/pdf');
+            console.log(blob)
 
         }
         ).catch(e => console.log(e))
@@ -180,7 +182,21 @@ const Transactions = () => {
         //     link.click();
     }
 
-    const tableAction = [
+    const adminTableAction = [
+        {
+            icon: 'edit',
+            tooltip: 'Edit transaction',
+            onClick: (event, rowData) => navigate(`/edit-transactions?id=${rowData?._id}`, { state: [{ type: rowData.type }, { type: rowData?.details?.productDetails?.nature ? rowData.details.productDetails.nature : '' }, { isView: false }] })
+        },
+        {
+            icon: 'download',
+            tooltip: 'Download term sheet',
+            // onClick: (event, rowData) => navigate(`/edit-transactions?id=${rowData?._id}`, { state: [{ type: rowData.type }, { type: rowData?.details?.productDetails?.nature ? rowData.details.productDetails.nature : '' }, { isView: false }] })
+            onClick: (event, rowData) => { downloadTermSheet(rowData._id) }
+            // onClick: (event, rowData) => { rowData.termSheet === 'Not Signed' ? downloadTermSheet() : converBase64toBlob(rowData.termSheetUrl) }
+        },
+    ]
+    const userTableAction = [
         {
             icon: 'edit',
             tooltip: 'Edit transaction',
@@ -241,12 +257,12 @@ const Transactions = () => {
                         // { title: 'Origination Port', field: 'details.shippingOptions.portOfOrigin.name' },
                         // { title: 'Destination Port', field: 'details.shippingOptions.destinationPort.name' },
                         // { title: 'Term Sheet', field: 'termSheet' },
-                        { title: 'Term Sheet', render: rowData => <p onClick={() => { rowData.termSheet === 'Not Signed' && setShowExcelModal(true); setSendId(rowData._id) }}>{rowData.termSheet}{rowData.termSheet === 'Signed' ? <Button onClick={() => { downloadTermSheet(rowData._id) }}><FileDownloadIcon /></Button> : <></>}</p> },
+                        { title: 'Term Sheet', render: rowData => <p onClick={() => { rowData.termSheet === 'Not Signed' && setShowExcelModal(true); setSendId(rowData._id) }}>{rowData.termSheet}{rowData.termSheet === 'Signed' ? <Button onClick={ () => { downloadTermSheet(rowData._id) }}><FileDownloadIcon /></Button> : <></>}</p> },
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                     ]}
                     data={transaction}
-                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction.splice(2, 1), tableAction) : tableAction.slice(1, 2)}
+                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? tableAction : tableAction.slice(1, 2)}
                     options={{
                         filtering: true,
                         actionsColumnIndex: -1,

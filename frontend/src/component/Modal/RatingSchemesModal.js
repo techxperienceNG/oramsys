@@ -54,7 +54,7 @@ const RatingSchemesModal = ({ onHide, show, getModalData, data, viewData }) => {
             error.value = 'Please enter Value!'
         }
 
-        if (!state.acceptable) {
+        if (state.acceptable === "") {
             param = true
             error.acceptable = 'Please enter acceptable!'
         }
@@ -91,9 +91,9 @@ const RatingSchemesModal = ({ onHide, show, getModalData, data, viewData }) => {
     const [commentModal, setCommentModal] = useState(false)
 
     const AcceptableOption = [
-        "Yes",
-        "No",
-    ]
+        { value: true, label: "Yes" },
+        { value: false, label: "No" }
+    ];
 
     const handleChnage = (e) => {
         setState({
@@ -101,6 +101,7 @@ const RatingSchemesModal = ({ onHide, show, getModalData, data, viewData }) => {
             [e.target.name]: e.target.value
         })
     }
+
 
     return (
         <div>
@@ -153,14 +154,17 @@ const RatingSchemesModal = ({ onHide, show, getModalData, data, viewData }) => {
                                         <Autocomplete
                                             label="Acceptable"
                                             id="disable-clearable"
-                                            onChange={(e, newVal) => setState({ ...state, acceptable: newVal })}
-                                            getOptionLabel={(option) => option}
+                                            onChange={(e, newVal) => { 
+                                                setState({ ...state, acceptable: newVal.value })
+                                            }}
+                                            getOptionLabel={(option) => option.label}
                                             options={AcceptableOption}
                                             disableClearable
                                             renderInput={(params) => (
                                                 <TextField {...params} label="Acceptable" variant="standard" />
                                             )}
-                                            value={AcceptableOption.acceptable}
+                                            value={(AcceptableOption.length > 0 && state.acceptable === true || state.acceptable === false) && AcceptableOption.find((ele) => ele.value === state.acceptable)}
+                                            disabled={isView}
                                         />
                                         {error?.acceptable && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.acceptable}</span>}
                                     </Col>
@@ -175,7 +179,7 @@ const RatingSchemesModal = ({ onHide, show, getModalData, data, viewData }) => {
                                             onChange={(e) => handleChnage(e)}
                                             multmultiline
                                             maxRows={3}
-                                        // onClick={() => { setCommentModal(true); setType('Comments'); setSelectedName('comments') }}
+                                        onClick={() => { setCommentModal(true); setType('Comments'); setSelectedName('comments') }}
                                         />
                                         {error?.comments && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.comments}</span>}
                                     </Col>

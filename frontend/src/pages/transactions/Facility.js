@@ -203,7 +203,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
     const interestPeriodOptions = [
         'Weekly',
         'Monthly',
-        'Querterly',
+        'Quarterly',
         'Bi-annual',
         'Annual',
     ]
@@ -866,7 +866,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             </Col>
                             <Col lg={3}>
                                 <TextField
-                                    label="Late interrest charges"
+                                    label="Late interest charges"
                                     id="standard-start-adornment"
                                     name='lateInterestCharges'
                                     value={facility.lateInterestCharges}

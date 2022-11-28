@@ -1,11 +1,19 @@
 import { Backdrop, Fade, FormControl, InputLabel, Modal, Select, TextField } from '@material-ui/core';
 import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { entityGetAction } from '../../redux/actions/entityAction';
 import { useSelector, useDispatch } from 'react-redux';
+import { CurrencyOptions } from "../../helper/common"
+
 
 const LCPartiesModal = ({ show, onHide, addParties, data }) => {
+
+    let numberReg = /^[1-7]\d{0,7}$/
+
+    const location = useLocation()
+    const isView = location.state[2]?.isView
 
     const [lcParties, setLcParties] = useState({
         applicant: "",
@@ -16,6 +24,8 @@ const LCPartiesModal = ({ show, onHide, addParties, data }) => {
         negotiatingBank: "",
         secondBeneficiary: "",
         reimbursingBank: "",
+        currency: "",
+        valueOfCurrency: "",
     })
 
     const dispatch = useDispatch()
@@ -29,6 +39,17 @@ const LCPartiesModal = ({ show, onHide, addParties, data }) => {
         }
     }, [applicants])
 
+    const handleChange = (e, name, type) => {
+        if (type === "lcParties") {
+            if (name === "valueOfcurrency") {
+              
+              if (e.target.value === "" || numberReg.test(e.target.value)) {
+                setLcParties({ ...lcParties, [e.target.name]: e.target.value })
+            }
+            }
+        }
+    }
+
     useEffect(() => {
         if (data) {
             setLcParties({
@@ -40,6 +61,8 @@ const LCPartiesModal = ({ show, onHide, addParties, data }) => {
                 negotiatingBank: data.negotiatingBank,
                 secondBeneficiary: data.secondBeneficiary,
                 reimbursingBank: data.reimbursingBank,
+                currency: data.currency,
+                valueOfCurrency: data.valueOfCurrency,
             })
         }
     }, [data])
@@ -78,6 +101,36 @@ const LCPartiesModal = ({ show, onHide, addParties, data }) => {
                                 <div className='form pt-2'>
                                     <h2>Contract value</h2>
                                     <Row>
+                                        <Col lg={3}>
+                                            <Autocomplete
+                                            options={CurrencyOptions}
+                                            getOptionLabel={(option) => option.label}
+                                            id="disable-clearable"
+                                            label="Contract currency"
+                                            renderInput={(params) => (
+                                                <TextField {...params} label="Contract currency" variant="standard" />
+                                            )}
+                                            onChange={(event, newValue) => {
+                                                setLcParties({ ...lcParties, currency: newValue.label });
+                                            }}
+                                            disableClearable
+                                            name='currency'
+                                            value={CurrencyOptions && lcParties?.currency && CurrencyOptions.find(
+                                                (ele) => ele.label === lcParties.currency)}
+                                            />
+                                            {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
+                                        </Col>
+                                        <Col lg={3}>
+                                            <TextField
+                                            label="Contract Value"
+                                            variant="standard"
+                                            color="warning"
+                                            name='valueOfCurrency'
+                                            value={lcParties.valueOfCurrency}
+                                            onChange={(e) => handleChange(e, "valueOfCurrency", "lcParties")}
+                                            disabled={isView}
+                                            />
+                                        </Col>
                                         <Col lg={3}>
                                             <Autocomplete
                                                 options={applicant}

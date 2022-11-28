@@ -226,7 +226,7 @@ const Transactions = () => {
             <div className='product'>
                 <div className='mb-3 d-flex justify-content-between align-items-center'>
                     <h2 className='m-0'>Transactions</h2>
-                    <button className='add_btn me-3' onClick={() => setShowspan(!showspan)}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
+                    {AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? <button className='add_btn me-3' onClick={() => setShowspan(!showspan)}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button> : <></>}
                     {
                         showspan &&
                         <div className='add_content' style={{ right: "50px", top: "131px" }}>
@@ -260,7 +260,7 @@ const Transactions = () => {
 
                     ]}
                     data={transaction}
-                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? adminTableAction : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? userTableAction : adminTableAction.slice(1, 2)}
+                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? adminTableAction : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? userTableAction : ""}
                     options={{
                         filtering: true,
                         actionsColumnIndex: -1,

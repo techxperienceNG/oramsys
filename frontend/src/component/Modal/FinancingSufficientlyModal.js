@@ -1,17 +1,44 @@
-import { Backdrop, Fade, Modal, TextField } from '@material-ui/core';
-import React, { useState } from 'react'
+import { Backdrop, Fade, Modal, TextField, InputAdornment } from '@material-ui/core';
+import React, { useState, useEffect } from 'react'
 import { Row, Col } from "react-bootstrap";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { useSelector } from 'react-redux'
 import { CurrencyOptions } from '../../helper/common';
+import { useLocation } from 'react-router-dom'
 
 const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
 
   const [financingSufficiently, setFinancingSufficiently] = useState({
-    contracCurrency: "",
+    contractCurrency: "",
     contractValue: "",
     facilityCurrency: "",
     facilityAmount: "",
   })
+  const location = useLocation()
+  const isView = location.state?.isView
+
+  const transactionData = useSelector((state) => state.transactionData.transactionData)
+  const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
+
+  useEffect(() => {
+    console.log('transactionData', transactionData)
+    setFinancingSufficiently({
+        ...financingSufficiently,
+        contractCurrency: transactionData?.details?.contractDetails?.currency,
+        contractValue: transactionData?.details?.contractDetails?.value,
+    })
+}, [transactionData])
+
+  useEffect(() => {
+    if (getTransactionByIdData && getTransactionByIdData.data) {
+        console.log("getTransactionByIdData=====", getTransactionByIdData.data)
+        setFinancingSufficiently({
+          ...financingSufficiently,
+          contractCurrency: getTransactionByIdData.data?.financingSufficiently?.contractCurrency,
+          contractValue: getTransactionByIdData.data?.financingSufficiently?.contractvalue
+      })
+    }
+}, [getTransactionByIdData])
 
   const handleChange = (e) => {
     setFinancingSufficiently({
@@ -59,7 +86,7 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
         <Fade in={show}>
           <div className='modal-content'>
             <div className='d-flex justify-content-between'>
-              <h2 id="transition-modal-title" className='modal-title'>Justification</h2>
+              <h2 id="transition-modal-title" className='modal-title'>Margin the financing sufficiently</h2>
               <img src='../../assets/img/my-img/Close.png' onClick={() => onHide()} style={{ cursor: "pointer", width: "24px", height: "24px" }} />
             </div>
             <div className='add-edit-product p-0 mt-3' id="transition-modal-description" >
@@ -68,18 +95,19 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                   <Col lg={3}>
                     <Autocomplete
                       options={CurrencyOptions}
-                      getOptionLabel={(option) => option?.label}
+                      getOptionLabel={(option) => option.label}
                       id="disable-clearable"
                       label="Contract currency"
                       renderInput={(params) => (
                         <TextField {...params} label="Contract currency" variant="standard" />
                       )}
                       onChange={(event, newValue) => {
-                        setFinancingSufficiently({ ...financingSufficiently, contracCurrency: newValue });
+                        setFinancingSufficiently({ ...financingSufficiently, contractCurrency: newValue.label });
                       }}
                       disableClearable
-                      value={financingSufficiently.contracCurrency}
-                      name='contracCurrency'
+                      disabled={isView || financingSufficiently.contractCurrency?.length > 0}
+                      value={(CurrencyOptions.length > 0 && financingSufficiently.contractCurrency) && CurrencyOptions.find((ele) => ele.label === financingSufficiently.contractCurrency)}
+
                     />
                     {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                   </Col>
@@ -91,6 +119,7 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                       name='contractValue'
                       value={formateCurrencyValue(financingSufficiently.contractValue)}
                       onChange={handleChange}
+                      disabled={isView || financingSufficiently.contractValue?.length > 0}
                     />
                   </Col>
 
@@ -121,6 +150,19 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                       value={formateCurrencyValue(financingSufficiently.facilityAmount)}
                       onChange={handleChange}
                     />
+                  </Col>
+                  
+                  <Col lg={3}>
+                      <TextField
+                          label="Loan to collateral value"
+                          id="standard-start-adornment"
+                          name=''
+                          value={((parseInt(financingSufficiently.facilityAmount) / parseInt(transactionData?.details?.contractDetails?.value?.replace(/,/g, ''))) * 100).toFixed(2)}
+                          InputProps={{
+                              endAdornment: <InputAdornment position="start">%</InputAdornment>,
+                          }}
+                  
+                      />
                   </Col>
                 </Row>
               </div>

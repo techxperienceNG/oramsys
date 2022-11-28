@@ -74,7 +74,7 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
             },
             {
               img: "./assets/img/my-img/Countries.png",
-              text: 'Air ports',
+              text: 'Airports',
               path: "airBases",
             },
             {

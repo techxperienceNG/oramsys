@@ -1,11 +1,11 @@
-import { FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { countrieAction } from '../../../../redux/actions/countrieAction';
-import { ratingAgencyAddAction, ratingAgencyGetByIdAction, ratingAgencyUpdateAction } from '../../../../redux/actions/ratingAgenciesAction';
-import { toast } from 'react-toastify'
+import { ratingAgencyGetByIdAction } from '../../../../redux/actions/ratingAgenciesAction';
+// import { toast } from 'react-toastify'
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { RATINGAGENCIES_GET_BY_ID } from '../../../../redux/types';
 
@@ -27,9 +27,10 @@ const Details = ({ hendelNext, hendelCancel, getData }) => {
     });
     const [error, setError] = useState()
     const dispatch = useDispatch()
+    
     const handleChange = (event) => {
         const name = event.target.name;
-        let postcode = /^[0-9\b]+$/;
+        let postcode = /^[0-9\b]*$/;
         if (name === "postcode") {
             console.log('event.target.value', event.target.value)
             console.log('postcode.test(event.target.value)', postcode.test(event.target.value))
@@ -55,7 +56,7 @@ const Details = ({ hendelNext, hendelCancel, getData }) => {
 
     useEffect(() => {
         dispatch(countrieAction("all"))
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         if (countryOptions && countryOptions.data) {
@@ -67,7 +68,7 @@ const Details = ({ hendelNext, hendelCancel, getData }) => {
         if (id) {
             dispatch(ratingAgencyGetByIdAction(id))
         }
-    }, [id])
+    }, [dispatch, id])
 
     // useEffect(() => {
     //   return(() => {
@@ -96,13 +97,13 @@ const Details = ({ hendelNext, hendelCancel, getData }) => {
 
     useEffect(() => {
         dispatch(countrieAction('all'))
-    }, [])
+    }, [dispatch])
 
 
     const validation = () => {
         let param = false
         let error = {}
-        let postcode = /^[0-9]{5}(?:-[0-9]{4})?$/
+        let postcode =  /^[1-6]\d{0,6}$/
         if (!state.name) {
             param = true
             error.name = "Please enter name!"

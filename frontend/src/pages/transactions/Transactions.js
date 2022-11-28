@@ -168,16 +168,16 @@ const Transactions = () => {
         // link.href = blobURL; // data url  
         // link.click();
         // }
-    //     var blob = new Blob(byteArrays, {
-    //         type: contentType
-    //     }); //statement which creates the blob
+        //     var blob = new Blob(byteArrays, {
+        //         type: contentType
+        //     }); //statement which creates the blob
 
-    //     var blobURL = URL.createObjectURL(blob);
+        //     var blobURL = URL.createObjectURL(blob);
 
-    //     let link = document.createElement('a');
-    //     link.download = 'TermSheet.docx';
-    //     link.href = blobURL; // data url  
-    //     link.click();
+        //     let link = document.createElement('a');
+        //     link.download = 'TermSheet.docx';
+        //     link.href = blobURL; // data url  
+        //     link.click();
     }
 
     const tableAction = [
@@ -210,7 +210,7 @@ const Transactions = () => {
             <div className='product'>
                 <div className='mb-3 d-flex justify-content-between align-items-center'>
                     <h2 className='m-0'>Transactions</h2>
-                    <button className='add_btn me-3' onClick={() => setShowspan(!showspan)}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
+                    {AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? <button className='add_btn me-3' onClick={() => setShowspan(!showspan)}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button> : <></>}
                     {
                         showspan &&
                         <div className='add_content' style={{ right: "50px", top: "131px" }}>
@@ -228,6 +228,7 @@ const Transactions = () => {
                         </div>
                     }
                 </div>
+                {console.log(tableAction)}
                 <MaterialTable
                     title=""
                     columns={[
@@ -240,12 +241,12 @@ const Transactions = () => {
                         // { title: 'Origination Port', field: 'details.shippingOptions.portOfOrigin.name' },
                         // { title: 'Destination Port', field: 'details.shippingOptions.destinationPort.name' },
                         // { title: 'Term Sheet', field: 'termSheet' },
-                        { title: 'Term Sheet', render: rowData => <p onClick={() => { rowData.termSheet === 'Not Signed' && setShowExcelModal(true); setSendId(rowData._id) }}>{rowData.termSheet}{rowData.termSheet === 'Signed' ? <Button onClick={ () => { downloadTermSheet(rowData._id) }}><FileDownloadIcon /></Button> : <></>}</p> },
+                        { title: 'Term Sheet', render: rowData => <p onClick={() => { rowData.termSheet === 'Not Signed' && setShowExcelModal(true); setSendId(rowData._id) }}>{rowData.termSheet}{rowData.termSheet === 'Signed' ? <Button onClick={() => { downloadTermSheet(rowData._id) }}><FileDownloadIcon /></Button> : <></>}</p> },
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                     ]}
                     data={transaction}
-                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? tableAction : tableAction.slice(1, 2)}
+                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction.splice(2, 1), tableAction) : tableAction.slice(1, 2)}
                     options={{
                         filtering: true,
                         actionsColumnIndex: -1,

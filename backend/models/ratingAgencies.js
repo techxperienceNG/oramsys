@@ -14,8 +14,8 @@ const RatingSchema = new Schema({
 var Schema = new Schema({
     name: { type: String, required: true },
     street: { type: String, required: false },
-    addressLine2: { type: String, required: false },
-    addressLine3: { type: String, required: false },
+    addressLine2: { type: String, required: false, default: null },
+    addressLine3: { type: String, required: false, default: null },
     city: { type: String, required: false },
     postcode: { type: String, required: false },
     state: { type: String, required: true, default: false },

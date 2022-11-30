@@ -65,6 +65,7 @@ const Add_Edit_Product = () => {
         type: oneProductData.data.type,
         status: oneProductData.data.status,
         expiryDate: moment(oneProductData.data.expiryDate).format("YYYY-MM-DD"),
+        matric: oneProductData.data.matric
       })
     }
   }, [oneProductData])

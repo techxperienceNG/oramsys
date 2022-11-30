@@ -4,7 +4,7 @@ const User = require("../models/user");
 const httpStatus = require('http-status');
 const APIResponse = require("../helpers/APIResponse");
 const { hashPassword, comparePassword } = require("../utils/bcrypt.helper");
-const { getJWTToken, verifyToken, verifyJWTToken } = require("../utils/jwt.helper");
+const { getJWTToken, verifyToken, verifyJWTToken, decodeToken } = require("../utils/jwt.helper");
 
 class UserController {
 

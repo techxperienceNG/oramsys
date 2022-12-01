@@ -19,24 +19,24 @@ const makeTermSheet = async (doc, transaction) => {
     doc.font("Times-Bold", 20).text('PARTIES', leftPosition + 220, topPosition += 300);
 
     doc.font('Times-Bold', 14).text('Borrower / Applicant: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.keyParties[0]?.parties?.filter((item) => item?.type?.roleName === "Buyer" || item?.type?.roleName === "Seller")?.map(item => item?.name?.details?.name)?.join(", ")}`, leftPosition + 135, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.keyParties[0].parties.filter((item) => item.type.roleName === "Buyer" || item.type.roleName === "Seller").map(item => item.name.details.name).join(", ")}`, leftPosition + 135, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Mandated Lead Arranger and Bookrunner: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.keyParties[0]?.parties?.filter((item) => item?.type?.roleName === "Buyer" || item?.type?.roleName === "Seller")?.map(item => item?.name?.details?.name)?.join(", ")}`, leftPosition + 265, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.keyParties[0].parties.filter((item) => item.type.roleName === "Buyer" || item.type.roleName === "Seller").map(item => item.name.details.name).join(", ")}`, leftPosition + 265, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Key Parties: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.keyParties[0]?.parties?.map(item => item?.name?.details?.name)?.join(", ")}`, leftPosition + 80, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.keyParties[0].parties.map(item => item.name.details.name).join(", ")}`, leftPosition + 80, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Lenders: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.lenders}`, leftPosition + 55, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.lenders}`, leftPosition + 55, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('International Facility Agent: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.keyParties[0]?.parties?.filter((item) => item?.type?.roleName === "International Facility Agent")?.map(item => item?.name?.details?.name)?.join(", ")}`, leftPosition + 170, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.keyParties[0].parties.filter((item) => item.type.roleName === "International Facility Agent").map(item => item.name.details.name).join(", ")}`, leftPosition + 170, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Local Administrative Agent (“LAA”): ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.keyParties[0]?.parties?.filter((item) => item?.type?.roleName === "Local Administrative Agent")?.map(item => item?.name?.details?.name)?.join(", ")}`, leftPosition + 230, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.keyParties[0].parties.filter((item) => item.type.roleName === "Local Administrative Agent").map(item => item.name.details.name).join(", ")}`, leftPosition + 230, topPosition).moveDown();
 
-    if (transaction?.keyParties[0]?.parties?.filter((item) => item?.type?.roleName === "Local Administrative Agent")?.map(item => item?.name?.details?.name)?.length) {
+    if (transaction.keyParties[0].parties.filter((item) => item.type.roleName === "Local Administrative Agent").map(item => item.name.details.name).length) {
         doc.font('Times-Bold', 14).text('Role of the LAA: ', leftPosition, topPosition += 25).moveDown();
         doc.font('Times-Roman', 14).text("", leftPosition + 105, topPosition).moveDown();
     }
@@ -47,111 +47,111 @@ const makeTermSheet = async (doc, transaction) => {
     doc.font("Times-Bold", 20).text('TERMS OF FACILITY', leftPosition + 170, topPosition += 50);
 
     doc.font('Times-Bold', 14).text('Facility type: ', leftPosition, topPosition += 50).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.type}`, leftPosition + 80, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.type}`, leftPosition + 80, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Facility Amount: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.amount}`, leftPosition + 105, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.amount}`, leftPosition + 105, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Purpose: ', leftPosition, topPosition += 25).moveDown();
     doc.font('Times-Roman', 14).text("name", leftPosition + 55, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Final Maturity Date and repayment period: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${moment(transaction?.facility?.finalMaturity).format("YYYY/MM/DD")}`, leftPosition + 265, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${moment(transaction.facility.finalMaturity).format("YYYY/MM/DD")}`, leftPosition + 265, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Availability Period: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.availabilityPeriod}`, leftPosition + 120, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.availabilityPeriod}`, leftPosition + 120, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Repayment: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.repayment}`, leftPosition + 75, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.repayment}`, leftPosition + 75, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Transaction Structure: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.transactionStructure}`, leftPosition + 140, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.transactionStructure}`, leftPosition + 140, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Permitted Accounts: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.permittedAccounts}`, leftPosition + 125, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.permittedAccounts}`, leftPosition + 125, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Sources of repayment: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.sourceOfRepayment?.map(item => item?.instrument).join(", ")}`, leftPosition + 135, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.sourceOfRepayment.map(item => item.instrument).join(", ")}`, leftPosition + 135, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Security Documents: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.securityDocuments?.map(item => item?.name).join(", ")}`, leftPosition + 135, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.securityDocuments.map(item => item.name).join(", ")}`, leftPosition + 135, topPosition).moveDown();
 
     doc.font("Times-Bold", 20).text('PRICING', leftPosition + 220, topPosition += 50);
 
     doc.font('Times-Bold', 14).text('Advisory Fee: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.advisoryFee} %`, leftPosition + 85, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.advisoryFee} %`, leftPosition + 85, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Annual Management Fee: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.managementFee} %`, leftPosition + 160, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.managementFee} %`, leftPosition + 160, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Commitment Fee: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.commitmentFee} %`, leftPosition + 115, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.commitmentFee} %`, leftPosition + 115, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Agency Fee: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.agencyFee} %`, leftPosition + 75, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.agencyFee} %`, leftPosition + 75, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Margin: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.margin} %`, leftPosition + 55, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.margin} %`, leftPosition + 55, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Interest Periods: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.interestPeriod}`, leftPosition + 105, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.interestPeriod}`, leftPosition + 105, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Interest Rate: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.interestRate} %`, leftPosition + 85, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.interestRate} %`, leftPosition + 85, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Default Interest: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.defaultInterest} %`, leftPosition + 105, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.defaultInterest} %`, leftPosition + 105, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Documentation: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.documentation}`, leftPosition + 100, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.documentation}`, leftPosition + 100, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Prepayment: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.prePayment} %`, leftPosition + 80, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.prePayment} %`, leftPosition + 80, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Cancellation fees: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.cancellationFee} %`, leftPosition + 110, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.cancellationFee} %`, leftPosition + 110, topPosition).moveDown();
 
     doc.addPage();
     topPosition = 0
 
     doc.font('Times-Bold', 14).text('Representations: ', leftPosition, topPosition += 50).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.representations}`, leftPosition + 105, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.representations}`, leftPosition + 105, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Information Undertakings: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.informationCovenants}`, leftPosition + 165, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.informationCovenants}`, leftPosition + 165, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('General Undertakings: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.generalUndertakings}`, leftPosition + 140, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.generalUndertakings}`, leftPosition + 140, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Transaction and Permitted Account Undertakings: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.financialCovenants}`, leftPosition + 305, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.financialCovenants}`, leftPosition + 305, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Events of Default: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.eventsOfDefault}`, leftPosition + 115, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.eventsOfDefault}`, leftPosition + 115, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Conditions Precedent: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.conditionsPrecedent}`, leftPosition + 135, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.conditionsPrecedent}`, leftPosition + 135, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Assignments and Transfers: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.assignments}`, leftPosition + 170, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.assignments}`, leftPosition + 170, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Taxes & other Deductions: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.taxationDuties}`, leftPosition + 165, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.taxationDuties}`, leftPosition + 165, topPosition).moveDown();
 
     doc.font("Times-Bold", 20).text('MISCELLANEOUS', leftPosition + 170, topPosition += 50);
 
 
     doc.font('Times-Bold', 14).text('Miscellaneous Provisions: ', leftPosition, topPosition += 50).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.miscellaneousProvisions}`, leftPosition + 155, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.miscellaneousProvisions}`, leftPosition + 155, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Costs and Expenses: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.expenses}`, leftPosition + 125, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.expenses}`, leftPosition + 125, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Governing Law: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.governingLaw}`, leftPosition + 100, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.governingLaw}`, leftPosition + 100, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Enforcement (Courts): ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction?.facility?.jurisdiction}`, leftPosition + 140, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.facility.jurisdiction}`, leftPosition + 140, topPosition).moveDown();
 
     doc.font("Times-Roman", 14).text("You should please indicate, at your earliest convenience, the acceptance of the above terms and conditions by countersigning and returning this document to [“the financier”]no later than end of business on [date].", leftPosition, topPosition += 30);
     doc.font("Times-Roman", 14).text("For and on behalf of [“the financier”]", leftPosition, topPosition += 60);

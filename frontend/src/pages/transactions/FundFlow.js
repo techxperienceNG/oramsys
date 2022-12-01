@@ -332,31 +332,43 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
         }
     }
 
-
-
     return (
         <>
             <div className='add-edit-product'>
                 <div className='form'>
                     <h5 className="title-color">Contract value</h5>
                     <Row>
-                        <Col lg={6}>
-                            <Autocomplete
+                        {/* <Col lg={6}>
+                            <TextField
                                 options={CurrencyOptions}
                                 getOptionLabel={(option) => option.label}
                                 id="disable-clearable"
-                                label="Contract currency"
+                                label="bruno"
                                 renderInput={(params) => (
                                     <TextField {...params} label="Contract currency" variant="standard" />
                                 )}
                                 onChange={(event, newValue) => {
                                     setContractDetails({ ...contractDetails, currency: newValue.label });
+                                    console.log(contractDetails)
                                 }}
-                                value={(CurrencyOptions.length > 0 && contractDetails.currency) && CurrencyOptions.find((ele) => ele.label === contractDetails.currency)}
+                                // value={(CurrencyOptions.length > 0 && contractDetails.currency) && CurrencyOptions.find((ele) => ele.label === contractDetails.currency)?.label}
+                                value="Chinese Yuan"
                                 disableClearable
                                 disabled={isView || contractDetails.currency?.length > 0}
                             />
                             {error && error.currency && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.currency}</span>}
+                        </Col> */}
+                          <Col lg={6}>
+                            <TextField
+                                label="Contract currency"
+                                variant="standard"
+                                color="warning"
+                                value={contractDetails.currency}
+                                name="currency"
+                             
+                                disabled={isView || contractDetails.currency?.length > 0}
+                            />
+                            {error && error.value && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.value}</span>}
                         </Col>
                         <Col lg={6}>
                             <TextField
@@ -391,7 +403,10 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                                 ...fundFlow,
                                                 paymentMethod: newValue,
                                                 openAccount: '',
+                                                terms: newValue === 'Cash against documents (CAD)' ? 'At sight' : fundFlow.terms
+
                                             });
+                                            console.log(newValue)
                                             setLettersOfCredit([])
                                         }}
                                         value={fundFlow.paymentMethod}
@@ -506,8 +521,10 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                 onChange={(event, newValue) => {
                                     setFundFlow({ ...fundFlow, terms: newValue });
                                 }}
-                                disabled={isView}
-                                value={(termsOptions.length > 0 && fundFlow.terms) && termsOptions.find((ele) => ele === fundFlow.terms)}
+                                disabled={fundFlow.paymentMethod === 'Cash against documents (CAD)' || isView}
+        
+                                value={fundFlow.terms}
+                                // value={(termsOptions.length > 0 && fundFlow.terms) && termsOptions.find((ele) => ele === fundFlow.terms)}
                                 disableClearable
                             />
                             {error && error.terms && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.terms}</span>}

@@ -99,6 +99,39 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType }) => {
     return (
         <>
             <div className='product'>
+            <div className='form'>
+                    <Row>
+                        <Col lg={6}>
+                        <TextField
+                            label='Borrower/Applicant Name'
+                            variant='standard'
+                            color='warning'
+                            name='borrower_Applicant'
+                            className='mb-3'
+                            onChange={(e) => setBorrower_Applicant(e.target.value)}
+                            value={borrower_Applicant}
+                            disabled={isView || borrower_Applicant?.length > 0}
+                        />
+                        {error && error?.borrower_Applicant && ( <span style={{color: "#da251e", width: "100%", textAlign: "start", }}>
+                            {error.borrower_Applicant}
+                            </span>
+                        )}
+                        </Col>
+                        <Col lg={6}>
+                        <TextField
+                            label='lenders'
+                            variant='standard'
+                            color='warning'
+                            name='lenders'
+                            className='mb-3'
+                            onChange={(e) => setLenders(e.target.value)}
+                            value={lenders}
+                            disabled={isView || borrower_Applicant?.length > 0}
+                        />
+                        {error && error?.lenders && (<span style={{ color: "#da251e", width: "100%", textAlign: "start"}}>{error.lenders}</span> )}
+                        </Col>
+                    </Row>
+            </div>
            
                 <div className='mb-3 d-flex justify-content-between align-items-center'>
                     <h5 className="title-color">Parties</h5>

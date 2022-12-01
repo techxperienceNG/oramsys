@@ -1010,7 +1010,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     {error && error?.type && <span style={{ color: 'red' }}>{error.type}</span>}
                                 </Col>
 
-                                <Col lg={3}>
+                                {/* <Col lg={3}>
                                     <Autocomplete
                                         options={CurrencyOptions}
                                         getOptionLabel={(option) => option.label}
@@ -1027,6 +1027,18 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         value={(CurrencyOptions.length > 0 && facility.currency) && CurrencyOptions.find((ele) => ele.label === facility.currency)}
                                     />
                                     {error && error?.currency && <span style={{ color: 'red' }}>{error.currency}</span>}
+                                </Col> */}
+                                <Col lg={6}>
+                                    <TextField
+                                        label="Contract currency"
+                                        variant="standard"
+                                        color="warning"
+                                        value={facility.currency}
+                                        name="currency"
+                                    
+                                        disabled={isView || facility.currency?.length > 0}
+                                    />
+                                    {error && error.value && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.value}</span>}
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
@@ -1232,7 +1244,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     title=""
                                     columns={[
                                         { title: 'Name', field: 'type' },
-                                        { title: 'Evidence', field: 'evidence' },
+                                        // { title: 'Evidence', field: 'evidence' },
                                         { title: 'Instrument', field: 'instrument' },
                                         // { title: 'Type', field: 'type' },
                                     ]}

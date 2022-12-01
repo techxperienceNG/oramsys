@@ -32,7 +32,42 @@ import { ApiGet, ApiPost } from '../helper/API/ApiData';
 
 const pathForLayout = ['/', '/signup', '/home', '/admin-login', '/fa-login']
 const Index = () => {
-    const pathForAuthLayout = ['/product', '/home', 'homeLanding', '/add-product', '/edit-product', "/entities", "/countries", "/products", "/airports", "/rating-agencies", "/users", "/add-edit-entities",  "/add-user", '/edit-user', "/rating-agencies-edit", "/transactions", '/risk-assessment', "/add-individual", '/edit-transactions']
+    const pathForAuthLayout = [
+        "add-product",
+
+        "edit-product",
+
+        "products",
+
+        "entities",
+
+        "entities-role",
+
+        "add-edit-entities",
+
+        "transactions",
+
+        "edit-transactions",
+
+        "rating-agencies",
+
+        "rating-agencies-edit",
+
+        "add-user",
+
+        "edit-user",
+
+        "users",
+
+        "countries",
+
+        "ports",
+
+        "airBases",
+
+        "risk-assessment",
+
+    ]
 
     const location = useLocation()
     const token = AuthStorage.getToken()
@@ -157,43 +192,75 @@ const Index = () => {
 
     let primaryLinks = []
     useEffect(() => {
-        if (pathForLayout.includes(location.pathname)) {
-            if (AuthStorage.isUserAuthenticated()) {
-                ApiGet("user/validateToken").then((res) => {
-                    if (res.status === 200) {
-                        console.log('res', res)
-                        if (AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin") {
-                            navigate("/homeLanding")
-                        } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "admin") {
-                            navigate("/entities")
-                        } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "user") {
-                            navigate("/homeLanding")
-                        }
-                    } else {
-                        localStorage.clear()
+        if (AuthStorage.isUserAuthenticated()) {
+            ApiGet("user/validateToken").then((res) => {
+                if (res.status === 200) {
+                    console.log('res', res)
+                    if (AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin") {
+                        navigate("/transactions")
+                    } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "admin") {
+                        navigate("/entities")
+                    } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "user") {
+                        navigate("/transactions")
                     }
-                }).catch(e => localStorage.clear())
-
-            } else {
+                } else {
+                    if (pathForLayout.includes(location.pathname))
+                        navigate(location.pathname)
+                    else
+                        navigate("/")
+                    localStorage.clear()
+                }
+            }).catch(e => {
+                if (pathForLayout.includes(location.pathname))
                     navigate(location.pathname)
-                // if (AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin") {
-                //     navigate("/admin-login")
-                // } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "admin") {
-                //     navigate("/fa-login")
-                // } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "user") {
-                //     navigate("/")
-                // } else {
-                //     navigate("/")
-                // }
-            }
-        } else {
-            if (AuthStorage.isUserAuthenticated()) {
-                navigate("/homeLanding")
-            } else {
-                navigate("/")
-            }
+                else
+                    navigate("/")
+                localStorage.clear()
+            })
         }
-    }, []);
+    }, [])
+    // useEffect(() => {
+    //     if (pathForLayout.includes(location.pathname)) {
+    //         if (AuthStorage.isUserAuthenticated()) {
+    //             ApiGet("user/validateToken").then((res) => {
+    //                 if (res.status === 200) {
+    //                     console.log('res', res)
+    //                     if (AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin") {
+    //                         navigate("/transactions")
+    //                     } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "admin") {
+    //                         navigate("/entities")
+    //                     } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "user") {
+    //                         navigate("/transactions")
+    //                     }
+    //                 } else {
+    //                     // navigate(-1)
+    //                     localStorage.clear()
+    //                 }
+    //             }).catch(e => {
+    //                 // navigate(-1)
+    //                 localStorage.clear()
+    //             })
+
+    //         } else {
+    //             navigate(location.pathname)
+    //             // if (AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin") {
+    //             //     navigate("/admin-login")
+    //             // } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "admin") {
+    //             //     navigate("/fa-login")
+    //             // } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "user") {
+    //             //     navigate("/")
+    //             // } else {
+    //             //     navigate("/")
+    //             // }
+    //         }
+    //     } else {
+    //         if (AuthStorage.isUserAuthenticated()) {
+    //             navigate("/transactions")
+    //         } else {
+    //             navigate(-1)
+    //         }
+    //     }
+    // }, []);
 
     if (AuthStorage.getStorageData(STORAGEKEY.roles) === "user") {
         primaryLinks = userRoutes
@@ -205,21 +272,30 @@ const Index = () => {
 
     return (
         <>
-            <Routes>
-                <Route element={<PublicRoutes />}>
-                    <Route path="/" element={<SignIn />} />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/home" element={<Home />} />
-                    <Route path="/admin-login" element={<AdminLogin />} />
-                    <Route path="/fa-login" element={<FunctionalAdmin />} />
-                </Route>
-                <Route element={<RouteProtecter />}>
-                    {primaryLinks?.map((item, i) =>
-                        < Route path={`/${item?.path}`} key={i} element={<item.component />} />
-                    )
-                    }
-                </Route>
-            </Routes>
+            {pathForLayout.includes(location.pathname) ?
+                <Layout>
+                    <Routes>
+                        {/* <Route element={<PublicRoutes />}> */}
+                        <Route path="/" element={<SignIn />} />
+                        <Route path="/signup" element={<SignUp />} />
+                        <Route path="/home" element={<Home />} />
+                        <Route path="/admin-login" element={<AdminLogin />} />
+                        <Route path="/fa-login" element={<FunctionalAdmin />} />
+                    </Routes>
+                </Layout> :
+                <AuthLayOut>
+                    <Routes>
+                        {primaryLinks?.map(item =>
+                            < Route path={`/${item?.path}`} element={<item.component />} />
+                            // }
+                        )}
+                    </Routes>
+                </AuthLayOut>
+            }
+            {/* </Route> */}
+            {/* <Route element={<RouteProtecter />}> */}
+            {/* </Route> */}
+            {/* </Routes> */}
         </>
     )
 }

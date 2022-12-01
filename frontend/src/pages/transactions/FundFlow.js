@@ -17,7 +17,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
 
     const dispatch = useDispatch()
 
-    const [fundFlow, setfundFlow] = useState({
+    const [fundFlow, setFundFlow] = useState({
         _id: "",
         contractCurrency: "",
         contractValue: "",
@@ -40,6 +40,11 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
         certificationValue: "",
         leviesCurrency: "",
         leviesValue: "",
+    })
+
+    const [contractDetails, setContractDetails] = useState({
+        curency: "",
+        value: ""
     })
 
     const [showTextEditor, setShowTextEditor] = useState(false)
@@ -66,20 +71,21 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
         dispatch(entityGetAction('Company'))
     }, [])
 
-    useEffect(() => {
-        console.log('transactionData', transactionData)
-        setfundFlow({
-            ...fundFlow,
-            contractCurrency: transactionData?.details?.contractDetails?.currency,
-            contractValue: transactionData?.details?.contractDetails?.value,
-        })
-    }, [transactionData])
+    // useEffect(() => {
+    //     console.log('transactionData', transactionData)
+    //     setFundFlow({
+    //         ...fundFlow,
+    //         contractCurrency: transactionData?.details?.contractDetails?.contractCurrency,
+    //         contractValue: transactionData?.details?.contractDetails?.contractValue,
+    //         _id: transactionData?.details.contractDetails?._id
+    //     })
+    // }, [transactionData])
 
 
     useEffect(() => {
         if (getTransactionByIdData && getTransactionByIdData.data) {
             console.log("getTransactionByIdData====", getTransactionByIdData.data)
-            setfundFlow({
+            setFundFlow({
                 _id: getTransactionByIdData.data?.fundFlow?._id,
                 contractCurrency: getTransactionByIdData.data?.fundFlow?.contractCurrency,
                 contractValue: getTransactionByIdData.data?.fundFlow?.contractValue,
@@ -115,18 +121,30 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                     reimbursingBank: { value: ele?.reimbursingBank?._id, label: ele?.reimbursingBank?.details?.name },
                 }
             }))
+            setContractDetails({
+                currency:
+                  getTransactionByIdData.data?.details?.contractDetails?.currency,
+                value: getTransactionByIdData.data?.details?.contractDetails?.value,
+            })
         }
     }, [getTransactionByIdData])
 
     const handleChange = (event) => {
-        setfundFlow({
+        setFundFlow({
             ...fundFlow,
             [event.target.name]: event.target.value
         });
     }
 
+    const handleChnages = (e) => {
+        setContractDetails({
+          ...contractDetails,
+          [e.target.name]: e.target.value,
+        })
+      }
+
     const hadleChangeModal = (e) => {
-        setfundFlow({
+        setFundFlow({
             ...fundFlow,
             [e.name]: e.value
         });
@@ -172,12 +190,12 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
 
     const handleChangeNumber = (e, name) => {
         if (name === "taxesValue" || name === "certificationValue" || name === "leviesValue") {
-            setfundFlow({ ...fundFlow, [name]: e.target.value })
+            setFundFlow({ ...fundFlow, [name]: e.target.value })
         }
     }
 
     const handleChnage = (e) => {
-        setfundFlow({
+        setFundFlow({
             ...fundFlow,
             [e.target.name]: e.target.value
         })
@@ -202,15 +220,15 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
         let flag = false
         let error = {}
 
-        if (!fundFlow.contractCurrency) {
-            flag = true
-            error.contractCurrency = ' Please enter contract currency!'
-        }
+        // if (!fundFlow.contractCurrency) {
+        //     flag = true
+        //     error.contractCurrency = ' Please enter contract currency!'
+        // }
 
-        if (!fundFlow.contractValue) {
-            flag = true
-            error.contractValue = ' Please enter contract value!'
-        }
+        // if (!fundFlow.contractValue) {
+        //     flag = true
+        //     error.contractValue = ' Please enter contract value!'
+        // }
 
         if (!fundFlow.paymentMethod) {
             flag = true
@@ -332,25 +350,25 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                     <TextField {...params} label="Contract currency" variant="standard" />
                                 )}
                                 onChange={(event, newValue) => {
-                                    setfundFlow({ ...fundFlow, contractCurrency: newValue.label });
+                                    setContractDetails({ ...contractDetails, currency: newValue.label });
                                 }}
-                                value={(CurrencyOptions.length > 0 && fundFlow.contractCurrency) && CurrencyOptions.find((ele) => ele.label === fundFlow.contractCurrency)}
+                                value={(CurrencyOptions.length > 0 && contractDetails.currency) && CurrencyOptions.find((ele) => ele.label === contractDetails.currency)}
                                 disableClearable
-                                disabled={isView || fundFlow.contractCurrency.length > 0}
+                                disabled={isView || contractDetails.currency?.length > 0}
                             />
-                            {error && error.contractCurrency && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.contractCurrency}</span>}
+                            {error && error.currency && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.currency}</span>}
                         </Col>
                         <Col lg={6}>
                             <TextField
                                 label="Contract value"
                                 variant="standard"
                                 color="warning"
-                                value={formateCurrencyValue(fundFlow.contractValue)}
-                                name="contractValue"
+                                value={formateCurrencyValue(contractDetails.value)}
+                                name="value"
                                 onChange={handleChange}
-                                disabled={isView || fundFlow.contractValue.length > 0}
+                                disabled={isView || contractDetails.value?.length > 0}
                             />
-                            {error && error.contractValue && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.contractValue}</span>}
+                            {error && error.value && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.value}</span>}
                         </Col>
                     </Row>
                 </div>
@@ -369,7 +387,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                             <TextField {...params} label="Payment method" variant="standard" />
                                         )}
                                         onChange={(event, newValue) => {
-                                            setfundFlow({
+                                            setFundFlow({
                                                 ...fundFlow,
                                                 paymentMethod: newValue,
                                                 openAccount: '',
@@ -486,7 +504,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                     <TextField {...params} label="Terms" variant="standard" />
                                 )}
                                 onChange={(event, newValue) => {
-                                    setfundFlow({ ...fundFlow, terms: newValue });
+                                    setFundFlow({ ...fundFlow, terms: newValue });
                                 }}
                                 disabled={isView}
                                 value={(termsOptions.length > 0 && fundFlow.terms) && termsOptions.find((ele) => ele === fundFlow.terms)}
@@ -504,7 +522,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                     <TextField {...params} label="Payment origin" variant="standard" />
                                 )}
                                 onChange={(event, newValue) => {
-                                    setfundFlow({ ...fundFlow, paymentOrigin: newValue._id });
+                                    setFundFlow({ ...fundFlow, paymentOrigin: newValue._id });
                                 }}
                                 disabled={isView}
                                 value={(country.length > 0 && fundFlow.paymentOrigin) && country.find((ele) => ele._id === fundFlow.paymentOrigin)}
@@ -523,7 +541,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                 )}
                                 disabled={isView}
                                 onChange={(event, newValue) => {
-                                    setfundFlow({ ...fundFlow, beneficiary: newValue._id });
+                                    setFundFlow({ ...fundFlow, beneficiary: newValue._id });
                                 }}
                                 value={(beneficiary.length > 0 && fundFlow.beneficiary) && beneficiary.find((ele) => ele._id === fundFlow.beneficiary)}
                                 disableClearable
@@ -544,7 +562,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                 disabled={isView}
                                 value={(additonalChargesOption.length > 0 && fundFlow.additonalCharges === true || fundFlow.additonalCharges === false) && additonalChargesOption.find((ele) => ele.value === fundFlow.additonalCharges)}
                                 onChange={(event, newValue) => {
-                                    setfundFlow({
+                                    setFundFlow({
                                         ...fundFlow,
                                         additonalCharges: newValue.value,
                                         payer: "",
@@ -582,7 +600,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                                     <TextField {...params} label="Payer" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
-                                                    setfundFlow({ ...fundFlow, payer: newValue._id });
+                                                    setFundFlow({ ...fundFlow, payer: newValue._id });
                                                 }}
                                                 value={(beneficiary.length > 0 && fundFlow.payer) && beneficiary.find((ele) => ele._id === fundFlow.payer)}
                                                 disableClearable
@@ -600,7 +618,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                                     <TextField {...params} label="Duties currency" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
-                                                    setfundFlow({ ...fundFlow, dutiesCurrency: newValue.label });
+                                                    setFundFlow({ ...fundFlow, dutiesCurrency: newValue.label });
                                                 }}
                                                 disabled={isView}
                                                 value={(CurrencyOptions.length > 0 && fundFlow.dutiesCurrency) && CurrencyOptions.find((ele) => ele.label === fundFlow.dutiesCurrency)}
@@ -630,7 +648,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                                     <TextField {...params} label="Taxes currency" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
-                                                    setfundFlow({ ...fundFlow, taxesCurrency: newValue?.label });
+                                                    setFundFlow({ ...fundFlow, taxesCurrency: newValue?.label });
                                                 }}
                                                 disabled={isView}
                                                 value={(CurrencyOptions.length > 0 && fundFlow.taxesCurrency) && CurrencyOptions.find((ele) => ele.label === fundFlow.taxesCurrency)}
@@ -662,7 +680,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                                     <TextField {...params} label="Certification currency" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
-                                                    setfundFlow({ ...fundFlow, certificationCurrency: newValue?.label });
+                                                    setFundFlow({ ...fundFlow, certificationCurrency: newValue?.label });
                                                 }}
                                                 disabled={isView}
                                                 value={(CurrencyOptions.length > 0 && fundFlow.certificationCurrency) && CurrencyOptions.find((ele) => ele.label === fundFlow.certificationCurrency)}
@@ -692,7 +710,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                                                     <TextField {...params} label="Levies currency" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
-                                                    setfundFlow({ ...fundFlow, leviesCurrency: newValue?.label });
+                                                    setFundFlow({ ...fundFlow, leviesCurrency: newValue?.label });
                                                 }}
                                                 disabled={isView}
                                                 value={(CurrencyOptions.length > 0 && fundFlow.leviesCurrency) && CurrencyOptions.find((ele) => ele.label === fundFlow.leviesCurrency)}

@@ -67,7 +67,7 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
                 </div>
                 <div className='form'>
                     <h2 className='mb-3'>Exchange rate risk</h2>
-                    {data.currencyHedge || data.marginFinancing ? <p>No risk</p> :
+                    {data.currencyHedge && data.marginFinancing ? <p>No risk</p> :
                         <div>
                             <div className='risk-tab' onClick={() => { setcurrencyHedgeModal(true); setSelected("currencyHedge") }}>
                                 <h3>Enter a currency hedge</h3>

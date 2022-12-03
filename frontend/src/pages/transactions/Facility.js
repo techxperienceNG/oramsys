@@ -998,7 +998,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             <Row>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Type"
+                                        label="Facility Type"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1010,25 +1010,57 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     {error && error?.type && <span style={{ color: 'red' }}>{error.type}</span>}
                                 </Col>
 
+                                <Col lg={3}>
                                 {/* <Col lg={3}>
+                <Autocomplete
+                  options={CurrencyOptions}
+                  getOptionLabel={(option) => option.label}
+                  id='disable-clearable'
+                  label='Contract currency'
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='Contract currency'
+                      variant='standard'/> 
+                      )}
+                  onChange={(e, newVal) =>
+                    setContractDetails({
+                      ...contractDetails,
+                      currency: newVal.label,
+                    })
+                  }
+                  value={CurrencyOptions && contractDetails?.currency && CurrencyOptions.find(
+                      (ele) => ele.label === contractDetails.currency)}
+                  disableClearable
+                  disabled={isView}
+                />
+                {error?.currency && ( <span style={{
+                      color: "#da251e",
+                      width: "100%",
+                      textAlign: "start",
+                    }}>
+                    {error?.currency}
+                  </span>
+                )}
+              </Col> */}
                                     <Autocomplete
                                         options={CurrencyOptions}
                                         getOptionLabel={(option) => option.label}
                                         id="disable-clearable"
-                                        label="Currency"
+                                        label="Facility Currency"
                                         renderInput={(params) => (
-                                            <TextField {...params} label="Currency" variant="standard" />
+                                            <TextField {...params} label="Facility Currency" variant="standard" />
                                         )}
                                         onChange={(event, newValue) => {
-                                            setFacility({ ...facility, currency: newValue?.label });
+                                            setFacility({ ...facility, currency: newValue.label });
                                         }}
                                         disableClearable
-                                        disabled={isView || facility.currency.length > 0}
-                                        value={(CurrencyOptions.length > 0 && facility.currency) && CurrencyOptions.find((ele) => ele.label === facility.currency)}
+                                        disabled={isView}
+                                        value={(CurrencyOptions.length > 0 && facility?.currency) && CurrencyOptions.find((ele) => ele.label === facility.currency)}
                                     />
                                     {error && error?.currency && <span style={{ color: 'red' }}>{error.currency}</span>}
-                                </Col> */}
-                                <Col lg={6}>
+                                </Col>
+                                {/* <Col lg={6}>
                                     <TextField
                                         label="Contract currency"
                                         variant="standard"
@@ -1039,7 +1071,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         disabled={isView || facility.currency?.length > 0}
                                     />
                                     {error && error.value && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.value}</span>}
-                                </Col>
+                                </Col> */}
                                 <Col lg={3}>
                                     <TextField
                                         label="Facility amount"

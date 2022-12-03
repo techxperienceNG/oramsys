@@ -13,7 +13,8 @@ import { transactionDataAction } from '../../redux/actions/transactionDataAction
 import { formatCurrency } from '../../helper/utils'
 import { useLocation } from 'react-router-dom'
 
-const FundFlow = ({ hendelCancel, hendelNext }) => {
+const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
+    console.log(getTrans)
 
     const dispatch = useDispatch()
 
@@ -122,9 +123,8 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                 }
             }))
             setContractDetails({
-                currency:
-                  getTransactionByIdData.data?.details?.contractDetails?.currency,
-                value: getTransactionByIdData.data?.details?.contractDetails?.value,
+                currency: getTrans.currency,
+                value: getTrans.value,
             })
         }
     }, [getTransactionByIdData])
@@ -338,26 +338,7 @@ const FundFlow = ({ hendelCancel, hendelNext }) => {
                 <div className='form'>
                     <h5 className="title-color">Contract value</h5>
                     <Row>
-                        {/* <Col lg={6}>
-                            <TextField
-                                options={CurrencyOptions}
-                                getOptionLabel={(option) => option.label}
-                                id="disable-clearable"
-                                label="bruno"
-                                renderInput={(params) => (
-                                    <TextField {...params} label="Contract currency" variant="standard" />
-                                )}
-                                onChange={(event, newValue) => {
-                                    setContractDetails({ ...contractDetails, currency: newValue.label });
-                                    console.log(contractDetails)
-                                }}
-                                // value={(CurrencyOptions.length > 0 && contractDetails.currency) && CurrencyOptions.find((ele) => ele.label === contractDetails.currency)?.label}
-                                value="Chinese Yuan"
-                                disableClearable
-                                disabled={isView || contractDetails.currency?.length > 0}
-                            />
-                            {error && error.currency && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.currency}</span>}
-                        </Col> */}
+                    
                           <Col lg={6}>
                             <TextField
                                 label="Contract currency"

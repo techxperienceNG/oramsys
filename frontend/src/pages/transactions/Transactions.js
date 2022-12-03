@@ -13,6 +13,7 @@ import ExcelModal from '../../component/Modal/ExcelModal';
 import { ApiGet } from '../../helper/API/ApiData';
 import { Button, Icon } from '@material-ui/core';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { GET_TRANSACTION_BY_ID } from '../../redux/types';
 const Transactions = () => {
 
     const dispatch = useDispatch()
@@ -63,68 +64,7 @@ const Transactions = () => {
         }
     }, [riskAssessment, selected])
 
-    const cardData = [
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-        {
-            label: "EXP. PHYSICAL",
-            product: "Frozen Concentrated Orange Juice",
-            type: "COMMODITY"
-        },
-    ]
+
 
     const downloadTermSheet = (id) => {
         ApiGet(`transaction/termSheet/${id}`).then(res => {
@@ -213,13 +153,25 @@ const Transactions = () => {
             onClick: (event, rowData) => cllickOnRiskAssessment(rowData._id)
         },
         {
+            icon: 'preview',
+            tooltip: 'View termsheet',
+            onClick: (event, rowData) => navigate(`/edit-transactions?id=${rowData?._id}`, { state: [{ type: rowData.type }, { type: rowData?.details?.productDetails?.nature ? rowData.details.productDetails.nature : '' }, { isView: true }] })
+        },
+        {
             icon: 'download',
             tooltip: 'Download term sheet',
             // onClick: (event, rowData) => navigate(`/edit-transactions?id=${rowData?._id}`, { state: [{ type: rowData.type }, { type: rowData?.details?.productDetails?.nature ? rowData.details.productDetails.nature : '' }, { isView: false }] })
-            onClick: (event, rowData) => { downloadTermSheet(rowData._id) }
-            // onClick: (event, rowData) => { rowData.termSheet === 'Not Signed' ? downloadTermSheet() : converBase64toBlob(rowData.termSheetUrl) }
+            // onClick: (event, rowData) => { downloadTermSheet(rowData._id) }
+            onClick: (event, rowData) => { rowData.termSheet === 'Not Signed' ? downloadTermSheet(rowData._id) : converBase64toBlob(rowData.termSheetUrl) }
         },
     ]
+    const handleRefresh = () => {
+        dispatch({
+            type: GET_TRANSACTION_BY_ID,
+            payload: {}
+        })
+        navigate('/edit-transactions', { state: [{ type: "Export" }, { type: "Physical" }] })
+    }
 
     return (
         <>
@@ -237,7 +189,7 @@ const Transactions = () => {
                             {
                                 showSubData &&
                                 <>
-                                    <p className="ps-3" onClick={() => navigate('/edit-transactions', { state: [{ type: "Export" }, { type: "Physical" }] })}>Physical commodities</p>
+                                    <p className="ps-3" onClick={handleRefresh}>Physical commodities</p>
                                     <p className="ps-3" onClick={() => navigate('/edit-transactions', { state: [{ type: "Export" }, { type: "Non-physical" }] })}>Non-physical commodities</p>
                                 </>
                             }

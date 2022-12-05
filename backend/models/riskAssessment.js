@@ -3,67 +3,67 @@
 const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 const Justification = new Schema({
-    justification: { type: String, required: true, default: null }
+    justification: { type: String, required: false, default: null }
 })
 
 const CurrencyHedge = new Schema({
-    hedgingMethod: { type: String, required: true, default: null },
-    counterparty: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null }
+    hedgingMethod: { type: String, required: false, default: null },
+    counterparty: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null }
 })
 
 const InternationalCreditStanding = new Schema({
-    type: { type: String, required: true, default: null },
-    party: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
+    type: { type: String, required: false, default: null },
+    party: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
 })
 
 const Counterparties = new Schema({
-    type: { type: String, required: true, default: null },
-    instrument: { type: String, required: true, default: null },
-    evidence: { type: String, required: true, default: null },
+    type: { type: String, required: false, default: null },
+    instrument: { type: String, required: false, default: null },
+    evidence: { type: String, required: false, default: null },
 })
 
 const CreditInsurers = new Schema({
-    type: { type: String, required: true, default: null },
-    insurer: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    broker: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    insuredParty: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    reInsurer: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    currencyOfCoverage: { type: String, required: true, default: null },
-    value: { type: String, required: true, default: null },
-    clauses: { type: String, required: true, default: null },
-    evidence: { type: String, required: true, default: null },
-    underwriter: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
+    type: { type: String, required: false, default: null },
+    insurer: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    broker: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    insuredParty: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    reInsurer: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    currencyOfCoverage: { type: String, required: false, default: null },
+    value: { type: String, required: false, default: null },
+    clauses: { type: String, required: false, default: null },
+    evidence: { type: String, required: false, default: null },
+    underwriter: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
 })
 
 const LocalCreditStanding = new Schema({
-    applicant: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    advisingBank: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    beneficiary: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    confirmingBank: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    issuingBank: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    negotiatingBank: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    reimbursingBank: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
-    secondBeneficiary: { type: Schema.Types.ObjectId, ref: 'Entity', required: true, default: null },
+    applicant: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    advisingBank: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    beneficiary: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    confirmingBank: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    issuingBank: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    negotiatingBank: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    reimbursingBank: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
+    secondBeneficiary: { type: Schema.Types.ObjectId, ref: 'Entity', required: false, default: null },
 })
 
 var Schema = new Schema({
-    transactionId: { type: String, required: true, default: null },
-    justification: { type: Justification, required: true, default: null },
-    currencyHedge: { type: CurrencyHedge, required: true, default: null },
-    marginFinancing: { type: Justification, required: true, default: null },
-    financingSufficiently: { type: Justification, required: true, default: null },
-    internationalCreditStanding: { type: InternationalCreditStanding, required: true, default: null },
-    counterparties: { type: Counterparties, required: true, default: null },
-    acceptableParty: { type: Counterparties, required: true, default: null },
-    creditInsurers: { type: CreditInsurers, required: true, default: null },
-    localCreditStanding: { type: LocalCreditStanding, required: true, default: null },
-    goodCreditStanding: { type: InternationalCreditStanding, required: true, default: null },
-    acceptableJurisdiction: { type: Justification, required: true, default: null },
-    cashCollateral: { type: Counterparties, required: true, default: null },
-    coverageOnStock: { type: Counterparties, required: true, default: null },
-    acceptableCMA: { type: InternationalCreditStanding, required: true, default: null },
-    contractsBasis: { type: Justification, required: true, default: null },
-    priceHedge: { type: Justification, required: true, default: null },
+    transactionId: { type: String, required: false, default: null },
+    justification: { type: Justification, required: false, default: null },
+    currencyHedge: { type: CurrencyHedge, required: false, default: null },
+    marginFinancing: { type: Justification, required: false, default: null },
+    financingSufficiently: { type: Justification, required: false, default: null },
+    internationalCreditStanding: { type: InternationalCreditStanding, required: false, default: null },
+    counterparties: { type: Counterparties, required: false, default: null },
+    acceptableParty: { type: Counterparties, required: false, default: null },
+    creditInsurers: { type: CreditInsurers, required: false, default: null },
+    localCreditStanding: { type: LocalCreditStanding, required: false, default: null },
+    goodCreditStanding: { type: InternationalCreditStanding, required: false, default: null },
+    acceptableJurisdiction: { type: Justification, required: false, default: null },
+    cashCollateral: { type: Counterparties, required: false, default: null },
+    coverageOnStock: { type: Counterparties, required: false, default: null },
+    acceptableCMA: { type: InternationalCreditStanding, required: false, default: null },
+    contractsBasis: { type: Justification, required: false, default: null },
+    priceHedge: { type: Justification, required: false, default: null },
 }, {
     timestamps: true
 })

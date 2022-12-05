@@ -2259,7 +2259,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                       label='Pricing unit'
                       variant='standard'
                       color='warning'
+                      // value={selectedProduct && selectedProduct}
                       value={selectedProduct && selectedProduct}
+                      onChange={(e) => handleChnage(e, "pricingUnit", "pricingDetails")}
                       disabled
                     />
                   </Col>

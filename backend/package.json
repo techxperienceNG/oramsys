@@ -39,5 +39,11 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^2.0.18",
     "pdfkit": "^0.13.0"
-  }
+  },
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "vercel-sapper"
+    }
+  ]
 }

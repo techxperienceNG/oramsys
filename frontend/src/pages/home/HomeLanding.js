@@ -50,13 +50,13 @@ const HomeLanding = () => {
   const getCount = name => {
     switch (name) {
       case 'transactions':
-        return getAlltransactionData?.data?.length;
+        return getAlltransactionData.length;
       case 'products':
-        return productGetDatas?.data?.length;
+        return productGetDatas.length;
       case 'users':
-        return getAllUsers?.data?.length;
+        return getAllUsers.length;
       case 'entities':
-        return getAllEntities.data.length // or the array of users like users.length;
+        return getAllEntities.length // or the array of users like users.length;
     }
   };
   return (

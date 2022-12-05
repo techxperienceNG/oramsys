@@ -28,15 +28,38 @@ const Edit_Transactions = () => {
     const transactionType = location?.state[0]?.type
     const productNature = location?.state[1]?.type
     const isView = location?.state[2]?.isView
+    const [getTrans, setGetTrans] = useState({})
+    const [getLender, setGetLender] = useState("")
+    const [getBorrower, setGetBorrower] = useState("")
 
     const [activeStep, setActiveStep] = useState(0);
     let step = []
+    const getTransactionId = useSelector(state => state.transactionData.getTransactionById)
+    // console.log('check this', getTransactionId.data.details?.contractDetails?.currency)
 
     useEffect(() => {
         if (id) {
             dispatch(getTransactionById(id))
+            let transdata = {
+                "id": id,
+                "currency": getTransactionId.data?.details?.contractDetails?.currency,
+                "value": getTransactionId.data?.details?.contractDetails?.value
+            }
+
+            localStorage.setItem('details', JSON.stringify(transdata))
+        
         }
     }, [id])
+
+    const signalContract = (values) => {
+        setGetTrans(values)
+    }
+    const signalLender = (values) => {  
+        setGetLender(values)
+    }
+    const signalBorrower = (values) => {
+        setGetBorrower(values)
+    }
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -91,10 +114,10 @@ const Edit_Transactions = () => {
                                         productNature === 'Physical' ?
                                             <>
                                                 {console.log('activeStep', activeStep)}
-                                                {activeStep + 1 === 1 && <DetailsTransaction hendelNext={handleNext} transactionType={transactionType} />}
-                                                {activeStep + 1 === 2 && <KeyParties hendelNext={handleNext} hendelCancel={handleBack} transactionType={transactionType} />}
+                                                {activeStep + 1 === 1 && <DetailsTransaction hendelNext={handleNext} signalContract={signalContract} signalLender={signalLender} signalBorrower={signalBorrower} transactionType={transactionType} />}
+                                                {activeStep + 1 === 2 && <KeyParties hendelNext={handleNext} getLender={getLender} getBorrower={getBorrower} hendelCancel={handleBack} transactionType={transactionType} />}
                                                 {activeStep + 1 === 3 && <DocumentFlow hendelNext={handleNext} hendelCancel={handleBack} />}
-                                                {activeStep + 1 === 4 && <FundFlow hendelNext={handleNext} hendelCancel={handleBack} />}
+                                                {activeStep + 1 === 4 && <FundFlow hendelNext={handleNext} getTrans={getTrans} hendelCancel={handleBack} />}
                                                 {activeStep + 1 === 5 && <Facility hendelNext={handleNext} hendelCancel={handleBack} />}
                                             </>
                                             :

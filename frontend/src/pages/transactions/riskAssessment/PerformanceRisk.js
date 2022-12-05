@@ -111,7 +111,7 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
                     <div className='form'>
                         <h2 className='mb-3'>Performance Risk</h2>
                         <div>
-                            {performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA ? <p>No risk</p> :
+                            {performanceRisk.goodCreditStanding && performanceRisk.acceptableJurisdiction && performanceRisk.cashCollateral && performanceRisk.coverageOnStock && performanceRisk.acceptableCMA ? <p>No risk</p> :
                                 <div>
                                     <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('goodCreditStanding') }}>
                                         <h3>Transfer risk to an entity with good credit standing (e.g the government, a Bank etc)</h3>

@@ -116,12 +116,12 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
                 <div className='form'>
                     <div>
                         <h2 className='mb-3'>Market/Price risk</h2>
-                        {marketPriceRisk.contractsBasis || marketPriceRisk.priceHedge || marketPriceRisk.financingSufficiently ? <p>No risk</p> :
+                        {marketPriceRisk.contractsBasis && marketPriceRisk.priceHedge && marketPriceRisk.financingSufficiently ? <p>No risk</p> :
                             <div>
-                                <div className='risk-tab' onClick={() => { setShowModal(true); setSelected('contractsBasis') }}>
+                                {/* <div className='risk-tab' onClick={() => { setShowModal(true); setSelected('contractsBasis') }}>
                                     <h3>Finance only on Firm Fixed Price contracts basis</h3>
                                     <img src={`../../../assets/img/about/${marketPriceRisk.contractsBasis ? "correct-success.png" : "correct (1).png"}`} />
-                                </div>
+                                </div> */}
                                 <div className='risk-tab' onClick={() => { setCurrencyHedgeDetailsModal(true); setSelected('priceHedge') }}>
                                     <h3>Enter a price hedge</h3>
                                     <img src={`../../../assets/img/about/${marketPriceRisk.priceHedge ? "correct-success.png" : "correct (1).png"}`} />

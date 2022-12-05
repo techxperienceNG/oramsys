@@ -17,10 +17,10 @@ import { transactionDataAction } from "../../redux/actions/transactionDataAction
 import moment from "moment"
 import { airPortsAction, portsAction } from "../../redux/actions/portsAction"
 
-const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
+const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalContract, signalBorrower, signalLender }) => {
   const navigate = useNavigate()
 
-  let numberReg = /^[1-7]\d{0,7}$/
+  // let numberReg = /^[0-9\b]+$/;
 
   const [productDetails, setProductDetails] = useState({
     nature: "",
@@ -54,12 +54,12 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
     destinationPort: "",
     destinationAirbase: "",
     shipmentFrequency: "",
-    warehouseRequired: false,
+    warehouseRequired: "",
     warehouses: [],
   })
 
   const [transShipmentOptions, setTransShipmentOptions] = useState({
-    tranShipmentRequired: false,
+    tranShipmentRequired: "",
     street: "",
     city: "",
     country: "",
@@ -363,7 +363,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
     setContractDetails({ ...contractDetails, [e.name]: e.value })
   }
 
-  const options = [
+  let options = [
+    {label: "Select option", value: ""}, 
     { label: "Yes", value: true },
     { label: "No", value: false },
   ]
@@ -423,7 +424,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
     "DARWAZ",
   ]
 
-  const warehouseRequiredOptions = [
+  let warehouseRequiredOptions = [
+    { value: '', label: "Select option" },
     { value: true, label: "Yes" },
     { value: false, label: "No" },
   ]
@@ -438,56 +440,45 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
 
   const handleChnage = (e, name, type) => {
     if (type === "productDetails") {
-      if (name === "quantity") {
-        if (e.target.value === "" || numberReg.test(e.target.value)) {
-          setProductDetails({ ...productDetails, [name]: e.target.value })
+        if (name === "quantity") {
+            if (e.target.value === '' || e.target.value) {
+                setProductDetails({ ...productDetails, [name]: e.target.value })
+            }
         }
-      }
-    } else if (type === "productDetails") {
-      if (name === "metric") {
-        if (e.target.value === "" || numberReg.test(e.target.value)) {
-          setProductDetails({ ...productDetails, [name]: e.target.value })
-        }
-      }
-    }else if (type === "contractDetails") {
-      if (name === "value") {
-        
-        if (e.target.value === "" || numberReg.test(e.target.value)) {
-          setContractDetails({ ...contractDetails, [name]: e.target.value })
-        }
-      }else if (name === "contractDate") {
-          setContractDetails({...contractDetails, [name]: e.target.value})
-      } 
-    } else if (type === "shippingOptions") {
-      if (name === "shippedWeights") {
-        const shippedReg = /^[1-4]\d{0,4}$/
-        if (e.target.value === "" || shippedReg.test(e.target.value)) {
-          setShippingOptions({ ...shippingOptions, [name]: e.target.value })
-        }
-      }
-    } else if (type === "transShipmentOptions") {
-      if (name === "transShipmentQuantity") {
-        if (e.target.value === "" || numberReg.test(e.target.value)) {
-          if (parseInt(productDetails.quantity) >= parseInt(e.target.value)) {
-            setTransShipmentOptions({
-              ...transShipmentOptions,
-              [name]: e.target.value,
-            })
-          } else {
-            setTransShipmentOptions({ ...transShipmentOptions, [name]: "" })
-          }
-        }
-      }
-    } else if (type === "pricingDetails") {
-      if (name === "pricingAmount" || name === "previousDayClosingAmount") {
-        const limit = 9
-
-        if (e.target.value === "" || numberReg.test(e.target.value)) {
-          setPricingDetails({ ...pricingDetails, [name]: e.target.value.slice(0, limit) })
-        }
-      }
     }
-  }
+    else if (type === "contractDetails") {
+        if (name === "value") {
+            if (e.target.value === '' || e.target.value) {
+                setContractDetails({ ...contractDetails, [name]: e.target.value })
+            }
+        }
+    }
+    else if (type === "shippingOptions") {
+        if (name === "shippedWeights") {
+            if (e.target.value === '' || e.target.value) {
+                setShippingOptions({ ...shippingOptions, [name]: e.target.value })
+            }
+        }
+    }
+    else if (type === "transShipmentOptions") {
+        if (name === "transShipmentQuantity") {
+            if (e.target.value === '' || e.target.value) {
+                if (parseInt(productDetails.quantity) >= parseInt(e.target.value)) {
+                    setTransShipmentOptions({ ...transShipmentOptions, [name]: e.target.value })
+                } else {
+                    setTransShipmentOptions({ ...transShipmentOptions, [name]: '' })
+                }
+            }
+        }
+    }
+    else if (type === "pricingDetails") {
+        if (name === "pricingAmount" || name === "previousDayClosingAmount") {
+            if (e.target.value === '' || e.target.value) {
+                setPricingDetails({ ...pricingDetails, [name]: e.target.value })
+            }
+        }
+    }
+}
 
   const handleChnages = (e) => {
     setContractDetails({
@@ -824,7 +815,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
     // console.log("body===========", body)
     // console.log('transShipmentOptions', transShipmentOptions)
     dispatch(transactionDataAction(body))
+    signalContract(body.details.contractDetails)
+    signalBorrower(body.borrower_Applicant)
+    signalLender(body.lenders)
     hendelNext()
+    console.log(signalContract)
   }
 
 
@@ -1087,7 +1082,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                   variant='standard'
                   color='warning'
                   name='Product_nature'
-                  value={productDetails.quantity}
+                  value={formateCurrencyValue(productDetails.quantity)}
                   onChange={(e) =>
                     handleChnage(e, "quantity", "productDetails")
                   }
@@ -1212,7 +1207,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                   label='Contract value'
                   variant='standard'
                   color='warning'
-                  value={contractDetails.value}
+                  value={formateCurrencyValue(contractDetails.value)}
                   onChange={(e) => handleChnage(e, "value", "contractDetails")}
                   disabled={isView}
                 />
@@ -1239,10 +1234,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    onChange={(e) => handleChnage(e, "contractDate", "contractDetails")}
-                    // inputProps={{
-                    //   min: new Date().toISOString().split("T")[0],
-                    // }}
+                    inputProps={{
+                      max: new Date().toISOString().split("T")[0]
+                  }}
+                  onChange={(e) => setContractDetails({ ...contractDetails, contractDate: e.target.value })}
                     // onChange={(e) =>
                     //   setContractDetails({
                     //     ...contractDetails,
@@ -1277,7 +1272,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                       shrink: true,
                     }}
                     inputProps={{
-                      min: contractDetails.contractDate
+                      max: contractDetails.contractDate
                         ? new Date(contractDetails.contractDate)
                             .toISOString()
                             .split("T")[0]
@@ -1521,8 +1516,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                       shrink: true,
                     }}
                     inputProps={{
-                      min: contractDetails.contractDate,
-                      max: contractDetails.expiryDate,
+                      max: contractDetails.contractDate,
+                      min: contractDetails.expiryDate,
                     }}
                     disabled={isView}
                     onChange={(e) =>
@@ -1593,7 +1588,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                   variant='standard'
                   color='warning'
                   name='netShippedWeights'
-                  value={shippingOptions.shippedWeights}
+                  value={formateCurrencyValue(shippingOptions.shippedWeights)}
                   onChange={(e) =>
                     handleChnage(e, "shippedWeights", "shippingOptions")
                   }
@@ -1785,10 +1780,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                   value={
                     ((warehouseRequiredOptions.length > 0 &&
                       shippingOptions.warehouseRequired === true) ||
-                      shippingOptions.warehouseRequired === false) &&
+                      shippingOptions.warehouseRequired === false) ?
                     warehouseRequiredOptions.find(
                       (ele) => ele.value === shippingOptions.warehouseRequired
-                    )
+                    ) : warehouseRequiredOptions = ''
                   }
                 />
                 {error?.warehouseRequired && (
@@ -1917,14 +1912,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                       variant='standard'
                     />
                   )}
-                  value={
-                    ((options.length > 0 &&
-                      transShipmentOptions.tranShipmentRequired === true) ||
-                      transShipmentOptions.tranShipmentRequired === false) &&
+                  value={((options.length > 0 && transShipmentOptions.tranShipmentRequired === true) || transShipmentOptions.tranShipmentRequired === false) ?
                     options.find(
                       (ele) =>
                         ele.value === transShipmentOptions.tranShipmentRequired
-                    )
+                    ) : options = ""
                   }
                 />
                 {error?.tranShipmentRequired && (
@@ -2235,11 +2227,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                     }
                   >
                     <TextField
-                      // label="Pricing amount"
-                      label='Mertic measure'
+                      label="Pricing amount"
+                      // label='Mertic measure'
                       variant='standard'
                       color='warning'
-                      value={pricingDetails.pricingAmount}
+                      value={formateCurrencyValue(pricingDetails.pricingAmount)}
                       name='contract_value'
                       onChange={(e) =>
                         handleChnage(e, "pricingAmount", "pricingDetails")
@@ -2267,7 +2259,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                       label='Pricing unit'
                       variant='standard'
                       color='warning'
+                      // value={selectedProduct && selectedProduct}
                       value={selectedProduct && selectedProduct}
+                      onChange={(e) => handleChnage(e, "pricingUnit", "pricingDetails")}
                       disabled
                     />
                   </Col>
@@ -2277,7 +2271,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType }) => {
                     }
                   >
                     <TextField
-                      label='previous day closing amount'
+                      label='Previous day closing amount'
                       variant='standard'
                       color='warning'
                       value={pricingDetails.previousDayClosingAmount}

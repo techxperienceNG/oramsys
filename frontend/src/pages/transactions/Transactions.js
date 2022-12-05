@@ -153,11 +153,6 @@ const Transactions = () => {
             onClick: (event, rowData) => cllickOnRiskAssessment(rowData._id)
         },
         {
-            icon: 'preview',
-            tooltip: 'View termsheet',
-            onClick: (event, rowData) => navigate(`/edit-transactions?id=${rowData?._id}`, { state: [{ type: rowData.type }, { type: rowData?.details?.productDetails?.nature ? rowData.details.productDetails.nature : '' }, { isView: true }] })
-        },
-        {
             icon: 'download',
             tooltip: 'Download term sheet',
             // onClick: (event, rowData) => navigate(`/edit-transactions?id=${rowData?._id}`, { state: [{ type: rowData.type }, { type: rowData?.details?.productDetails?.nature ? rowData.details.productDetails.nature : '' }, { isView: false }] })

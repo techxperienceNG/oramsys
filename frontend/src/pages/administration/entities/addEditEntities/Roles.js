@@ -28,7 +28,7 @@ const Roles = ({ hendelNext, hendelCancel }) => {
 
     const companyData = useSelector((state) => state.companydata.companydata)
     const entityAddData = useSelector((state) => state.entityData.entityAdd)
-    const editEntityData = useSelector((state) => state.entityData.editEntity)
+    const editEntityData = useSelector((state) => state.entityData.entityUpdate)
     const rolesData = useSelector(state => state.entityRoleData.entityRole)
 
     useEffect(() => {

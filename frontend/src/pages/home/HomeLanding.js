@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 import { useDispatch } from 'react-redux';
 import { GET_TRANSACTION_BY_ID } from '../../redux/types';
+import { productGetAction } from '../../redux/actions/productAction';
+import { getAllTransaction } from '../../redux/actions/transactionDataAction';
+import { entityGetAction } from '../../redux/actions/entityAction';
+import { userGetAction } from '../../redux/actions/userAction';
 
 const HomeLanding = () => {
   const token = AuthStorage.getToken()
@@ -47,18 +51,45 @@ const HomeLanding = () => {
   const getAllUsers = useSelector(state => state.userData.getUserData)
   const getAllEntities = useSelector(state => state.entityData.entity)
 
-  const getCount = name => {
+  const getCount = useCallback((name) => {
     switch (name) {
       case 'transactions':
-        return getAlltransactionData.length;
+        return getAlltransactionData?.data?.length ;
       case 'products':
-        return productGetDatas.length;
+        return productGetDatas?.data?.length;
       case 'users':
-        return getAllUsers.length;
+        return getAllUsers?.data?.length; // or the array of users like users.length;
       case 'entities':
-        return getAllEntities.length // or the array of users like users.length;
+        return getAllEntities?.data?.length
+        default: return;
     }
-  };
+  }, [getAllUsers, getAlltransactionData, productGetDatas, getAllEntities])
+
+  const Authsend = useCallback(() => {
+    let id = AuthStorage.getStorageData(STORAGEKEY.roles) !== "superAdmin" ? AuthStorage.getStorageData(STORAGEKEY.userId) : "all"
+    dispatch(getAllTransaction(id))
+  }, [dispatch])
+  
+    const prodAction = useCallback(() => {
+      dispatch(productGetAction("all"))
+    }, [dispatch]) 
+
+    const entityAction = useCallback(() => {
+      dispatch(entityGetAction("all"))
+    }, [dispatch]) 
+    const userAction = useCallback(() => {
+      dispatch(userGetAction())
+    }, [dispatch]) 
+
+    useEffect(() => {
+      dispatch(() => Authsend())
+      dispatch(() => prodAction())
+      dispatch(() => entityAction())
+      dispatch(() => userAction())
+      // console.log(getAlltransactionData)
+      // eslint-disable-next-line
+    }, [])
+      
   return (
     <>
         <section className=''>
@@ -97,7 +128,7 @@ const HomeLanding = () => {
                               <img src="./assets/img/figure/figure41.png"  alt="figure" height="41" width="45" />
                             </div>
                           </div>
-                          <h2 className="heading-title"><a href="/" className="text-decoration-none">{getAlltransactionData?.length} {" "} Transactions</a>
+                          <h2 className="heading-title"><a href="/" className="text-decoration-none">{ getAlltransactionData?.data?.length} {" "} Transactions</a>
                           
                           </h2>
                           <p>loremLorem ipsum dolor sit, amet consectetur adipisicing Bookan unknown</p>

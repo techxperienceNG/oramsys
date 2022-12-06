@@ -182,10 +182,29 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         }
     }, [getTransactionByIdData])
 
+    const counterpartyOptions = useSelector(state => state.entityData.entity)
+
     useEffect(() => {
         console.log('transactionData===', transactionData)
+        if(transactionData && transactionData.facility?.currencyHedgeDetails && counterpartyOptions?.data) {
+            setAddCurrencyHedge(transactionData.facility?.currencyHedgeDetails.map((ele) => {
+                return {
+                    _id: ele._id,
+                    hedgingMethod: ele.hedgingMethod,
+                    counterParty: counterpartyOptions.data.find((item) => item.counterParty?._id === ele.counterParty)?.name
+                }
+            }))
+        }
+        
     }, [transactionData])
 
+    const Delete = (data) => {
+        let body = {
+            ...transactionData,
+            currencyHedgeDetails: transactionData.facility.currencyHedgeDetails.filter((ele, i) => i !== data.tableData.id)
+        }
+        dispatch(transactionDataAction(body))
+    }
 
 
 

@@ -112,6 +112,8 @@ const Roles = ({ hendelNext, hendelCancel }) => {
             roles: companyData.roles,
         }
         dispatch(editEntityAction(id, body))
+        navigate('/entities')
+
     }
 
     useEffect(() => {

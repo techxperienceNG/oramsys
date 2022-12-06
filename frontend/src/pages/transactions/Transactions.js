@@ -79,12 +79,15 @@ const Transactions = () => {
 
     const converBase64toBlob = (content, contentType) => {
         const linkSource = `data:application/pdf;base64,${content}`;
-        const downloadLink = document.createElement("a");
-        const fileName = "TermSheet.pdf";
+        let pdfWindow = window.open("")
+        pdfWindow.document.write(`<iframe width='100%' height='100%' src=${linkSource}></iframe>`)
+        // const linkSource = `data:application/pdf;base64,${content}`;
+        // const downloadLink = document.createElement("a");
+        // const fileName = "TermSheet.pdf";
 
-        downloadLink.href = linkSource;
-        downloadLink.download = fileName;
-        downloadLink.click();
+        // downloadLink.href = linkSource;
+        // downloadLink.download = fileName;
+        // downloadLink.click();
         // contentType = contentType || '';
         // var sliceSize = 512;
         // var byteCharacters = window.atob(content); //method which converts base64 to binary
@@ -209,7 +212,10 @@ const Transactions = () => {
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                     ]}
                     data={transaction}
-                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+                    // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? tableAction.splice(2, 1) : tableAction.slice(1, 2)}
+                    // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1),tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
                     options={{
                         filtering: true,
                         actionsColumnIndex: -1,

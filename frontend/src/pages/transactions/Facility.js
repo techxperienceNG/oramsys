@@ -17,6 +17,7 @@ import { ADD_TRANSACTION, EDIT_TRANSACTION, GET_TRANSACTION_BY_ID } from '../../
 import { toast } from 'react-toastify'
 import moment from "moment"
 import { productGetAction } from '../../redux/actions/productAction'
+import { companydataAction } from '../../redux/actions/companydataAction'
 
 const Facility = ({ hendelCancel, hendelNext }) => {
 
@@ -711,7 +712,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                 currencyHedge: facility.currencyHedge === "Yes" ? true : false,
                 currencyHedgeDetails: addCurrencyHedge.map((item) => {
                     return {
-                        counterparty: item?.counterparty?.value,
+                        counterParty: item?.counterParty?.value,
                         hedgingMethod: item?.hedgingMethod
                     }
                 }),
@@ -765,6 +766,18 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         }
     }
 
+    // const Delete = (data) => {
+    //     let body = {
+    //         ...transactionData,
+    //         licenses: transactionData.facility.currencyHedgeDetails.filter((ele, i) => i !== data.tableData.id)
+    //     }
+    //     dispatch(transactionDataAction(body))
+    // }
+
+    const DeleteCurrencyhedgedetails = (rowData) =>{
+        let DeleteCurrencyhedge = addCurrencyHedge.filter((ele , i)=>i!==rowData.tableData.id)
+        setAddCurrencyHedge(DeleteCurrencyhedge)
+    }
 
     return (
         <>
@@ -1183,10 +1196,16 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                                 },
                                                 {
                                                     icon: 'delete',
+<<<<<<< HEAD
                                                     tooltip: 'Delete Role',
                                                     onClick: (e, data) => { Delete(data) }
                                                 },
                                             
+=======
+                                                    tooltip: 'Delete hedge details',
+                                                    onClick: (event, rowData) => {DeleteCurrencyhedgedetails(rowData) }
+                                                }
+>>>>>>> fd924341b57c2376d871f7a141c6678f93736481
                                             ]}
                                             options={{
                                                 filtering: true,
@@ -1326,11 +1345,6 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                             tooltip: 'View Source of Repayment',
                                             onClick: (event, rowData) => { setAddSourceOfRepayment(true); setRowEditData(rowData); setView(isView) }
                                             // onClick: (event, rowData) => navigate(`/edit-product?id=${rowData?._id}`, { state: { isView: true } })
-                                        },
-                                        {
-                                            icon: 'delete',
-                                            tooltip: 'Delete Rating',
-                                            onClick: (e, data) => { Delete(data) }
                                         }
                                     ]}
                                     options={{
@@ -1850,7 +1864,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                     </div>
                 </div>
                 <div className='footer_'>
-                    <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">Back</button>
+                    <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">cancel</button>
                     <button onClick={() => { navigate('/transactions') }} className={`footer_next_btn ${isView ? 'd-block' : 'd-none'}`}>Exit</button>
                     <button onClick={() => { id ? edit() : save() }} className={`footer_next_btn ${isView && 'd-none'}`}>{id ? "Close" : "Save"}</button>
                 </div>

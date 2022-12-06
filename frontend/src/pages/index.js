@@ -183,10 +183,10 @@ const Index = () => {
             path: "airBases",
             component: AirBases,
         },
-        // {
-        //     path: "risk-assessment",
-        //     component: RiskAssessment,
-        // },
+        {
+            path: "risk-assessment",
+            component: RiskAssessment,
+        },
     ]
 
     let primaryLinks = []

@@ -1,8 +1,8 @@
 const protocol = 'http';
 // const host = 'newbizstart.iptime.org';
 // const host = 'https://oramsys-backend.vercel.app/';
-// const host = 'http://192.168.1.4:5002/';
-const host = 'http://localhost:5002/';
+const host = 'http://192.168.1.21:5002/';
+// const host = 'http://localhost:5002/';
 // const port = '5002';
 // const trailUrl = 'api/v1';
 

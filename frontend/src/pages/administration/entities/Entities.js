@@ -16,6 +16,7 @@ const Entities = () => {
   const dispatch = useDispatch()
 
   const entityData = useSelector(state => state.entityData.entity)
+  console.log('entities====', entityData)
   let userId = AuthStorage.getStorageData(STORAGEKEY.roles) === 'admin' ? AuthStorage.getStorageData(STORAGEKEY.userId) : ""
 
   useEffect(() => {

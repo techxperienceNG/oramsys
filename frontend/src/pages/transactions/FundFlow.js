@@ -344,10 +344,10 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                 label="Contract currency"
                                 variant="standard"
                                 color="warning"
-                                value={contractDetails.currency}
+                                value={getTrans.currency}
                                 name="currency"
                              
-                                disabled={isView || contractDetails.currency?.length > 0}
+                                disabled={true}
                             />
                             {error && error.value && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.value}</span>}
                         </Col>
@@ -356,10 +356,10 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                 label="Contract value"
                                 variant="standard"
                                 color="warning"
-                                value={formateCurrencyValue(contractDetails.value)}
+                                value={formateCurrencyValue(getTrans.value)}
                                 name="value"
                                 onChange={handleChange}
-                                disabled={isView || contractDetails.value?.length > 0}
+                                disabled={true}
                             />
                             {error && error.value && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.value}</span>}
                         </Col>

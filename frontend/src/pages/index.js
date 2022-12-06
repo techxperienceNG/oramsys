@@ -68,7 +68,6 @@ const Index = () => {
         "risk-assessment",
 
     ]
-
     const location = useLocation()
     const token = AuthStorage.getToken()
     const dispatch = useDispatch()
@@ -181,7 +180,7 @@ const Index = () => {
             component: Ports,
         },
         {
-            path: "airports",
+            path: "airBases",
             component: AirBases,
         },
         // {
@@ -217,7 +216,7 @@ const Index = () => {
                     navigate("/")
                 localStorage.clear()
             })
-        }
+        } 
     }, [])
     // useEffect(() => {
     //     if (pathForLayout.includes(location.pathname)) {
@@ -285,6 +284,7 @@ const Index = () => {
                 </Layout> :
                 <AuthLayOut>
                     <Routes>
+
                         {primaryLinks?.map(item =>
                             < Route path={`/${item?.path}`} element={<item.component />} />
                             // }
@@ -327,7 +327,7 @@ const PublicRoutes = () => {
                 navigate("/")
             )
         ) : (
-            pathForLayout.includes(location.pathname) ? navigate(-1) : location.pathname === "/" ? navigate("/homeLanding") : navigate('/')
+            pathForLayout.includes(location.pathname) ? navigate(-1) : location.pathname === "/" ? navigate("/products") : navigate('/')
         );
     }, [isAuthenticated]);
 

@@ -21,6 +21,9 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
     })
 
     const riskAssessment = useSelector(state => state.riskAssessmentData.riskAssessment)
+    const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
+    console.log('getTransactionByIdData', getTransactionByIdData)
+
     const dispatch = useDispatch()
     const modalGetData = (e) => {
         if (e.name === 'currencyHedge') {
@@ -30,6 +33,26 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
             })
         }
     }
+
+
+    useEffect(() => {
+        if (getTransactionByIdData && getTransactionByIdData.data) {
+            let body = {
+                ...riskAssessment,
+                currencyHedge: {
+                    hedgingMethod: getTransactionByIdData.data.facility.currencyHedgeDetails[0]?.hedgingMethod,
+                    counterparty: getTransactionByIdData.data.facility.currencyHedgeDetails[0]?.counterParty,
+                },
+
+            }
+            // let newData = {
+                //     value: data,
+                //     name: type
+                // }
+                dispatch(riskAssessmentAction(body))
+            }
+        },[getTransactionByIdData])
+        
 
 
     useEffect(() => {
@@ -69,10 +92,11 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
                     <h2 className='mb-3'>Exchange rate risk</h2>
                     {data.currencyHedge && data.marginFinancing ? <p>No risk</p> :
                         <div>
+                           {getTransactionByIdData?.data?.facility?.rePaymentCurrency !== getTransactionByIdData?.data?.details?.contractDetails?.currency &&
                             <div className='risk-tab' onClick={() => { setcurrencyHedgeModal(true); setSelected("currencyHedge") }}>
                                 <h3>Enter a currency hedge</h3>
                                 <img src={`../../../assets/img/about/${data.currencyHedge ? "correct-success.png" : "correct (1).png"}`} />
-                            </div>
+                            </div>}
                             <div className='risk-tab' onClick={() => { setfinancingSufficientlyModal(true); setSelected("marginFinancing")}}>
                                 <h3>Margin the financing sufficiently</h3>
                                 <img src={`../../../assets/img/about/${data.marginFinancing ? "correct-success.png" : "correct (1).png"}`} />

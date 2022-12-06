@@ -693,7 +693,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                 currencyHedge: facility.currencyHedge === "Yes" ? true : false,
                 currencyHedgeDetails: addCurrencyHedge.map((item) => {
                     return {
-                        counterparty: item?.counterparty?.value,
+                        counterParty: item?.counterParty?.value,
                         hedgingMethod: item?.hedgingMethod
                     }
                 }),

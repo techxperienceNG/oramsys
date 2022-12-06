@@ -9,7 +9,7 @@ import TextEditerModal from '../../component/Modal/TextEditerModal'
 import CurrencyHedgeDetailsModal from '../../component/Modal/CurrencyHedgeDetailsModal'
 import { CurrencyOptions } from '../../helper/common'
 import { useSelector } from 'react-redux'
-import { addTransaction, editTransaction, transactionDataAction } from '../../redux/actions/transactionDataAction'
+import { addTransaction, editTransaction } from '../../redux/actions/transactionDataAction'
 import { useDispatch } from 'react-redux'
 import AuthStorage from '../../helper/AuthStorage'
 import STORAGEKEY from '../../config/APP/app.config'
@@ -17,7 +17,6 @@ import { ADD_TRANSACTION, EDIT_TRANSACTION, GET_TRANSACTION_BY_ID } from '../../
 import { toast } from 'react-toastify'
 import moment from "moment"
 import { productGetAction } from '../../redux/actions/productAction'
-import { companydataAction } from '../../redux/actions/companydataAction'
 
 const Facility = ({ hendelCancel, hendelNext }) => {
 
@@ -749,10 +748,10 @@ const Facility = ({ hendelCancel, hendelNext }) => {
 
     const Delete = (data) => {
         let body = {
-            ...transactionData,
-            licenses: transactionData.facility.currencyHedgeDetails.filter((ele, i) => i !== data.tableData.id)
+            ...companyData,
+            licenses: companyData.licenses.filter((ele, i) => i !== data.tableData.id)
         }
-        dispatch(transactionDataAction(body))
+        dispatch(companydataAction(body))
     }
 
     return (
@@ -1170,11 +1169,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                                     tooltip: 'View Currency hedge details',
                                                     onClick: (event, rowData) => { setCurrencyHedgeDetailsModal(true); setEditRowData(rowData) }
                                                 },
-                                                {
-                                                    icon: 'delete',
-                                                    tooltip: 'Delete hedge details',
-                                                    onClick: (e, data) => { Delete(data) }
-                                                }
+                                            
                                             ]}
                                             options={{
                                                 filtering: true,
@@ -1314,6 +1309,11 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                             tooltip: 'View Source of Repayment',
                                             onClick: (event, rowData) => { setAddSourceOfRepayment(true); setRowEditData(rowData); setView(isView) }
                                             // onClick: (event, rowData) => navigate(`/edit-product?id=${rowData?._id}`, { state: { isView: true } })
+                                        },
+                                        {
+                                            icon: 'delete',
+                                            tooltip: 'Delete Rating',
+                                            onClick: (e, data) => { Delete(data) }
                                         }
                                     ]}
                                     options={{
@@ -1833,7 +1833,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                     </div>
                 </div>
                 <div className='footer_'>
-                    <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">cancel</button>
+                    <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">Back</button>
                     <button onClick={() => { navigate('/transactions') }} className={`footer_next_btn ${isView ? 'd-block' : 'd-none'}`}>Exit</button>
                     <button onClick={() => { id ? edit() : save() }} className={`footer_next_btn ${isView && 'd-none'}`}>{id ? "Close" : "Save"}</button>
                 </div>

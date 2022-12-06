@@ -1196,16 +1196,9 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                                 },
                                                 {
                                                     icon: 'delete',
-<<<<<<< HEAD
-                                                    tooltip: 'Delete Role',
-                                                    onClick: (e, data) => { Delete(data) }
-                                                },
-                                            
-=======
                                                     tooltip: 'Delete hedge details',
                                                     onClick: (event, rowData) => {DeleteCurrencyhedgedetails(rowData) }
                                                 }
->>>>>>> fd924341b57c2376d871f7a141c6678f93736481
                                             ]}
                                             options={{
                                                 filtering: true,

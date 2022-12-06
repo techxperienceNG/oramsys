@@ -9,7 +9,7 @@ import TextEditerModal from '../../component/Modal/TextEditerModal'
 import CurrencyHedgeDetailsModal from '../../component/Modal/CurrencyHedgeDetailsModal'
 import { CurrencyOptions } from '../../helper/common'
 import { useSelector } from 'react-redux'
-import { addTransaction, editTransaction } from '../../redux/actions/transactionDataAction'
+import { addTransaction, editTransaction, transactionDataAction } from '../../redux/actions/transactionDataAction'
 import { useDispatch } from 'react-redux'
 import AuthStorage from '../../helper/AuthStorage'
 import STORAGEKEY from '../../config/APP/app.config'
@@ -181,10 +181,29 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         }
     }, [getTransactionByIdData])
 
+    const counterpartyOptions = useSelector(state => state.entityData.entity)
+
     useEffect(() => {
         console.log('transactionData===', transactionData)
+        if(transactionData && transactionData.facility?.currencyHedgeDetails && counterpartyOptions?.data) {
+            setAddCurrencyHedge(transactionData.facility?.currencyHedgeDetails.map((ele) => {
+                return {
+                    _id: ele._id,
+                    hedgingMethod: ele.hedgingMethod,
+                    counterParty: counterpartyOptions.data.find((item) => item.counterParty?._id === ele.counterParty)?.name
+                }
+            }))
+        }
+        
     }, [transactionData])
 
+    const Delete = (data) => {
+        let body = {
+            ...transactionData,
+            currencyHedgeDetails: transactionData.facility.currencyHedgeDetails.filter((ele, i) => i !== data.tableData.id)
+        }
+        dispatch(transactionDataAction(body))
+    }
 
 
 
@@ -746,13 +765,6 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         }
     }
 
-    const Delete = (data) => {
-        let body = {
-            ...companyData,
-            licenses: companyData.licenses.filter((ele, i) => i !== data.tableData.id)
-        }
-        dispatch(companydataAction(body))
-    }
 
     return (
         <>
@@ -1168,6 +1180,11 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                                     icon: 'preview',
                                                     tooltip: 'View Currency hedge details',
                                                     onClick: (event, rowData) => { setCurrencyHedgeDetailsModal(true); setEditRowData(rowData) }
+                                                },
+                                                {
+                                                    icon: 'delete',
+                                                    tooltip: 'Delete Role',
+                                                    onClick: (e, data) => { Delete(data) }
                                                 },
                                             
                                             ]}

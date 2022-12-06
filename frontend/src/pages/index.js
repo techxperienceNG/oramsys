@@ -197,11 +197,11 @@ const Index = () => {
                 if (res.status === 200) {
                     console.log('res', res)
                     if (AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin") {
-                        navigate("/transactions")
+                        navigate("/homeLanding")
                     } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "admin") {
                         navigate("/entities")
                     } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "user") {
-                        navigate("/transactions")
+                        navigate("/homeLanding")
                     }
                 } else {
                     if (pathForLayout.includes(location.pathname))

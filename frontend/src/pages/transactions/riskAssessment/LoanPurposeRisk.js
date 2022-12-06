@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import LoanPurposeRiskModal from '../../../component/Modal/LoanPurposeRiskModal'
 import { getRiskAssessment, riskAssessmentAction } from '../../../redux/actions/riskAssessmentAction'
+import { getTransactionById } from '../../../redux/actions/transactionDataAction'
 
 const LoanPurposeRisk = ({ hendelNext, hendelCancel }) => {
 
@@ -40,6 +41,8 @@ const LoanPurposeRisk = ({ hendelNext, hendelCancel }) => {
         } else {
             // if (!cancel) {
                 dispatch(getRiskAssessment(id))
+                dispatch(getTransactionById(id))
+
             // }
         }
     }, [riskAssessment])

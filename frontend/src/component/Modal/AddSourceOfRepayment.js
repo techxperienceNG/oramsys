@@ -125,7 +125,8 @@ const AddSourceOfRepayment = ({ show, onHide, getModalData, data, getEditData, i
                                     <Col lg={4}>
                                         <Autocomplete
                                             // options={sourceOfRepayment.type ? options : [] || data.type && sourceOfRepayment.type}
-                                            options={sourceOfRepayment.type ? options : []}
+                                            // options={sourceOfRepayment.type ? options : []}
+                                            options={ options }
                                             getOptionLabel={(option) => option}
                                             id="disable-clearable"
                                             label="Instrument"
@@ -143,7 +144,8 @@ const AddSourceOfRepayment = ({ show, onHide, getModalData, data, getEditData, i
                                     </Col>
                                     <Col lg={4}>
                                         <Autocomplete
-                                            options={sourceOfRepayment.instrument ? options : []}
+                                            // options={sourceOfRepayment.instrument ? options : []}
+                                            options={ options }
                                             getOptionLabel={(option) => option}
                                             id="disable-clearable"
                                             label="Evidence"

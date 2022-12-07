@@ -180,7 +180,7 @@ const Index = () => {
             component: Ports,
         },
         {
-            path: "airBases",
+            path: "airports",
             component: AirBases,
         },
         {

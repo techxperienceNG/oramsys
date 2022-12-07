@@ -195,7 +195,7 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                           label="Loan to collateral value"
                           id="standard-start-adornment"
                           name=''
-                          value={((parseInt(financingSufficiently.facilityAmount) / parseInt(transactionData?.details?.contractDetails?.value?.replace(/,/g, ''))) * 100).toFixed(2)}
+                          value={((parseInt(financingSufficiently.facilityAmount) / parseInt(getTransactionByIdData.data?.details?.contractDetails?.value?.replace(/,/g, ''))) * 100).toFixed(2)}
                           InputProps={{
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,
                           }}

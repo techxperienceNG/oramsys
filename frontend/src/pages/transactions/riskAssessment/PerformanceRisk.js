@@ -27,6 +27,9 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
     })
 
     const riskAssessment = useSelector(state => state.riskAssessmentData.riskAssessment)
+    const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
+    console.log('getTransactionByIdData.data', getTransactionByIdData.data.keyParties[0].parties[0].type.roleName)
+
     
     useEffect(() => {
         if (riskAssessment) {
@@ -73,19 +76,19 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
     }
 
     const nextStep = () => {
-        if (performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA) {
+        // if (performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA) {
             let body = {
                 ...riskAssessment,
-                goodCreditStanding: performanceRisk.goodCreditStanding,
-                acceptableJurisdiction: performanceRisk.acceptableJurisdiction,
-                cashCollateral: performanceRisk.cashCollateral,
-                coverageOnStock: performanceRisk.coverageOnStock,
-                acceptableCMA: performanceRisk.acceptableCMA,
+                goodCreditStanding: {type:performanceRisk.goodCreditStanding?.type ?? '',party:performanceRisk.goodCreditStanding?.party ?? ''},
+                acceptableJurisdiction:performanceRisk.acceptableJurisdiction?.justification,
+                cashCollateral: {type:performanceRisk.cashCollateral?.type ?? '',instrument:performanceRisk.cashCollateral?.instrument ?? '',evidence:performanceRisk.cashCollateral?.evidence ?? '',},
+                coverageOnStock:{ type:performanceRisk.coverageOnStock?.type ?? '',instrument:performanceRisk.coverageOnStock?.instrument ?? '',evidence:performanceRisk.coverageOnStock?.evidence ?? ''},
+                acceptableCMA: {type:performanceRisk.acceptableCMA?.type ?? '',party:performanceRisk.acceptableCMA?.party ?? '',}
             }
 
             dispatch(riskAssessmentAction(body))
             hendelNext()
-        }
+        // }
     }
 
     const cashCollateralOption = [
@@ -129,10 +132,10 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
                                         <h3>Take Insurance coverage on stock (in the case of theft and other related issues)</h3>
                                         <img src={`../../../assets/img/about/${performanceRisk.coverageOnStock ? "correct-success.png" : "correct (1).png"}`} />
                                     </div>
-                                    <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('acceptableCMA') }}>
+                                    { getTransactionByIdData.data.keyParties[0].parties[0].type.roleName !=="CMA" && <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('acceptableCMA') }}>
                                         <h3>Appoint an acceptable CMA</h3>
                                         <img src={`../../../assets/img/about/${performanceRisk.acceptableCMA ? "correct-success.png" : "correct (1).png"}`} />
-                                    </div>
+                                    </div>}
                                 </div>
                             }
                         </div>

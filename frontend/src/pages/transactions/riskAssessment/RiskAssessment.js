@@ -57,7 +57,7 @@ const RiskAssessment = () => {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            {console.log('activeStep', activeStep)}
+                            {console.log('🎈activeStep', activeStep)}
                             {activeStep + 1 === 1 && <LoanPurposeRisk hendelNext={handleNext} />}
                             {activeStep + 1 === 2 && <ExchangeRateRisk hendelNext={handleNext} hendelCancel={handleBack} />}
                             {activeStep + 1 === 3 && <PaymentBuyerRisk hendelNext={handleNext} hendelCancel={handleBack} />}

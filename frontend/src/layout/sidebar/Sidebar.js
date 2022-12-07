@@ -185,7 +185,7 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
 
         <div className='sidebar-nav'>
           <Navbar>
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%",zIndex:11111 }}>
               {
                 navbarData.map((item, i) => (
                   <div key={i} className={`${item.text === "Jobs" ? "d-block navbar-body" : 'navbar-body'}`}>

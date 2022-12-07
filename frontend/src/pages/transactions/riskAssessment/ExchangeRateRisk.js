@@ -41,8 +41,14 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
                 ...riskAssessment,
                 currencyHedge: {
                     hedgingMethod: getTransactionByIdData.data.facility.currencyHedgeDetails[0]?.hedgingMethod,
-                    counterparty: getTransactionByIdData.data.facility.currencyHedgeDetails[0]?.counterParty,
+                    counterparty: getTransactionByIdData.data.facility.currencyHedgeDetails[0]?.counterParty?.details?._id,
                 },
+                marginFinancing: {
+                    contractCurrency: getTransactionByIdData.data?.details?.contractDetails?.currency,
+                    contractValue: getTransactionByIdData.data?.details?.contractDetails?.value,
+                    facilityCurrency: getTransactionByIdData.data.facility.currency,
+                    facilityAmount: getTransactionByIdData.data.facility.amount
+                }
 
             }
             // let newData = {
@@ -62,12 +68,12 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
     }, [riskAssessment])
 
     const nextStep = () => {
-        if (data.currencyHedge || data.marginFinancing) {
+        // if (data.currencyHedge || data.marginFinancing) {
 
             let body = {
                 ...riskAssessment,
-                currencyHedge: data.currencyHedge,
-                marginFinancing: data.marginFinancing
+                currencyHedge:{ hedgingMethod : data.currencyHedge.hedgingMethod ?? '',counterparty : data.currencyHedge.counterparty ?? ''},
+                marginFinancing: {contractCurrency:data.marginFinancing.contractCurrency ?? '',contractValue:data.marginFinancing.contractValue ?? '',facilityCurrency:data.marginFinancing.facilityCurrency ?? '',facilityAmount:data.marginFinancing.facilityAmount ?? ''}
                 // exchangeRateRisk: {
                 //     currencyHedge: data.currencyHedge,
                 //     financingSufficiently: data.financingSufficiently
@@ -75,7 +81,7 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
             }
             dispatch(riskAssessmentAction(body))
             hendelNext()
-        }
+        // }
     }
 
     return (

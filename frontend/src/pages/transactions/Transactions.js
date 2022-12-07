@@ -66,28 +66,33 @@ const Transactions = () => {
 
 
 
-    const downloadTermSheet = (id) => {
+    const downloadTermSheet = (id, name) => {
         ApiGet(`transaction/termSheet/${id}`).then(res => {
             let data = res.data.data
-            var blob;
-            blob = converBase64toBlob(data, 'application/pdf');
-            console.log(blob)
-
+            if(name === 'view'){
+                ViewRiskAssessment(data)
+            } else if (name === 'download'){
+                converBase64toBlob(data);
+            }
         }
         ).catch(e => console.log(e))
     }
 
     const converBase64toBlob = (content, contentType) => {
-        const linkSource = `data:application/pdf;base64,${content}`;
-        let pdfWindow = window.open("")
-        pdfWindow.document.write(`<iframe width='100%' height='100%' src=${linkSource}></iframe>`)
         // const linkSource = `data:application/pdf;base64,${content}`;
-        // const downloadLink = document.createElement("a");
-        // const fileName = "TermSheet.pdf";
+        // let pdfWindow = window.open("")
+        // pdfWindow.document.write(`<iframe width='100%' height='100%' src=${linkSource}></iframe>`)
 
-        // downloadLink.href = linkSource;
-        // downloadLink.download = fileName;
-        // downloadLink.click();
+
+
+        const linkSource = `data:application/pdf;base64,${content}`;
+        const downloadLink = document.createElement("a");
+        const fileName = "TermSheet.pdf";
+
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
+
         // contentType = contentType || '';
         // var sliceSize = 512;
         // var byteCharacters = window.atob(content); //method which converts base64 to binary
@@ -124,6 +129,11 @@ const Transactions = () => {
         //     link.href = blobURL; // data url  
         //     link.click();
     }
+    const ViewRiskAssessment = (contents) => {
+        const linkSources = `data:application/pdf;base64,${contents}`;
+        let pdfWindow = window.open("")
+        pdfWindow.document.write(`<iframe width='100%' height='100%' src=${linkSources}></iframe>`)
+    }
 
     const userTableAction = [
         {
@@ -156,11 +166,16 @@ const Transactions = () => {
             onClick: (event, rowData) => cllickOnRiskAssessment(rowData._id)
         },
         {
+            icon: 'preview',
+            tooltip: 'view term sheet',
+            onClick: (event, rowData) => { rowData.termSheet === 'Not Signed' ? downloadTermSheet(rowData._id, 'view') : ViewRiskAssessment() }
+        },
+        {
             icon: 'download',
             tooltip: 'Download term sheet',
             // onClick: (event, rowData) => navigate(`/edit-transactions?id=${rowData?._id}`, { state: [{ type: rowData.type }, { type: rowData?.details?.productDetails?.nature ? rowData.details.productDetails.nature : '' }, { isView: false }] })
             // onClick: (event, rowData) => { downloadTermSheet(rowData._id) }
-            onClick: (event, rowData) => { rowData.termSheet === 'Not Signed' ? downloadTermSheet(rowData._id) : converBase64toBlob(rowData.termSheetUrl) }
+            onClick: (event, rowData) => { rowData.termSheet === 'Not Signed' ? downloadTermSheet(rowData._id, 'download') : converBase64toBlob(rowData.termSheetUrl) }
         },
     ]
     const handleRefresh = () => {
@@ -207,14 +222,14 @@ const Transactions = () => {
                         // { title: 'Origination Port', field: 'details.shippingOptions.portOfOrigin.name' },
                         // { title: 'Destination Port', field: 'details.shippingOptions.destinationPort.name' },
                         // { title: 'Term Sheet', field: 'termSheet' },
-                        { title: 'Term Sheet', render: rowData => <p onClick={() => { rowData.termSheet === 'Not Signed' && setShowExcelModal(true); setSendId(rowData._id) }}>{rowData.termSheet}{rowData.termSheet === 'Signed' ? <Button onClick={ () => { downloadTermSheet(rowData._id) }}><FileDownloadIcon /></Button> : <></>}</p> },
+                        { title: 'Term Sheet', render: rowData => <p onClick={() => { rowData.termSheet === 'Not Signed' && setShowExcelModal(true); setSendId(rowData._id) }}>{rowData.termSheet}{rowData.termSheet === 'Signed' ? <Button onClick={() => { downloadTermSheet(rowData._id) }}><FileDownloadIcon /></Button> : <></>}</p> },
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                     ]}
                     data={transaction}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? tableAction.splice(2, 1) : tableAction.slice(1, 2)}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1),tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
-                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
 
                     options={{
                         filtering: true,

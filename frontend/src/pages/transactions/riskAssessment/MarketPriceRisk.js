@@ -26,7 +26,14 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
     const [marketPriceRisk, setMarketPriceRisk] = useState({
         contractsBasis: "",
         priceHedge: "",
-        financingSufficiently: "",
+        financingSufficiently: {
+
+            justification: ""
+        },
+        internationalCreditStanding: {
+            type: "",
+            party: ''
+        }
     })
 
     const modalData = (e) => {
@@ -49,12 +56,12 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
 
             navigate('/transactions')
             toast.success(addRiskAssessmentData.message)
-            
+
         }
     }, [addRiskAssessmentData])
 
     useEffect(() => {
-        if(getRiskAssessment && getRiskAssessment.data && getRiskAssessment.status === 200) {
+        if (getRiskAssessment && getRiskAssessment.data && getRiskAssessment.status === 200) {
             setMarketPriceRisk({
                 ...marketPriceRisk,
                 contractsBasis: getRiskAssessment.data.details?.contractsBasis,
@@ -75,33 +82,34 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
                 ...marketPriceRisk,
                 [e.name]: e.value
             })
-            } else if (e.name === 'priceHedge') {
-                setMarketPriceRisk({
-                    ...marketPriceRisk,
-                    priceHedge: e.value
-                })
-            } else if (e.name === 'financingSufficiently') {
-                setMarketPriceRisk({
-                    ...marketPriceRisk,
-                    financingSufficiently: e.value
-                })
+        } else if (e.name === 'priceHedge') {
+            setMarketPriceRisk({
+                ...marketPriceRisk,
+                priceHedge: e.value
+            })
+        } else if (e.name === 'financingSufficiently') {
+            setMarketPriceRisk({
+                ...marketPriceRisk,
+                financingSufficiently: e.value
+            })
         }
     }
 
     const saveData = () => {
-        if (marketPriceRisk.contractsBasis || marketPriceRisk.priceHedge || marketPriceRisk.financingSufficiently) {
+        // if (marketPriceRisk.priceHedge || marketPriceRisk.financingSufficiently) {
 
-            let body = {
-                ...riskAssessment,
-                contractsBasis: marketPriceRisk.contractsBasis,
-                priceHedge: marketPriceRisk.priceHedge,
-                financingSufficiently: marketPriceRisk.financingSufficiently,
-                transactionId: id
-            }
-            dispatch(addRiskAssessment(body))
-            console.log('body', body)
-            
+        let body = {
+            ...riskAssessment,
+            // contractsBasis: marketPriceRisk.contractsBasis,
+            priceHedge: {hedgingMethod:marketPriceRisk.priceHedge?.hedgingMethod ?? '',counterParty:marketPriceRisk.priceHedge?.counterParty ?? ''},
+            financingSufficiently:{contractCurrency: marketPriceRisk.financingSufficiently?.contractCurrency ??'',contractValue: marketPriceRisk.financingSufficiently?.contractValue ??'',facilityCurrency: marketPriceRisk.financingSufficiently?.facilityCurrency ??'',facilityAmount: marketPriceRisk.financingSufficiently?.facilityAmount,},
+            internationalCreditStanding:{type:marketPriceRisk.internationalCreditStanding?.type ?? '',party:marketPriceRisk.internationalCreditStanding?.party ?? ''},
+            transactionId: id
         }
+        dispatch(addRiskAssessment(body))
+        console.log('body', body)
+
+        // }
     }
 
 
@@ -145,7 +153,7 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
             </div>
 
             {showModal && <LoanPurposeRiskModal show={showModal} onHide={() => setShowModal(false)} getModalData={(e) => getModalData(e)} types={selected} />}
-            {currencyHedgeDetailsModal && <CurrencyHedgeDetailsModal show={currencyHedgeDetailsModal} onHide={() => setCurrencyHedgeDetailsModal(false)} getModalData={(e) => setMarketPriceRisk({...marketPriceRisk, priceHedge: e })} types={selected} />}
+            {currencyHedgeDetailsModal && <CurrencyHedgeDetailsModal show={currencyHedgeDetailsModal} onHide={() => setCurrencyHedgeDetailsModal(false)} getModalData={(e) => setMarketPriceRisk({ ...marketPriceRisk, priceHedge: e })} types={selected} />}
             {financingSufficientlyModal && <FinancingSufficientlyModal show={financingSufficientlyModal} onHide={() => setFinancingSufficientlyModal(false)} getModalData={(e) => setMarketPriceRisk({ ...marketPriceRisk, financingSufficiently: e })} />}
 
         </>

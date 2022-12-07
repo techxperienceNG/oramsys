@@ -161,7 +161,7 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                     />
                   </Col>
 
-                  {/* <Col lg={3}>
+                  <Col lg={3}>
                     <Autocomplete
                       options={CurrencyOptions}
                       getOptionLabel={(option) => option?.label}
@@ -171,13 +171,14 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                         <TextField {...params} label="Facility currency" variant="standard" />
                       )}
                       onChange={(event, newValue) => {
-                        setFinancingSufficiently({ ...financingSufficiently, facilityCurrency: newValue });
+                        setFinancingSufficiently({ ...financingSufficiently, facilityCurrency: newValue.label });
                       }}
                       disableClearable
                       name='facilityCurrency'
-                      value={financingSufficiently.facilityCurrency}
+                      value={(CurrencyOptions.length > 0 && financingSufficiently.facilityCurrency) && CurrencyOptions.find((ele) => ele.label === financingSufficiently.facilityCurrency)}
+
                     />
-                    {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>}
+                    {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                   </Col>
                   <Col lg={3}>
                     <TextField
@@ -188,7 +189,7 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                       value={formateCurrencyValue(financingSufficiently.facilityAmount)}
                       onChange={handleChange}
                     />
-                  </Col> */}
+                  </Col>
                   
                   <Col lg={3}>
                       <TextField

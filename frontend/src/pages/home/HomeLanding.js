@@ -16,21 +16,21 @@ const HomeLanding = () => {
   const dispatch = useDispatch()
   const cards = [
     {
-      title: 'Transactions',
+      title: 'Completed Transactions',
       text: '',
       img1: "./assets/img/figure/figure39.png" ,
       img2: "./assets/img/figure/figure41.png",
       name: "transactions"
     },
     {
-      title: 'Products',
+      title: 'Available Products',
       text: '',
       img1: "./assets/img/figure/figure39.png",
       img2: "./assets/img/figure/figure42.png",
       name: "products"
     },
     {
-      title: 'Users',
+      title: 'Registered Users',
       text: '',
       img1: "./assets/img/figure/figure39.png",
       img2: "./assets/img/figure/figure43.png",
@@ -109,7 +109,7 @@ const HomeLanding = () => {
                               <img src={card.img2}  alt="figure" height="41" width="45" />
                             </div>
                           </div>
-                          <h2 className="heading-title"><a href="/" className="text-decoration-none">{getCount(card.name)} {" "} {card.title}</a>
+                          <h2 className="heading-title"><a href="/" className="text-decoration-none"><p className='heading-title'>{getCount(card.name)}</p> {" "} {card.title}</a>
                           
                           </h2>
                           <p>{card.text}</p>

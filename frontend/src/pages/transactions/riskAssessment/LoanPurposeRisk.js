@@ -51,7 +51,7 @@ const LoanPurposeRisk = ({ hendelNext, hendelCancel }) => {
         // if (data.justification) {
             let body = {
                 ...riskAssessment,
-                justification:{justification:data.justification ?? ''}
+                justification:data.justification ?? ''
             }
             dispatch(riskAssessmentAction(body))
             hendelNext()

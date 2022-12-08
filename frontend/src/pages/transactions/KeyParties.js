@@ -101,40 +101,6 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     return (
         <>
             <div className='product'>
-            <div className='form'>
-                    <Row>
-                        <Col lg={6}>
-                        <TextField
-                            label='Borrower/Applicant Name'
-                            variant='standard'
-                            color='warning'
-                            name='borrower_Applicant'
-                            className='mb-3'
-                            // onChange={(e) => setBorrower_Applicant(e.target.value)}
-                            value={getBorrower}
-                            disabled={true}
-                        />
-                        {error && error?.borrower_Applicant && ( <span style={{color: "#da251e", width: "100%", textAlign: "start", }}>
-                            {error.borrower_Applicant}
-                            </span>
-                        )}
-                        </Col>
-                        <Col lg={6}>
-                        <TextField
-                            label='lenders'
-                            variant='standard'
-                            color='warning'
-                            name='lenders'
-                            className='mb-3'
-                            // onChange={(e) => setLenders(e.target.value)}
-                            value={getLender}
-                            disabled={true}
-                        />
-                        {error && error?.lenders && (<span style={{ color: "#da251e", width: "100%", textAlign: "start"}}>{error.lenders}</span> )}
-                        </Col>
-                    </Row>
-            </div>
-           
                 <div className='mb-3 d-flex justify-content-between align-items-center'>
                     <h5 className="title-color">Parties</h5>
                     <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => { setShowEditModal(!showEditModal) }}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
@@ -142,8 +108,39 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                 <MaterialTable
                     title=""
                     columns={[
+                        { title: 'Borrower/Applicant', render: rowData =>  
+                        <Row>
+                            <Col lg={12} className="mb-4">
+                                <TextField
+                                    label='Borrower/Applicant Name'
+                                    variant='standard'
+                                    color='warning'
+                                    name='borrower_Applicant'
+                                    
+                                    // onChange={(e) => setBorrower_Applicant(e.target.value)}
+                                    value={getBorrower}
+                                    disabled={true}
+                                />
+                            </Col>
+                         </Row>},
+                        { title: 'Lender', render: rowData =>  
+                        <Row>
+                           <Col lg={12} className="mb-4">
+                                <TextField
+                                    label='Lenders'
+                                    variant='standard'
+                                    color='warning'
+                                    name='lenders'
+                                    
+                                    // onChange={(e) => setLenders(e.target.value)}
+                                    value={getLender}
+                                    disabled={true}
+                                />
+                            </Col>
+                         </Row>},
                         { title: 'Name', field: 'name.label' },
                         { title: 'Label', field: 'type.label' },
+                        
                     ]}
                     data={tableData}
 

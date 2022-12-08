@@ -185,6 +185,17 @@ const Transactions = () => {
         })
         navigate('/edit-transactions', { state: [{ type: "Export" }, { type: "Physical" }] })
     }
+    const formateCurrencyValue = (data) => {
+        if (data) {
+          let value = data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          // let prefix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.prefix
+          // let suffix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.suffix
+          // return prefix ? (prefix + value) : suffix ? (value + suffix) : value
+          return value
+        } else {
+          return data
+        }
+      }
 
     return (
         <>
@@ -218,7 +229,7 @@ const Transactions = () => {
                         { title: 'Applicant', field: 'borrower_Applicant' },
                         { title: 'Lenders', field: 'lenders' },
                         { title: 'Product', field: 'details.productDetails.name.name' },
-                        { title: 'Value', field: 'details.contractDetails.value' },
+                        { title: 'Value', render: rowData =>  formateCurrencyValue(rowData.details.contractDetails.value)},
                         // { title: 'Origination Port', field: 'details.shippingOptions.portOfOrigin.name' },
                         // { title: 'Destination Port', field: 'details.shippingOptions.destinationPort.name' },
                         // { title: 'Term Sheet', field: 'termSheet' },
@@ -229,7 +240,11 @@ const Transactions = () => {
                     data={transaction}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? tableAction.splice(2, 1) : tableAction.slice(1, 2)}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1),tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+<<<<<<< HEAD
                     actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+=======
+                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+>>>>>>> 8c8eb88553b835fd5796ebbc87ddbcfa3c59e03c
 
                     options={{
                         filtering: true,

@@ -28,7 +28,7 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
 
     const riskAssessment = useSelector(state => state.riskAssessmentData.riskAssessment)
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
-    console.log('getTransactionByIdData.data', getTransactionByIdData.data.keyParties[0].parties[0].type.roleName)
+    // console.log('getTransactionByIdData.data', getTransactionByIdData.data.keyParties[0].parties[0].type.roleName)
 
     
     useEffect(() => {
@@ -132,7 +132,7 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
                                         <h3>Take Insurance coverage on stock (in the case of theft and other related issues)</h3>
                                         <img src={`../../../assets/img/about/${performanceRisk.coverageOnStock ? "correct-success.png" : "correct (1).png"}`} />
                                     </div>
-                                    { getTransactionByIdData.data.keyParties[0].parties[0].type.roleName !=="CMA" && <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('acceptableCMA') }}>
+                                    { getTransactionByIdData?.data?.keyParties[0]?.parties[0]?.type?.roleName !=="CMA" && <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('acceptableCMA') }}>
                                         <h3>Appoint an acceptable CMA</h3>
                                         <img src={`../../../assets/img/about/${performanceRisk.acceptableCMA ? "correct-success.png" : "correct (1).png"}`} />
                                     </div>}

@@ -80,13 +80,14 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
             let body = {
                 ...riskAssessment,
                 goodCreditStanding: {type:performanceRisk.goodCreditStanding?.type ?? '',party:performanceRisk.goodCreditStanding?.party ?? ''},
-                acceptableJurisdiction:performanceRisk.acceptableJurisdiction?.justification,
+                acceptableJurisdiction:{justification:performanceRisk.acceptableJurisdiction.justification??'',evidence:performanceRisk.acceptableJurisdiction.evidence??''},
                 cashCollateral: {type:performanceRisk.cashCollateral?.type ?? '',instrument:performanceRisk.cashCollateral?.instrument ?? '',evidence:performanceRisk.cashCollateral?.evidence ?? '',},
                 coverageOnStock:{ type:performanceRisk.coverageOnStock?.type ?? '',instrument:performanceRisk.coverageOnStock?.instrument ?? '',evidence:performanceRisk.coverageOnStock?.evidence ?? ''},
                 acceptableCMA: {type:performanceRisk.acceptableCMA?.type ?? '',party:performanceRisk.acceptableCMA?.party ?? '',}
             }
 
             dispatch(riskAssessmentAction(body))
+            console.log('performanceRisk🎈🎈🎈', performanceRisk)
             hendelNext()
         // }
     }

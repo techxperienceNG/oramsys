@@ -79,12 +79,6 @@ const Transactions = () => {
     }
 
     const converBase64toBlob = (content, contentType) => {
-        // const linkSource = `data:application/pdf;base64,${content}`;
-        // let pdfWindow = window.open("")
-        // pdfWindow.document.write(`<iframe width='100%' height='100%' src=${linkSource}></iframe>`)
-
-
-
         const linkSource = `data:application/pdf;base64,${content}`;
         const downloadLink = document.createElement("a");
         const fileName = "TermSheet.pdf";
@@ -93,41 +87,6 @@ const Transactions = () => {
         downloadLink.download = fileName;
         downloadLink.click();
 
-        // contentType = contentType || '';
-        // var sliceSize = 512;
-        // var byteCharacters = window.atob(content); //method which converts base64 to binary
-        // var byteArrays = [
-        // ];
-        // for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        //     var slice = byteCharacters.slice(offset, offset + sliceSize);
-        //     var byteNumbers = new Array(slice.length);
-        //     for (var i = 0; i < slice.length; i++) {
-        //         byteNumbers[i] = slice.charCodeAt(i);
-        //     }
-        //     var byteArray = new Uint8Array(byteNumbers);
-        //     byteArrays.push(byteArray);
-        // }
-        // var blob = new Blob(byteArrays, {
-        //     type: contentType
-        // }); //statement which creates the blob
-
-        // var blobURL = URL.createObjectURL(blob);
-
-        // let link = document.createElement('a');
-        // link.download = 'TermSheet.docx';
-        // link.href = blobURL; // data url  
-        // link.click();
-        // }
-        //     var blob = new Blob(byteArrays, {
-        //         type: contentType
-        //     }); //statement which creates the blob
-
-        //     var blobURL = URL.createObjectURL(blob);
-
-        //     let link = document.createElement('a');
-        //     link.download = 'TermSheet.docx';
-        //     link.href = blobURL; // data url  
-        //     link.click();
     }
     const ViewRiskAssessment = (contents) => {
         const linkSources = `data:application/pdf;base64,${contents}`;

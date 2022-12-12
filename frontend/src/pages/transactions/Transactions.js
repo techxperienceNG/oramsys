@@ -240,9 +240,13 @@ const Transactions = () => {
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? tableAction.splice(2, 1) : tableAction.slice(1, 2)}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1),tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
 
-                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
+                    // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
 
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
+                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
 
                     options={{
                         filtering: true,

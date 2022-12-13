@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { CurrencyOptions } from '../../helper/common';
 import { useLocation } from 'react-router-dom'
 
-const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
+const FinancingSufficientlyModal = ({ show, onHide, getModalData,data }) => {
 
   const [financingSufficiently, setFinancingSufficiently] = useState({
     contractCurrency: "",
@@ -33,6 +33,10 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
 //         facilityAmount: transactionData.data.facility.amount
 //     })
 // }, [transactionData])
+
+useEffect(() => {
+  setFinancingSufficiently(data)
+}, [data])
 
   useEffect(() => {
     if (getTransactionByIdData && getTransactionByIdData.data) {
@@ -112,8 +116,8 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                         setFinancingSufficiently({ ...financingSufficiently, contractCurrency: newValue.label });
                       }}
                       disableClearable
-                      disabled={isView || financingSufficiently.contractCurrency?.length > 0}
-                      value={(CurrencyOptions.length > 0 && financingSufficiently.contractCurrency) && CurrencyOptions.find((ele) => ele.label === financingSufficiently.contractCurrency)}
+                      disabled={isView || financingSufficiently?.contractCurrency?.length > 0}
+                      value={(CurrencyOptions.length > 0 && financingSufficiently?.contractCurrency) && CurrencyOptions.find((ele) => ele.label === financingSufficiently?.contractCurrency)}
 
                     />
                     {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
@@ -124,9 +128,9 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                       variant="standard"
                       color="warning"
                       name='contractValue'
-                      value={formateCurrencyValue(financingSufficiently.contractValue)}
+                      value={formateCurrencyValue(financingSufficiently?.contractValue)}
                       onChange={handleChange}
-                      disabled={isView || financingSufficiently.contractValue?.length > 0}
+                      disabled={isView || financingSufficiently?.contractValue?.length > 0}
                     />
                   </Col>
 
@@ -144,8 +148,8 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                       }}
                       disableClearable
                       name='facilityCurrency'
-                      disabled={isView || financingSufficiently.facilityCurrency?.length > 0}
-                      value={(CurrencyOptions.length > 0 && financingSufficiently.facilityCurrency) && CurrencyOptions.find((ele) => ele.label === financingSufficiently.facilityCurrency)}
+                      disabled={isView || financingSufficiently?.facilityCurrency?.length > 0}
+                      value={(CurrencyOptions.length > 0 && financingSufficiently?.facilityCurrency) && CurrencyOptions.find((ele) => ele.label === financingSufficiently?.facilityCurrency)}
                     />
                     {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                   </Col>
@@ -155,9 +159,9 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                       variant="standard"
                       color="warning"
                       name='facilityAmount'
-                      value={formateCurrencyValue(financingSufficiently.facilityAmount)}
+                      value={formateCurrencyValue(financingSufficiently?.facilityAmount)}
                       onChange={handleChange}
-                      disabled={isView || financingSufficiently.facilityAmount?.length > 0}
+                      disabled={isView || financingSufficiently?.facilityAmount?.length > 0}
                     />
                   </Col>
 
@@ -175,7 +179,7 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                       }}
                       disableClearable
                       name='facilityCurrency'
-                      value={(CurrencyOptions.length > 0 && financingSufficiently.facilityCurrency) && CurrencyOptions.find((ele) => ele.label === financingSufficiently.facilityCurrency)}
+                      value={(CurrencyOptions.length > 0 && financingSufficiently?.facilityCurrency) && CurrencyOptions.find((ele) => ele.label === financingSufficiently?.facilityCurrency)}
 
                     />
                     {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
@@ -186,7 +190,7 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                       variant="standard"
                       color="warning"
                       name='facilityAmount'
-                      value={formateCurrencyValue(financingSufficiently.facilityAmount)}
+                      value={formateCurrencyValue(financingSufficiently?.facilityAmount)}
                       onChange={handleChange}
                     />
                   </Col>
@@ -196,7 +200,7 @@ const FinancingSufficientlyModal = ({ show, onHide, getModalData }) => {
                           label="Loan to collateral value"
                           id="standard-start-adornment"
                           name=''
-                          value={((parseInt(financingSufficiently.facilityAmount) / parseInt(getTransactionByIdData.data?.details?.contractDetails?.value?.replace(/,/g, ''))) * 100).toFixed(2)}
+                          value={((parseInt(financingSufficiently?.facilityAmount) / parseInt(getTransactionByIdData.data?.details?.contractDetails?.value?.replace(/,/g, ''))) * 100).toFixed(2)}
                           InputProps={{
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,
                           }}

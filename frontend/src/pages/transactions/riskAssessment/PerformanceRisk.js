@@ -27,7 +27,9 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
             justification: ''
         },
         cashCollateral: {
-            justification: ''
+            type: '',
+            instrument: '',
+            evidence: '',
         },
         coverageOnStock: {
             type: '',
@@ -44,7 +46,27 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
 
     useEffect(() => {
         if (riskAssessment) {
-            setPerformanceRisk(riskAssessment)
+            setPerformanceRisk({
+                ...performanceRisk,
+                goodCreditStanding: {
+                    type: riskAssessment?.goodCreditStanding?.type,
+                    party: riskAssessment?.goodCreditStanding?.party
+                },
+                cashCollateral: {
+                    type: riskAssessment?.cashCollateral?.type,
+                    instrument: riskAssessment?.cashCollateral?.instrument,
+                    evidence: riskAssessment?.cashCollateral?.evidence
+                },
+                coverageOnStock: {
+                    type: riskAssessment?.coverageOnStock?.type,
+                    instrument: riskAssessment?.coverageOnStock?.instrument,
+                    evidence: riskAssessment?.coverageOnStock?.evidence
+                },
+                acceptableCMA: {
+                    type: riskAssessment?.acceptableCMA?.type,
+                    party: riskAssessment?.acceptableCMA?.party,
+                },
+            })
         }
     }, [riskAssessment])
 
@@ -87,15 +109,15 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
     }
 
     const nextStep = () => {
-        // if (performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA) {
+        // if (performanceRisk?.goodCreditStanding || performanceRisk?.acceptableJurisdiction || performanceRisk?.cashCollateral || performanceRisk?.coverageOnStock || performanceRisk?.acceptableCMA) {
         let body = {
             ...riskAssessment,
             ...performanceRisk
-            // goodCreditStanding: performanceRisk.goodCreditStanding,
-            // acceptableJurisdiction: performanceRisk.acceptableJurisdiction,
-            // cashCollateral: performanceRisk.cashCollateral,
-            // coverageOnStock: performanceRisk.coverageOnStock,
-            // acceptableCMA: performanceRisk.acceptableCMA,
+            // goodCreditStanding: performanceRisk?.goodCreditStanding,
+            // acceptableJurisdiction: performanceRisk?.acceptableJurisdiction,
+            // cashCollateral: performanceRisk?.cashCollateral,
+            // coverageOnStock: performanceRisk?.coverageOnStock,
+            // acceptableCMA: performanceRisk?.acceptableCMA,
         }
 
         dispatch(riskAssessmentAction(body))
@@ -117,8 +139,8 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
             <>
                 <div className='add-edit-product'>
                     <div className='d-flex align-items-center justify-content-center error-info mb-3'>
-                        <img src={`../../../assets/img/about/${performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
-                        {performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA ?
+                        <img src={`../../../assets/img/about/${performanceRisk?.goodCreditStanding?.type && performanceRisk?.acceptableJurisdiction?.justification && performanceRisk?.cashCollateral?.type && performanceRisk?.coverageOnStock?.type && performanceRisk?.acceptableCMA?.type ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
+                        {performanceRisk?.goodCreditStanding?.type && performanceRisk?.acceptableJurisdiction?.justification && performanceRisk?.cashCollateral?.type && performanceRisk?.coverageOnStock?.type && performanceRisk?.acceptableCMA?.type ?
                             <p className='success'>Risks are acceptable due to mitigants</p> :
                             <p className='error'>The below risks require your attention</p>
                         }
@@ -126,27 +148,27 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
                     <div className='form'>
                         <h2 className='mb-3'>Performance Risk</h2>
                         <div>
-                            {performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA ? <p>No risk</p> :
+                            {performanceRisk?.goodCreditStanding?.type && performanceRisk?.acceptableJurisdiction?.justification && performanceRisk?.cashCollateral?.type && performanceRisk?.coverageOnStock?.type && performanceRisk?.acceptableCMA?.type.type ? <p>No risk</p> :
                                 <div>
                                     <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('goodCreditStanding') }}>
                                         <h3>Transfer risk to an entity with good credit standing (e.g the government, a Bank etc)</h3>
-                                        <img src={`../../../assets/img/about/${performanceRisk.goodCreditStanding ? "correct-success.png" : "correct (1).png"}`} />
+                                        <img src={`../../../assets/img/about/${performanceRisk?.goodCreditStanding?.type ? "correct-success.png" : "correct (1).png"}`} />
                                     </div>
                                     <div className='risk-tab' onClick={() => { setShowTextEditer(true); setSelected('acceptableJurisdiction') }}>
                                         <h3>Charge over marketable assets of the company, located in an acceptable jurisdiction</h3>
-                                        <img src={`../../../assets/img/about/${performanceRisk.acceptableJurisdiction ? "correct-success.png" : "correct (1).png"}`} />
+                                        <img src={`../../../assets/img/about/${performanceRisk?.acceptableJurisdiction?.justification ? "correct-success.png" : "correct (1).png"}`} />
                                     </div>
                                     <div className='risk-tab' onClick={() => { setSameModal(true); setSelected('cashCollateral'); setOptions(cashCollateralOption) }}>
                                         <h3>Cash Collateral</h3>
-                                        <img src={`../../../assets/img/about/${performanceRisk.cashCollateral ? "correct-success.png" : "correct (1).png"}`} />
+                                        <img src={`../../../assets/img/about/${performanceRisk?.cashCollateral?.type ? "correct-success.png" : "correct (1).png"}`} />
                                     </div>
                                     <div className='risk-tab' onClick={() => { setSameModal(true); setSelected('coverageOnStock'); setOptions(coverageOnStock) }}>
                                         <h3>Take Insurance coverage on stock (in the case of theft and other related issues)</h3>
-                                        <img src={`../../../assets/img/about/${performanceRisk.coverageOnStock ? "correct-success.png" : "correct (1).png"}`} />
+                                        <img src={`../../../assets/img/about/${performanceRisk?.coverageOnStock?.type ? "correct-success.png" : "correct (1).png"}`} />
                                     </div>
                                     <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('acceptableCMA') }}>
                                         <h3>Appoint an acceptable CMA</h3>
-                                        <img src={`../../../assets/img/about/${performanceRisk.acceptableCMA ? "correct-success.png" : "correct (1).png"}`} />
+                                        <img src={`../../../assets/img/about/${performanceRisk?.acceptableCMA?.type ? "correct-success.png" : "correct (1).png"}`} />
                                     </div>
                                 </div>
                             }
@@ -157,8 +179,8 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
                     <button onClick={() => hendelCancel()} className="footer_cancel_btn">cancel</button>
                     <button onClick={() => { nextStep() }} className='footer_next_btn'> Next</button>
                 </div>
-                {showSameModal && <InternationalCreditStandingModal show={showSameModal} onHide={() => setShowSameModal(false)} getModalData={(e) => modalData(e)} type={selected} />}
-                {sameModal && <CounterpartiesModal show={sameModal} onHide={() => setSameModal(false)} getModalData={(e) => { console.log('e', e); getData(e) }} type={selected} modalOption={options} />}
+                {showSameModal && <InternationalCreditStandingModal show={showSameModal} onHide={() => setShowSameModal(false)} getModalData={(e) => modalData(e)} type={selected} data={{ goodCreditStanding: performanceRisk?.goodCreditStanding, acceptableCMA: performanceRisk?.acceptableCMA }} from='' />}
+                {sameModal && <CounterpartiesModal show={sameModal} onHide={() => setSameModal(false)} getModalData={(e) => { console.log('e', e); getData(e) }} type={selected} modalOption={options} data={{ cashCollateral: performanceRisk?.cashCollateral, coverageOnStock: performanceRisk?.coverageOnStock }} />}
                 {showTextEditer && <LoanPurposeRiskModal show={showTextEditer} onHide={() => setShowTextEditer(false)} getModalData={(e) => { console.log('e', e); modalGetData(e) }} types={selected} />}
             </>
         </>

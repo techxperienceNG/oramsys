@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { entityGetAction } from '../../redux/actions/entityAction';
 import { useSelector } from 'react-redux';
 
-const CurrencyHedgeModal = ({ show, onHide, getModalData, type }) => {
+const CurrencyHedgeModal = ({ show, onHide, getModalData, type,data }) => {
     const riskAssessment = useSelector(state => state.riskAssessmentData.riskAssessment)
 
     const [currencyHedgeModal, setCurrencyHedgeModal] = useState({
@@ -27,15 +27,18 @@ const CurrencyHedgeModal = ({ show, onHide, getModalData, type }) => {
     ]
 
     const counterparty = useSelector(state => state.entityData.entity)
+    useEffect(()=>{
+        setCurrencyHedgeModal(data)
+    },[data])
 
-    useEffect(() => {
-        if (riskAssessment?.currencyHedge) {
-            setCurrencyHedgeModal({
-                hedgingMethod: riskAssessment?.currencyHedge?.hedgingMethod,
-                counterparty: riskAssessment?.currencyHedge?.counterparty
-            })
-        }
-    }, [riskAssessment])
+    // useEffect(() => {
+    //     if (riskAssessment?.currencyHedge) {
+    //         setCurrencyHedgeModal({
+    //             hedgingMethod: riskAssessment?.currencyHedge?.hedgingMethod,
+    //             counterparty: riskAssessment?.currencyHedge?.counterparty
+    //         })
+    //     }
+    // }, [riskAssessment])
 
     useEffect(() => {
         if (counterparty && counterparty.data) {
@@ -107,7 +110,7 @@ const CurrencyHedgeModal = ({ show, onHide, getModalData, type }) => {
                                                 setCurrencyHedgeModal({ ...currencyHedgeModal, hedgingMethod: newValue });
                                             }}
                                             disableClearable
-                                            value={currencyHedgeModal.hedgingMethod}
+                                            value={currencyHedgeModal?.hedgingMethod}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -125,7 +128,7 @@ const CurrencyHedgeModal = ({ show, onHide, getModalData, type }) => {
                                                 setCurrencyHedgeModal({ ...currencyHedgeModal, counterparty: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(counterpartyOptions && currencyHedgeModal.counterparty) && counterpartyOptions.find((ele) => ele._id === currencyHedgeModal.counterparty._id)}
+                                            value={(counterpartyOptions && currencyHedgeModal?.counterparty) && counterpartyOptions.find((ele) => ele._id === currencyHedgeModal?.counterparty)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>

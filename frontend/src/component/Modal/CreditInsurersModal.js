@@ -9,7 +9,7 @@ import { entityGetAction } from '../../redux/actions/entityAction';
 import { useSelector } from 'react-redux';
 import { CurrencyOptions } from '../../helper/common';
 
-const CreditInsurersModal = ({ show, onHide, getModalData }) => {
+const CreditInsurersModal = ({ show, onHide, getModalData ,data}) => {
 
     const [creaditInsurers, setCreaditInsurers] = useState({
         type: "",
@@ -21,6 +21,7 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
         value: "",
         clauses: "",
         evidence: "",
+        underwriter:""
     })
 
     // const hadleChange = (e) => {
@@ -46,7 +47,9 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
         dispatch(entityGetAction('Company'))
     }, [])
 
-
+    useEffect(() => {
+        setCreaditInsurers(data)
+    }, [data])
     const HedgingMethodOption = [
         'Primary',
         'Secondary',
@@ -129,7 +132,7 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
                                                 setCreaditInsurers({ ...creaditInsurers, type: newValue });
                                             }}
                                             disableClearable
-                                            value={creaditInsurers.type}
+                                            value={creaditInsurers?.type}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -147,7 +150,7 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
                                                 setCreaditInsurers({ ...creaditInsurers, insurer: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && creaditInsurers.insurer) && options.find((ele) => ele._id === creaditInsurers.insurer)}
+                                            value={(options && creaditInsurers?.insurer) && options.find((ele) => ele._id === creaditInsurers?.insurer)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -165,7 +168,7 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
                                                 setCreaditInsurers({ ...creaditInsurers, broker: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && creaditInsurers.broker) && options.find((ele) => ele._id === creaditInsurers.broker)}
+                                            value={(options && creaditInsurers?.broker) && options.find((ele) => ele._id === creaditInsurers?.broker)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -182,7 +185,7 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
                                                 setCreaditInsurers({ ...creaditInsurers, insuredParty: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && creaditInsurers.insuredParty) && options.find((ele) => ele._id === creaditInsurers.insuredParty)}
+                                            value={(options && creaditInsurers?.insuredParty) && options.find((ele) => ele._id === creaditInsurers?.insuredParty)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -202,7 +205,7 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
                                                 setCreaditInsurers({ ...creaditInsurers, underwriter: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && creaditInsurers.underwriter) && options.find((ele) => ele._id === creaditInsurers.underwriter)}
+                                            value={(options && creaditInsurers?.underwriter) && options.find((ele) => ele._id === creaditInsurers?.underwriter)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -220,7 +223,7 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
                                                 setCreaditInsurers({ ...creaditInsurers, reInsurer: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && creaditInsurers.reInsurer) && options.find((ele) => ele._id === creaditInsurers.reInsurer)}
+                                            value={(options && creaditInsurers?.reInsurer) && options.find((ele) => ele._id === creaditInsurers?.reInsurer)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -238,7 +241,7 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
                                                 setCreaditInsurers({ ...creaditInsurers, currencyOfCoverage: newValue?.label });
                                             }}
                                             disableClearable
-                                            value={(CurrencyOptions && creaditInsurers.currencyOfCoverage) && CurrencyOptions.find((ele) => ele.label === creaditInsurers.currencyOfCoverage)}
+                                            value={(CurrencyOptions && creaditInsurers?.currencyOfCoverage) && CurrencyOptions.find((ele) => ele.label === creaditInsurers?.currencyOfCoverage)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -248,7 +251,7 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
                                             variant="standard"
                                             color="warning"
                                             name='value'
-                                            value={creaditInsurers.value}
+                                            value={creaditInsurers?.value}
                                             onChange={(e) => handleChangeNumber(e, 'value')}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
@@ -261,7 +264,7 @@ const CreditInsurersModal = ({ show, onHide, getModalData }) => {
                                             variant="standard"
                                             color="warning"
                                             name='clauses'
-                                            value={creaditInsurers.clauses}
+                                            value={creaditInsurers?.clauses}
                                             onChange={(e) => handleChnage(e)}
                                             multiline
                                             maxRows={3}

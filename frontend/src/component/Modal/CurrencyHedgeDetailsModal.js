@@ -5,11 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { entityGetAction } from '../../redux/actions/entityAction';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) => {
+const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData,data }) => {
 
     const [currencyHedgeDetails, setCurrencyHedgeDetails] = useState({
         hedgingMethod: "",
-        counterParty: "",
+        counterparty: "",
     })
     const [id, setId] = useState('')
 
@@ -23,7 +23,9 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) 
             setCounterpartyOption(counterpartyOptions?.data)
         }
     }, [counterpartyOptions])
-
+    useEffect(() => {
+        setCurrencyHedgeDetails(data)
+    }, [data])
     useEffect(() => {
         dispatch(entityGetAction('Company'))
     }, [])
@@ -34,7 +36,7 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) 
             setId(editRowData.tableData.id)
             setCurrencyHedgeDetails({
                 hedgingMethod: editRowData?.hedgingMethod,
-                counterParty: { value: editRowData?.counterParty?.value, label: editRowData?.counterParty?.label }
+                counterparty: { value: editRowData?.counterparty?.value, label: editRowData?.counterparty?.label }
             })
         }
     }, [editRowData])
@@ -100,7 +102,7 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) 
                                                     setCurrencyHedgeDetails({ ...currencyHedgeDetails, hedgingMethod: newValue });
                                                 }}
                                                 disableClearable
-                                                value={currencyHedgeDetails.hedgingMethod}
+                                                value={currencyHedgeDetails?.hedgingMethod}
                                             />
                                         </Col>
                                         <Col lg={6}>
@@ -113,11 +115,11 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) 
                                                     <TextField {...params} label="Counterparty" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
-                                                    setCurrencyHedgeDetails({ ...currencyHedgeDetails, counterParty: { value: newValue?._id, label: newValue?.details?.name } });
+                                                    setCurrencyHedgeDetails({ ...currencyHedgeDetails, counterparty: { value: newValue?._id, label: newValue?.details?.name } });
                                                     console.log('newValue._id==', newValue._id)
                                                 }}
                                                 disableClearable
-                                                value={(currencyHedgeDetails.counterParty && counterpartyOption.length > 0) && counterpartyOption.find((elem) => elem._id === currencyHedgeDetails.counterParty?.value)}
+                                                value={(currencyHedgeDetails?.counterparty && counterpartyOption.length > 0) && counterpartyOption.find((elem) => elem._id === currencyHedgeDetails?.counterparty?.value)}
                                             />
                                         </Col>
                                     </Row>

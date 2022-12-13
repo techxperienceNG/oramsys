@@ -1,14 +1,15 @@
 import { Backdrop, Fade, Modal, TextField } from '@material-ui/core'
 import { DropzoneArea } from 'material-ui-dropzone';
 import React, { useState } from 'react'
+import { useEffect } from 'react';
 import { Row, Col } from "react-bootstrap";
 import TextEditerModal from './TextEditerModal';
 
-const LoanPurposeRiskModal = ({ show, onHide, getModalData, types }) => {
+const LoanPurposeRiskModal = ({ show, onHide, getModalData, types, data }) => {
 
     const [loanPurposeRisk, setLoanPurposeRisk] = useState({
         justification: "",
-        evidence :""
+        evidence: ""
     })
 
     const [commentModal, setCommentModal] = useState(false)
@@ -38,6 +39,9 @@ const LoanPurposeRiskModal = ({ show, onHide, getModalData, types }) => {
             [e.target.name]: e.target.value
         })
     }
+    useEffect(() => {
+        setLoanPurposeRisk(data)
+    }, [data])
 
     const handleChangeFile = (file) => {
         if (file) {
@@ -78,7 +82,7 @@ const LoanPurposeRiskModal = ({ show, onHide, getModalData, types }) => {
                                             variant="standard"
                                             color="warning"
                                             name='justification'
-                                            value={loanPurposeRisk.justification}
+                                            value={loanPurposeRisk?.justification}
                                             multiline
                                             maxRows={3}
                                             onChange={(e) => handleChnage(e)}

@@ -19,18 +19,29 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
     const [options, setOptions] = useState([])
     const dispatch = useDispatch()
     const [performanceRisk, setPerformanceRisk] = useState({
-        goodCreditStanding: "",
-        acceptableJurisdiction: "",
-        cashCollateral: "",
-        coverageOnStock: "",
-        acceptableCMA: "",
+        goodCreditStanding: {
+            type: '',
+            party: '',
+        },
+        acceptableJurisdiction: {
+            justification: ''
+        },
+        cashCollateral: {
+            justification: ''
+        },
+        coverageOnStock: {
+            type: '',
+            instrument: '',
+            evidence: '',
+        },
+        acceptableCMA: {
+            type: '',
+            party: '',
+        },
     })
 
     const riskAssessment = useSelector(state => state.riskAssessmentData.riskAssessment)
-    const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
-    // console.log('getTransactionByIdData.data', getTransactionByIdData.data.keyParties[0].parties[0].type.roleName)
 
-    
     useEffect(() => {
         if (riskAssessment) {
             setPerformanceRisk(riskAssessment)
@@ -77,18 +88,18 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
 
     const nextStep = () => {
         // if (performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA) {
-            let body = {
-                ...riskAssessment,
-                goodCreditStanding: {type:performanceRisk.goodCreditStanding?.type ?? '',party:performanceRisk.goodCreditStanding?.party ?? ''},
-                acceptableJurisdiction:{justification:performanceRisk.acceptableJurisdiction.justification??'',evidence:performanceRisk.acceptableJurisdiction.evidence??''},
-                cashCollateral: {type:performanceRisk.cashCollateral?.type ?? '',instrument:performanceRisk.cashCollateral?.instrument ?? '',evidence:performanceRisk.cashCollateral?.evidence ?? '',},
-                coverageOnStock:{ type:performanceRisk.coverageOnStock?.type ?? '',instrument:performanceRisk.coverageOnStock?.instrument ?? '',evidence:performanceRisk.coverageOnStock?.evidence ?? ''},
-                acceptableCMA: {type:performanceRisk.acceptableCMA?.type ?? '',party:performanceRisk.acceptableCMA?.party ?? '',}
-            }
+        let body = {
+            ...riskAssessment,
+            ...performanceRisk
+            // goodCreditStanding: performanceRisk.goodCreditStanding,
+            // acceptableJurisdiction: performanceRisk.acceptableJurisdiction,
+            // cashCollateral: performanceRisk.cashCollateral,
+            // coverageOnStock: performanceRisk.coverageOnStock,
+            // acceptableCMA: performanceRisk.acceptableCMA,
+        }
 
-            dispatch(riskAssessmentAction(body))
-            console.log('performanceRisk🎈🎈🎈', performanceRisk)
-            hendelNext()
+        dispatch(riskAssessmentAction(body))
+        hendelNext()
         // }
     }
 
@@ -115,7 +126,7 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
                     <div className='form'>
                         <h2 className='mb-3'>Performance Risk</h2>
                         <div>
-                            {performanceRisk.goodCreditStanding && performanceRisk.acceptableJurisdiction && performanceRisk.cashCollateral && performanceRisk.coverageOnStock && performanceRisk.acceptableCMA ? <p>No risk</p> :
+                            {performanceRisk.goodCreditStanding || performanceRisk.acceptableJurisdiction || performanceRisk.cashCollateral || performanceRisk.coverageOnStock || performanceRisk.acceptableCMA ? <p>No risk</p> :
                                 <div>
                                     <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('goodCreditStanding') }}>
                                         <h3>Transfer risk to an entity with good credit standing (e.g the government, a Bank etc)</h3>
@@ -133,10 +144,10 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
                                         <h3>Take Insurance coverage on stock (in the case of theft and other related issues)</h3>
                                         <img src={`../../../assets/img/about/${performanceRisk.coverageOnStock ? "correct-success.png" : "correct (1).png"}`} />
                                     </div>
-                                    { getTransactionByIdData?.data?.keyParties[0]?.parties[0]?.type?.roleName !=="CMA" && <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('acceptableCMA') }}>
+                                    <div className='risk-tab' onClick={() => { setShowSameModal(true); setSelected('acceptableCMA') }}>
                                         <h3>Appoint an acceptable CMA</h3>
                                         <img src={`../../../assets/img/about/${performanceRisk.acceptableCMA ? "correct-success.png" : "correct (1).png"}`} />
-                                    </div>}
+                                    </div>
                                 </div>
                             }
                         </div>

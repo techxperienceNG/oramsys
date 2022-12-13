@@ -1,5 +1,6 @@
 import { Box, Button, Step, StepLabel, Stepper, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import ExchangeRateRisk from './ExchangeRateRisk';
 import LoanPurposeRisk from './LoanPurposeRisk';
@@ -13,13 +14,15 @@ const RiskAssessment = () => {
     const navigate = useNavigate()
     const [page, setPage] = useState('Details')
     const [details, setDetails] = useState({})
-
+    const riskAssessment = useSelector(state => state.riskAssessmentData.riskAssessment)
     const [activeStep, setActiveStep] = useState(0);
 
     const isStepOptional = (step) => {
         return step === 1;
     };
+
     const handleNext = () => {
+        console.log('Data ========= >', riskAssessment)
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
@@ -57,7 +60,7 @@ const RiskAssessment = () => {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            {console.log('🎈activeStep', activeStep)}
+                            {console.log('activeStep', activeStep)}
                             {activeStep + 1 === 1 && <LoanPurposeRisk hendelNext={handleNext} />}
                             {activeStep + 1 === 2 && <ExchangeRateRisk hendelNext={handleNext} hendelCancel={handleBack} />}
                             {activeStep + 1 === 3 && <PaymentBuyerRisk hendelNext={handleNext} hendelCancel={handleBack} />}

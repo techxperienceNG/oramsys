@@ -20,11 +20,35 @@ const PaymentBuyerRisk = ({ hendelNext, hendelCancel }) => {
     const [options, setOptions] = useState([])
     const dispatch = useDispatch()
     const [paymentBuyesrRisk, setpaymentBuyesrRisk] = useState({
-        internationalCreditStanding: "",
-        counterparties: "",
-        acceptableParty: "",
-        creditInsurers: "",
-        localCreditStanding: "",
+        internationalCreditStanding: {
+            type: '',
+            party: ''
+        },
+        counterparties: {
+            type: '',
+            instrument: '',
+            evidence: '',
+        },
+        acceptableParty: {
+            type: '',
+            instrument: '',
+            evidence: '',
+        },
+        creditInsurers: {
+            type: '',
+            instrument: '',
+            evidence: '',
+        },
+        localCreditStanding: {
+            applicant: '',
+            advisingBank: '',
+            beneficiary: '',
+            confirmingBank: '',
+            issuingBank: '',
+            negotiatingBank: '',
+            reimbursingBank: '',
+            secondBeneficiary: '',
+        }
     })
 
     const getData = (e) => {
@@ -44,7 +68,6 @@ const PaymentBuyerRisk = ({ hendelNext, hendelCancel }) => {
 
     const riskAssessment = useSelector(state => state.riskAssessmentData.riskAssessment)
 
-console.log('riskAssessment🎈', riskAssessment)
     useEffect(() => {
         if (riskAssessment) {
             setpaymentBuyesrRisk(riskAssessment)
@@ -65,27 +88,28 @@ console.log('riskAssessment🎈', riskAssessment)
         'Assigned Receivables'
     ]
 
-    // useEffect(() => {
-    //     console.log('riskAssessment', riskAssessment)
-    //     console.log('paymentBuyesrRisk', paymentBuyesrRisk)
-    // }, [riskAssessment, paymentBuyesrRisk])
+    useEffect(() => {
+        console.log('riskAssessment', riskAssessment)
+        console.log('paymentBuyesrRisk', paymentBuyesrRisk)
+    }, [riskAssessment, paymentBuyesrRisk])
 
 
     const nextStep = () => {
-    console.log('paymentBuyesrRisk🎈', paymentBuyesrRisk)
-
         // if (paymentBuyesrRisk.internationalCreditStanding || paymentBuyesrRisk.counterparties || paymentBuyesrRisk.acceptableParty || paymentBuyesrRisk.creditInsurers || paymentBuyesrRisk.localCreditStanding) {
-            let body = {
-                ...riskAssessment,
-                internationalCreditStanding: {type:paymentBuyesrRisk.internationalCreditStanding?.type ?? '',party:paymentBuyesrRisk.internationalCreditStanding?.party ?? ''},
-                counterparties:  { type:paymentBuyesrRisk.counterparties?.type ?? '',instrument : paymentBuyesrRisk.counterparties?.instrument ?? '',evidence : paymentBuyesrRisk.counterparties?.evidence ?? '' },
-                acceptableParty:  { type:paymentBuyesrRisk.acceptableParty?.type ?? '',instrument : paymentBuyesrRisk.acceptableParty?.instrument ?? '',evidence : paymentBuyesrRisk.acceptableParty?.evidence ?? '' },
-                creditInsurers: { type:paymentBuyesrRisk.creditInsurers?.type ?? '',insurer : paymentBuyesrRisk.creditInsurers?.insurer ?? '',broker : paymentBuyesrRisk.creditInsurers?.broker ?? '',insuredParty : paymentBuyesrRisk.creditInsurers?.insuredParty ?? '' ,reInsurer : paymentBuyesrRisk.creditInsurers?.reInsurer ?? '' ,currencyOfCoverage : paymentBuyesrRisk.creditInsurers?.currencyOfCoverage ?? '' ,value : paymentBuyesrRisk.creditInsurers?.value ?? '' ,clauses : paymentBuyesrRisk.creditInsurers?.clauses ?? '' ,evidence : paymentBuyesrRisk.creditInsurers?.evidence ?? '' ,underwriter : paymentBuyesrRisk.creditInsurers?.underwriter ?? ''  },
-                localCreditStanding:  { applicant:paymentBuyesrRisk.localCreditStanding?.applicant ?? '',advisingBank : paymentBuyesrRisk.localCreditStanding?.advisingBank ?? '' ,beneficiary : paymentBuyesrRisk.localCreditStanding?.beneficiary ?? '' ,confirmingBank : paymentBuyesrRisk.localCreditStanding?.confirmingBank ?? '' ,issuingBank : paymentBuyesrRisk.localCreditStanding?.issuingBank ?? '' ,negotiatingBank : paymentBuyesrRisk.localCreditStanding?.negotiatingBank ?? '' ,reimbursingBank : paymentBuyesrRisk.localCreditStanding?.reimbursingBank ?? '' ,secondBeneficiary : paymentBuyesrRisk.localCreditStanding?.secondBeneficiary ?? '' }
-            }
-            dispatch(riskAssessmentAction(body))          
-            hendelNext()
-        // }
+        let body = {
+            ...riskAssessment,
+            ...paymentBuyesrRisk
+            // internationalCreditStanding: paymentBuyesrRisk.internationalCreditStanding,
+            // counterparties: paymentBuyesrRisk.counterparties,
+            // acceptableParty: paymentBuyesrRisk.acceptableParty,
+            // creditInsurers: paymentBuyesrRisk.creditInsurers,
+            // localCreditStanding: paymentBuyesrRisk.localCreditStanding,
+        }
+        console.log('body', body)
+        dispatch(riskAssessmentAction(body))
+
+        hendelNext()
+        // } 
     }
 
     return (
@@ -101,7 +125,7 @@ console.log('riskAssessment🎈', riskAssessment)
                 <div className='form'>
                     <div>
                         <h2 className='mb-3'>Payment/Buyer risk</h2>
-                        {paymentBuyesrRisk.internationalCreditStanding && paymentBuyesrRisk.counterparties && paymentBuyesrRisk.acceptableParty && paymentBuyesrRisk.creditInsurers && paymentBuyesrRisk.localCreditStanding ? <p>No risk</p> :
+                        {paymentBuyesrRisk.internationalCreditStanding || paymentBuyesrRisk.counterparties || paymentBuyesrRisk.acceptableParty || paymentBuyesrRisk.creditInsurers || paymentBuyesrRisk.localCreditStanding ? <p>No risk</p> :
                             <div>
                                 <div className='risk-tab' onClick={() => { setInternationalCreditStandingModal(true); setSelected('internationalCreditStanding') }}>
                                     <h3>If international bank, use an on-lending model with a local bank with acceptable credit standing</h3>

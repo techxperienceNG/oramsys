@@ -16,14 +16,18 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
     const [financingSufficientlyModal, setfinancingSufficientlyModal] = useState(false)
     const [selected, setSelected] = useState('')
     const [data, setData] = useState({
-        currencyHedge: "",
-        marginFinancing: ""
+        currencyHedge: {
+            hedgingMethod: '',
+            counterparty: ''
+        },
+        marginFinancing: {
+            justification: ''
+        }
     })
 
     const riskAssessment = useSelector(state => state.riskAssessmentData.riskAssessment)
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
-    console.log('getTransactionByIdData', getTransactionByIdData)
-
+    // console.log('getAlltransactionData', getTransactionByIdData.data.facility.rePaymentCurrency)
     const dispatch = useDispatch()
     const modalGetData = (e) => {
         if (e.name === 'currencyHedge') {
@@ -34,7 +38,6 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
         }
     }
 
-
     useEffect(() => {
         if (getTransactionByIdData && getTransactionByIdData.data) {
             let body = {
@@ -43,12 +46,6 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
                     hedgingMethod: getTransactionByIdData.data.facility.currencyHedgeDetails[0]?.hedgingMethod,
                     counterparty: getTransactionByIdData.data.facility.currencyHedgeDetails[0]?.counterParty?.details?._id,
                 },
-                marginFinancing: {
-                    contractCurrency: getTransactionByIdData.data?.details?.contractDetails?.currency,
-                    contractValue: getTransactionByIdData.data?.details?.contractDetails?.value,
-                    facilityCurrency: getTransactionByIdData.data.facility.currency,
-                    facilityAmount: getTransactionByIdData.data.facility.amount
-                }
 
             }
             // let newData = {
@@ -57,8 +54,7 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
                 // }
                 dispatch(riskAssessmentAction(body))
             }
-        },[getTransactionByIdData])
-        
+        }, [getTransactionByIdData])
 
 
     useEffect(() => {
@@ -70,17 +66,14 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
     const nextStep = () => {
         // if (data.currencyHedge || data.marginFinancing) {
 
-            let body = {
-                ...riskAssessment,
-                currencyHedge:{ hedgingMethod : data.currencyHedge.hedgingMethod ?? '',counterparty : data.currencyHedge.counterparty ?? ''},
-                marginFinancing: {contractCurrency:data.marginFinancing.contractCurrency ?? '',contractValue:data.marginFinancing.contractValue ?? '',facilityCurrency:data.marginFinancing.facilityCurrency ?? '',facilityAmount:data.marginFinancing.facilityAmount ?? ''}
-                // exchangeRateRisk: {
-                //     currencyHedge: data.currencyHedge,
-                //     financingSufficiently: data.financingSufficiently
-                // }
-            }
-            dispatch(riskAssessmentAction(body))
-            hendelNext()
+        let body = {
+            ...riskAssessment,
+            ...data
+            // currencyHedge: data.currencyHedge,
+            // marginFinancing: data.marginFinancing
+        }
+        dispatch(riskAssessmentAction(body))
+        hendelNext(data)
         // }
     }
 
@@ -96,14 +89,14 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
                 </div>
                 <div className='form'>
                     <h2 className='mb-3'>Exchange rate risk</h2>
-                    {data.currencyHedge && data.marginFinancing ? <p>No risk</p> :
+                    {data.currencyHedge || data.marginFinancing ? <p>No risk</p> :
                         <div>
-                           {getTransactionByIdData?.data?.facility?.rePaymentCurrency !== getTransactionByIdData?.data?.details?.contractDetails?.currency &&
-                            <div className='risk-tab' onClick={() => { setcurrencyHedgeModal(true); setSelected("currencyHedge") }}>
-                                <h3>Enter a currency hedge</h3>
-                                <img src={`../../../assets/img/about/${data.currencyHedge ? "correct-success.png" : "correct (1).png"}`} />
-                            </div>}
-                            <div className='risk-tab' onClick={() => { setfinancingSufficientlyModal(true); setSelected("marginFinancing")}}>
+                            {getTransactionByIdData?.data?.facility?.rePaymentCurrency === getTransactionByIdData?.data?.details?.contractDetails?.currency &&
+                                <div className='risk-tab' onClick={() => { setcurrencyHedgeModal(true); setSelected("currencyHedge") }}>
+                                    <h3>Enter a currency hedge</h3>
+                                    <img src={`../../../assets/img/about/${data.currencyHedge ? "correct-success.png" : "correct (1).png"}`} />
+                                </div>}
+                            <div className='risk-tab' onClick={() => setfinancingSufficientlyModal(true)}>
                                 <h3>Margin the financing sufficiently</h3>
                                 <img src={`../../../assets/img/about/${data.marginFinancing ? "correct-success.png" : "correct (1).png"}`} />
                             </div>

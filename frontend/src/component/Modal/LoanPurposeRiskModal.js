@@ -7,7 +7,8 @@ import TextEditerModal from './TextEditerModal';
 const LoanPurposeRiskModal = ({ show, onHide, getModalData, types }) => {
 
     const [loanPurposeRisk, setLoanPurposeRisk] = useState({
-        justification: ""
+        justification: "",
+        evidence :""
     })
 
     const [commentModal, setCommentModal] = useState(false)
@@ -36,6 +37,17 @@ const LoanPurposeRiskModal = ({ show, onHide, getModalData, types }) => {
             ...loanPurposeRisk,
             [e.target.name]: e.target.value
         })
+    }
+
+    const handleChangeFile = (file) => {
+        if (file) {
+            new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            }).then((res) => setLoanPurposeRisk({ ...loanPurposeRisk, evidence: res }));
+        }
     }
     return (
         <div>
@@ -89,7 +101,7 @@ const LoanPurposeRiskModal = ({ show, onHide, getModalData, types }) => {
                                                         previewGridProps={{ container: { spacing: 1, } }}
                                                         dropzoneText='Drop file here'
                                                         previewText=""
-                                                        onChange={''}
+                                                        onChange={(file) => handleChangeFile(file[0])}
                                                     />
                                                 </div> : ''}
                                             </div>

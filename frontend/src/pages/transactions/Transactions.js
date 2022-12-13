@@ -53,18 +53,18 @@ const Transactions = () => {
         }
     }, [getAlltransactionData])
 
-    const cllickOnRiskAssessment = (id) => {
-        dispatch(getRiskAssessment(id))
-        setSelected(id)
-    }
+    // const cllickOnRiskAssessment = (id) => {
+    //     dispatch(getRiskAssessment(id))
+    //     setSelected(id)
+    // }
     useEffect(() => {
-        console.log('riskAssessment', riskAssessment)
+        console.log('selected🧨🧨', selected)
         if (riskAssessment.status === 200 && selected) {
-            navigate(`/risk-assessment?id=${riskAssessment?.data?.transactionId ?? selected}`)
+            if (riskAssessment && riskAssessment.data && riskAssessment.data.transactionId   ) {
+               navigate(`/risk-assessment?id=${selected}`)
+            }
         }
     }, [riskAssessment, selected])
-
-
 
     const downloadTermSheet = (id, name) => {
         ApiGet(`transaction/termSheet/${id}`).then(res => {
@@ -122,10 +122,10 @@ const Transactions = () => {
         {
             icon: 'assessment',
             tooltip: 'Risk Assessment',
-            onClick: (event, rowData) => cllickOnRiskAssessment(rowData._id)
+            onClick: (event, rowData) => { dispatch(getRiskAssessment(rowData._id)) ;setSelected(rowData._id)}
         },
         {
-            icon: 'preview',
+            icon: 'visibilityIcon',
             tooltip: 'view term sheet',
             onClick: (event, rowData) => { rowData.termSheet === 'Not Signed' ? downloadTermSheet(rowData._id, 'view') : ViewRiskAssessment() }
         },
@@ -179,7 +179,6 @@ const Transactions = () => {
                         </div>
                     }
                 </div>
-                {console.log(tableAction)}
                 <MaterialTable
                     title=""
                     columns={[
@@ -199,7 +198,14 @@ const Transactions = () => {
                     data={transaction}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? tableAction.splice(2, 1) : tableAction.slice(1, 2)}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1),tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
+
+                    // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
+                    // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
                     actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
 
                     options={{
                         filtering: true,

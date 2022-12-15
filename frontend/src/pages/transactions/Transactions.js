@@ -60,9 +60,9 @@ const Transactions = () => {
     useEffect(() => {
         console.log('selected🧨🧨', selected)
         if (riskAssessment.status === 200 && selected) {
-            if (riskAssessment && riskAssessment.data && riskAssessment.data.transactionId   ) {
+            // if (riskAssessment && riskAssessment.data && riskAssessment.data.transactionId   ) {
                navigate(`/risk-assessment?id=${selected}`)
-            }
+            // }
         }
     }, [riskAssessment, selected])
 

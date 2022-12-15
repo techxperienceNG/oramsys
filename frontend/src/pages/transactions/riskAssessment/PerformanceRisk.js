@@ -24,7 +24,8 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
             party: '',
         },
         acceptableJurisdiction: {
-            justification: ''
+            justification: '',
+            evidence:''
         },
         cashCollateral: {
             type: '',
@@ -65,6 +66,10 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
                 acceptableCMA: {
                     type: riskAssessment?.acceptableCMA?.type,
                     party: riskAssessment?.acceptableCMA?.party,
+                },
+                acceptableJurisdiction: {
+                    justification: riskAssessment?.acceptableJurisdiction?.justification,
+                    evidence: riskAssessment?.acceptableJurisdiction?.evidence,
                 },
             })
         }

@@ -9,7 +9,8 @@ const axios = require('axios').default;
 const defaultHeaders = {
     isAuth: true,
     AdditionalParams: {},
-    isJsonRequest: true
+    isJsonRequest: true,
+    "Access-Control-Allow-Origin": "https://oramsys3.netlify.app"
 };
 
 

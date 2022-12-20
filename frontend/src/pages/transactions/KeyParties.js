@@ -11,11 +11,7 @@ import { CurrencyOptions } from "../../helper/common"
 import { transactionDataAction } from '../../redux/actions/transactionDataAction'
 
 const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getBorrower }) => {
-    console.log(getLender)
-    console.log(getBorrower)
-
     const dispatch = useDispatch()
-
     const navigate = useNavigate()
     const [showEditModal, setShowEditModal] = useState(false)
     const [tableData, setTableData] = useState([])
@@ -27,13 +23,34 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     const [borrower_Applicant, setBorrower_Applicant] = useState("")
     const [lenders, setLenders] = useState("")
     const [error, setError] = useState({})
+    const [names, setNames] = useState([])
+    const [buyers, setBuyer] = useState([])
+    const nameOption = useSelector(state => state.entityData.entity)
     const [keyParties, setkeyParties] = useState({
         documentRemittance: ""
     })
+    const [securityDocuments, setSecurityDocuments] = useState([{
+        type: "",
+        name: "",
+        file: ""
+    }])
 
+    const parties = [{
+        label: 'Subsidiary',
+        value: 'subsidiary',
+        prefix: ''
+    }, {
+        label: 'Owners',
+        value: 'owners',
+        prefix: ''
+    }, {
+        label: 'Associate',
+        value: 'associate',
+        prefix: ''
+    }];
     const transactionData = useSelector((state) => state.transactionData.transactionData)
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
-
+    console.log('getTransactionByIdData.data.keyParties', getTransactionByIdData.data);
     useEffect(() => {
         if (getTransactionByIdData && getTransactionByIdData.data) {
             setTableData(getTransactionByIdData.data.keyParties[0].parties.map((ele) => {
@@ -48,6 +65,12 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
             setkeyParties(getTransactionByIdData.data?.documentRemittance)
         }
     }, [getTransactionByIdData])
+
+    useEffect(() => {
+        if (nameOption?.data) {
+            setNames(nameOption?.data)
+        }
+    }, [nameOption])
 
     const partiesEditData = (data, id) => {
         console.log('id ==', id)
@@ -68,9 +91,10 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
             setTableData([...tableData, data])
         }
     }
-    
+
 
     const next = () => {
+        let relatedParties = keyParties;
         let body = {
             ...transactionData,
             keyParties: {
@@ -80,13 +104,18 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                         type: ele.type,
                         name: ele.name
                     }
-                })
+                }),
+                relatedParties: relatedParties
             },
             type: transactionType
         }
+        // console.log(body);
+        // return false;
         dispatch(transactionDataAction(body))
         hendelNext()
     }
+    console.log(keyParties);
+
     // const options = [
     //     "Afghanistan",
     //     "Albania",
@@ -98,6 +127,34 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     //     "India",
     // ];
 
+    // console.log('names', names);
+
+
+    useEffect(() => {
+        let buyer_arr = [];
+        if (names) {
+            names.forEach(element => {
+                // console.log('roles', element.roles);
+                element.roles.forEach(roleDetail => {
+                    // console.log('roleDetail', roleDetail);
+                    // console.log('roleDetail.roleId.roleName', roleDetail.roleId.roleName);
+                    if (roleDetail.roleId.roleName == "Buyer") {
+                        buyer_arr.push(element);
+                    }
+                });
+
+            });
+        }
+        setBuyer(buyer_arr);
+    }, [names])
+
+    const handleRelation = (e, newValue, val) => {
+        console.log(val);
+        setkeyParties({ ...keyParties, party_relation: newValue.label, buyer: val.details?.name, shipper: val.warehouses[0].name });
+    }
+
+
+
     return (
         <>
             <div className='product'>
@@ -108,39 +165,43 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                 <MaterialTable
                     title=""
                     columns={[
-                        { title: 'Borrower/Applicant', render: rowData =>  
-                        <Row>
-                            <Col lg={12} className="mb-4">
-                                <TextField
-                                    label='Borrower/Applicant Name'
-                                    variant='standard'
-                                    color='warning'
-                                    name='borrower_Applicant'
-                                    
-                                    // onChange={(e) => setBorrower_Applicant(e.target.value)}
-                                    value={getBorrower}
-                                    disabled={true}
-                                />
-                            </Col>
-                         </Row>},
-                        { title: 'Lender', render: rowData =>  
-                        <Row>
-                           <Col lg={12} className="mb-4">
-                                <TextField
-                                    label='Lenders'
-                                    variant='standard'
-                                    color='warning'
-                                    name='lenders'
-                                    
-                                    // onChange={(e) => setLenders(e.target.value)}
-                                    value={getLender}
-                                    disabled={true}
-                                />
-                            </Col>
-                         </Row>},
+                        {
+                            title: 'Borrower/Applicant', render: rowData =>
+                                <Row>
+                                    <Col lg={12} className="mb-4">
+                                        <TextField
+                                            label='Borrower/Applicant Name'
+                                            variant='standard'
+                                            color='warning'
+                                            name='borrower_Applicant'
+
+                                            // onChange={(e) => setBorrower_Applicant(e.target.value)}
+                                            value={getBorrower}
+                                            disabled={true}
+                                        />
+                                    </Col>
+                                </Row>
+                        },
+                        {
+                            title: 'Lender', render: rowData =>
+                                <Row>
+                                    <Col lg={12} className="mb-4">
+                                        <TextField
+                                            label='Lenders'
+                                            variant='standard'
+                                            color='warning'
+                                            name='lenders'
+
+                                            // onChange={(e) => setLenders(e.target.value)}
+                                            value={getLender}
+                                            disabled={true}
+                                        />
+                                    </Col>
+                                </Row>
+                        },
                         { title: 'Name', field: 'name.label' },
                         { title: 'Label', field: 'type.label' },
-                        
+
                     ]}
                     data={tableData}
 
@@ -173,201 +234,73 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
             <div className='add-edit-product parties_main'>
                 <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
                     <h5 className="title-color">Related parties</h5>
-                    <Row>
-                        <Col lg={2}>
-                            <div className='d-flex'>
-                                <img src='../../../assets/img/about/Tag.png' />
-                                <p className='mb-0 ms-4'>Buyer 1</p>
-                            </div>
-                        </Col>
-                        <Col lg={2}>
-                            <div className='d-flex'>
-                                <img src='../../../assets/img/about/Deliver.png' />
-                                <p className='mb-0 ms-4'>Shipper 1</p>
-                            </div>
-                        </Col>
-                        <Col lg={4}>
-                            <div className='d-flex align-items-center Related_parties'>
-                                <p className='mb-0 title-color'>Relation</p>
-                                <Autocomplete
-                                    className='ms-3 mb-3'
-                                    options={CurrencyOptions}
-                                    getOptionLabel={(option) => option.label}
-                                    id="disable-clearable"
-                                    label="Contract currency"
-                                    value={CurrencyOptions && setkeyParties?.documentRemittance && CurrencyOptions.find(
-                                        (ele) => ele.label === setkeyParties.documentRemittance
-                                    )}
-                                    renderInput={(params) => (
-                                        <TextField {...params} label="Contract currency" variant="standard" />
-                                    )}
-                                    onChange={(event, newValue) => {
-                                        setkeyParties({ ...keyParties, documentRemittance: newValue.label });
-                                    }}
-                                    disableClearable
-                                />
-                            </div>
-                        </Col>
-                        <Col lg={4}>
-                            <div className='drag-and-drop'>
-                                <DropzoneArea
-                                    Icon="none"
-                                    filesLimit={1}
-                                    showPreviews={true}
-                                    showPreviewsInDropzone={false}
-                                    useChipsForPreview
-                                    previewGridProps={{ container: { spacing: 1, } }}
-                                    dropzoneText='Upload Evidence'
-                                    previewText=""
-                                    onChange={(files) => console.log('Files:', files)}
-                                />
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col lg={2}>
-                            <div className='d-flex'>
-                                <img src='../../../assets/img/about/Deliver.png' />
-                                <p className='mb-0 ms-4'>Buyer 1</p>
-                            </div>
-                        </Col>
-                        <Col lg={2}>
-                            <div className='d-flex'>
-                                <img src='../../../assets/img/about/Deliver.png' />
-                                <p className='mb-0 ms-4'>Shipper 1</p>
-                            </div>
-                        </Col>
-                        <Col lg={4}>
-                            <div className='d-flex align-items-center Related_parties'>
-                                <p className='mb-0 title-color'>Relation</p>
-                                <Autocomplete
-                                    className='ms-3 mb-3'
-                                    options={CurrencyOptions}
-                                    getOptionLabel={(option) => option.label}
-                                    id="disable-clearable"
-                                    label="Contract currency"
-                                    renderInput={(params) => (
-                                        <TextField {...params} label="Contract currency" variant="standard" />
-                                    )}
-                                    onChange={(event, newValue) => {
-                                        setkeyParties({ ...keyParties, documentRemittance: newValue.label });
-                                    }}
-                                    disableClearable
-                                />
-                            </div>
-                        </Col>
-                        <Col lg={4}>
-                            <div className='drag-and-drop'>
-                                <DropzoneArea
-                                    Icon="none"
-                                    filesLimit={1}
-                                    showPreviews={true}
-                                    showPreviewsInDropzone={false}
-                                    useChipsForPreview
-                                    previewGridProps={{ container: { spacing: 1, } }}
-                                    dropzoneText='Upload Evidence'
-                                    previewText=""
-                                    onChange={(files) => console.log('Files:', files)}
-                                />
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col lg={2}>
-                            <div className='d-flex'>
-                                <img src='../../../assets/img/about/Tag.png' />
-                                <p className='mb-0 ms-4'>Buyer 1</p>
-                            </div>
-                        </Col>
-                        <Col lg={2}>
-                            <div className='d-flex'>
-                                <img src='../../../assets/img/about/Deliver.png' />
-                                <p className='mb-0 ms-4'>Shipper 1</p>
-                            </div>
-                        </Col>
-                        <Col lg={4}>
-                            <div className='d-flex align-items-center Related_parties'>
-                                <p className='mb-0 title-color'>Relation</p>
-                                <Autocomplete
-                                    className='ms-3 mb-3'
-                                    options={CurrencyOptions}
-                                    getOptionLabel={(option) => option.label}
-                                    id="disable-clearable"
-                                    label="Contract currency"
-                                    renderInput={(params) => (
-                                        <TextField {...params} label="Contract currency" variant="standard" />
-                                    )}
-                                    onChange={(event, newValue) => {
-                                        setkeyParties({ ...keyParties, documentRemittance: newValue.label });
-                                    }}
-                                    disableClearable
-                                />
-                            </div>
-                        </Col>
-                        <Col lg={4}>
-                            <div className='drag-and-drop'>
-                                <DropzoneArea
-                                    Icon="none"
-                                    filesLimit={1}
-                                    showPreviews={true}
-                                    showPreviewsInDropzone={false}
-                                    useChipsForPreview
-                                    previewGridProps={{ container: { spacing: 1, } }}
-                                    dropzoneText='Upload Evidence'
-                                    previewText=""
-                                    onChange={(files) => console.log('Files:', files)}
-                                />
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col lg={2}>
-                            <div className='d-flex'>
-                                <img src='../../../assets/img/about/Tag.png' />
-                                <p className='mb-0 ms-4'>Buyer 1</p>
-                            </div>
-                        </Col>
-                        <Col lg={2}>
-                            <div className='d-flex'>
-                                <img src='../../../assets/img/about/Deliver.png' />
-                                <p className='mb-0 ms-4'>Shipper 1</p>
-                            </div>
-                        </Col>
-                        <Col lg={4}>
-                            <div className='d-flex align-items-center Related_parties'>
-                                <p className='mb-0 title-color'>Relation</p>
-                                <Autocomplete
-                                    className='ms-3 mb-3'
-                                    options={CurrencyOptions}
-                                    getOptionLabel={(option) => option.label}
-                                    id="disable-clearable"
-                                    label="Contract currency"
-                                    renderInput={(params) => (
-                                        <TextField {...params} label="Contract currency" variant="standard" />
-                                    )}
-                                    onChange={(event, newValue) => {
-                                        setkeyParties({ ...keyParties, documentRemittance: newValue.label });
-                                    }}
-                                    disableClearable
-                                />
-                            </div>
-                        </Col>
-                        <Col lg={4}>
-                            <div className='drag-and-drop'>
-                                <DropzoneArea
-                                    Icon="none"
-                                    filesLimit={1}
-                                    showPreviews={true}
-                                    showPreviewsInDropzone={false}
-                                    useChipsForPreview
-                                    previewGridProps={{ container: { spacing: 1, } }}
-                                    dropzoneText='Upload Evidence'
-                                    previewText=""
-                                    onChange={(files) => console.log('Files:', files)}
-                                />
-                            </div>
-                        </Col>
-                    </Row>
+
+                    {buyers.map((val, ind) => (
+                        <><Row>
+                            <Col lg={2}>
+                                <div className='d-flex'>
+                                    <img src='../../../assets/img/about/Tag.png' />
+                                    <p className='mb-0 ms-4'>{val.details ? val.details?.name : "unknown"}</p>
+                                </div>
+                            </Col>
+                            <Col lg={2}>
+                                {val.warehouses.map((element) => (
+                                    <><div className='d-flex'>
+                                        <img src='../../../assets/img/about/Deliver.png' />
+                                        <p className='mb-0 ms-4'>{element.name ? element.name : "unknown"}</p>
+                                    </div></>
+                                ))}
+
+                            </Col>
+                            <Col lg={4}>
+                                <div className='d-flex align-items-center Related_parties'>
+                                    <p className='mb-0 title-color'>Party Relation</p>
+                                    <Autocomplete
+                                        className='ms-3 mb-3'
+                                        options={parties}
+                                        getOptionLabel={(option) => option.label}
+                                        id="disable-clearable"
+                                        label="Party Relation"
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Party Relation" variant="standard" />
+                                        )}
+                                        value={parties && setkeyParties?.documentRemittance && parties.find(
+                                            (ele) => ele.label === setkeyParties.documentRemittance
+                                        )}
+                                        onChange={(event, newValue) => handleRelation(event, newValue, val)}
+                                        disableClearable
+                                    />
+                                </div>
+                            </Col>
+                            <Col lg={4}>
+                                <div className='drag-and-drop'>
+                                    <DropzoneArea
+                                        Icon="none"
+                                        filesLimit={1}
+                                        showPreviews={true}
+                                        showPreviewsInDropzone={false}
+                                        useChipsForPreview
+                                        previewGridProps={{ container: { spacing: 1, } }}
+                                        dropzoneText='Upload Evidence'
+                                        previewText=""
+                                        onChange={(e) => {
+                                            console.log("===", e?.target?.files)
+                                            let temp = [...securityDocuments];
+                                            Object.keys(e?.target?.files)?.map(file => {
+                                                console.log("file", file)
+                                                const reader = new FileReader();
+                                                reader.readAsDataURL(e?.target?.files[file]);
+                                                reader.onload = () => temp.push({ name: e?.target?.files[file]?.name, type: e?.target?.files[file]?.type, file: reader.result?.split(",")[1] });
+                                                reader.onerror = error => console.log(error);
+                                            })
+                                            setSecurityDocuments(temp)
+                                        }}
+                                    />
+                                </div>
+                            </Col>
+                        </Row></>
+                    ))}
+
                 </div>
             </div>
             <div className='footer_'>

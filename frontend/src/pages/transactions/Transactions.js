@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { getRiskAssessment, riskAssessmentAction } from '../../redux/actions/riskAssessmentAction';
 import ExcelModal from '../../component/Modal/ExcelModal';
-import { ApiGet } from '../../helper/API/ApiData';
+import { ApiGet, ApiGet2 } from '../../helper/API/ApiData';
 import { Button, Icon } from '@material-ui/core';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { GET_TRANSACTION_BY_ID } from '../../redux/types';
@@ -61,17 +61,17 @@ const Transactions = () => {
         console.log('selected🧨🧨', selected)
         if (riskAssessment.status === 200 && selected) {
             // if (riskAssessment && riskAssessment.data && riskAssessment.data.transactionId   ) {
-               navigate(`/risk-assessment?id=${selected}`)
+            navigate(`/risk-assessment?id=${selected}`)
             // }
         }
     }, [riskAssessment, selected])
 
     const downloadTermSheet = (id, name) => {
-        ApiGet(`transaction/termSheet/${id}`).then(res => {
+        ApiGet2(`transaction/termSheet/${id}`).then(res => {
             let data = res.data.data
-            if(name === 'view'){
+            if (name === 'view') {
                 ViewRiskAssessment(data)
-            } else if (name === 'download'){
+            } else if (name === 'download') {
                 converBase64toBlob(data);
             }
         }
@@ -122,7 +122,7 @@ const Transactions = () => {
         {
             icon: 'assessment',
             tooltip: 'Risk Assessment',
-            onClick: (event, rowData) => { dispatch(getRiskAssessment(rowData._id)) ;setSelected(rowData._id)}
+            onClick: (event, rowData) => { dispatch(getRiskAssessment(rowData._id)); setSelected(rowData._id) }
         },
         {
             icon: 'visibilityIcon',
@@ -146,15 +146,15 @@ const Transactions = () => {
     }
     const formateCurrencyValue = (data) => {
         if (data) {
-          let value = data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          // let prefix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.prefix
-          // let suffix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.suffix
-          // return prefix ? (prefix + value) : suffix ? (value + suffix) : value
-          return value
+            let value = data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            // let prefix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.prefix
+            // let suffix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.suffix
+            // return prefix ? (prefix + value) : suffix ? (value + suffix) : value
+            return value
         } else {
-          return data
+            return data
         }
-      }
+    }
 
     return (
         <>
@@ -187,7 +187,7 @@ const Transactions = () => {
                         { title: 'Applicant', field: 'borrower_Applicant' },
                         { title: 'Lenders', field: 'lenders' },
                         { title: 'Product', field: 'details.productDetails.name.name' },
-                        { title: 'Value', render: rowData =>  formateCurrencyValue(rowData.details.contractDetails.value)},
+                        { title: 'Value', render: rowData => formateCurrencyValue(rowData.details.contractDetails.value) },
                         // { title: 'Origination Port', field: 'details.shippingOptions.portOfOrigin.name' },
                         // { title: 'Destination Port', field: 'details.shippingOptions.destinationPort.name' },
                         // { title: 'Term Sheet', field: 'termSheet' },
@@ -204,7 +204,7 @@ const Transactions = () => {
 
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
 
-                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
 
 
                     options={{

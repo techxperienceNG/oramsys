@@ -284,16 +284,16 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                         dropzoneText='Upload Evidence'
                                         previewText=""
                                         onChange={(e) => {
-                                            console.log("===", e?.target?.files)
-                                            let temp = [...securityDocuments];
-                                            Object.keys(e?.target?.files)?.map(file => {
-                                                console.log("file", file)
-                                                const reader = new FileReader();
-                                                reader.readAsDataURL(e?.target?.files[file]);
-                                                reader.onload = () => temp.push({ name: e?.target?.files[file]?.name, type: e?.target?.files[file]?.type, file: reader.result?.split(",")[1] });
-                                                reader.onerror = error => console.log(error);
-                                            })
-                                            setSecurityDocuments(temp)
+                                            // console.log("===", e?.target?.files)
+                                            // let temp = [...securityDocuments];
+                                            // Object.keys(e?.target?.files)?.map(file => {
+                                            //     console.log("file", file)
+                                            //     const reader = new FileReader();
+                                            //     reader.readAsDataURL(e?.target?.files[file]);
+                                            //     reader.onload = () => temp.push({ name: e?.target?.files[file]?.name, type: e?.target?.files[file]?.type, file: reader.result?.split(",")[1] });
+                                            //     reader.onerror = error => console.log(error);
+                                            // })
+                                            // setSecurityDocuments(temp)
                                         }}
                                     />
                                 </div>

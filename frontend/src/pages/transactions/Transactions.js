@@ -67,7 +67,7 @@ const Transactions = () => {
     }, [riskAssessment, selected])
 
     const downloadTermSheet = (id, name) => {
-        ApiGet2(`transaction/termSheet/${id}`).then(res => {
+        ApiGet(`transaction/termSheet/${id}`).then(res => {
             let data = res.data.data
             if (name === 'view') {
                 ViewRiskAssessment(data)

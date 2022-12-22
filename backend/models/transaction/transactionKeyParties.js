@@ -1,6 +1,7 @@
 "use strict"
 
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { text } = require('pdfkit');
 var Schema = mongoose.Schema
 
 var Parties = new Schema({
@@ -8,10 +9,23 @@ var Parties = new Schema({
     name: { type: Schema.Types.ObjectId, ref: "Entity", required: false, default: null }
 })
 
+var relatedParties = new Schema({
+    party_relation: { type: String, required: true, default: null },
+    buyer: { type: String, required: true, default: null },
+    shipper: { type: String, required: true, default: null },
+});
+
+var uploadEvidence = new Schema({
+    type: { type: String, required: true, default: null },
+    name: { type: String, required: true, default: null },
+    file: { type: String, required: true, default: null },
+});
 
 var Schema = new Schema({
     transactionId: { type: String, required: true, default: null },
     parties: { type: [Parties], required: false },
+    relatedParties: { type: [relatedParties], required: false },
+    uploadEvidence: { type: [uploadEvidence], required: false },
 }, {
     timestamps: true
 })

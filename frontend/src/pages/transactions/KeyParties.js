@@ -29,7 +29,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     const [keyParties, setkeyParties] = useState({
         documentRemittance: ""
     })
-    const [securityDocuments, setSecurityDocuments] = useState([{
+
+    const [uploadEvidence, setUploadEvidence] = useState([{
         type: "",
         name: "",
         file: ""
@@ -48,10 +49,12 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         value: 'associate',
         prefix: ''
     }];
+
     const transactionData = useSelector((state) => state.transactionData.transactionData)
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
-    console.log('getTransactionByIdData.data.keyParties', getTransactionByIdData.data);
+
     useEffect(() => {
+        console.log('getTransactionByIdData.data?.keyparties',getTransactionByIdData.data?.keyParties[0].relatedParties);
         if (getTransactionByIdData && getTransactionByIdData.data) {
             setTableData(getTransactionByIdData.data.keyParties[0].parties.map((ele) => {
                 return {
@@ -62,7 +65,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
             setEditId(getTransactionByIdData?.data?.keyParties[0]?._id)
             setBorrower_Applicant(getLender.borrower_Applicant)
             setLenders(getBorrower.lenders)
-            setkeyParties(getTransactionByIdData.data?.documentRemittance)
+            setkeyParties(getTransactionByIdData.data?.keyParties[0].relatedParties);
+            setUploadEvidence(getTransactionByIdData.data?.keyParties[0].uploadEvidence);
         }
     }, [getTransactionByIdData])
 
@@ -92,7 +96,6 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         }
     }
 
-
     const next = () => {
         let relatedParties = keyParties;
         let body = {
@@ -105,7 +108,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                         name: ele.name
                     }
                 }),
-                relatedParties: relatedParties
+                relatedParties: relatedParties,
+                uploadEvidence: uploadEvidence
             },
             type: transactionType
         }
@@ -114,21 +118,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         dispatch(transactionDataAction(body))
         hendelNext()
     }
+    
     console.log(keyParties);
-
-    // const options = [
-    //     "Afghanistan",
-    //     "Albania",
-    //     "Algeria",
-    //     "Andorra",
-    //     "Angola",
-    //     "Antigua",
-    //     "Argentina",
-    //     "India",
-    // ];
-
-    // console.log('names', names);
-
+    console.log(parties);
 
     useEffect(() => {
         let buyer_arr = [];
@@ -148,11 +140,31 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         setBuyer(buyer_arr);
     }, [names])
 
-    const handleRelation = (e, newValue, val) => {
-        console.log(val);
-        setkeyParties({ ...keyParties, party_relation: newValue.label, buyer: val.details?.name, shipper: val.warehouses[0].name });
+    const handleRelation = (e, newValue, val, ind) => {
+        console.log(keyParties);
+        var temp = [];
+        temp[ind] = { party_relation: newValue.label, buyer: val.details?.name, shipper: val.warehouses[0].name };
+        setkeyParties(temp);
     }
 
+    const handleChangeFile = (file, ind) => {
+        console.log(file);
+        if (file) {
+            new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                // }).then((res) => setUploadEvidence({ type: 'img', name: file.name, file: res }));
+            }).then((res) => {
+                var temp = [];
+                temp[ind] = { type: 'img', name: file.name, file: res };
+                setUploadEvidence(temp);
+            });
+        }
+        // console.log(uploadEvidence);
+        // console.log(keyParties);
+    }
 
 
     return (
@@ -264,15 +276,16 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                         renderInput={(params) => (
                                             <TextField {...params} label="Party Relation" variant="standard" />
                                         )}
-                                        value={parties && setkeyParties?.documentRemittance && parties.find(
-                                            (ele) => ele.label === setkeyParties.documentRemittance
+                                        value={parties && keyParties[ind]?.party_relation && parties.find(
+                                            (ele) => ele.label === keyParties[ind]?.party_relation
                                         )}
-                                        onChange={(event, newValue) => handleRelation(event, newValue, val)}
+                                        onChange={(event, newValue) => handleRelation(event, newValue, val, ind)}
                                         disableClearable
                                     />
                                 </div>
+                                
                             </Col>
-                            <Col lg={4}>
+                            <Col lg={2}>
                                 <div className='drag-and-drop'>
                                     <DropzoneArea
                                         Icon="none"
@@ -283,18 +296,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                         previewGridProps={{ container: { spacing: 1, } }}
                                         dropzoneText='Upload Evidence'
                                         previewText=""
-                                        onChange={(e) => {
-                                            // console.log("===", e?.target?.files)
-                                            // let temp = [...securityDocuments];
-                                            // Object.keys(e?.target?.files)?.map(file => {
-                                            //     console.log("file", file)
-                                            //     const reader = new FileReader();
-                                            //     reader.readAsDataURL(e?.target?.files[file]);
-                                            //     reader.onload = () => temp.push({ name: e?.target?.files[file]?.name, type: e?.target?.files[file]?.type, file: reader.result?.split(",")[1] });
-                                            //     reader.onerror = error => console.log(error);
-                                            // })
-                                            // setSecurityDocuments(temp)
-                                        }}
+                                        onChange={(file) => handleChangeFile(file[0], ind)}
                                     />
                                 </div>
                             </Col>

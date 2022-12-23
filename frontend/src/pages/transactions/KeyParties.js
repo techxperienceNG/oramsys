@@ -26,9 +26,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     const [names, setNames] = useState([])
     const [buyers, setBuyer] = useState([])
     const nameOption = useSelector(state => state.entityData.entity)
-    const [keyParties, setkeyParties] = useState({
-        documentRemittance: ""
-    })
+    const [keyParties, setkeyParties] = useState([])
 
     const [uploadEvidence, setUploadEvidence] = useState([{
         type: "",
@@ -54,7 +52,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
 
     useEffect(() => {
-        console.log('getTransactionByIdData.data?.keyparties',getTransactionByIdData.data?.keyParties[0].relatedParties);
+        // console.log('getTransactionByIdData.data?.keyparties',getTransactionByIdData.data?.keyParties[0].relatedParties);
         if (getTransactionByIdData && getTransactionByIdData.data) {
             setTableData(getTransactionByIdData.data.keyParties[0].parties.map((ele) => {
                 return {
@@ -77,8 +75,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     }, [nameOption])
 
     const partiesEditData = (data, id) => {
-        console.log('id ==', id)
-        console.log('data ==', data)
+        // console.log('id ==', id)
+        // console.log('data ==', data)
 
         if (id !== undefined) {
             setTableData(
@@ -120,7 +118,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     }
     
     console.log(keyParties);
-    console.log(parties);
+    // console.log(parties);
 
     useEffect(() => {
         let buyer_arr = [];
@@ -141,14 +139,14 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     }, [names])
 
     const handleRelation = (e, newValue, val, ind) => {
-        console.log(keyParties);
+        // console.log(keyParties);
         var temp = [];
         temp[ind] = { party_relation: newValue.label, buyer: val.details?.name, shipper: val.warehouses[0].name };
         setkeyParties(temp);
     }
 
     const handleChangeFile = (file, ind) => {
-        console.log(file);
+        // console.log(file);
         if (file) {
             new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -276,7 +274,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                         renderInput={(params) => (
                                             <TextField {...params} label="Party Relation" variant="standard" />
                                         )}
-                                        value={parties && keyParties[ind]?.party_relation && parties.find(
+                                        value={parties && keyParties!= undefined && keyParties.length > 0 && keyParties[ind]?.party_relation && parties.find(
                                             (ele) => ele.label === keyParties[ind]?.party_relation
                                         )}
                                         onChange={(event, newValue) => handleRelation(event, newValue, val, ind)}

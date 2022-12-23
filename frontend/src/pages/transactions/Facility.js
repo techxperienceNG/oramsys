@@ -689,7 +689,9 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                         name: ele.name.value
                     }
                 }),
-                _id: transactionData.keyParties._id
+                _id: transactionData.keyParties._id,
+                relatedParties: transactionData.keyParties?.relatedParties,
+                uploadEvidence: transactionData.keyParties?.uploadEvidence
             },
             documentFlow: transactionData.documentFlow,
             fundFlow: {

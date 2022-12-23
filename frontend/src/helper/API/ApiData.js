@@ -13,11 +13,44 @@ const defaultHeaders = {
     "Access-Control-Allow-Origin": "https://oramsys3.netlify.app"
 };
 
+const termHeaders = {
+    isAuth: true,
+    isJsonRequest: true,
+    "Access-Control-Allow-Origin": "https://oramsys3.netlify.app"
+};
 
 export const ApiGet = (type) => {
     const s = type.includes('?') ? '&' : '?';
     return new Promise((resolve, reject) => {
         axios.get(`${BaseURL}${type}`, getHttpOptions())
+            .then((responseJson) => {
+                resolve(responseJson.data);
+            })
+            .catch((error) => {
+                if (error?.response?.status === 401) {
+                    AuthStorage.deauthenticateUser();
+                    window.location.href = "/"
+                }
+                if (error && error.hasOwnProperty('response') &&
+                    error.response && error.response.hasOwnProperty('data') && error.response.data &&
+                    error.response.data.hasOwnProperty('error') && error.response.data.error) {
+                    reject(error.response.data.error);
+                } else {
+                    reject(error);
+                }
+            });
+    });
+}
+
+
+export const ApiGet2 = (type) => {
+    const s = type.includes('?') ? '&' : '?';
+    return new Promise((resolve, reject) => {
+        axios.get(`${BaseURL}${type}`, {
+            headers: {
+                'Access-Control-Allow-Origin': 'https://oramsys3.netlify.app'
+            }
+        })
             .then((responseJson) => {
                 resolve(responseJson.data);
             })

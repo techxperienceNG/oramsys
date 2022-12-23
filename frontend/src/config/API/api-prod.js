@@ -1,6 +1,7 @@
 const protocol = 'http';
 // const host = 'https://oramsys-backend.vercel.app/';
-const host = 'http://localhost:5002/';
+const host = 'https://oramsysapi.myjfh.com/';
+// const host = 'http://localhost:5002/';
 // const host = 'http://3.219.151.79:5002/';
 // const port = '5002';
 // const trailUrl = 'api/v1';

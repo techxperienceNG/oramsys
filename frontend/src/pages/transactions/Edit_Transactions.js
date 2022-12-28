@@ -113,7 +113,6 @@ const Edit_Transactions = () => {
                                     {
                                         productNature === 'Physical' ?
                                             <>
-                                                {console.log('activeStep', activeStep)}
                                                 {activeStep + 1 === 1 && <DetailsTransaction hendelNext={handleNext} signalContract={signalContract} signalLender={signalLender} signalBorrower={signalBorrower} transactionType={transactionType} />}
                                                 {activeStep + 1 === 2 && <KeyParties hendelNext={handleNext} getLender={getLender} getBorrower={getBorrower} hendelCancel={handleBack} transactionType={transactionType} />}
                                                 {activeStep + 1 === 3 && <DocumentFlow hendelNext={handleNext} hendelCancel={handleBack} />}
@@ -133,7 +132,7 @@ const Edit_Transactions = () => {
                                         <div style={{ height: "88vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                             <p style={{ fontSize: '48px', fontWeight: "bold" }}>Product not yet available. Coming soon</p>
                                         </div>
-                                        {/* {console.log('activeStep', activeStep)}
+                                        {/* 
                                         {activeStep + 1 === 1 && <KeyParties hendelNext={handleNext} hendelCancel={handleBack} transactionType={transactionType}/>}
                                         {activeStep + 1 === 2 && <DocumentFlow hendelNext={handleNext} hendelCancel={handleBack} />}
                                         {activeStep + 1 === 3 && <FundFlow hendelNext={handleNext} hendelCancel={handleBack} />}

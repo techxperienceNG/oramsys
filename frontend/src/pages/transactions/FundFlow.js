@@ -85,7 +85,6 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
 
     useEffect(() => {
         if (getTransactionByIdData && getTransactionByIdData.data) {
-            console.log("getTransactionByIdData====", getTransactionByIdData.data)
             setFundFlow({
                 _id: getTransactionByIdData.data?.fundFlow?._id,
                 contractCurrency: getTransactionByIdData.data?.fundFlow?.contractCurrency,

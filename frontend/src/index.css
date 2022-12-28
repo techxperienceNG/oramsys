@@ -16138,11 +16138,11 @@ div#wrapper.open>.offcanvas-mask {
 }
 
 .Related_parties .MuiInput-root {
-  width: 277px !important;
+  width: 150px !important;
 }
 
 .parties_main .drag-and-drop .MuiDropzoneArea-root {
-  width: 277px !important;
+  width: auto !important;
   padding: 10px;
 }
 

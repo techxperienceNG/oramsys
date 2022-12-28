@@ -142,7 +142,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
 
     const handleRelation = (e, newValue, val, ind) => {
         console.log(keyParties);
-        var temp = [];
+        var temp = undefined ?? [];
         temp[ind] = { party_relation: newValue.label, buyer: val.details?.name, shipper: val.warehouses[0].name };
         setkeyParties(temp);
     }
@@ -157,7 +157,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                 reader.onerror = error => reject(error);
                 // }).then((res) => setUploadEvidence({ type: 'img', name: file.name, file: res }));
             }).then((res) => {
-                var temp = [];
+                var temp = undefined ?? [];
                 temp[ind] = { type: 'img', name: file.name, file: res };
                 setUploadEvidence(temp);
             });

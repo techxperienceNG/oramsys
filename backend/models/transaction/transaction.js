@@ -647,7 +647,7 @@ Schema.statics.getById = async function (id) {
         })
         .populate({
             path: "keyParties",
-            select: ['parties', 'relatedParties','uploadEvidence'],
+            select: ['parties', 'relatedParties'],
             populate: [{
                 path: "parties",
                 populate: [
@@ -666,10 +666,7 @@ Schema.statics.getById = async function (id) {
             },
             {
                 path: "relatedParties",
-                select: ['party_relation', 'buyer', 'details']
-            },{
-                path: "uploadEvidence",
-                select: ['party_relation', 'buyer', 'details']
+                select: ['party_relation', 'buyer', 'details','upload_evidence']
             }
             ]
         })

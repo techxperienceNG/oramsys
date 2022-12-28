@@ -217,7 +217,6 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
   useEffect(() => {
     if (getTransactionByIdData && getTransactionByIdData.data) {
-      console.log("getTransactionByIdData===", getTransactionByIdData)
       setEditId(getTransactionByIdData.data?.details?._id)
       setBorrower_Applicant(getTransactionByIdData.data?.borrower_Applicant)
       setLenders(getTransactionByIdData.data?.lenders)

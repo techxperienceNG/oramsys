@@ -177,8 +177,7 @@ class transactionController {
                     }
                     let element = {
                         parties: keyParty,
-                        relatedParties: keyParties?.relatedParties,
-                        uploadEvidence: keyParties?.uploadEvidence
+                        relatedParties: keyParties?.relatedParties
 
                     }
                     console.log('element keyparties',element);

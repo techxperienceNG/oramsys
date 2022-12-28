@@ -26,14 +26,12 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     const [names, setNames] = useState([])
     const [buyers, setBuyer] = useState([])
     const nameOption = useSelector(state => state.entityData.entity)
-    const [keyParties, setkeyParties] = useState([])
-
-    const [uploadEvidence, setUploadEvidence] = useState([{
-        type: "",
-        name: "",
-        file: ""
+    const [keyParties, setkeyParties] = useState([{
+        'party_relation': '', 'buyer': '', 'shipper': '', 'upload_evidence': ''
     }])
+    const [editMode, setEditMode] = useState(false);
 
+    const [warehouses, setWarehouses] = useState([])
     const parties = [{
         label: 'Subsidiary',
         value: 'subsidiary',
@@ -47,7 +45,6 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         value: 'associate',
         prefix: ''
     }];
-
     const transactionData = useSelector((state) => state.transactionData.transactionData)
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
 
@@ -63,8 +60,11 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
             setEditId(getTransactionByIdData?.data?.keyParties[0]?._id)
             setBorrower_Applicant(getLender.borrower_Applicant)
             setLenders(getBorrower.lenders)
-            setkeyParties(getTransactionByIdData.data?.keyParties[0].relatedParties);
-            setUploadEvidence(getTransactionByIdData.data?.keyParties[0].uploadEvidence);
+            if (getTransactionByIdData.data?.keyParties[0].relatedParties != undefined && getTransactionByIdData.data?.keyParties[0].relatedParties.length > 0) {
+                // console.log('keyparties at useEffect', keyParties);
+                setkeyParties(getTransactionByIdData.data?.keyParties[0].relatedParties);
+                setEditMode(true);
+            }
         }
     }, [getTransactionByIdData])
 
@@ -75,9 +75,6 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     }, [nameOption])
 
     const partiesEditData = (data, id) => {
-        // console.log('id ==', id)
-        // console.log('data ==', data)
-
         if (id !== undefined) {
             setTableData(
                 tableData.map((ele, i) => {
@@ -96,6 +93,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
 
     const next = () => {
         let relatedParties = keyParties;
+        // console.log(relatedParties);
+        // return false;
         let body = {
             ...transactionData,
             keyParties: {
@@ -107,63 +106,88 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                     }
                 }),
                 relatedParties: relatedParties,
-                uploadEvidence: uploadEvidence
             },
             type: transactionType
         }
-        // console.log(body);
-        // return false;
         dispatch(transactionDataAction(body))
         hendelNext()
     }
-    
-    console.log(keyParties);
-    // console.log(parties);
+
+    console.log('keyparties at 118', keyParties);
+    console.log(names);
 
     useEffect(() => {
         let buyer_arr = [];
+        let warehouses = [];
         if (names) {
             names.forEach(element => {
-                // console.log('roles', element.roles);
+                // console.log('element ', element);
                 element.roles.forEach(roleDetail => {
                     // console.log('roleDetail', roleDetail);
                     // console.log('roleDetail.roleId.roleName', roleDetail.roleId.roleName);
                     if (roleDetail.roleId.roleName == "Buyer") {
-                        buyer_arr.push(element);
+                        var temp = {
+                            label: element.details.name,
+                            value: element.details.name,
+                            prefix: ''
+                        };
+                        buyer_arr.push(temp);
+
+                        element.warehouses.forEach(warehose => {
+                            warehouses.push(warehose);
+                        })
+
                     }
                 });
 
             });
         }
         setBuyer(buyer_arr);
+        setWarehouses(warehouses);
     }, [names])
 
-    const handleRelation = (e, newValue, val, ind) => {
-        // console.log(keyParties);
-        var temp = [];
-        temp[ind] = { party_relation: newValue.label, buyer: val.details?.name, shipper: val.warehouses[0].name };
+    let temp = keyParties;
+    const handleRelation = (e, newValue, ind) => {
+        console.log('handleRelation keyParties', keyParties);
+        temp[ind].party_relation = newValue.label;
+        console.log('handleRelation temp ----->', temp);
         setkeyParties(temp);
+        console.log(keyParties);
+    }
+
+    const handleBuyer = (e, newValue, ind) => {
+        let temp = keyParties;
+        temp[ind].buyer = newValue.label;
+        setkeyParties(temp);
+        console.log('handleBuyer keyParties', keyParties);
+
+    }
+
+    const handleShipper = (e, newValue, ind) => {
+        var temp = keyParties;
+        temp[ind].shipper = newValue.name;
+        setkeyParties(temp);
+        console.log('handleBuyer keyParties', keyParties);
+
     }
 
     const handleChangeFile = (file, ind) => {
-        // console.log(file);
         if (file) {
             new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = () => resolve(reader.result);
                 reader.onerror = error => reject(error);
-                // }).then((res) => setUploadEvidence({ type: 'img', name: file.name, file: res }));
             }).then((res) => {
-                var temp = [];
-                temp[ind] = { type: 'img', name: file.name, file: res };
-                setUploadEvidence(temp);
+                var temp = keyParties;
+                temp[ind].upload_evidence = { type: 'img', name: file.name, file: res };
+                setkeyParties(temp);
             });
         }
-        // console.log(uploadEvidence);
-        // console.log(keyParties);
+        console.log('handleChangeFile keyparties', keyParties);
     }
 
+    const buyer_data_loop = [0];
 
     return (
         <>
@@ -245,61 +269,87 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                 <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
                     <h5 className="title-color">Related parties</h5>
 
-                    {buyers.map((val, ind) => (
-                        <><Row>
-                            <Col lg={2}>
-                                <div className='d-flex'>
-                                    <img src='../../../assets/img/about/Tag.png' />
-                                    <p className='mb-0 ms-4'>{val.details ? val.details?.name : "unknown"}</p>
-                                </div>
-                            </Col>
-                            <Col lg={2}>
-                                {val.warehouses.map((element) => (
-                                    <><div className='d-flex'>
-                                        <img src='../../../assets/img/about/Deliver.png' />
-                                        <p className='mb-0 ms-4'>{element.name ? element.name : "unknown"}</p>
-                                    </div></>
-                                ))}
-
-                            </Col>
-                            <Col lg={4}>
-                                <div className='d-flex align-items-center Related_parties'>
-                                    <p className='mb-0 title-color'>Party Relation</p>
-                                    <Autocomplete
-                                        className='ms-3 mb-3'
-                                        options={parties}
-                                        getOptionLabel={(option) => option.label}
-                                        id="disable-clearable"
-                                        label="Party Relation"
-                                        renderInput={(params) => (
-                                            <TextField {...params} label="Party Relation" variant="standard" />
-                                        )}
-                                        value={parties && keyParties!= undefined && keyParties.length > 0 && keyParties[ind]?.party_relation && parties.find(
-                                            (ele) => ele.label === keyParties[ind]?.party_relation
-                                        )}
-                                        onChange={(event, newValue) => handleRelation(event, newValue, val, ind)}
-                                        disableClearable
-                                    />
-                                </div>
-                                
-                            </Col>
-                            <Col lg={2}>
-                                <div className='drag-and-drop'>
-                                    <DropzoneArea
-                                        Icon="none"
-                                        filesLimit={1}
-                                        showPreviews={true}
-                                        showPreviewsInDropzone={false}
-                                        useChipsForPreview
-                                        previewGridProps={{ container: { spacing: 1, } }}
-                                        dropzoneText='Upload Evidence'
-                                        previewText=""
-                                        onChange={(file) => handleChangeFile(file[0], ind)}
-                                    />
-                                </div>
-                            </Col>
-                        </Row></>
+                    {buyer_data_loop.map((val, ind) => (
+                      <>
+                      <Row>
+                          <Col lg={3}>
+                              <div className='d-flex'>
+                                  <img src='../../../assets/img/about/Tag.png' style={{ "height": "30px", "top": "22px", "position": "relative" }} />
+                                  <Autocomplete
+                                      className='ms-3 mb-3 w-100'
+                                      options={buyers}
+                                      getOptionLabel={(option) => option.label || ""}
+                                      id={"disable-clearable-buyer" + ind}
+                                      label="Buyer"
+                                      renderInput={(params) => (
+                                          <TextField {...params} label="Buyer" variant="standard" />
+                                      )}
+              
+                                      getOptionSelected={(option) => option.label === 'test'}
+                                      onChange={(event, newValue) => handleBuyer(event, newValue, ind)}
+                                      disableClearable
+                                  />
+                              </div>
+                          </Col>
+                          <Col lg={3}>
+                              {warehouses.map((element) => (
+                                  <><div className='d-flex'>
+                                      <img src='../../../assets/img/about/Deliver.png' style={{ "height": "30px", "top": "22px", "position": "relative" }} />
+                                      <Autocomplete
+                                          className='ms-3 mb-3 w-100'
+                                          options={warehouses}
+                                          getOptionLabel={(option) => option.name}
+                                          id={"disable-clearable-shipper-" + ind}
+                                          label="Shipper"
+                                          renderInput={(params) => (
+                                              <TextField {...params} label="Shipper" variant="standard" />
+                                          )}
+                                          getOptionSelected={(option) => option.name === 'test'}
+                                          onChange={(event, newValue) => handleShipper(event, newValue, ind)}
+                                          disableClearable
+                                      />
+                                  </div></>
+                              ))}
+              
+                          </Col>
+                          <Col lg={4}>
+                              <div className='d-flex align-items-center Related_parties'>
+                                  <p className='mb-0 title-color'>Party Relation</p>
+                                  <Autocomplete
+                                      className='ms-3 mb-3'
+                                      options={parties}
+                                      getOptionLabel={(option) => option.label}
+                                      id={"disable-clearable-relation-party" + ind}
+                                      label="Party Relation"
+                                      renderInput={(params) => (
+                                          <TextField {...params} label="Party Relation" variant="standard" />
+                                      )}
+                                      getOptionSelected={(option) => option.label === 'test'}
+                                      onChange={(event, newValue) => handleRelation(event, newValue, ind)}
+                                      disableClearable
+                                  />
+                              </div>
+              
+                          </Col>
+                          <Col lg={2}>
+                              <div className='drag-and-drop'>
+                                  <DropzoneArea
+                                      Icon="none"
+                                      filesLimit={1}
+                                      showPreviews={true}
+                                      showPreviewsInDropzone={false}
+                                      useChipsForPreview
+                                      previewGridProps={{ container: { spacing: 1, } }}
+                                      dropzoneText='Upload Evidence'
+                                      previewText=""
+                                      onChange={(file) => handleChangeFile(file[0], ind)}
+                                  />
+                              </div>
+                          </Col>
+                      </Row>
+                  </>
                     ))}
+
 
                 </div>
             </div>

@@ -40,7 +40,6 @@ useEffect(() => {
 
   useEffect(() => {
     if (getTransactionByIdData && getTransactionByIdData.data) {
-        console.log("getTransactionByIdData=====", getTransactionByIdData.data)
         setFinancingSufficiently({
           ...financingSufficiently,
           contractCurrency: getTransactionByIdData.data?.details?.contractDetails?.currency,

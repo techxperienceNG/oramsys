@@ -29,8 +29,15 @@ const oktaAuth = new OktaAuth(config);
 
 
 const Routes = () => {
-
   const navigate = useNavigate();
+  
+  window.onload = function () {
+    if (!localStorage.getItem('userId')) {
+      navigate('/');
+    }
+  }
+
+
   const restoreOriginalUri = async (_oktaAuth, originalUri) => {
     navigate(toRelativeUrl(originalUri || "/", window.location.origin));
   };

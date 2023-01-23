@@ -15,7 +15,8 @@ var Schema = new Schema({
     status: { type: String, required: false, default: null },
     expiryDate: { type: Date, required: false, default: null },
     isApproved: { type: Boolean, required: true, default: false },
-    isDeleted: { type: Boolean, required: true, default: false }
+    isDeleted: { type: Boolean, required: true, default: false },
+    commodity_sub_type:  { type: String, required: false, default: null }
 }, {
     timestamps: true
 })

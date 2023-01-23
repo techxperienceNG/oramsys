@@ -382,8 +382,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     productDetails.commodityType === "Hard"
       ? ["Metal", "Energy"]
       : productDetails.commodityType === "Soft"
-        ? ["Agricultural", "Energy"]
-        : []
+      ? ["Agricultural"]
+      : []
 
   const metricOption = ["Ton"]
 

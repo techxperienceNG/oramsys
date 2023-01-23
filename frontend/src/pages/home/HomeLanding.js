@@ -113,7 +113,7 @@ const HomeLanding = () => {
                           
                           </h2>
                           <p>{card.text}</p>
-            
+                      
                         </div>
                       </div>
                       ))
@@ -132,7 +132,9 @@ const HomeLanding = () => {
                           
                           </h2>
                           <p>loremLorem ipsum dolor sit, amet consectetur adipisicing Bookan unknown</p>
-            
+                       <div className="item-button">
+                  <a href="#" className="item-btn text-decoration-none">+ <span>Read More</span></a>
+                </div>
                         </div>
                       </div>
                    

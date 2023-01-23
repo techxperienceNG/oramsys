@@ -30,6 +30,7 @@ import Ports from './administration/masterData/ports/Ports';
 import AirBases from './administration/masterData/airBases/AirBases';
 import { ApiGet, ApiPost } from '../helper/API/ApiData';
 
+
 const pathForLayout = ['/', '/signup', '/home', '/admin-login', '/fa-login']
 const Index = () => {
     const pathForAuthLayout = [
@@ -324,7 +325,7 @@ const PublicRoutes = () => {
             pathForLayout.includes(location.pathname) ? (
                 <Navigate to={location} />
             ) : (
-                navigate("/")
+                <Navigate to='/' />
             )
         ) : (
             pathForLayout.includes(location.pathname) ? navigate(-1) : location.pathname === "/" ? navigate("/products") : navigate('/')

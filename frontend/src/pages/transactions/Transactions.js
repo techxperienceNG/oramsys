@@ -14,6 +14,7 @@ import { ApiGet, ApiGet2 } from '../../helper/API/ApiData';
 import { Button, Icon } from '@material-ui/core';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { GET_TRANSACTION_BY_ID } from '../../redux/types';
+import Skeleton from 'react-loading-skeleton'
 const Transactions = () => {
 
     const dispatch = useDispatch()
@@ -173,7 +174,7 @@ const Transactions = () => {
                                     <p className="ps-3" onClick={handleRefresh}>Physical commodities</p>
                                     <p className="ps-3" onClick={() => navigate('/edit-transactions', { state: [{ type: "Export" }, { type: "Non-physical" }] })}>Non-physical commodities</p>
                                 </>
-                            }
+                            || <Skeleton /> }
                         </div>
                     }
                 </div>
@@ -193,7 +194,7 @@ const Transactions = () => {
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                     ]}
-                    data={transaction}
+                    data={transaction || <Skeleton />}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? tableAction.splice(2, 1) : tableAction.slice(1, 2)}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1),tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
 

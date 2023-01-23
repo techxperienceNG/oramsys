@@ -376,7 +376,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     productDetails.commodityType === "Hard"
       ? ["Metal", "Energy"]
       : productDetails.commodityType === "Soft"
-      ? ["Agricultural", "Energy"]
+      ? ["Agricultural"]
       : []
 
   const metricOption = ["Ton"]
@@ -1006,6 +1006,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                       ...productDetails,
                       commoditySubType: newVal,
                     })
+                    
                   }
                   getOptionLabel={(option) => option}
                   options={commoditySubTypeOption}

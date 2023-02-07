@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { entityGetAction } from '../../redux/actions/entityAction';
 import { useSelector } from 'react-redux';
 
-const LocalCreditStandingModal = ({ show, onHide, getModalData }) => {
+const LocalCreditStandingModal = ({ show, onHide, getModalData ,data}) => {
 
     const [localCreditStanding, setLocalCreditStanding] = useState({
         applicant: "",
@@ -37,7 +37,10 @@ const LocalCreditStandingModal = ({ show, onHide, getModalData }) => {
         setOptions(entityName.data)
     }, [entityName])
 
-
+    useEffect(() => {
+        setLocalCreditStanding(data)
+    }, [data])
+    
     useEffect(() => {
         dispatch(entityGetAction('Company'))
     }, [])
@@ -84,7 +87,7 @@ const LocalCreditStandingModal = ({ show, onHide, getModalData }) => {
                                                 setLocalCreditStanding({ ...localCreditStanding, applicant: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && localCreditStanding.applicant) && options.find((ele) => ele._id === localCreditStanding.applicant)}
+                                            value={(options && localCreditStanding?.applicant) && options.find((ele) => ele._id === localCreditStanding?.applicant)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -102,7 +105,7 @@ const LocalCreditStandingModal = ({ show, onHide, getModalData }) => {
                                                 setLocalCreditStanding({ ...localCreditStanding, advisingBank: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && localCreditStanding.advisingBank) && options.find((ele) => ele._id === localCreditStanding.advisingBank)}
+                                            value={(options && localCreditStanding?.advisingBank) && options.find((ele) => ele._id === localCreditStanding?.advisingBank)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -120,7 +123,7 @@ const LocalCreditStandingModal = ({ show, onHide, getModalData }) => {
                                                 setLocalCreditStanding({ ...localCreditStanding, beneficiary: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && localCreditStanding.beneficiary) && options.find((ele) => ele._id === localCreditStanding.beneficiary)}
+                                            value={(options && localCreditStanding?.beneficiary) && options.find((ele) => ele._id === localCreditStanding?.beneficiary)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -137,7 +140,7 @@ const LocalCreditStandingModal = ({ show, onHide, getModalData }) => {
                                                 setLocalCreditStanding({ ...localCreditStanding, conformingBank: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && localCreditStanding.conformingBank) && options.find((ele) => ele._id === localCreditStanding.conformingBank)}
+                                            value={(options && localCreditStanding?.conformingBank) && options.find((ele) => ele._id === localCreditStanding?.conformingBank)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -157,7 +160,7 @@ const LocalCreditStandingModal = ({ show, onHide, getModalData }) => {
                                                 setLocalCreditStanding({ ...localCreditStanding, issuingBank: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && localCreditStanding.issuingBank) && options.find((ele) => ele._id === localCreditStanding.issuingBank)}
+                                            value={(options && localCreditStanding?.issuingBank) && options.find((ele) => ele._id === localCreditStanding?.issuingBank)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -175,7 +178,7 @@ const LocalCreditStandingModal = ({ show, onHide, getModalData }) => {
                                                 setLocalCreditStanding({ ...localCreditStanding, negotiatingBank: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && localCreditStanding.negotiatingBank) && options.find((ele) => ele._id === localCreditStanding.negotiatingBank)}
+                                            value={(options && localCreditStanding?.negotiatingBank) && options.find((ele) => ele._id === localCreditStanding?.negotiatingBank)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -193,7 +196,7 @@ const LocalCreditStandingModal = ({ show, onHide, getModalData }) => {
                                                 setLocalCreditStanding({ ...localCreditStanding, reimbursingBank: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && localCreditStanding.reimbursingBank) && options.find((ele) => ele._id === localCreditStanding.reimbursingBank)}
+                                            value={(options && localCreditStanding?.reimbursingBank) && options.find((ele) => ele._id === localCreditStanding?.reimbursingBank)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -211,7 +214,7 @@ const LocalCreditStandingModal = ({ show, onHide, getModalData }) => {
                                                 setLocalCreditStanding({ ...localCreditStanding, secondBeneficiary: newValue._id });
                                             }}
                                             disableClearable
-                                            value={(options && localCreditStanding.secondBeneficiary) && options.find((ele) => ele._id === localCreditStanding.secondBeneficiary)}
+                                            value={(options && localCreditStanding?.secondBeneficiary) && options.find((ele) => ele._id === localCreditStanding?.secondBeneficiary)}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>

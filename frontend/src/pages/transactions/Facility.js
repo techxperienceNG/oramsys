@@ -106,7 +106,6 @@ const Facility = ({ hendelCancel, hendelNext }) => {
 
     useEffect(() => {
         if (getTransactionByIdData && getTransactionByIdData.data) {
-            console.log("getTransactionByIdData=====", getTransactionByIdData.data)
             setFacility({
                 _id: getTransactionByIdData.data?.facility?._id,
                 interestPeriod: getTransactionByIdData.data?.facility?.interestPeriod,
@@ -689,7 +688,8 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                         name: ele.name.value
                     }
                 }),
-                _id: transactionData.keyParties._id
+                _id: transactionData.keyParties._id,
+                relatedParties: transactionData.keyParties?.relatedParties
             },
             documentFlow: transactionData.documentFlow,
             fundFlow: {
@@ -777,6 +777,10 @@ const Facility = ({ hendelCancel, hendelNext }) => {
     const DeleteCurrencyhedgedetails = (rowData) =>{
         let DeleteCurrencyhedge = addCurrencyHedge.filter((ele , i)=>i!==rowData.tableData.id)
         setAddCurrencyHedge(DeleteCurrencyhedge)
+    }
+    const DeleteSourceOfRepayment = (rowData) => {
+        let DeleteRepaymentsource = sourceOfRepayment.filter((ele, i) => i !== rowData.tableData.id)
+        setSourceOfRepayment(DeleteRepaymentsource)
     }
 
     return (
@@ -1319,7 +1323,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         // { title: 'Type', field: 'type' },
                                     ]}
                                     // data={productGetData?.data}
-                                    data={sourceOfRepayment}
+                                    data={sourceOfRepayment.length ? sourceOfRepayment : []}
                                     actions={isView ? [
                                         {
                                             icon: 'preview',
@@ -1338,7 +1342,12 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                             tooltip: 'View Source of Repayment',
                                             onClick: (event, rowData) => { setAddSourceOfRepayment(true); setRowEditData(rowData); setView(isView) }
                                             // onClick: (event, rowData) => navigate(`/edit-product?id=${rowData?._id}`, { state: { isView: true } })
-                                        }
+                                        },
+                                        {
+                                            icon: 'delete',
+                                            tooltip: 'Delete source of repayment',
+                                            onClick: (event, rowData) => {DeleteSourceOfRepayment(rowData) }
+                                        },
                                     ]}
                                     options={{
                                         filtering: true,

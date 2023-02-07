@@ -177,9 +177,12 @@ class transactionController {
                     }
                     let element = {
                         parties: keyParty,
-                    }
-                    const transactionKeyPartiesResponse = await transactionKeyParties.updateTransactionKeyParties(element, keyParties._id);
+                        relatedParties: keyParties?.relatedParties
 
+                    }
+                    console.log('element keyparties',element);
+                    const transactionKeyPartiesResponse = await transactionKeyParties.updateTransactionKeyParties(element, keyParties._id);
+                    console.log('element keyparties',transactionKeyPartiesResponse);
                     updateData = {
                         ...updateData,
                         keyParties: transactionKeyPartiesResponse._id
@@ -262,6 +265,7 @@ class transactionController {
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new APIResponse({}, 'Error in fetching transaction', httpStatus.INTERNAL_SERVER_ERROR, e));
         }
     }
+
     async download(req, res, next) {
         try {
             let id = req.params.id
@@ -301,6 +305,7 @@ class transactionController {
 
             }
         } catch (e) {
+            console.log('-----------------------catch-------------------------------------', e);
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new APIResponse({}, 'Error in downloading TermSheet', httpStatus.INTERNAL_SERVER_ERROR, e));
         }
     }

@@ -195,16 +195,22 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
   }, [productType])
 
   useEffect(() => {
+
     if (productData && productData.data) {
       setProductName(productData.data)
     }
+    console.log('productName.data ', productName);
+
   }, [productData])
 
   useEffect(() => {
+    console.log('called at matric1');
+    console.log('productName matric1 ',productName);
+    console.log('productDetails matric1 ',productDetails);
     if (productName.length > 0 && productDetails.name) {
       setProductDetails({
         ...productDetails,
-        metric: productName.find((ele) => ele._id === productDetails.name).matric,
+        metric: productName.find((ele) => ele._id === productDetails.name)?.matric,
       })
     }
   }, [productDetails.name, productName])
@@ -217,7 +223,6 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
   useEffect(() => {
     if (getTransactionByIdData && getTransactionByIdData.data) {
-      console.log("getTransactionByIdData===", getTransactionByIdData)
       setEditId(getTransactionByIdData.data?.details?._id)
       setBorrower_Applicant(getTransactionByIdData.data?.borrower_Applicant)
       setLenders(getTransactionByIdData.data?.lenders)
@@ -233,10 +238,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         quantity:
           getTransactionByIdData.data?.details?.productDetails?.quantity,
         metric: getTransactionByIdData.data?.details?.productDetails?.metric,
-      
+
         quality: getTransactionByIdData.data?.details?.productDetails?.quality,
       })
-      
+
       setContractDetails({
         currency:
           getTransactionByIdData.data?.details?.contractDetails?.currency,
@@ -364,7 +369,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
   }
 
   let options = [
-    {label: "Select option", value: ""}, 
+    { label: "Select option", value: "" },
     { label: "Yes", value: true },
     { label: "No", value: false },
   ]
@@ -377,7 +382,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     productDetails.commodityType === "Hard"
       ? ["Metal", "Energy"]
       : productDetails.commodityType === "Soft"
-      ? ["Agricultural", "Energy"]
+      ? ["Agricultural"]
       : []
 
   const metricOption = ["Ton"]
@@ -440,45 +445,45 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
   const handleChnage = (e, name, type) => {
     if (type === "productDetails") {
-        if (name === "quantity") {
-            if (e.target.value === '' || e.target.value) {
-                setProductDetails({ ...productDetails, [name]: e.target.value })
-            }
+      if (name === "quantity") {
+        if (e.target.value === '' || e.target.value) {
+          setProductDetails({ ...productDetails, [name]: e.target.value })
         }
+      }
     }
     else if (type === "contractDetails") {
-        if (name === "value") {
-            if (e.target.value === '' || e.target.value) {
-                setContractDetails({ ...contractDetails, [name]: e.target.value })
-            }
+      if (name === "value") {
+        if (e.target.value === '' || e.target.value) {
+          setContractDetails({ ...contractDetails, [name]: e.target.value })
         }
+      }
     }
     else if (type === "shippingOptions") {
-        if (name === "shippedWeights") {
-            if (e.target.value === '' || e.target.value) {
-                setShippingOptions({ ...shippingOptions, [name]: e.target.value })
-            }
+      if (name === "shippedWeights") {
+        if (e.target.value === '' || e.target.value) {
+          setShippingOptions({ ...shippingOptions, [name]: e.target.value })
         }
+      }
     }
     else if (type === "transShipmentOptions") {
-        if (name === "transShipmentQuantity") {
-            if (e.target.value === '' || e.target.value) {
-                if (parseInt(productDetails.quantity) >= parseInt(e.target.value)) {
-                    setTransShipmentOptions({ ...transShipmentOptions, [name]: e.target.value })
-                } else {
-                    setTransShipmentOptions({ ...transShipmentOptions, [name]: '' })
-                }
-            }
+      if (name === "transShipmentQuantity") {
+        if (e.target.value === '' || e.target.value) {
+          if (parseInt(productDetails.quantity) >= parseInt(e.target.value)) {
+            setTransShipmentOptions({ ...transShipmentOptions, [name]: e.target.value })
+          } else {
+            setTransShipmentOptions({ ...transShipmentOptions, [name]: '' })
+          }
         }
+      }
     }
     else if (type === "pricingDetails") {
-        if (name === "pricingAmount" || name === "previousDayClosingAmount") {
-            if (e.target.value === '' || e.target.value) {
-                setPricingDetails({ ...pricingDetails, [name]: e.target.value })
-            }
+      if (name === "pricingAmount" || name === "previousDayClosingAmount") {
+        if (e.target.value === '' || e.target.value) {
+          setPricingDetails({ ...pricingDetails, [name]: e.target.value })
         }
+      }
     }
-}
+  }
 
   const handleChnages = (e) => {
     setContractDetails({
@@ -538,7 +543,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
     if (!productDetails.metric) {
       flag = true
-      error.metric = "Please enter metric!" 
+      error.metric = "Please enter metric!"
     }
 
     if (!productDetails.quality) {
@@ -822,6 +827,20 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     console.log(signalContract)
   }
 
+  const handleCommoditySubtypeChange = (e, newVal) => {
+    let product = [];
+    productData.data.forEach((item) => {
+      if (item.commodity_sub_type == newVal) {
+        product.push(item);
+      }
+    })
+    setProductName(product);
+    setProductDetails({
+      ...productDetails,
+      commoditySubType: newVal,
+    })
+  }
+
 
   return (
     <>
@@ -945,8 +964,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                   productType === "Non-Physical"
                     ? "d-none"
                     : productDetails.type
-                    ? "d-block"
-                    : "d-none"
+                      ? "d-block"
+                      : "d-none"
                 }
               >
                 <Autocomplete
@@ -995,18 +1014,15 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                   productType === "Non-Physical"
                     ? "d-none"
                     : productDetails.type
-                    ? "d-block"
-                    : "d-none"
+                      ? "d-block"
+                      : "d-none"
                 }
               >
                 <Autocomplete
                   label='Commodity Sub type'
                   id='disable-clearable'
                   onChange={(e, newVal) =>
-                    setProductDetails({
-                      ...productDetails,
-                      commoditySubType: newVal,
-                    })
+                    handleCommoditySubtypeChange(e, newVal)
                   }
                   getOptionLabel={(option) => option}
                   options={commoditySubTypeOption}
@@ -1180,8 +1196,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     <TextField
                       {...params}
                       label='Contract currency'
-                      variant='standard'/> 
-                      )}
+                      variant='standard' />
+                  )}
                   onChange={(e, newVal) =>
                     setContractDetails({
                       ...contractDetails,
@@ -1189,17 +1205,17 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     })
                   }
                   value={CurrencyOptions && contractDetails?.currency && CurrencyOptions.find(
-                      (ele) => ele.label === contractDetails.currency)}
+                    (ele) => ele.label === contractDetails.currency)}
                   disableClearable
                   disabled={isView}
                 />
-                {error?.currency && ( <span style={{
-                      color: "#da251e",
-                      width: "100%",
-                      textAlign: "start",
-                    }}>
-                    {error?.currency}
-                  </span>
+                {error?.currency && (<span style={{
+                  color: "#da251e",
+                  width: "100%",
+                  textAlign: "start",
+                }}>
+                  {error?.currency}
+                </span>
                 )}
               </Col>
               <Col lg={3}>
@@ -1236,8 +1252,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     }}
                     inputProps={{
                       max: new Date().toISOString().split("T")[0]
-                  }}
-                  onChange={(e) => setContractDetails({ ...contractDetails, contractDate: e.target.value })}
+                    }}
+                    onChange={(e) => setContractDetails({ ...contractDetails, contractDate: e.target.value })}
                     // onChange={(e) =>
                     //   setContractDetails({
                     //     ...contractDetails,
@@ -1274,8 +1290,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     inputProps={{
                       max: contractDetails.contractDate
                         ? new Date(contractDetails.contractDate)
-                            .toISOString()
-                            .split("T")[0]
+                          .toISOString()
+                          .split("T")[0]
                         : "",
                     }}
                     onChange={(e) =>
@@ -1781,9 +1797,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     ((warehouseRequiredOptions.length > 0 &&
                       shippingOptions.warehouseRequired === true) ||
                       shippingOptions.warehouseRequired === false) ?
-                    warehouseRequiredOptions.find(
-                      (ele) => ele.value === shippingOptions.warehouseRequired
-                    ) : warehouseRequiredOptions = ''
+                      warehouseRequiredOptions.find(
+                        (ele) => ele.value === shippingOptions.warehouseRequired
+                      ) : warehouseRequiredOptions = ''
                   }
                 />
                 {error?.warehouseRequired && (
@@ -1832,27 +1848,27 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                       actions={
                         isView
                           ? [
-                              {
-                                icon: "preview",
-                                tooltip: "View Entities",
-                                onClick: (e, rowData) => {},
-                              },
-                            ]
+                            {
+                              icon: "preview",
+                              tooltip: "View Entities",
+                              onClick: (e, rowData) => { },
+                            },
+                          ]
                           : [
-                              {
-                                icon: "edit",
-                                tooltip: "Edit Entities",
-                                onClick: (e, rowData) => {
-                                  setAddWarehouseModal(true)
-                                  setWareHouseId(rowData)
-                                },
+                            {
+                              icon: "edit",
+                              tooltip: "Edit Entities",
+                              onClick: (e, rowData) => {
+                                setAddWarehouseModal(true)
+                                setWareHouseId(rowData)
                               },
-                              {
-                                icon: "preview",
-                                tooltip: "View Entities",
-                                onClick: (e, rowData) => {},
-                              },
-                            ]
+                            },
+                            {
+                              icon: "preview",
+                              tooltip: "View Entities",
+                              onClick: (e, rowData) => { },
+                            },
+                          ]
                       }
                       options={{
                         filtering: true,
@@ -2069,7 +2085,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                         }
                         // value={transShipmentOptions.transShipmentUnit}
                         disabled={isView || productDetails.metric}
-                        // onChange={(e) => handleChnage(e, 'transShipmentUnit', 'transShipmentOptions')}
+                      // onChange={(e) => handleChnage(e, 'transShipmentUnit', 'transShipmentOptions')}
                       />
                       {error?.transShipmentUnit && (
                         <span
@@ -2175,8 +2191,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                   pricingDetails.pricingType === "Firm fixed price"
                     ? 3
                     : 4 || pricingDetails.pricingHedgeingStatus === "Yes"
-                    ? 3
-                    : 4
+                      ? 3
+                      : 4
                 }
               >
                 <Autocomplete
@@ -2454,7 +2470,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                             value={
                               counterPartyOption.length > 0 &&
                               pricingDetails.pricingCounterParty !==
-                                undefined &&
+                              undefined &&
                               pricingDetails.pricingCounterParty &&
                               counterPartyOption.find(
                                 (ele) =>

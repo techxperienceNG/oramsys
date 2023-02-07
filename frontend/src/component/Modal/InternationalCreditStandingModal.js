@@ -5,7 +5,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useDispatch, useSelector } from 'react-redux';
 import { entityGetAction } from '../../redux/actions/entityAction';
 
-const InternationalCreditStandingModal = ({ show, onHide, getModalData, type }) => {
+const InternationalCreditStandingModal = ({ show, onHide, getModalData, type, data, from }) => {
 
   const [internationalCreditStanding, setInternationalCreditStanding] = useState({
     type: "",
@@ -17,12 +17,21 @@ const InternationalCreditStandingModal = ({ show, onHide, getModalData, type }) 
     'borrower',
   ]
 
+  console.log('parties', parties)
+  console.log('internationalCreditStanding?.party', internationalCreditStanding?.party)
   const counterparty = useSelector(state => state.entityData.entity)
   const dispatch = useDispatch()
 
   useEffect(() => {
     setParties(counterparty.data)
   }, [counterparty])
+
+  useEffect(() => {
+    if (from)
+      setInternationalCreditStanding(data)
+    else
+      setInternationalCreditStanding(data[type])
+  }, [data,from])
 
   useEffect(() => {
     dispatch(entityGetAction('Company'))
@@ -61,7 +70,7 @@ const InternationalCreditStandingModal = ({ show, onHide, getModalData, type }) 
         <Fade in={show}>
           <div className='modal-content'>
             <div className='d-flex justify-content-between'>
-            <h2 id="transition-modal-title" className='modal-title'>Enter a Mitigant</h2>
+              <h2 id="transition-modal-title" className='modal-title'>Enter a Mitigant</h2>
               <img src='../../assets/img/my-img/Close.png' onClick={() => onHide()} style={{ cursor: "pointer", width: "24px", height: "24px" }} />
             </div>
             <div className='add-edit-product p-0 mt-3' id="transition-modal-description" >
@@ -81,7 +90,7 @@ const InternationalCreditStandingModal = ({ show, onHide, getModalData, type }) 
                         setInternationalCreditStanding({ ...internationalCreditStanding, type: newValue });
                       }}
                       disableClearable
-                      value={internationalCreditStanding.type}
+                      value={internationalCreditStanding?.type}
                     />
                     {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                   </Col>
@@ -99,7 +108,7 @@ const InternationalCreditStandingModal = ({ show, onHide, getModalData, type }) 
                         setInternationalCreditStanding({ ...internationalCreditStanding, party: newValue._id });
                       }}
                       disableClearable
-                      value={(parties && internationalCreditStanding.party) && parties.find((ele) => ele._id === internationalCreditStanding.party)}
+                      value={(parties && internationalCreditStanding?.party) && parties.find((ele) => ele._id === internationalCreditStanding?.party)}
                     />
                     {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                   </Col>

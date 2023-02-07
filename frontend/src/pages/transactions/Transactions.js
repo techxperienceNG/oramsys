@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Transactionscard from '../../component/Transactionscard'
@@ -10,10 +10,11 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { getRiskAssessment, riskAssessmentAction } from '../../redux/actions/riskAssessmentAction';
 import ExcelModal from '../../component/Modal/ExcelModal';
-import { ApiGet } from '../../helper/API/ApiData';
+import { ApiGet, ApiGet2 } from '../../helper/API/ApiData';
 import { Button, Icon } from '@material-ui/core';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { GET_TRANSACTION_BY_ID } from '../../redux/types';
+import Skeleton from 'react-loading-skeleton'
 const Transactions = () => {
 
     const dispatch = useDispatch()
@@ -27,7 +28,6 @@ const Transactions = () => {
     const [transaction, setTransaction] = useState([])
 
     const getAlltransactionData = useSelector((state) => state.transactionData.getAllTransaction)
-    console.log('getAll', getAlltransactionData)
     const riskAssessment = useSelector((state) => state.riskAssessmentData.getRiskAssessment)
 
     useEffect(() => {
@@ -35,7 +35,7 @@ const Transactions = () => {
         dispatch(getAllTransaction(id))
     }, [])
 
-    useEffect(() => {
+    const refreshPage = useCallback(() => {
         if (getAlltransactionData && getAlltransactionData.data && getAlltransactionData.data.length > 0) {
             setTransaction(getAlltransactionData.data?.map(item => {
                 return {
@@ -53,25 +53,29 @@ const Transactions = () => {
         }
     }, [getAlltransactionData])
 
+    useEffect(() => {
+        dispatch(() => refreshPage())
+        //eslint-disable-next-line
+    }, [])
+
     // const cllickOnRiskAssessment = (id) => {
     //     dispatch(getRiskAssessment(id))
     //     setSelected(id)
     // }
     useEffect(() => {
-        console.log('selected🧨🧨', selected)
         if (riskAssessment.status === 200 && selected) {
-            if (riskAssessment && riskAssessment.data && riskAssessment.data.transactionId   ) {
-               navigate(`/risk-assessment?id=${selected}`)
-            }
+            // if (riskAssessment && riskAssessment.data && riskAssessment.data.transactionId   ) {
+            navigate(`/risk-assessment?id=${selected}`)
+            // }
         }
     }, [riskAssessment, selected])
 
     const downloadTermSheet = (id, name) => {
         ApiGet(`transaction/termSheet/${id}`).then(res => {
             let data = res.data.data
-            if(name === 'view'){
+            if (name === 'view') {
                 ViewRiskAssessment(data)
-            } else if (name === 'download'){
+            } else if (name === 'download') {
                 converBase64toBlob(data);
             }
         }
@@ -79,12 +83,6 @@ const Transactions = () => {
     }
 
     const converBase64toBlob = (content, contentType) => {
-        // const linkSource = `data:application/pdf;base64,${content}`;
-        // let pdfWindow = window.open("")
-        // pdfWindow.document.write(`<iframe width='100%' height='100%' src=${linkSource}></iframe>`)
-
-
-
         const linkSource = `data:application/pdf;base64,${content}`;
         const downloadLink = document.createElement("a");
         const fileName = "TermSheet.pdf";
@@ -93,41 +91,6 @@ const Transactions = () => {
         downloadLink.download = fileName;
         downloadLink.click();
 
-        // contentType = contentType || '';
-        // var sliceSize = 512;
-        // var byteCharacters = window.atob(content); //method which converts base64 to binary
-        // var byteArrays = [
-        // ];
-        // for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        //     var slice = byteCharacters.slice(offset, offset + sliceSize);
-        //     var byteNumbers = new Array(slice.length);
-        //     for (var i = 0; i < slice.length; i++) {
-        //         byteNumbers[i] = slice.charCodeAt(i);
-        //     }
-        //     var byteArray = new Uint8Array(byteNumbers);
-        //     byteArrays.push(byteArray);
-        // }
-        // var blob = new Blob(byteArrays, {
-        //     type: contentType
-        // }); //statement which creates the blob
-
-        // var blobURL = URL.createObjectURL(blob);
-
-        // let link = document.createElement('a');
-        // link.download = 'TermSheet.docx';
-        // link.href = blobURL; // data url  
-        // link.click();
-        // }
-        //     var blob = new Blob(byteArrays, {
-        //         type: contentType
-        //     }); //statement which creates the blob
-
-        //     var blobURL = URL.createObjectURL(blob);
-
-        //     let link = document.createElement('a');
-        //     link.download = 'TermSheet.docx';
-        //     link.href = blobURL; // data url  
-        //     link.click();
     }
     const ViewRiskAssessment = (contents) => {
         const linkSources = `data:application/pdf;base64,${contents}`;
@@ -163,7 +126,7 @@ const Transactions = () => {
         {
             icon: 'assessment',
             tooltip: 'Risk Assessment',
-            onClick: (event, rowData) => { dispatch(getRiskAssessment(rowData._id)) ;setSelected(rowData._id)}
+            onClick: (event, rowData) => { dispatch(getRiskAssessment(rowData._id)); setSelected(rowData._id) }
         },
         {
             icon: 'visibilityIcon',
@@ -187,15 +150,15 @@ const Transactions = () => {
     }
     const formateCurrencyValue = (data) => {
         if (data) {
-          let value = data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          // let prefix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.prefix
-          // let suffix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.suffix
-          // return prefix ? (prefix + value) : suffix ? (value + suffix) : value
-          return value
+            let value = data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            // let prefix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.prefix
+            // let suffix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.suffix
+            // return prefix ? (prefix + value) : suffix ? (value + suffix) : value
+            return value
         } else {
-          return data
+            return data
         }
-      }
+    }
 
     return (
         <>
@@ -216,7 +179,7 @@ const Transactions = () => {
                                     <p className="ps-3" onClick={handleRefresh}>Physical commodities</p>
                                     <p className="ps-3" onClick={() => navigate('/edit-transactions', { state: [{ type: "Export" }, { type: "Non-physical" }] })}>Non-physical commodities</p>
                                 </>
-                            }
+                            || <Skeleton /> }
                         </div>
                     }
                 </div>
@@ -228,7 +191,7 @@ const Transactions = () => {
                         { title: 'Applicant', field: 'borrower_Applicant' },
                         { title: 'Lenders', field: 'lenders' },
                         { title: 'Product', field: 'details.productDetails.name.name' },
-                        { title: 'Value', render: rowData =>  formateCurrencyValue(rowData.details.contractDetails.value)},
+                        { title: 'Value', render: rowData => formateCurrencyValue(rowData.details.contractDetails.value) },
                         // { title: 'Origination Port', field: 'details.shippingOptions.portOfOrigin.name' },
                         // { title: 'Destination Port', field: 'details.shippingOptions.destinationPort.name' },
                         // { title: 'Term Sheet', field: 'termSheet' },
@@ -236,13 +199,17 @@ const Transactions = () => {
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                         // { title: 'Entities Involved', render: rowData => { return rowData?.keyParties.map(item => item?.parties.map(partyItem => partyItem?.name?.details?.name))?.map(data => <p>{data}</p>) } },
                     ]}
-                    data={transaction}
+                    data={transaction || <Skeleton />}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? tableAction.splice(2, 1) : tableAction.slice(1, 2)}
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1),tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
 
-                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
+                    // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
 
                     // actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? ( tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
+                    actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+
 
                     options={{
                         filtering: true,
@@ -254,7 +221,7 @@ const Transactions = () => {
                 />
             </div>
 
-            {showExcelModal && <ExcelModal show={showExcelModal} onHide={() => setShowExcelModal(false)} getId={sendId} />}
+            {showExcelModal && <ExcelModal refreshpage={() => dispatch(() => refreshPage())} show={showExcelModal} onHide={() => setShowExcelModal(false)} getId={sendId} />}
         </>
     )
 }

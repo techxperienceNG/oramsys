@@ -62,7 +62,6 @@ const RatingAgenciesEdit = () => {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            {console.log('activeStep', activeStep)}
                             {activeStep + 1 === 1 && <Details hendelNext={handleNext} getData = {setDetails} />}
                             {activeStep + 1 === 2 && <Ratingschemes hendelNext={handleNext} hendelCancel={handleBack} detailData = {details} />}
                         </React.Fragment>

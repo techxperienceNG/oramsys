@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption }) => {
+const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption ,data}) => {
 
     const [counterparties, setCounterparties] = useState({
         type: "",
@@ -19,7 +19,10 @@ const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption }) 
     useEffect(() => {
       console.log('modalOptions', modalOption)
     }, [modalOption])
-    
+    console.log('data', data)
+    useEffect(() => {
+        setCounterparties(data[type])
+      }, [data])
 
     const save = (data) => {
         let newData = {
@@ -66,7 +69,7 @@ const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption }) 
                                                 setCounterparties({ ...counterparties, type: newValue });
                                             }}
                                             disableClearable
-                                            value={counterparties.type}
+                                            value={counterparties?.type}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -84,7 +87,7 @@ const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption }) 
                                                 setCounterparties({ ...counterparties, instrument: newValue });
                                             }}
                                             disableClearable
-                                            value={counterparties.instrument}
+                                            value={counterparties?.instrument}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
@@ -102,7 +105,7 @@ const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption }) 
                                                 setCounterparties({ ...counterparties, evidence: newValue });
                                             }}
                                             disableClearable
-                                            value={counterparties.evidence}
+                                            value={counterparties?.evidence}
                                         />
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>

@@ -25,6 +25,10 @@ export const addRiskAssessment = (body) => async (dispatch) => {
                     type: ADD_RISK_ASSESSMENT,
                     payload: res
                 })
+                dispatch({
+                    type: RISK_ASSESSMENT_DATA,
+                    payload: null,
+                });
             })
             .catch((error) => {
                 console.log(error.response.data);
@@ -77,43 +81,41 @@ export const getRiskAssessment = (id) => async (dispatch) => {
                 if (res.data) {
                     let body = {
                         ...res.data,
-                        justification: res.data.justification ? res.data.justification.justification : '',
-                        priceHedge: res.data.priceHedge ? res.data.priceHedge.justification : '',
-                        acceptableCMA: { ...res.data.acceptableCMA, party: res.data.acceptableCMA.details ? res.data.acceptableCMA.details.name : '' },
-                        acceptableJurisdiction: res.data.acceptableJurisdiction ? res.data.acceptableJurisdiction.justification : '',
-                        contractsBasis: res.data.contractsBasis ? res.data.contractsBasis.justification : '',
-                        financingSufficiently: res.data.financingSufficiently ? res.data.financingSufficiently.justification : '',
-                        priceHedge: res.data.priceHedge ? res.data.priceHedge.justification : '',
+                        priceHedge: {
+                            ...res.data.priceHedge,
+                            counterparty: res.data.priceHedge?.counterparty ? res.data.priceHedge?.counterparty?._id : null,
+                        },
+                        acceptableCMA: { ...res.data.acceptableCMA, party: res.data?.acceptableCMA ? res.data.acceptableCMA?.party?._id : null },
                         creditInsurers: {
                             ...res.data.creditInsurers,
-                            broker: res.data.creditInsurers?.broker?.details ? res.data.creditInsurers?.broker.details.name : '',
-                            insuredParty: res.data.creditInsurers?.insuredParty?.details ? res.data.creditInsurers?.insuredParty?.details.name : '',
-                            insurer: res.data.creditInsurers?.insurer?.details ? res.data.creditInsurers?.insurer?.details.name : '',
-                            reInsurer: res.data.creditInsurers?.reInsurer?.details ? res.data.creditInsurers?.reInsurer?.details.name : '',
-                            underwriter: res.data.creditInsurers?.underwriter?.details ? res.data.creditInsurers?.underwriter?.details.name : '',
+                            broker: res.data.creditInsurers?.broker ? res.data.creditInsurers?.broker?._id : null,
+                            insuredParty: res.data.creditInsurers?.insuredParty ? res.data.creditInsurers?.insuredParty?._id : null,
+                            insurer: res.data.creditInsurers?.insurer ? res.data.creditInsurers?.insurer?._id : null,
+                            reInsurer: res.data.creditInsurers?.reInsurer ? res.data.creditInsurers?.reInsurer?._id : null,
+                            underwriter: res.data.creditInsurers?.underwriter ? res.data.creditInsurers?.underwriter?._id : null,
                         },
                         currencyHedge: {
                             ...res.data.currencyHedge,
-                            counterparty: res.data.currencyHedge?.counterparty?.details ? res.data.currencyHedge?.counterparty?.details.name : ''
+                            counterparty: res.data.currencyHedge?.counterparty ? res.data.currencyHedge?.counterparty?._id : null
                         },
                         goodCreditStanding: {
                             ...res.data.goodCreditStanding,
-                            party: res.data.goodCreditStanding?.party?.details ? res.data.goodCreditStanding?.party?.details.name : ''
+                            party: res.data.goodCreditStanding?.party ? res.data.goodCreditStanding?.party?._id : null
                         },
-                        internationalCreditStandin: {
-                            ...res.data.internationalCreditStandin,
-                            party: res.data.internationalCreditStandin?.party?.details ? res.data.internationalCreditStandin?.party?.details.name : ''
+                        internationalCreditStanding: {
+                            ...res.data?.internationalCreditStanding,
+                            party: res.data.internationalCreditStanding ? res.data.internationalCreditStanding?.party?._id : null
                         },
                         localCreditStanding: {
                             ...res.data.localCreditStanding,
-                            advisingBank: res.data.localCreditStanding?.advisingBank?.details ? res.data.localCreditStanding?.advisingBank?.details.name : '',
-                            applicant: res.data.localCreditStanding?.applicant?.details ? res.data.localCreditStanding?.applicant?.details.name : '',
-                            beneficiary: res.data.localCreditStanding?.beneficiary?.details ? res.data.localCreditStanding?.beneficiary?.details.name : '',
-                            conformingBank: res.data.localCreditStanding?.conformingBank?.details ? res.data.localCreditStanding?.conformingBank?.details.name : '',
-                            issuingBank: res.data.localCreditStanding?.issuingBank?.details ? res.data.localCreditStanding?.issuingBank?.details.name : '',
-                            negotiatingBank: res.data.localCreditStanding?.negotiatingBank?.details ? res.data.localCreditStanding?.negotiatingBank?.details.name : '',
-                            reimbursingBank: res.data.localCreditStanding?.reimbursingBank?.details ? res.data.localCreditStanding?.reimbursingBank?.details.name : '',
-                            secondBeneficiary: res.data.localCreditStanding?.secondBeneficiary?.details ? res.data.localCreditStanding?.secondBeneficiary?.details.name : '',
+                            advisingBank: res.data.localCreditStanding?.advisingBank ? res.data.localCreditStanding?.advisingBank?._id : null,
+                            applicant: res.data.localCreditStanding?.applicant ? res.data.localCreditStanding?.applicant?._id : null,
+                            beneficiary: res.data.localCreditStanding?.beneficiary ? res.data.localCreditStanding?.beneficiary?._id : null,
+                            conformingBank: res.data.localCreditStanding?.conformingBank ? res.data.localCreditStanding?.conformingBank?._id : null,
+                            issuingBank: res.data.localCreditStanding?.issuingBank ? res.data.localCreditStanding?.issuingBank?._id : null,
+                            negotiatingBank: res.data.localCreditStanding?.negotiatingBank ? res.data.localCreditStanding?.negotiatingBank?._id : null,
+                            reimbursingBank: res.data.localCreditStanding?.reimbursingBank ? res.data.localCreditStanding?.reimbursingBank?._id : null,
+                            secondBeneficiary: res.data.localCreditStanding?.secondBeneficiary ? res.data.localCreditStanding?.secondBeneficiary?._id : null,
                         },
                     }
                     dispatch({

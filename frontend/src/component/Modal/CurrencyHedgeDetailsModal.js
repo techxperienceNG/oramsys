@@ -1,15 +1,17 @@
 import { Backdrop, Modal, Fade, FormControl, InputLabel, Select, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+import { DropzoneArea } from 'material-ui-dropzone';
 import { Col, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { entityGetAction } from '../../redux/actions/entityAction';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) => {
+const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData,data }) => {
 
     const [currencyHedgeDetails, setCurrencyHedgeDetails] = useState({
         hedgingMethod: "",
-        counterParty: "",
+        counterparty: "",
+        evidence: "",
     })
     const [id, setId] = useState('')
 
@@ -23,7 +25,9 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) 
             setCounterpartyOption(counterpartyOptions?.data)
         }
     }, [counterpartyOptions])
-
+    useEffect(() => {
+        setCurrencyHedgeDetails(data)
+    }, [data])
     useEffect(() => {
         dispatch(entityGetAction('Company'))
     }, [])
@@ -34,7 +38,7 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) 
             setId(editRowData.tableData.id)
             setCurrencyHedgeDetails({
                 hedgingMethod: editRowData?.hedgingMethod,
-                counterParty: { value: editRowData?.counterParty?.value, label: editRowData?.counterParty?.label }
+                counterparty: { value: editRowData?.counterparty?.value, label: editRowData?.counterparty?.label }
             })
         }
     }, [editRowData])
@@ -62,6 +66,18 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) 
         console.log('currencyHedgeDetails===', currencyHedgeDetails)
         console.log('counterpartyOption==', counterpartyOption)
     }, [currencyHedgeDetails, counterpartyOption])
+
+    
+    const handleChangeFile = (file) => {
+        if (file) {
+            new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            }).then((res) => setCurrencyHedgeDetails({ ...currencyHedgeDetails, evidence: res }));
+        }
+    }
 
     return (
         <>
@@ -100,7 +116,7 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) 
                                                     setCurrencyHedgeDetails({ ...currencyHedgeDetails, hedgingMethod: newValue });
                                                 }}
                                                 disableClearable
-                                                value={currencyHedgeDetails.hedgingMethod}
+                                                value={currencyHedgeDetails?.hedgingMethod}
                                             />
                                         </Col>
                                         <Col lg={6}>
@@ -113,13 +129,27 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData }) 
                                                     <TextField {...params} label="Counterparty" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
-                                                    setCurrencyHedgeDetails({ ...currencyHedgeDetails, counterParty: { value: newValue?._id, label: newValue?.details?.name } });
+                                                    setCurrencyHedgeDetails({ ...currencyHedgeDetails, counterparty: { value: newValue?._id, label: newValue?.details?.name } });
                                                     console.log('newValue._id==', newValue._id)
                                                 }}
                                                 disableClearable
-                                                value={(currencyHedgeDetails.counterParty && counterpartyOption.length > 0) && counterpartyOption.find((elem) => elem._id === currencyHedgeDetails.counterParty?.value)}
+                                                value={(currencyHedgeDetails?.counterparty && counterpartyOption.length > 0) && counterpartyOption.find((elem) => elem._id === currencyHedgeDetails?.counterparty?.value)}
                                             />
                                         </Col>
+                                        <div className='drag-and-drop'>
+                                                    <label>Upload Evidence</label>
+                                                    <DropzoneArea
+                                                        Icon="none"
+                                                        filesLimit={1}
+                                                        showPreviews={true}
+                                                        showPreviewsInDropzone={false}
+                                                        useChipsForPreview
+                                                        previewGridProps={{ container: { spacing: 1, } }}
+                                                        dropzoneText='Drop file here'
+                                                        previewText=""
+                                                        onChange={(file) => handleChangeFile(file[0])}
+                                                    />
+                                                </div>
                                     </Row>
                                 </div>
                                 <div className='d-flex justify-content-between mt-4'>

@@ -71,6 +71,7 @@ const SignIn = () => {
     const buttonText = authState?.isAuthenticated ? "Logout" : "Login";
     const btnLogic = authState?.isAuthenticated ? logOut : loginWithRedirect;
 
+    
     return (
         <section className="login">
             <div className="container">

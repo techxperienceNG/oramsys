@@ -16,7 +16,7 @@ const LoanPurposeRisk = ({ hendelNext, hendelCancel }) => {
     const searchParams = new URLSearchParams(window.location.search)
     const id = searchParams.get('id')
     const [data, setData] = useState({
-        justification: ""
+        justification: null
     })
     const riskAssessment = useSelector(state => state.riskAssessmentData.riskAssessment)
 
@@ -30,7 +30,7 @@ const LoanPurposeRisk = ({ hendelNext, hendelCancel }) => {
             })
         }
     }
-    
+
     useEffect(() => {
         console.log('riskAssessment === 22', riskAssessment)
         if (riskAssessment) {
@@ -40,21 +40,21 @@ const LoanPurposeRisk = ({ hendelNext, hendelCancel }) => {
             })
         } else {
             // if (!cancel) {
-                dispatch(getRiskAssessment(id))
-                dispatch(getTransactionById(id))
-
+            dispatch(getRiskAssessment(id))
+            dispatch(getTransactionById(id))
             // }
         }
     }, [riskAssessment])
 
     const nextStep = () => {
-        // if (data.justification) {
-            let body = {
-                ...riskAssessment,
-                justification:data.justification ?? ''
-            }
-            dispatch(riskAssessmentAction(body))
-            hendelNext()
+        let body = {
+            ...riskAssessment,
+            ...data
+            // justification: data.justification
+        }
+        dispatch(riskAssessmentAction(body))
+        // if (data.justification) {          
+        hendelNext()
         // }
     }
     return (

@@ -481,8 +481,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         if (e.target.value === '' || e.target.value) {
           setPricingDetails({ ...pricingDetails, [name]: e.target.value })
         }
+      }
     }
-}
+  }
 
   const handleChnages = (e) => {
     setContractDetails({

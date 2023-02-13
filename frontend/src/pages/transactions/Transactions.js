@@ -150,7 +150,7 @@ const Transactions = () => {
     }
     const formateCurrencyValue = (data) => {
         if (data) {
-            let value = data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            let value = data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             // let prefix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.prefix
             // let suffix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.suffix
             // return prefix ? (prefix + value) : suffix ? (value + suffix) : value

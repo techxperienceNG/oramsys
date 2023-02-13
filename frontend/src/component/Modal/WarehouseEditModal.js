@@ -250,7 +250,7 @@ const WarehouseEditModal = ({ onHide, show, mode, editData }) => {
                                             options={getGoverningLawOption}
                                             disableClearable
                                             renderInput={(params) => (
-                                                <TextField {...params} label="Governing law" variant="standard" />
+                                                <TextField {...params} label="Type of warehouse document issued" variant="standard" />
                                             )}
                                             value={(getGoverningLawOption.length && warehouse.governingLaw) ? getGoverningLawOption.find(item => item === warehouse?.governingLaw) : {}}
                                             disabled={mode === "View"}

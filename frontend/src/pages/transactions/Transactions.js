@@ -220,6 +220,7 @@ const Transactions = () => {
                     }}
                 />
             </div>
+            
 
             {showExcelModal && <ExcelModal refreshpage={() => dispatch(() => refreshPage())} show={showExcelModal} onHide={() => setShowExcelModal(false)} getId={sendId} />}
         </>

@@ -263,7 +263,7 @@ const Index = () => {
     // }, []);
 
     if (AuthStorage.getStorageData(STORAGEKEY.roles) === "user") {
-        primaryLinks = superAdminRoutes
+        primaryLinks = userRoutes
     } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "admin") {
         primaryLinks = AdminRoutes
     } else if (AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin") {

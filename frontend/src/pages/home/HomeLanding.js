@@ -197,7 +197,7 @@ const HomeLanding = () => {
                         </span>
                         <span>Edit Transactions</span>
                       </Link>
-                      <Dropdown as={ButtonGroup}>
+                      {/* <Dropdown as={ButtonGroup}>
                         <Button variant='primary'>Create</Button>
 
                         <Dropdown.Toggle
@@ -214,7 +214,7 @@ const HomeLanding = () => {
                             Export{" "}
                           </Dropdown.Item>
                         </Dropdown.Menu>
-                      </Dropdown>
+                      </Dropdown> */}
                       {/* <a href='/' class="btn d-inline-flex btn-sm btn-primary mx-1">
                                     <span class=" pe-2">
                                         <i class="bi bi-plus"></i>
@@ -231,9 +231,9 @@ const HomeLanding = () => {
           <main class='py-6'>
             <div class='container-fluid'>
               <div class='row g-6 mb-6'>
-                {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" &&
+                {AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin" &&
                   cards.map((card, i) => (
-                    <div class='col-xl-3 mb-3 col-sm-6 col-12'>
+                    <div class='col-xl-6 mb-3 col-sm-6 col-12'>
                       <div class='card shadow border-0'>
                         <div class='card-body'>
                           <div class='row'>
@@ -310,7 +310,85 @@ const HomeLanding = () => {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))
+                }
+
+
+                  { AuthStorage.getStorageData(STORAGEKEY.roles) === "user" &&
+                  <div class='col-6 mb-3 col-sm-6 col-12'>
+                  <div class='card shadow border-0'>
+                    <div class='card-body'>
+                      <div class='row'>
+                        <div class='col'>
+                          <span class='h6 font-semibold text-muted text-sm d-block mb-2'>
+                            Transactions
+                          </span>
+                          <span class='h3 font-bold mb-0'>
+                            {signedCount.length}
+                          </span>
+                        </div>
+                        <div class='col-auto'>
+                          <div
+                            className={`icon icon-shape bg-success text-white text-lg rounded-circle`}
+                          >
+                            <GrTransaction size={56} />
+                          </div>
+                        </div>
+                      </div>
+                      <div class='mt-2 mb-0 text-sm'>
+                          <>
+                            {" "}
+                            <span className='badge badge-pill bg-soft-success text-success me-2'>
+                              {signedCount.length}
+                            </span>
+                            <span class='text-nowrap text-xs text-muted'>
+                              Completed
+                            </span>
+                          </>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                  }
+
+                  { AuthStorage.getStorageData(STORAGEKEY.roles) === "user" &&
+                    <>
+                    <div class='col-6 mb-3 col-sm-6 col-12'>
+                      <div class='card shadow border-0'>
+                        <div class='card-body'>
+                          <div class='row'>
+                            <div class='col'>
+                              <span class='h6 font-semibold text-muted text-sm d-block mb-2'>
+                                Completed Transactions
+                              </span>
+                              <span class='h3 font-bold mb-0'>
+                                {notSignedCount.length}
+                              </span>
+                            </div>
+                            <div class='col-auto'>
+                              <div
+                                className={`icon icon-shape bg-primary text-white text-lg rounded-circle`}
+                              >
+                                <IoTimerOutline size={56} />
+                              </div>
+                            </div>
+                          </div>
+                          <div class='mt-2 mb-0 text-sm'>
+                              <>
+                                {" "}
+                                <span className='badge badge-pill bg-soft-gray text-success me-2'>
+                                  {notSignedCount.length}
+                                </span>
+                                <span class='text-nowrap text-xs text-muted'>
+                                  In progress...
+                                </span>
+                              </>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                    </>
+                  }
               </div>
 
               <div class='card shadow border-0 mb-7'>
@@ -325,6 +403,8 @@ const HomeLanding = () => {
                         <th scope='col'>Borrower</th>
                         <th scope='col'>Lender</th>
                         <th scope='col'>Value</th>
+                        <th scope='col'>Status</th>
+                        <th scope='col'>Status</th>
                         <th scope='col'>Status</th>
                         <th></th>
                       </tr>
@@ -364,9 +444,11 @@ const HomeLanding = () => {
                               )}
                             </td>
                             <td class='text-end'>
-                              <Button variant='outline-dark' class='btn btn-sm btn-neutral'>
+                              <Link to='#' onClick={() => {
+                                  data.termSheet === 'Not Signed' ? downloadTermSheet(data._id, 'view') : ViewRiskAssessment() 
+                              }} class='btn btn-sm btn-neutral'>
                                 View Termsheet
-                              </Button>
+                              </Link>
                               <Button variant='outline-dark' class='btn btn-sm btn-square btn-neutral text-danger-hover'
                                 onClick={() => {
                                   data.termSheet === "Signed"
@@ -385,7 +467,7 @@ const HomeLanding = () => {
                 </div>
                 <div class='card-footer border-0 py-5'>
                   <span class='text-muted text-sm'>
-                    Showing 10 items out of 250 results found
+               
                   </span>
                 </div>
               </div>

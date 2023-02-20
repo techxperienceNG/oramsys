@@ -232,9 +232,10 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         'No'
     ]
 
-    const loanPurposeValidityOptions = [
-        'Yes',
-        'No'
+    let loanPurposeValidityOptions = [
+        { value: '', label: "Is the loan purpose valid?" },
+        { value: true, label: "Yes" },
+        { value: false, label: "No" }
     ]
 
     const hadleChangeModal = (e) => {
@@ -1221,32 +1222,14 @@ const Facility = ({ hendelCancel, hendelNext }) => {
 
                 <div className='add-edit-product p-0'>
                     <div className='form'>
-                        <h2 className='mb-3'>Loan Purpose</h2>
+                        <h2 className='mb-3'>Loan Purpose Justification</h2>
                         <div>
                             <Row>
-                                <Col lg={facility.loanPurposeValidity === 'No' ? 6 : 12}>
-                                    <Autocomplete
-                                        options={loanPurposeValidityOptions}
-                                        getOptionLabel={(option) => option}
-                                        id="disable-clearable"
-                                        label="Loan Purpose Validity"
-                                        renderInput={(params) => (
-                                            <TextField {...params} label="Loan Purpose Validity" variant="standard" />
-                                        )}
-                                        onChange={(event, newValue) => {
-                                            setFacility({ ...facility, loanPurposeValidity: newValue });
-                                        }}
-                                        disableClearable
-                                        value={facility.loanPurposeValidity}
-                                        disabled={isView}
-                                    />
-                                    {error && error?.loanPurposeValidity && <span style={{ color: 'red' }}>{error.loanPurposeValidity}</span>}
-                                </Col>
-                                {
-                                    facility.loanPurposeValidity === 'No' &&
+                              
+                            
                                     <Col lg={6}>
                                         <TextField
-                                            label="Loan Purpose Justification"
+                                            label="Loan Purpose"
                                             id="standard-start-adornment"
                                             variant="standard"
                                             color="warning"
@@ -1260,7 +1243,28 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         />
                                         {error && error?.loanPurposJustification && <span style={{ color: 'red' }}>{error.loanPurposJustification}</span>}
                                     </Col>
-                                }
+                                
+                                  <Col lg={6}>
+                                    <Autocomplete
+                                        options={loanPurposeValidityOptions}
+                                        getOptionLabel={(option) => option.label}
+                                        id="disable-clearable"
+                                        label="Loan Purpose Validity"
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Loan Purpose Validity" variant="standard" />
+                                        )}
+                                        onChange={(event, newValue) => {
+                                            setFacility({ ...facility, loanPurposeValidity: newValue });
+                                        }}
+                                        disableClearable
+                                        value={((loanPurposeValidityOptions.length > 0 && facility.loanPurposeValidity === true) ||
+                                             facility.loanPurposeValidity === true) ? 
+                                             loanPurposeValidityOptions.find((ele) => ele.value === facility.loanPurposeValidity) : loanPurposeValidityOptions = ''}
+
+                                        disabled={isView}
+                                    />
+                                    {error && error?.loanPurposeValidity && <span style={{ color: 'red' }}>{error.loanPurposeValidity}</span>}
+                                </Col>
 
                             </Row>
                         </div>

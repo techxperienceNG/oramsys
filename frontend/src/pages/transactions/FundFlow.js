@@ -185,6 +185,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
         'Documents against acceptance (DAA)',
         'Letter of Credit (LC)',
         'Open account',
+        'Electronic Bill of Laden'
     ]
 
     const handleChangeNumber = (e, name) => {

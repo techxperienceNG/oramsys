@@ -1,5 +1,6 @@
 import { Backdrop, Modal, Fade, FormControl, InputLabel, Select, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+import { DropzoneArea } from 'material-ui-dropzone';
 import { Col, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { entityGetAction } from '../../redux/actions/entityAction';
@@ -10,6 +11,7 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData,dat
     const [currencyHedgeDetails, setCurrencyHedgeDetails] = useState({
         hedgingMethod: "",
         counterparty: "",
+        evidence: "",
     })
     const [id, setId] = useState('')
 
@@ -64,6 +66,18 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData,dat
         console.log('currencyHedgeDetails===', currencyHedgeDetails)
         console.log('counterpartyOption==', counterpartyOption)
     }, [currencyHedgeDetails, counterpartyOption])
+
+    
+    const handleChangeFile = (file) => {
+        if (file) {
+            new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            }).then((res) => setCurrencyHedgeDetails({ ...currencyHedgeDetails, evidence: res }));
+        }
+    }
 
     return (
         <>
@@ -122,6 +136,20 @@ const CurrencyHedgeDetailsModal = ({ show, onHide, getModalData, editRowData,dat
                                                 value={(currencyHedgeDetails?.counterparty && counterpartyOption.length > 0) && counterpartyOption.find((elem) => elem._id === currencyHedgeDetails?.counterparty?.value)}
                                             />
                                         </Col>
+                                        <div className='drag-and-drop'>
+                                                    <label>Upload Evidence</label>
+                                                    <DropzoneArea
+                                                        Icon="none"
+                                                        filesLimit={1}
+                                                        showPreviews={true}
+                                                        showPreviewsInDropzone={false}
+                                                        useChipsForPreview
+                                                        previewGridProps={{ container: { spacing: 1, } }}
+                                                        dropzoneText='Drop file here'
+                                                        previewText=""
+                                                        onChange={(file) => handleChangeFile(file[0])}
+                                                    />
+                                                </div>
                                     </Row>
                                 </div>
                                 <div className='d-flex justify-content-between mt-4'>

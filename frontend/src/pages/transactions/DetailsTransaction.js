@@ -2535,4 +2535,5 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
   )
 }
 
+
 export default DetailsTransaction

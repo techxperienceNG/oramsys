@@ -1258,7 +1258,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         }}
                                         disableClearable
                                         value={((loanPurposeValidityOptions.length > 0 && facility.loanPurposeValidity === true) ||
-                                             facility.loanPurposeValidity === true) ? 
+                                             facility.loanPurposeValidity === false) ? 
                                              loanPurposeValidityOptions.find((ele) => ele.value === facility.loanPurposeValidity) : loanPurposeValidityOptions = ''}
 
                                         disabled={isView}

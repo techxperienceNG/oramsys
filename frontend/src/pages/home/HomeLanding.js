@@ -430,7 +430,7 @@ const HomeLanding = () => {
                               </Link>
                             </td>
                             <td>
-                              {formateCurrencyValue(data.details.contractDetails.value)}
+                              {formateCurrencyValue(data?.details?.contractDetails?.value)}
                             </td>
                             <td>
                               {data.termSheet === "Signed" ? (

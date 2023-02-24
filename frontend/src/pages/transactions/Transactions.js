@@ -191,7 +191,7 @@ const Transactions = () => {
                         { title: 'Applicant', field: 'borrower_Applicant' },
                         { title: 'Lenders', field: 'lenders' },
                         { title: 'Product', field: 'details.productDetails.name.name' },
-                        { title: 'Value', render: rowData => formateCurrencyValue(rowData.details.contractDetails.value) },
+                        { title: 'Value', render: rowData => formateCurrencyValue(rowData.details?.contractDetails?.value) },
                         // { title: 'Origination Port', field: 'details.shippingOptions.portOfOrigin.name' },
                         // { title: 'Destination Port', field: 'details.shippingOptions.destinationPort.name' },
                         // { title: 'Term Sheet', field: 'termSheet' },

@@ -404,13 +404,11 @@ const HomeLanding = () => {
                         <th scope='col'>Lender</th>
                         <th scope='col'>Value</th>
                         <th scope='col'>Status</th>
-                        <th scope='col'>Status</th>
-                        <th scope='col'>Status</th>
-                        <th></th>
+                        {/* <th scope='col'>Actions</th> */}
                       </tr>
                     </thead>
                     <tbody>
-                      {getAlltransactionData &&
+                      {!getAlltransactionData ? <p className='text-center'> No records were found</p> : getAlltransactionData &&
                         getAlltransactionData?.data?.map((data) => (
                           <tr>
                             <td>

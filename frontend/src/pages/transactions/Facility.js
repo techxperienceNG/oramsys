@@ -142,7 +142,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                 prePayment: getTransactionByIdData.data?.facility?.prePayment,
                 type: getTransactionByIdData.data?.facility?.type,
                 amount: getTransactionByIdData.data?.facility?.amount,
-                loanPurposJustification: getTransactionByIdData.data?.facility?.loanPurposeValidity,
+                loanPurposJustification: getTransactionByIdData.data?.facility?.loanPurposJustification,
                 finalMaturity: getTransactionByIdData.data?.facility?.finalMaturity && moment(getTransactionByIdData.data?.facility?.finalMaturity).format("YYYY-MM-DD"),
                 availabilityPeriod: getTransactionByIdData.data?.facility?.availabilityPeriod,
                 repayment: getTransactionByIdData.data?.facility?.repayment,
@@ -233,9 +233,9 @@ const Facility = ({ hendelCancel, hendelNext }) => {
     ]
 
     let loanPurposeValidityOptions = [
-        { value: '', label: "Is the loan purpose valid?" },
-        { value: true, label: "Yes" },
-        { value: false, label: "No" }
+       'Is the loan purpose valid?',
+       'Yes',
+       'No'
     ]
 
     const hadleChangeModal = (e) => {
@@ -1247,7 +1247,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                   <Col lg={6}>
                                     <Autocomplete
                                         options={loanPurposeValidityOptions}
-                                        getOptionLabel={(option) => option.label}
+                                        getOptionLabel={(option) => option}
                                         id="disable-clearable"
                                         label="Loan Purpose Validity"
                                         renderInput={(params) => (
@@ -1257,10 +1257,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                             setFacility({ ...facility, loanPurposeValidity: newValue });
                                         }}
                                         disableClearable
-                                        value={((loanPurposeValidityOptions.length > 0 && facility.loanPurposeValidity === true) ||
-                                             facility.loanPurposeValidity === false) ? 
-                                             loanPurposeValidityOptions.find((ele) => ele.value === facility.loanPurposeValidity) : loanPurposeValidityOptions = ''}
-
+                                        value={facility.loanPurposeValidity}
                                         disabled={isView}
                                     />
                                     {error && error?.loanPurposeValidity && <span style={{ color: 'red' }}>{error.loanPurposeValidity}</span>}

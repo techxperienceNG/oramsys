@@ -135,7 +135,7 @@ const Transactions = () => {
         },
         {
             icon: 'download',
-            tooltip: 'Download term sheet',
+            tooltip: 'Download term sheet', 
             // onClick: (event, rowData) => navigate(`/edit-transactions?id=${rowData?._id}`, { state: [{ type: rowData.type }, { type: rowData?.details?.productDetails?.nature ? rowData.details.productDetails.nature : '' }, { isView: false }] })
             // onClick: (event, rowData) => { downloadTermSheet(rowData._id) }
             onClick: (event, rowData) => { rowData.termSheet === 'Not Signed' ? downloadTermSheet(rowData._id, 'download') : converBase64toBlob(rowData.termSheetUrl) }

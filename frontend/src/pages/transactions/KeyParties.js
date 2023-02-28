@@ -256,9 +256,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                         }
                     ]}
                     options={{
-                        filtering: true,
+                        filtering: false,
                         actionsColumnIndex: -1,
-                        sorting: true,
+                        sorting: false,
                         pageSize: 10,
                         search: false,
                         emptyRowsWhenPaging: false,

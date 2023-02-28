@@ -27,6 +27,7 @@ const WarehouseEditModal = ({ onHide, show, mode, editData }) => {
         city: "",
         country: "",
         governingLaw: "",
+        typeOfDoc: "",
     })
 
     const companyData = useSelector((state) => state.companydata.companydata)
@@ -35,6 +36,11 @@ const WarehouseEditModal = ({ onHide, show, mode, editData }) => {
         'Field',
         'Terminal'
     ];
+
+    const typeOfDocumentOptions = [
+        'Warrants',
+        'Warehouse Reciepts (non-transferable)'
+    ]
 
     const getNatureoption = [
         'Private',
@@ -57,6 +63,7 @@ const WarehouseEditModal = ({ onHide, show, mode, editData }) => {
                 city: temp?.city,
                 country: temp?.country,
                 governingLaw: temp?.governingLaw,
+                typeOfDoc: temp?.typeOfDoc,
             })
         }
     }, [editData, mode, companyData])
@@ -101,6 +108,10 @@ const WarehouseEditModal = ({ onHide, show, mode, editData }) => {
         if (!warehouse.governingLaw) {
             flag = true
             error.governingLaw = 'Please select governing law'
+        }
+        if (!warehouse.typeOfDoc) {
+            flag = true
+            error.typeOfDoc= 'Please select type of warehouse document'
         }
 
         setError(error)
@@ -232,19 +243,35 @@ const WarehouseEditModal = ({ onHide, show, mode, editData }) => {
                                     </Col>
                                     <Col lg={6} className="mb-4">
                                         <Autocomplete
-                                            label="Governing law"
+                                            label="Type of warehouse document issued"
                                             id="disable-clearable"
                                             onChange={(e, newVal) => setWarehouse({ ...warehouse, governingLaw: newVal })}
                                             getOptionLabel={(option) => option}
                                             options={getGoverningLawOption}
                                             disableClearable
                                             renderInput={(params) => (
-                                                <TextField {...params} label="Governing law" variant="standard" />
+                                                <TextField {...params} label="Type of warehouse document issued" variant="standard" />
                                             )}
                                             value={(getGoverningLawOption.length && warehouse.governingLaw) ? getGoverningLawOption.find(item => item === warehouse?.governingLaw) : {}}
                                             disabled={mode === "View"}
                                         />
                                         {error && error.governingLaw && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.governingLaw}</span>}
+                                    </Col>
+                                    <Col lg={6} className="mb-4">
+                                        <Autocomplete
+                                            label="Type of Warehouse document"
+                                            id="disable-clearable"
+                                            onChange={(e, newVal) => setWarehouse({ ...warehouse, typeOfDoc: newVal })}
+                                            getOptionLabel={(option) => option}
+                                            options={typeOfDocumentOptions}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField {...params} label="Type of Waherhouse Document" variant="standard" />
+                                            )}
+                                            value={(typeOfDocumentOptions.length && warehouse.typeOfDoc) ? typeOfDocumentOptions.find(item => item === warehouse?.typeOfDoc) : {}}
+                                            disabled={mode === "View"}
+                                        />
+                                        {error && error.typeOfDoc && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.typeOfDoc}</span>}
                                     </Col>
                                 </Row>
                             </div>

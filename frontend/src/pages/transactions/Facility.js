@@ -142,7 +142,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                 prePayment: getTransactionByIdData.data?.facility?.prePayment,
                 type: getTransactionByIdData.data?.facility?.type,
                 amount: getTransactionByIdData.data?.facility?.amount,
-                loanPurposJustification: getTransactionByIdData.data?.facility?.loanPurposeValidity,
+                loanPurposJustification: getTransactionByIdData.data?.facility?.loanPurposJustification,
                 finalMaturity: getTransactionByIdData.data?.facility?.finalMaturity && moment(getTransactionByIdData.data?.facility?.finalMaturity).format("YYYY-MM-DD"),
                 availabilityPeriod: getTransactionByIdData.data?.facility?.availabilityPeriod,
                 repayment: getTransactionByIdData.data?.facility?.repayment,
@@ -232,9 +232,10 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         'No'
     ]
 
-    const loanPurposeValidityOptions = [
-        'Yes',
-        'No'
+    let loanPurposeValidityOptions = [
+       'Is the loan purpose valid?',
+       'Yes',
+       'No'
     ]
 
     const hadleChangeModal = (e) => {
@@ -1221,10 +1222,29 @@ const Facility = ({ hendelCancel, hendelNext }) => {
 
                 <div className='add-edit-product p-0'>
                     <div className='form'>
-                        <h2 className='mb-3'>Loan Purpose</h2>
+                        <h2 className='mb-3'>Loan Purpose Justification</h2>
                         <div>
                             <Row>
-                                <Col lg={facility.loanPurposeValidity === 'No' ? 6 : 12}>
+                              
+                            
+                                    <Col lg={6}>
+                                        <TextField
+                                            label="Loan Purpose"
+                                            id="standard-start-adornment"
+                                            variant="standard"
+                                            color="warning"
+                                            name='loanPurposJustification'
+                                            value={facility.loanPurposJustification}
+                                            onChange={handleChange}
+                                            multiline
+                                            maxRows={3}
+                                            // onClick={() => { setShowTextEditor(true); setType('Loan Purpose Justification'); setSelectedName('loanPurposJustification') }}
+                                            disabled={isView}
+                                        />
+                                        {error && error?.loanPurposJustification && <span style={{ color: 'red' }}>{error.loanPurposJustification}</span>}
+                                    </Col>
+                                
+                                  <Col lg={6}>
                                     <Autocomplete
                                         options={loanPurposeValidityOptions}
                                         getOptionLabel={(option) => option}
@@ -1242,25 +1262,6 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     />
                                     {error && error?.loanPurposeValidity && <span style={{ color: 'red' }}>{error.loanPurposeValidity}</span>}
                                 </Col>
-                                {
-                                    facility.loanPurposeValidity === 'No' &&
-                                    <Col lg={6}>
-                                        <TextField
-                                            label="Loan Purpose Justification"
-                                            id="standard-start-adornment"
-                                            variant="standard"
-                                            color="warning"
-                                            name='loanPurposJustification'
-                                            value={facility.loanPurposJustification}
-                                            onChange={handleChange}
-                                            multiline
-                                            maxRows={3}
-                                            // onClick={() => { setShowTextEditor(true); setType('Loan Purpose Justification'); setSelectedName('loanPurposJustification') }}
-                                            disabled={isView}
-                                        />
-                                        {error && error?.loanPurposJustification && <span style={{ color: 'red' }}>{error.loanPurposJustification}</span>}
-                                    </Col>
-                                }
 
                             </Row>
                         </div>

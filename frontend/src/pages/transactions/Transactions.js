@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Transactionscard from '../../component/Transactionscard'
@@ -35,7 +35,7 @@ const Transactions = () => {
         dispatch(getAllTransaction(id))
     }, [])
 
-    useEffect(() => {
+    const refreshPage = useCallback(() => {
         if (getAlltransactionData && getAlltransactionData.data && getAlltransactionData.data.length > 0) {
             setTransaction(getAlltransactionData.data?.map(item => {
                 return {
@@ -52,6 +52,11 @@ const Transactions = () => {
             }))
         }
     }, [getAlltransactionData])
+
+    useEffect(() => {
+        dispatch(() => refreshPage())
+        //eslint-disable-next-line
+    }, [])
 
     // const cllickOnRiskAssessment = (id) => {
     //     dispatch(getRiskAssessment(id))
@@ -130,7 +135,7 @@ const Transactions = () => {
         },
         {
             icon: 'download',
-            tooltip: 'Download term sheet',
+            tooltip: 'Download term sheet', 
             // onClick: (event, rowData) => navigate(`/edit-transactions?id=${rowData?._id}`, { state: [{ type: rowData.type }, { type: rowData?.details?.productDetails?.nature ? rowData.details.productDetails.nature : '' }, { isView: false }] })
             // onClick: (event, rowData) => { downloadTermSheet(rowData._id) }
             onClick: (event, rowData) => { rowData.termSheet === 'Not Signed' ? downloadTermSheet(rowData._id, 'download') : converBase64toBlob(rowData.termSheetUrl) }
@@ -145,7 +150,7 @@ const Transactions = () => {
     }
     const formateCurrencyValue = (data) => {
         if (data) {
-            let value = data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            let value = data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             // let prefix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.prefix
             // let suffix = CurrencyOptions.find((ele) => ele.label === contractDetails?.currency)?.suffix
             // return prefix ? (prefix + value) : suffix ? (value + suffix) : value
@@ -186,7 +191,7 @@ const Transactions = () => {
                         { title: 'Applicant', field: 'borrower_Applicant' },
                         { title: 'Lenders', field: 'lenders' },
                         { title: 'Product', field: 'details.productDetails.name.name' },
-                        { title: 'Value', render: rowData => formateCurrencyValue(rowData.details.contractDetails.value) },
+                        { title: 'Value', render: rowData => formateCurrencyValue(rowData.details?.contractDetails?.value) },
                         // { title: 'Origination Port', field: 'details.shippingOptions.portOfOrigin.name' },
                         // { title: 'Destination Port', field: 'details.shippingOptions.destinationPort.name' },
                         // { title: 'Term Sheet', field: 'termSheet' },
@@ -215,8 +220,9 @@ const Transactions = () => {
                     }}
                 />
             </div>
+            
 
-            {showExcelModal && <ExcelModal show={showExcelModal} onHide={() => setShowExcelModal(false)} getId={sendId} />}
+            {showExcelModal && <ExcelModal refreshpage={() => dispatch(() => refreshPage())} show={showExcelModal} onHide={() => setShowExcelModal(false)} getId={sendId} />}
         </>
     )
 }

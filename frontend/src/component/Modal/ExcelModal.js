@@ -3,11 +3,12 @@ import { Backdrop, Fade, Modal, TextField } from '@material-ui/core'
 import { Col, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { termSheetAction } from '../../redux/actions/termSheetAction'
+// import { termSheetAction } from '../../redux/actions/termSheetAction'
 import { toast } from 'react-toastify'
 import { TERM_SHEET } from '../../redux/types'
 
 
-const ExcelModal = ({ show, onHide, getId }) => {
+const ExcelModal = ({ show, onHide, getId, refreshpage }) => {
 
     const [file, setFile] = useState()
 
@@ -42,6 +43,7 @@ const ExcelModal = ({ show, onHide, getId }) => {
         console.log(body);
 
         dispatch(termSheetAction(body))
+        refreshpage()
     }
 
 

@@ -1,10 +1,10 @@
 import Pages from '../pages'
 import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Security } from '@okta/okta-react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useEffect, useState } from "react";
 
 const OKTA_DOMAIN = 'dev-09386955';
 const CLIENT_ID = '0oa5hrixzgbpayfmA5d7';
@@ -30,13 +30,23 @@ const oktaAuth = new OktaAuth(config);
 
 const Routes = () => {
   const navigate = useNavigate();
-  
+
+  const useFindPath = () => {
+    const location = useLocation();
+    const [currentPath, setCurrentPath] = useState();
+    useEffect(() => {
+      setCurrentPath(location.pathname);
+    }, [location]);
+    return currentPath;
+  };
+
+  const path = useFindPath();
+
   window.onload = function () {
-    if (!localStorage.getItem('userId')) {
+    if (!localStorage.getItem('userId') && path !== '/admin-login') {
       navigate('/');
     }
   }
-
 
   const restoreOriginalUri = async (_oktaAuth, originalUri) => {
     navigate(toRelativeUrl(originalUri || "/", window.location.origin));

@@ -14,7 +14,7 @@ import { ApiGet, ApiGet2 } from '../../helper/API/ApiData';
 import { Button, Icon } from '@material-ui/core';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { GET_TRANSACTION_BY_ID } from '../../redux/types';
-import Skeleton from 'react-loading-skeleton'
+import Skeleton from 'react-loading-skeleton';
 const Transactions = () => {
 
     const dispatch = useDispatch()

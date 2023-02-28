@@ -29,6 +29,7 @@ const Edit_Transactions = () => {
     const productNature = location?.state[1]?.type
     const isView = location?.state[2]?.isView
     const [getTrans, setGetTrans] = useState({})
+    const [transId, setTransId] = useState("");
     const [getLender, setGetLender] = useState("")
     const [getBorrower, setGetBorrower] = useState("")
 
@@ -46,15 +47,16 @@ const Edit_Transactions = () => {
                 "value": getTransactionId.data?.details?.contractDetails?.value
             }
 
+            setTransId(id);
             localStorage.setItem('details', JSON.stringify(transdata))
-        
+
         }
     }, [id])
 
     const signalContract = (values) => {
         setGetTrans(values)
     }
-    const signalLender = (values) => {  
+    const signalLender = (values) => {
         setGetLender(values)
     }
     const signalBorrower = (values) => {
@@ -113,7 +115,7 @@ const Edit_Transactions = () => {
                                     {
                                         productNature === 'Physical' ?
                                             <>
-                                                {activeStep + 1 === 1 && <DetailsTransaction hendelNext={handleNext} signalContract={signalContract} signalLender={signalLender} signalBorrower={signalBorrower} transactionType={transactionType} />}
+                                                {activeStep + 1 === 1 && <DetailsTransaction hendelNext={handleNext} signalContract={signalContract} signalLender={signalLender} signalBorrower={signalBorrower} transactionType={transactionType} transaction_id={transId} />}
                                                 {activeStep + 1 === 2 && <KeyParties hendelNext={handleNext} getLender={getLender} getBorrower={getBorrower} hendelCancel={handleBack} transactionType={transactionType} />}
                                                 {activeStep + 1 === 3 && <DocumentFlow hendelNext={handleNext} hendelCancel={handleBack} />}
                                                 {activeStep + 1 === 4 && <FundFlow hendelNext={handleNext} getTrans={getTrans} hendelCancel={handleBack} />}

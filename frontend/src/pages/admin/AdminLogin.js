@@ -65,7 +65,7 @@ const AdminLogin = () => {
                 type: LOGIN,
                 payload: { res: res, is_loggedin: true }
             })
-            if (res.status === 200 && res.data.token) {
+            if (res.status === 200 && res.data != undefined) {
                 toast.success(res.message);
                 navigate('/homeLanding');
                 AuthStorage.setStorageData(STORAGEKEY.token, res.data.token, true)
@@ -97,7 +97,7 @@ const AdminLogin = () => {
                         </div>
                     </div>
                     <div className="rgt-pan">
-                    <p>This is the administrative portal, if you are not an administrator you cannot have access. Please go to the client login</p>
+                        <p>This is the administrative portal, if you are not an administrator you cannot have access. Please go to the client login</p>
                         {/* <h1>Create Account</h1> */}
                         {/* <p>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore modi omnis vero a autem harum quidem quo deserunt quos minus

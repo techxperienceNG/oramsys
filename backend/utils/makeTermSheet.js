@@ -10,7 +10,7 @@ const makeTermSheet = async (doc, transaction) => {
     // draw some text
     // console.log(EntityRoles)
 
-    doc.font("Times-Bold", 20).text('PRELIMINARY TERMSHEET', leftPosition + 150, topPosition += 50);
+    doc.font("Times-Bold", 20).text(`${transaction.termSheet === 'Signed' ? 'FACILITY TERMSHEET' : 'PRELIMINARY TERMSHEET'}`, leftPosition + 150, topPosition += 50);
 
     doc.font("Times-Bold", 17).text('IMPORTANT NOTICE:', leftPosition, topPosition += 50);
 

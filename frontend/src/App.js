@@ -7,7 +7,7 @@ import store from './redux/store';
 import { ToastContainer } from 'react-bootstrap';
 
 window.onbeforeunload = function () {
-  localStorage.clear();
+  // localStorage.clear();
 }
 
 function App() {

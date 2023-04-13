@@ -22,6 +22,7 @@ const SecurityDocuments = new Schema({
 
 
 var Schema = new Schema({
+    baseRate: { type: String, required: false, default: null },
     transactionId: { type: String, required: false, default: null },
     interestRate: { type: String, required: false, default: null },
     advisoryFee: { type: String, required: false, default: null },
@@ -33,7 +34,6 @@ var Schema = new Schema({
     miscellaneousProvisions: { type: String, required: false, default: null },
     generalUndertakings: { type: String, required: false, default: null },
     interestPeriod: { type: String, required: false, default: null },
-    baseRate: { type: String, required: false, default: null },
     interestPaymentDate: { type: Date, required: false, default: null },
     tenor: { type: String, required: false, default: null },
     managementFee: { type: String, required: false, default: null },

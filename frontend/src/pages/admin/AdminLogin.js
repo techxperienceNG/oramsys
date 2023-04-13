@@ -6,6 +6,9 @@ import AuthStorage from '../../helper/AuthStorage';
 import { LOGIN } from '../../redux/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify'
+import svgIcon from '../../css/undraw_developer_activity_re_39tg.svg'
+import '../../css/login.css'
+import '../../css/bootstrap.min.css'
 
 
 const AdminLogin = () => {
@@ -80,35 +83,78 @@ const AdminLogin = () => {
         })
     }
     return (
-        <section className="login">
-            <div className="container">
-                <div className="sign-grd">
-                    <div className="lft-pan">
-                        <div className="form-box">
-                            <div className='form'>
-                                <h1 className='mb-5 mt-5'>Sign In</h1>
-                                <input type="email" placeholder="Email" name='email' onChange={handelChange} />
-                                {loginFormError.email && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{loginFormError.email}</span>}
-                                <input type="password" placeholder="Password" name='password' onChange={handelChange} />
-                                {loginFormError.password && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{loginFormError.password}</span>}
-                                <a href="#" className="forgot">Forgot your password?</a>
-                                <button onClick={(e) => Login(e)}>Sign In</button>
+
+        <div class="content">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-6 contents">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="mb-4">
+                                    <h3 className='title-admin'>Administration</h3>
+                                    <p class="mb-4">This is the administrative portal, if you are not an administrator you cannot have access. Please go to the client login</p>
+                                </div>
+
+                                <div className='form'>
+
+                                    <div class="form-floating mb-3">
+                                        <input type="email" name='email' onChange={(e) => handelChange(e)} class="form-control" id="floatingInput" placeholder="Email" />
+                                        <label for="floatingInputValue">Email address</label>
+                                        {loginFormError.email && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{loginFormError.email}</span>}
+                                    </div>
+
+                                    <div class="form-floating mb-4">
+                                        <input type="password" onChange={(e) => handelChange(e)} name='password' class="form-control" id="floatingPassword" placeholder="Password" />
+                                        <label for="floatingInputValue">Password</label>
+                                        {loginFormError.password && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{loginFormError.password}</span>}
+                                    </div>
+
+                                    <button onClick={(e) => Login(e)} class="btn btn-block btn-primary">Log In</button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
-                    <div className="rgt-pan">
-                        <p>This is the administrative portal, if you are not an administrator you cannot have access. Please go to the client login</p>
-                        {/* <h1>Create Account</h1> */}
-                        {/* <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore modi omnis vero a autem harum quidem quo deserunt quos minus
-                        </p> */}
-                        {/* <a onClick={() => navigate('/signup')} className="ghost">Create Account</a> */}
-                        {/* <p>OR</p> */}
-                        {/* <a onClick={btnLogic} className="ghost">{buttonText}</a> */}
+
+                    <div class="col-md-6">
+                        <img src={svgIcon} style={{ height: '480x' }} alt="Image" className='img-slide img-responsive' />
                     </div>
+
                 </div>
             </div>
-        </section>
+        </div>
+        // <section className="login">
+        //     <div className="container">
+        //         <div className="sign-grd">
+        //             <div className="lft-pan">
+        //                 <div className="form-box">
+        //                     <div className='form'>
+        //                         <h1 className='mb-5 mt-5'>Sign In</h1>
+        //                         <input type="email" placeholder="Email" name='email' onChange={handelChange} />
+        //                         {loginFormError.email && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{loginFormError.email}</span>}
+
+        //                         <input type="password" placeholder="Password" name='password' onChange={handelChange} />
+        //                         {loginFormError.password && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{loginFormError.password}</span>}
+
+        //                         <a href="#" className="forgot">Forgot your password?</a>
+        //                         <button onClick={(e) => Login(e)}>Sign In</button>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //             <div className="rgt-pan">
+        //                 <p>This is the administrative portal, if you are not an administrator you cannot have access. Please go to the client login</p>
+        //                 {/* <h1>Create Account</h1> */}
+        //                 {/* <p>
+        //                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore modi omnis vero a autem harum quidem quo deserunt quos minus
+        //                 </p> */}
+        //                 {/* <a onClick={() => navigate('/signup')} className="ghost">Create Account</a> */}
+        //                 {/* <p>OR</p> */}
+        //                 {/* <a onClick={btnLogic} className="ghost">{buttonText}</a> */}
+        //             </div>
+        //         </div>
+        //     </div>
+        // </section>
     )
 }
 

@@ -15643,12 +15643,13 @@ div#wrapper.open>.offcanvas-mask {
   /* padding: 25px; */
   /* background: #082979; */
   height: 100vh;
+  border: 1px solid #F1F1F1;
   display: block;
   position: none;
   /* position: fixed;
   top: 0px;
   z-index: 111; */
-  background-color: rgb(249, 249, 249);
+  /* background-color: rgb(249, 249, 249); */
 }
 
 /* .sidebar_responsive {
@@ -15660,11 +15661,12 @@ div#wrapper.open>.offcanvas-mask {
   display: flex;
   box-sizing: border-box;
   /* max-width: 100%; */
-  background: linear-gradient(rgb(147, 56, 99) 0%, rgb(255, 116, 119) 100%);
+  /* background: linear-gradient(rgb(147, 56, 99) 0%, rgb(255, 116, 119) 100%); */
+  background-color: rgb(249, 249, 249);
   min-width: 0px;
   min-height: 0px;
   flex-direction: column;
-  height: 308px;
+  height: 290px;
   width: 281px;
 }
 
@@ -15674,14 +15676,14 @@ div#wrapper.open>.offcanvas-mask {
 }
 
 .profile-content .user_img {
-  height: 128px;
-  width: 128px;
+  height: 120px;
+  width: 120px;
   margin: 20px auto;
 
 }
 
 .profile-name h1 {
-  color: #FFFFFF;
+  color: #333333;
   font-family: Lato;
   font-size: 16px;
   font-weight: bold;

@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { registerAction } from '../../redux/actions/registerAction';
 import { toast } from 'react-toastify'
+import svgIcon from '../../css/undraw_remotely_2j6y.svg'
+import '../../css/login.css'
+import '../../css/bootstrap.min.css'
 
 
 const SignUp = () => {
@@ -67,36 +70,99 @@ const SignUp = () => {
         dispatch(registerAction(registerData))
     }
     return (
-        <section className="login signup">
-            <div className="container">
-                <div className="sign-grd">
-                    <div className="rgt-pan">
-                        <h1>Sign In</h1>
-                        {/* <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore modi omnis vero a autem harum quidem quo deserunt quos minus
-                        </p> */}
-                        <a onClick={() => navigate('/')} className="ghost">Sign In</a>
-                    </div>
-                    <div className="lft-pan">
-                        <div className="form-box">
-                            <div className='form'>
-                                <h1 className='mb-5 mt-5'>Create Account</h1>
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                   
+                    <div class="col-md-6 contents">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="mb-4">
+                                    <h3 className='title'>Sign Up</h3> 
+                                </div>
 
-                                <input type="text" placeholder="Name" name='name' onChange={(e) => handelChange(e)} />
-                                {registerError.name && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.name}</span>}
-                                <input type="email" placeholder="Email" name='email' onChange={(e) => handelChange(e)} />
-                                {registerError.email && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.email}</span>}
-                                <input type="password" placeholder="Password" name='password' onChange={(e) => handelChange(e)} />
-                                {registerError.password && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.password}</span>}
-                                <input type="password" placeholder="Conform password" name='conformPassword' onChange={(e) => handelChange(e)} />
-                                {registerError.conformPassword && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.conformPassword}</span>}
-                                <button onClick={(e) => register(e)}>Sign Up</button>
+                                <div className='form'>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" name='name' onChange={(e) => handelChange(e)} class="form-control" id="floatingInput" placeholder="Name" />
+                                        <label for="floatingInputValue">Name</label>
+                                        {registerError.name && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.name}</span>}                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                        <input type="email" name='email' onChange={(e) => handelChange(e)} class="form-control" id="floatingInput" placeholder="Email" />
+                                        <label for="floatingInputValue">Email address</label>
+                                        {registerError.email && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.email}</span>}
+                                    </div>
+
+                                    <div class="form-floating mb-4">
+                                        <input type="password" onChange={(e) => handelChange(e)} name='password' class="form-control" id="floatingPassword" placeholder="Password" />
+                                        <label for="floatingInputValue">Password</label>
+                                        {registerError.password && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.password}</span>}                                    
+                                    </div>
+                                    <div class="form-floating mb-4">
+                                        <input type="password" onChange={(e) => handelChange(e)} name='conformPassword' class="form-control" id="floatingPassword" placeholder="Confirm password" />
+                                        <label for="floatingInputValue">Confirm password</label>
+                                        {registerError.conformPassword && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.conformPassword}</span>}                                    </div>
+
+                                    <div class="d-flex mb-5 align-items-center">
+                                        <div className='row'>
+                                            <div className='col-12 text-center'>
+                                                <label class="control control--checkbox mb-0">
+                                                    <span class="caption">Already Registered? {" "} 
+                                                    <a className='fw-semibold' onClick={() => navigate('/')}>Log In</a></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button onClick={(e) => register(e)} class="btn btn-block btn-primary">Sign Up</button>     
+                                </div>
+
                             </div>
                         </div>
+
                     </div>
+                    <div class="col-md-6">
+                        <img src={svgIcon} style={{ height: '480x'}} alt="Image" className='img-slide img-responsive' />
+                    </div>
+
                 </div>
             </div>
-        </section>
+        </div>
+
+
+        // <section className="login signup">
+        //     <div className="container">
+        //         <div className="sign-grd">
+        //             <div className="rgt-pan">
+        //                 <h1>Sign In</h1>
+        //                 {/* <p>
+        //                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore modi omnis vero a autem harum quidem quo deserunt quos minus
+        //                 </p> */}
+        //                 <a onClick={() => navigate('/')} className="ghost">Sign In</a>
+        //             </div>
+        //             <div className="lft-pan">
+        //                 <div className="form-box">
+        //                     <div className='form'>
+        //                         <h1 className='mb-5 mt-5'>Create Account</h1>
+
+        //                         <input type="text" placeholder="Name" name='name' onChange={(e) => handelChange(e)} />
+        //                         {registerError.name && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.name}</span>}
+
+        //                         <input type="email" placeholder="Email" name='email' onChange={(e) => handelChange(e)} />
+        //                         {registerError.email && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.email}</span>}
+
+        //                         <input type="password" placeholder="Password" name='password' onChange={(e) => handelChange(e)} />
+        //                         {registerError.password && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.password}</span>}
+
+        //                         <input type="password" placeholder="Conform password" name='conformPassword' onChange={(e) => handelChange(e)} />
+        //                         {registerError.conformPassword && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{registerError.conformPassword}</span>}
+        //                         <button onClick={(e) => register(e)}>Sign Up</button>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </section>
     )
 }
 

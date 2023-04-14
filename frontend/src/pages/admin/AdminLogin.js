@@ -83,47 +83,58 @@ const AdminLogin = () => {
         })
     }
     return (
+        <>
+            <div class="content">
 
-        <div class="content">
-            <div class="container">
-                <div class="row">
+                <div class="container">
 
-                    <div class="col-md-6 contents">
-                        <div class="row justify-content-center">
-                            <div class="col-md-8">
-                                <div class="mb-4">
-                                    <h3 className='title-admin'>Administration</h3>
-                                    <p class="mb-4">This is the administrative portal, if you are not an administrator you cannot have access. Please go to the client login</p>
-                                </div>
+                    <div class="row">
 
-                                <div className='form'>
-
-                                    <div class="form-floating mb-3">
-                                        <input type="email" name='email' onChange={(e) => handelChange(e)} class="form-control" id="floatingInput" placeholder="Email" />
-                                        <label for="floatingInputValue">Email address</label>
-                                        {loginFormError.email && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{loginFormError.email}</span>}
+                        <div class="col-md-6 contents">
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item"><a href="#" onClick={() => navigate('/')}>Client Login</a></li>
+                                        </ol>
+                                    </nav>
+                                    <div class="mb-4">
+                                        <h3 className='title-admin'>Administration</h3>
+                                        <p class="mb-4">This is the administrative portal, if you are not an administrator you cannot have access. Please go to the client login</p>
                                     </div>
 
-                                    <div class="form-floating mb-4">
-                                        <input type="password" onChange={(e) => handelChange(e)} name='password' class="form-control" id="floatingPassword" placeholder="Password" />
-                                        <label for="floatingInputValue">Password</label>
-                                        {loginFormError.password && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{loginFormError.password}</span>}
+                                    <div className='form'>
+
+                                        <div class="form-floating mb-3">
+                                            <input type="email" name='email' onChange={(e) => handelChange(e)} class="form-control" id="floatingInput" placeholder="Email" />
+                                            <label for="floatingInputValue">Email address</label>
+                                            {loginFormError.email && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{loginFormError.email}</span>}
+                                        </div>
+
+                                        <div class="form-floating mb-4">
+                                            <input type="password" onChange={(e) => handelChange(e)} name='password' class="form-control" id="floatingPassword" placeholder="Password" />
+                                            <label for="floatingInputValue">Password</label>
+                                            {loginFormError.password && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{loginFormError.password}</span>}
+                                        </div>
+
+                                        <button onClick={(e) => Login(e)} class="btn btn-block btn-primary">Log In</button>
                                     </div>
 
-                                    <button onClick={(e) => Login(e)} class="btn btn-block btn-primary">Log In</button>
                                 </div>
-
                             </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <img src={svgIcon} style={{ height: '480x' }} alt="Image" className='img-slide img-responsive' />
-                    </div>
+                        <div class="col-md-6">
+                            <img src={svgIcon} style={{ height: '480x' }} alt="Image" className='img-slide img-responsive' />
+                        </div>
 
+
+
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
         // <section className="login">
         //     <div className="container">
         //         <div className="sign-grd">

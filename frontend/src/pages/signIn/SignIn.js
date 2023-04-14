@@ -84,6 +84,12 @@ const SignIn = () => {
                     <div class="col-md-6 contents">
                         <div class="row justify-content-center">
                             <div class="col-md-8">
+                            <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href='#' onClick={() => navigate('/admin-login')}>Admin</a></li>
+                        </ol>
+                    </nav>
                                 <div class="mb-4">
                                     <h3 className='title'>Sign In</h3> 
                                 </div>
@@ -120,10 +126,10 @@ const SignIn = () => {
 
                                     <span class="d-block text-left my-4 text-muted">&mdash; or login as &mdash;</span>
                                     
-
+{/* 
                                     <div class="social-login">
                                          <a href='#' onClick={() => navigate('/admin-login')}> Admin </a>{" "} <i className='fa-1.5x bi bi-arrow-right'></i>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                             </div>

@@ -77,6 +77,11 @@ const SignUp = () => {
                     <div class="col-md-6 contents">
                         <div class="row justify-content-center">
                             <div class="col-md-8">
+                            <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="#" onClick={() => navigate('/')}>Home</a></li>
+                                        </ol>
+                                    </nav>
                                 <div class="mb-4">
                                     <h3 className='title'>Sign Up</h3> 
                                 </div>

@@ -185,7 +185,7 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
         {/* <img src="../../../assets/img/about/close.png" className="close_sidebar" onClick={() => setSidebar(!showSidebar)} /> */}
           <div className='profile-content'>
             <img src='../../../assets/img/lgo-red.png' alt="" className='align-items-center m-2 mt-3 mx-auto profile-img' />
-            <img src='../../../assets/img/about/bg.png' className='user_img' />
+            <img src='../../../assets/img/about/profile.png' className='user_img' />
             <div className='profile-name text-center'>
               <h1>{userData?.name}</h1>
               {/* <img src='../../../assets/img/about/logout.png' onClick={(e) => Logout(e)} className='mt-2' style={{ cursor: "pointer" }} /> */}

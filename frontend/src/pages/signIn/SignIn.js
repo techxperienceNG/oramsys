@@ -113,7 +113,7 @@ const SignIn = () => {
                                             <div className='col-12 text-center'>
                                                 <label class="control control--checkbox mb-0">
                                                     <span class="caption">Don't Have an account? {" "} 
-                                                    <a className='fw-semibold' onClick={() => navigate('/signup')}>Sign up{" "}<i className='fa-1.5x bi bi-arrow-right'></i></a></span>
+                                                    <a className='fw-semibold' onClick={() => navigate('/signup')}>Register here{" "}<i className='fa-1.5x bi bi-arrow-right'></i></a></span>
                                                 </label>
                                             </div>
                                             <div className='col-12 text-center mt-4'>
@@ -124,7 +124,7 @@ const SignIn = () => {
 
                                     <button onClick={(e) => Login(e)} class="btn btn-block btn-primary">Log In</button>
 
-                                    <span class="d-block text-left my-4 text-muted">&mdash; or login as &mdash;</span>
+                                    {/* <span class="d-block text-left my-4 text-muted">&mdash; or login as &mdash;</span> */}
                                     
 {/* 
                                     <div class="social-login">

@@ -326,8 +326,9 @@ const Transactions = () => {
                         ))
                       }
                     </tbody>
+                    {!currentTrans < 0 && <p className='text-center mx-auto container my-5 m-5'> No records were found</p> }
+
                   </table>
-                  {!currentTrans && <p className='text-center mx-auto container my-5 m-5'> No records were found</p> }
                 </div>
                 <div class="card-footer border-0 py-2">
 

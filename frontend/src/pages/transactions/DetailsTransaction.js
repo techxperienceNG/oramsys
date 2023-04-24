@@ -552,22 +552,22 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     }
 
 
-    // useEffect(() => {
-    //     console.log('product.product name loading');
-    //     if (productDetails.commoditySubType != undefined) {
-    //         let product = [];
-    //         productData.data.forEach((item) => {
-    //             if (item.commodity_sub_type == productDetails.commoditySubType) {
-    //                 product.push(item);
-    //             }
-    //         })
-    //         setProductName(product);
-    //     } else {
-    //         if (productData && productData.data) {
-    //             setProductName(productData.data)
-    //         }
-    //     }
-    // }, [productData])
+    useEffect(() => {
+        console.log('product.product name loading');
+        if (productDetails.commoditySubType != undefined) {
+            let product = [];
+            productData.data.forEach((item) => {
+                if (item.commodity_sub_type == productDetails.commoditySubType) {
+                    product.push(item);
+                }
+            })
+            setProductName(product);
+        } else {
+            if (productData && productData.data) {
+                setProductName(productData.data)
+            }
+        }
+    }, [productData])
 
     const hadleChangeModal = (e) => {
         setContractDetails({ ...contractDetails, [e.name]: e.value })

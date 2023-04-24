@@ -191,7 +191,7 @@ const HomeLanding = () => {
                   {/* <!-- Actions --> */}
                   <div className='col-sm-6 col-12 text-sm-end'>
                     <div className='mx-n1'>
-                      <Link to='/transactions' className='btn border border-danger border-2 d-inline-flex btn-sm btn-neutral border-base mx-1'>
+                      <Link to='/transactions' className='btn border border-2 d-inline-flex btn-sm btn-neutral border-base mx-1'>
                         <span className=' pe-2'><i className='bi bi-pencil'></i></span>
                         <span>Edit Transactions</span>
                       </Link>

@@ -16,6 +16,16 @@
     border-bottom: 1px solid #e2e2e2;
 }
 
+.page-item,
+.page-link,
+.form-control,
+.form-select,
+.input-group,
+.btn,
+.dropdown {
+    box-shadow: none !important;
+    outline: none !important;
+}
 
 .topbar-left {
     display: flex;
@@ -2873,13 +2883,13 @@ ul {
     margin-bottom: 8px;
 }
 
-.approvalrolemodal .form:nth-child(even){
-    background-color: rgb(243, 243, 243)     ;
+.approvalrolemodal .form:nth-child(even) {
+    background-color: rgb(243, 243, 243);
     border: none !important;
 }
 
 .MuiInputBase-input::-webkit-outer-spin-button,
 .MuiInputBase-input::-webkit-inner-spin-button {
-  -webkit-appearance: none !important;
-  margin: 0;
+    -webkit-appearance: none !important;
+    margin: 0;
 }

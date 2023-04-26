@@ -202,18 +202,18 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
 
 
-    // useEffect(() => {
-    //     console.log('called at matric1');
-    //     console.log('product.Name matric1 ', productName);
-    //     console.log('product.Details matric1 ', productDetails);
-    //     if (productName.length > 0 && productDetails.name) {
-    //         console.log('product.settingProductDetails by productName');
-    //         setProductDetails({
-    //             ...productDetails,
-    //             metric: productName.find((ele) => ele._id === productDetails.name)?.matric,
-    //         })
-    //     }
-    // }, [productDetails.name, productName])
+    useEffect(() => {
+        console.log('called at matric1');
+        console.log('product.Name matric1 ', productName);
+        console.log('product.Details matric1 ', productDetails);
+        if (productName.length > 0 && productDetails.name) {
+            console.log('product.settingProductDetails by productName');
+            setProductDetails({
+                ...productDetails,
+                metric: productName.find((ele) => ele._id === productDetails.name)?.matric,
+            })
+        }
+    }, [productDetails.name, productName])
 
     useEffect(() => {
         if (country && country.data) {
@@ -1496,7 +1496,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                     shrink: true,
                                                 }}
                                                 inputProps={{
-                                                    max: contractDetails.contractDate
+                                                    min: contractDetails.contractDate
                                                         ? new Date(contractDetails.contractDate)
                                                             .toISOString()
                                                             .split("T")[0]
@@ -1740,8 +1740,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                     shrink: true,
                                                 }}
                                                 inputProps={{
-                                                    max: contractDetails.contractDate,
-                                                    min: contractDetails.expiryDate,
+                                                    min: contractDetails.contractDate,
+                                                    max: contractDetails.expiryDate,
                                                 }}
                                                 disabled={isView}
                                                 onChange={(e) =>
@@ -2590,11 +2590,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                     value={
                                                         ((warehouseRequiredOptions.length > 0 &&
                                                             pricingDetails.pricingHedgeingStatus === true) ||
-                                                            pricingDetails.pricingHedgeingStatus === false) &&
+                                                            pricingDetails.pricingHedgeingStatus === false) && Array.isArray(warehouseRequiredOptions) ?
                                                         warehouseRequiredOptions.find(
                                                             (ele) =>
                                                                 ele.value === pricingDetails.pricingHedgeingStatus
-                                                        )
+                                                        ) : warehouseRequiredOptions === ''
                                                     }
                                                 />
                                                 {error?.pricingHedgeingStatus && (

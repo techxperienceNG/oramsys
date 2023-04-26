@@ -50,6 +50,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "awssync": "aws s3 sync ./build 's3://oramsys.com/'",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

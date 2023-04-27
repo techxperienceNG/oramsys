@@ -7,17 +7,14 @@ import reportWebVitals from "./reportWebVitals"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-import { SkeletonTheme } from "react-loading-skeleton"
-import 'react-loading-skeleton/dist/skeleton.css'
+// import "slick-carousel/slick/slick-theme.css"
+// import 'react-loading-skeleton/dist/skeleton.css'
 import 'react-tooltip/dist/react-tooltip.css'
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
   // <React.StrictMode>
-  <SkeletonTheme color='#202020' highlightColor='lightgrey'>
     <App />
-  </SkeletonTheme>
   // </React.StrictMode>
 )
 

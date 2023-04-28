@@ -15642,14 +15642,24 @@ div#wrapper.open>.offcanvas-mask {
   width: 300px;
   /* padding: 25px; */
   /* background: #082979; */
-  height: 100vh;
-  border: 1px solid #F1F1F1;
+  /* height: 100vh; */
+  border-right: 1px solid #F1F1F1;
   display: block;
   position: none;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   /* position: fixed;
   top: 0px;
   z-index: 111; */
   /* background-color: rgb(249, 249, 249); */
+}
+.sidebar-main::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-main::-webkit-scrollbar-thumb {
+  width: 5px;
+  background: lightgrey;
 }
 
 /* .sidebar_responsive {
@@ -15662,7 +15672,7 @@ div#wrapper.open>.offcanvas-mask {
   box-sizing: border-box;
   /* max-width: 100%; */
   /* background: linear-gradient(rgb(147, 56, 99) 0%, rgb(255, 116, 119) 100%); */
-  background-color: rgb(249, 249, 249);
+  background-color: #F1F1F1;
   min-width: 0px;
   min-height: 0px;
   flex-direction: column;

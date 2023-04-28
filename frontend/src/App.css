@@ -32,6 +32,12 @@ body{
     
     color:green;
 }
+.card {
+    transition: all 0.4s;
+}
+.card:hover {
+    transform: scale(1.05);
+}
 .header-topbar-layout1 {
     background-color: #000;
 }

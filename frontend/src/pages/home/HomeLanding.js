@@ -208,87 +208,87 @@ const HomeLanding = () => {
             <div className='container-fluid'>
               <div className='row g-6 mb-6'>
                 <Slide down>
-                {AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin" &&
-                  cards.map((card, i) => (
-                    <div className='col-xl-6 mb-3 col-sm-6 col-12' key={i}>
-                      <div className='card shadow border-0'>
-                        <div className='card-body'>
-                          <div className='row'>
-                            <div className='col'>
-                              <span className='h6 font-semibold text-muted text-sm d-block mb-2'>
-                                {card.title}
-                              </span>
-                              <span className='h3 font-bold mb-0'>
-                                {getCount(card.name)}
-                              </span>
-                            </div>
-                            <div className='col-auto'>
-                              <div
-                                className={`icon icon-shape ${card.color} text-white text-lg rounded-circle`}
-                              >
-                                <card.icon size={56} />
+                  {AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin" &&
+                    cards.map((card, i) => (
+                      <div className='col-xl-4 mb-3 col-sm-6 col-12' key={i}>
+                        <div className='card shadow border-0'>
+                          <div className='card-body'>
+                            <div className='row'>
+                              <div className='col'>
+                                <span className='h6 font-semibold text-muted text-sm d-block mb-2'>
+                                  {card.title}
+                                </span>
+                                <span className='h3 font-bold mb-0'>
+                                  {getCount(card.name)}
+                                </span>
+                              </div>
+                              <div className='col-auto'>
+                                <div
+                                  className={`icon icon-shape ${card.color} text-white text-lg rounded-circle`}
+                                >
+                                  <card.icon size={56} />
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className='mt-2 mb-0 text-sm'>
-                            {card.status === "Completed" ? (
-                              <>
-                                {" "}
-                                <span className='badge badge-pill bg-soft-success text-success me-2'>
-                                  {signedCount.length}
-                                </span>
-                                <span className='text-nowrap text-xs text-muted'>
-                                  Completed
-                                </span>
-                                <span className='badge mx-2 badge-pill bg-danger text-success-white me-2'>
-                                  {notSignedCount.length}
-                                </span>
-                                <span className='text-nowrap text-xs text-muted'>
-                                  In Progress...
-                                </span>
-                              </>
-                            ) : (
-                              <>
-                                <span className='badge badge-pill bg-soft-success text-success me-2'>
-                                  <i className='bi bi-arrow-up me-1'></i>13%
-                                </span>
-                                <span className='text-nowrap text-xs text-muted'>
-                                  {card.title === "Available Products" ? (
-                                    <Link
-                                      className='text-decoration-none'
-                                      to='/products'
-                                    >
-                                      View Products{" "}
-                                      <i className='bi bi-arrow-right me-1'></i>
-                                    </Link>
-                                  ) : card.title === "Registered Users" ? (
-                                    <Link
-                                      className='text-decoration-none'
-                                      to='/users'
-                                    >
-                                      View Users{" "}
-                                      <i className='bi bi-arrow-right me-1'></i>
-                                    </Link>
-                                  ) : card.title === "Entities" ? (
-                                    <Link
-                                      className='text-decoration-none'
-                                      to='/entities'
-                                    >
-                                      View Entities{" "}
-                                      <i className='bi bi-arrow-right me-1'></i>
-                                    </Link>
-                                  ) : (
-                                    ""
-                                  )}
-                                </span>
-                              </>
-                            )}
+                            <div className='mt-2 mb-0 text-sm'>
+                              {card.status === "Completed" ? (
+                                <>
+                                  {" "}
+                                  <span className='badge badge-pill bg-soft-success text-success me-2'>
+                                    {signedCount.length}
+                                  </span>
+                                  <span className='text-nowrap text-xs text-muted'>
+                                    Completed
+                                  </span>
+                                  <span className='badge mx-2 badge-pill bg-danger text-success-white me-2'>
+                                    {notSignedCount.length}
+                                  </span>
+                                  <span className='text-nowrap text-xs text-muted'>
+                                    In Progress...
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <span className='badge badge-pill bg-soft-success text-success me-2'>
+                                    <i className='bi bi-arrow-up me-1'></i>13%
+                                  </span>
+                                  <span className='text-nowrap text-xs text-muted'>
+                                    {card.title === "Available Products" ? (
+                                      <Link
+                                        className='text-decoration-none'
+                                        to='/products'
+                                      >
+                                        View Products{" "}
+                                        <i className='bi bi-arrow-right me-1'></i>
+                                      </Link>
+                                    ) : card.title === "Registered Users" ? (
+                                      <Link
+                                        className='text-decoration-none'
+                                        to='/users'
+                                      >
+                                        View Users{" "}
+                                        <i className='bi bi-arrow-right me-1'></i>
+                                      </Link>
+                                    ) : card.title === "Entities" ? (
+                                      <Link
+                                        className='text-decoration-none'
+                                        to='/entities'
+                                      >
+                                        View Entities{" "}
+                                        <i className='bi bi-arrow-right me-1'></i>
+                                      </Link>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </span>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                }
+                    ))
+                  }
                 </Slide>
 
 
@@ -456,7 +456,7 @@ const HomeLanding = () => {
                     </div>
                   </div>
                 </div>
-                </Slide>
+              </Slide>
             </div>
           </main>
         </div>

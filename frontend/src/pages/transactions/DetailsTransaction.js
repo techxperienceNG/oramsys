@@ -126,6 +126,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             ports?.data &&
             ports.data.length > 0
         ) {
+            setOriginCountry([])
+            setPortsOptions([])
             if (shippingOptions.countryOfOrigin) {
                 let tempData = countries.find(
                     (el) => el?._id === shippingOptions.countryOfOrigin
@@ -144,6 +146,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             airBase?.data &&
             airBase.data.length > 0
         ) {
+            setOriginCountry([])
+            setPortsOptions([])
             if (shippingOptions.countryOfOrigin) {
                 let tempData = countries.find(
                     (el) => el?._id === shippingOptions.countryOfOrigin
@@ -159,13 +163,14 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         }
     }, [ports, airBase, countries, shippingOptions])
 
-    // useEffect(() => {
-    //     console.log('=======airBase', airBase.data)
-    // }, [airBase])
+    useEffect(() => {
+         console.log('airBase', airBase);
+        console.log('=======airBase', airBase.data)
+    }, [airBase])
 
-    // useEffect(() => {
-    //     console.log('=======portsOptions', portsOptions)
-    // }, [portsOptions])
+    useEffect(() => {
+        console.log('=======portsOptions', portsOptions)
+    }, [portsOptions])
 
     const setPorts = (country) => {
         if (shippingOptions.shipmentMode === "SEA") {
@@ -375,26 +380,29 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
 
     let transactionDetail = async (id) => {
-        await ApiGet(`transaction/getById/${id}`)
-            .then((getTransactionByIdData) => {
-                console.log('state response', getTransactionByIdData);
-                if (getTransactionByIdData && getTransactionByIdData.data) {
-                    console.log('product.transaction detail called');
-                    setEditId(getTransactionByIdData.data?.details?._id)
-                    setBorrower_Applicant(getTransactionByIdData.data?.borrower_Applicant)
-                    setLenders(getTransactionByIdData.data?.lenders)
-                    setProductDetails({
-                        nature: getTransactionByIdData.data?.details?.productDetails?.nature,
-                        type: getTransactionByIdData.data?.details?.productDetails?.type,
-                        commodityType:
-                            getTransactionByIdData.data?.details?.productDetails?.commodityType,
-                        commoditySubType:
-                            getTransactionByIdData.data?.details?.productDetails
-                                ?.commoditySubType,
-                        name: getTransactionByIdData.data?.details?.productDetails?.name?._id,
-                        quantity:
-                            getTransactionByIdData.data?.details?.productDetails?.quantity,
-                        metric: getTransactionByIdData.data?.details?.productDetails?.metric,
+        if (id) {
+            await ApiGet(`transaction/getById/${id}`)
+                .then((getTransactionByIdData) => {
+                    let resp = getTransactionByIdData.data;
+                    console.log('transaction detail API response', resp);
+                    let respProductDetails = getTransactionByIdData.data.details.productDetails;
+                    console.log('state response', getTransactionByIdData);
+                    if (getTransactionByIdData && getTransactionByIdData.data) {
+                        setEditId(getTransactionByIdData.data?.details?._id)
+                        setBorrower_Applicant(getTransactionByIdData.data?.borrower_Applicant)
+                        setLenders(getTransactionByIdData.data?.lenders)
+                        setProductDetails({
+                            nature: respProductDetails?.nature,
+                            type: respProductDetails?.type,
+                            commodityType:
+                                respProductDetails?.commodityType,
+                            commoditySubType:
+                                respProductDetails
+                                    ?.commoditySubType,
+                            name: respProductDetails?.name?._id,
+                            quantity:
+                                respProductDetails?.quantity,
+                            metric: respProductDetails?.metric,
 
                         quality: getTransactionByIdData.data?.details?.productDetails?.quality,
                     })
@@ -524,16 +532,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                 ?.pricingCounterParty?._id,
                     })
 
-                    console.log('-------------------------product.productDetails-----------------------------------', productDetails);
-                    console.log('-------------------------product.commoditySubType-----------------------------------', getTransactionByIdData.data?.details?.productDetails
-                        ?.commoditySubType);
-                    console.log('-------------------------product.name-----------------------------------', productName);
-                    console.log('-------------------------product.data-----------------------------------', productData);
-                    console.log('-------------------------product.getTransactionByIdData-----------------------------------', getTransactionByIdData);
-                    if (productDetails.commoditySubType != undefined) {
+                    if (respProductDetails.commoditySubType != undefined) {
                         let product = [];
                         productData.data.forEach((item) => {
-                            if (item.commodity_sub_type == productDetails.commoditySubType) {
+                            if (item.commodity_sub_type == respProductDetails.commoditySubType) {
                                 product.push(item);
                             }
                         })
@@ -549,6 +551,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             .catch((error) => {
                 console.log(error);
             })
+        }
     }
 
 

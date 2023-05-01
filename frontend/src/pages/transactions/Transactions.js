@@ -238,10 +238,10 @@ const Transactions = () => {
 
                   </div>
                   <div class="table-responsive">
-                    <table class="table table-responsive table-hover table-borderless">
+                    <table class="table table-borderless caption-top table-hover table-nowrap">
 
                       <thead>
-                        <tr class="bg-light">
+                        <tr class="bg-light text-center">
                           <th scope="col" width="5%">Date</th>
                           <th scope="col" width="15%">Transaction Number</th>
                           <th scope="col" width="10%">Applicant</th>
@@ -249,7 +249,7 @@ const Transactions = () => {
                           <th scope="col" width="20%">Product</th>
                           <th scope="col" width="10%">Value</th>
                           <th scope="col" width="20%">Termsheet</th>
-                          <th scope="col" class="text-end" width="20%"><span>Actions</span></th>
+                          <th scope="col" class="" width="20%"><span>Actions</span></th>
                           {/* <th scope="col" className='col-2' >Date</th>
                           <th scope="col" className='col-2'>Transaction Number</th>
                           <th scope="col" className='col-2' width="10%">Applicant</th>
@@ -264,30 +264,30 @@ const Transactions = () => {
                         {!currentTrans ? <Loader /> : currentTrans.length > 0 &&
                           currentTrans?.map((data) => (
                             <tr className='text-center'>
-                              <td style={{ fontSize: "1.1rem" }} className='py-6 fst-normal'>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
                                 {new Date(data.createdAt).toLocaleDateString("en-US", DATE_OPTIONS)}
                               </td>
-                              <td style={{ fontSize: "1.1rem" }} className='py-6 fst-normal'>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
                                 {data._id}
                               </td>
-                              <td style={{ fontSize: "1.1rem" }} className='py-6 fst-normal'>
-                                <Link className='py-6 fst-normal text-decoration-none text-heading font-semibold' to='/'>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                                <Link className='py-4 fst-normal text-decoration-none text-heading font-semibold' to='/'>
                                   {data.borrower_Applicant}
                                 </Link>
                               </td>
 
-                              <td style={{ fontSize: "1.1rem" }} className='py-6 fst-normal'>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
                                 <Link className='text-decoration-none  text-heading font-semibold' to='/'>
                                   {data.lenders}
                                 </Link>
                               </td>
-                              <td style={{ fontSize: "1.1rem" }} className='py-6 fst-normal'>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
                                 {formateCurrencyValue(data?.details?.contractDetails?.value)}
                               </td>
-                              <td style={{ fontSize: "1.1rem" }} className='py-6 fst-normal'>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
                                 {data?.details?.productDetails?.name?.name}
                               </td>
-                              <td style={{ fontSize: "1.1rem" }} className='py-6 fst-normal cursor-pointer'>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal cursor-pointer'>
                                 <p onClick={() => { data.termSheet === "Not Signed" && setShowExcelModal(true); setSendId(data._id) }}>
                                   {data.termSheet}
                                   {data.termSheet === "Signed" ? (
@@ -305,14 +305,14 @@ const Transactions = () => {
                                         data-tooltip-id='edit-id'
                                         data-tooltip-content='Edit Transaction'
                                         className='cursor-pointer'
-                                        size={25} />
+                                        size={18} />
                                       <Tooltip id='edit-id' place='top' effect='solid' />
                                     </div>
                                     <div class=''>
                                       <MdPreview data-tooltip-id='preview-id' data-tooltip-content='Preview Transaction'
                                         onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}
                                         className='cursor-pointer'
-                                        size={25}
+                                        size={18}
                                       />
                                       <Tooltip id='preview-id' place='top' effect='solid' />
                                     </div>
@@ -320,21 +320,20 @@ const Transactions = () => {
                                       {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ? <MdAssessment data-tooltip-id='riskassesment-id' data-tooltip-content='Risk Assesment' onClick={() => {
                                         dispatch(getRiskAssessment(data._id)); setSelected(data._id)
                                       }} className='cursor-pointer'
-                                        size={25}
+                                        size={18}
                                       /> : ""}
 
                                       <Tooltip id='riskassesment-id' place='top' effect='solid' />
                                     </div>
                                     <div class=''>
-                                      <Link className='link-dark' to='#' onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}>
-                                        <MdVisibility data-tooltip-id='viewriskassesment' data-tooltip-content='View Risk Assesment' size={25} />
+                                        <MdVisibility  onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}data-tooltip-id='viewriskassesment' data-tooltip-content='View Termsheet' size={18} />
                                         <Tooltip id='viewriskassesment' place='top' effect='solid' />
-                                      </Link>
+                                    
                                     </div>
                                     <div class=''>
                                       <FileDownloadIcon data-tooltip-id='termsheet' data-tooltip-content='Download Termsheet' onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}
                                         className='cursor-pointer'
-                                        size={25}
+                                        size={18}
                                       />
                                       <Tooltip id='termsheet' place='top' effect='solid' />
                                     </div>

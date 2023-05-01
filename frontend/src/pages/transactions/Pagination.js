@@ -11,11 +11,11 @@ const Paginate = ({ postsPerPage, totalPosts, paginate, prevPagefunc, currentPag
 
     return (
         <div className='d-flex align-items-center justify-content-between' aria-label="...">
-            <div className=''>
-            <span class="text-muted fs-5 fw-light">Showing {!totalPosts ? 0 : postsPerPage } items out of {!totalPosts ? 0 : totalPosts} results found</span>
+            <div className='pe-4'>
+            <span class="text-muted fs-6 fw-light">Showing {!totalPosts ? 0 : postsPerPage } out of {!totalPosts ? 0 : totalPosts}</span>
 
             </div>
-            <ul class="pagination pagination-lg">
+            <ul class="pagination pagination-md">
                 <li class={`page-item cursor-pointer ${currentPage === 1 ? 'disabled' : ''}`}>
                     <span onClick={prevPagefunc} class="page-link">Previous</span>
                 </li>

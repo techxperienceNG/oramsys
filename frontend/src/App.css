@@ -6,6 +6,38 @@
 
 /* Header<======================== */
 
+body{
+    font-family: 'Open Sans', sans-serif;
+    
+}
+.search{
+  
+  top:6px;
+  left:10px;
+}
+
+.form-control{
+    
+    border:none;
+    padding-left:32px;
+}
+
+.form-control:focus{
+    
+    border:none;
+    box-shadow:none;
+}
+
+.green{
+    
+    color:green;
+}
+.card {
+    transition: all 0.4s;
+}
+.card:hover {
+    transform: scale(1.05);
+}
 .header-topbar-layout1 {
     background-color: #000;
 }

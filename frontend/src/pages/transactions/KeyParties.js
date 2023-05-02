@@ -44,7 +44,13 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         label: 'Associate',
         value: 'associate',
         prefix: ''
-    }];
+    },
+    {
+        label: 'None',
+        value: 'none',
+        prefix: ''
+    },
+];
     const transactionData = useSelector((state) => state.transactionData.transactionData)
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
 

@@ -30,6 +30,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         'party_relation': '', 'buyer': '', 'shipper': '', 'upload_evidence': ''
     }])
     const [editMode, setEditMode] = useState(false);
+    const [relation, setRelation] = useState();
 
     const [warehouses, setWarehouses] = useState([])
     const parties = [{
@@ -49,7 +50,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         label: 'None',
         value: 'none',
         prefix: ''
-    },
+    }
 ];
     const transactionData = useSelector((state) => state.transactionData.transactionData)
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
@@ -262,9 +263,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                         }
                     ]}
                     options={{
-                        filtering: false,
+                        filtering: true,
                         actionsColumnIndex: -1,
-                        sorting: false,
+                        sorting: true,
                         pageSize: 10,
                         search: false,
                         emptyRowsWhenPaging: false,
@@ -331,13 +332,13 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                           <TextField {...params} label="Party Relation" variant="standard" />
                                       )}
                                       getOptionSelected={(option) => option.label === 'test'}
-                                      onChange={(event, newValue) => handleRelation(event, newValue, ind)}
+                                      onChange={(event, newValue) => {handleRelation(event, newValue, ind); setRelation(parties)}}
                                       disableClearable
                                   />
                               </div>
               
                           </Col>
-                          <Col lg={2}>
+                          {relation ? <Col lg={2}>
                               <div className='drag-and-drop'>
                                   <DropzoneArea
                                       Icon="none"
@@ -351,7 +352,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                       onChange={(file) => handleChangeFile(file[0], ind)}
                                   />
                               </div>
-                          </Col>
+                          </Col> : '' }
+                        
                       </Row>
                   </>
                     ))}

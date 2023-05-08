@@ -49,6 +49,7 @@ var Schema = new Schema({
     currencyHedge: { type: Boolean, required: false, default: false },
     currencyHedgeDetails: { type: [CurrencyHedgeDetails], required: false, default: null },
     loanPurposeValidity: { type: String, required: false, default: null },
+    loloanPurposJustification: { type: String, required: false, default: null },
     goods: { type: String, required: false, default: null },
     workingCapital: { type: String, required: false, default: null },
     sourceOfRepayment: { type: [SourceOfRepayment], required: false, default: null },

@@ -210,7 +210,7 @@ const HomeLanding = () => {
                 <Slide down>
                 {AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin" &&
                   cards.map((card, i) => (
-                    <div className='col-xl-6 mb-3 col-sm-6 col-12' key={i}>
+                    <div className='col-xl-4 mb-3 col-sm-6 col-12' key={i}>
                       <div className='card shadow border-0'>
                         <div className='card-body'>
                           <div className='row'>
@@ -378,18 +378,18 @@ const HomeLanding = () => {
                       {/* <button type="button" className="btn btn-primary btn-lg">
                       <FaSearch />
                     </button> */}
-                    <div>Applications</div>
+                    <h4>Applications</h4>
                     </div>
                     <div className='table-responsive text-center'>
                       <table className='table table-bordered border-light caption-top border-2 table-hover table-nowrap'>
-                        <thead className='thead-light text-center'>
+                        <thead className='thead-light '>
                           <tr>
                             <th scope='col'>Date Created</th>
                             <th scope='col'>Borrower</th>
                             <th scope='col'>Lender</th>
                             <th scope='col'>Value</th>
                             <th scope='col'>Status</th>
-                            {/* <th scope='col'>Actions</th> */}
+                            <th scope='col'>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -397,19 +397,19 @@ const HomeLanding = () => {
                             getAlltransactionData?.data?.filter((item) => {
                               return search.toLowerCase() === '' ? item : item.borrower_Applicant.toLowerCase().includes(search)
                             }).map((data, i) => (
-                              <tr key={data.id} text-center>
+                              <tr key={data.id} >
                                 <td>
                                   {new Date(data.createdAt).toLocaleDateString("en-US", DATE_OPTIONS)}
                                 </td>
                                 <td>
-                                  <img alt='...' src='https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80' className='avatar avatar-sm rounded-circle me-2' />
+                                  {/* <img alt='...' src='https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80' className='avatar avatar-sm rounded-circle me-2' /> */}
                                   <Link className='text-decoration-none text-heading font-semibold' to='/'>
                                     {data.borrower_Applicant}
                                   </Link>
                                 </td>
 
                                 <td>
-                                  <img alt='...' src='https://preview.webpixels.io/web/img/other/logos/logo-1.png' className='avatar avatar-xs rounded-circle me-2' />
+                                  {/* <img alt='...' src='https://preview.webpixels.io/web/img/other/logos/logo-1.png' className='avatar avatar-xs rounded-circle me-2' /> */}
                                   <Link className='text-decoration-none  text-heading font-semibold' to='/'>
                                     {data.lenders}
                                   </Link>
@@ -428,13 +428,13 @@ const HomeLanding = () => {
                                     </span>
                                   )}
                                 </td>
-                                {/* <td className='text-end'>
+                                <td className='text-end text-center'>
                                   <Link to='#' onClick={() => {
                                     data.termSheet === 'Not Signed' ? downloadTermSheet(data._id, 'view') : ViewRiskAssessment()
                                   }} className='btn btn-sm btn-neutral'>
                                     View Termsheet
                                   </Link>
-                                  <Button variant='outline-dark' className='btn btn-sm btn-square btn-neutral text-danger-hover'
+                                  {/* <Button variant='outline-dark' className='btn btn-sm btn-square btn-neutral text-danger-hover'
                                     onClick={() => {
                                       data.termSheet === "Signed"
                                         ? downloadTermSheet(data._id, "download")
@@ -442,8 +442,8 @@ const HomeLanding = () => {
                                     }}
                                   >
                                     <i className='bi bi-arrow-down'></i>
-                                  </Button>
-                                </td> */}
+                                  </Button> */}
+                                </td>
                               </tr>
                             ))}
 

@@ -21,8 +21,8 @@ jobs:
         working-directory: frontend
         run: ls -ll
       - name: run build command
+        working-directory: frontend
         run: | 
-            cd frontend
             ls -ll
             npm i -f 
             npm run build 

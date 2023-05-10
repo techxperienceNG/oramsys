@@ -22,5 +22,6 @@ jobs:
         run: ls -ll
       - name: run build command
         run: | 
+            ls -ll
             npm i -f 
             npm run build 

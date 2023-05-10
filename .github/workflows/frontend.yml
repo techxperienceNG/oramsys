@@ -22,6 +22,7 @@ jobs:
         run: ls -ll
       - name: run build command
         run: | 
+            cd frontend
             ls -ll
             npm i -f 
             npm run build 

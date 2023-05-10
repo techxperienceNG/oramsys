@@ -18,10 +18,9 @@ jobs:
         with:
           node-version: 16
       - name: setup working directory
-        working-directory: ./backend
+        working-directory: ./frontend
         run: ls -ll
       - name: run build command
         run: | 
-            cd backend
             npm i -f 
             npm run build 

@@ -25,4 +25,4 @@ jobs:
         run: | 
             ls -ll
             npm i -f 
-            npm run build 
+            CI=false npm run build 

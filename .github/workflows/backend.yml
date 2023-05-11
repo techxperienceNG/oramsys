@@ -17,12 +17,12 @@ jobs:
       uses: webfactory/ssh-agent@v0.5.0
       with: 
         ssh_private_key: ${{ secrets.PRIVATEKEY }}
-      
     - name: Connect with ec2 instance
       uses: appleboy/ssh-action@master
       with: 
         host: 3.9.96.120
         username: ubuntu
+        password: ${{ secrets.PRIVATEKEY }}
         port: 22
         script: |
           cd /data/oramsys/backend

@@ -26,3 +26,4 @@ jobs:
             ls -ll
             npm i -f 
             CI=false npm run build 
+            ls -ll

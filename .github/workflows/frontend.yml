@@ -30,7 +30,7 @@ jobs:
       - name: Deploy stage
         run: |
           ls -ll
-          aws s3 sync backend/build/* s3://oramsys.com
+          aws s3 sync frontend/build/* s3://oramsys.com
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.ACCESSKEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRETKEY }}

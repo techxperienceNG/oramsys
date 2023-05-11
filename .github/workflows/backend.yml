@@ -17,14 +17,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: setup working directory
+      - name: Deployment stage
         working-directory: backend
-      - name: deployment stage
-        env: 
-          PRIVATEKEY: ${{ secrets.PRIVATEKEY }}
         run: |
           cat PRIVATEKEY >> key.pem
           ssh -i key.pem ubuntu@3.9.96.120
           cd /data/oramsys/backend
           npm i -f
           pm2 restart 0
+        env: 
+          PRIVATEKEY: ${{ secrets.PRIVATEKEY }}

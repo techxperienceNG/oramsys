@@ -10,18 +10,14 @@ on:
       - 'backend'
 
 jobs:
-  build:
+  run-commands-on-ec2:
     runs-on: ubuntu-latest
     steps:
-    - name: Connect with ec2 instance
-      uses: appleboy/ssh-action@master
-      with: 
-        host: 3.9.96.120
-        username: ubuntu
-        password: ${{ secrets.PRIVATEKEY }}
-        port: 22
-        script: |
-          cd /data/oramsys/backend
-          npm i -f
-          pm2 restart 0
+    - name: setup ssh
+      uses: webfactory/ssh-agent@v0.5.0
+      with:
+        ssh-private-key: ${{ secrets.PRIVATEKEY }}
+    - name: run commands to ec2 instance
+      run:
+        ssh -i $SSH_AUTH_SOCK -o StrictHostKeyChecking=no ubuntu@3.9.96.120 "cd /data/oramsys/backend && git pull && npm -i -f && pm2 restart 0" 
       

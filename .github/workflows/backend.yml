@@ -18,7 +18,8 @@ jobs:
         PRIVATEKEY: ${{ secrets.PRIVATEKEY }}
       run: |
         ls -ll
-        cat "$PRIVATEKEY" > key && chmod 400 key
+        cat "$PRIVATEKEY" > key 
+        chmod 400 key
         ssh -o StrictHostKeyChecking=no -i key ubuntu@3.9.96.120
          cd /data/oramsys/backend
          npm i -f

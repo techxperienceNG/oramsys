@@ -239,7 +239,7 @@ const Transactions = () => {
 
                   </div>
                   <div class="table-responsive">
-                    <table class="table table-borderless caption-top table-hover table-nowrap">
+                    <table class="table border-light border-5 table-nowrap caption-top table-hover">
 
                       <thead>
                         <tr class="bg-light text-center">
@@ -254,7 +254,7 @@ const Transactions = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {!currentTrans ? <Loader /> : currentTrans.length > 0 &&
+                        {!currentTrans ? <Loader className='text-center mx-auto container py-5 my-5 m-5' /> : currentTrans.length > 0 &&
                           currentTrans?.filter((item) => {
                             return search.toLowerCase() === '' ? item : item.borrower_Applicant.toLowerCase().includes(search)
                           }).map((data) => (
@@ -266,15 +266,13 @@ const Transactions = () => {
                                 {data._id}
                               </td>
                               <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                                <Link className='py-4 fst-normal text-decoration-none text-heading font-semibold' to='/'>
+                                
                                   {data.borrower_Applicant}
-                                </Link>
+                              
                               </td>
 
                               <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                                <Link className='text-decoration-none  text-heading font-semibold' to='/'>
                                   {data.lenders}
-                                </Link>
                               </td>
                               <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
                                 {formateCurrencyValue(data?.details?.contractDetails?.value)}

@@ -27,10 +27,9 @@ jobs:
             npm i -f 
             CI=false npm run build 
             ls -ll
-      - name: setup AWS
-        uses: imehedi/actions-awscli-v2@latest
-        with:
-          args: s3 sync build/* s3://oramsys.com
+      - name: Deploy stage
+        run: |
+          aws s3 sync build/* s3://oramsys.com
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.ACCESSKEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRETKEY }}

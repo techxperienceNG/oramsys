@@ -449,6 +449,8 @@ const HomeLanding = () => {
 
                         </tbody>
                       </table>
+                      {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div> }
+
                     </div>
                     {/* <div className='card-footer border-0 py-5'>
                       <span className='text-muted text-sm'>

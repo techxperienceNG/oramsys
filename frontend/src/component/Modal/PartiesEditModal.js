@@ -131,9 +131,9 @@ const PartiesEditModal = ({ show, onHide, getModalData, isView, editData }) => {
                                     <Col lg={12} className="mb-4">
                                         <Autocomplete
                                             options={names}
-                                            getOptionLabel={(option) => option.details ? option.details?.name : "unknown"}
+                                            getOptionLabel={(option) => option.details ? option.details?.name : ""}
                                             id="disable-clearable"
-                                            label="Name"
+                                            label="Party"
                                             renderInput={(params) => (
                                                 <TextField {...params} label="Name" variant="standard" />
                                             )}

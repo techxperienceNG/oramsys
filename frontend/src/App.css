@@ -2,14 +2,21 @@
 
 /* Bootstrap Icons */
 @import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+
+* {
+    font-family: "Poppins", sans-serif;
+
+}
 
 
 /* Header<======================== */
 
-body{
+/* body{
     font-family: 'Open Sans', sans-serif;
-    
-}
+
+} */
 .search{
   
   top:6px;

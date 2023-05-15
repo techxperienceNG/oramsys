@@ -48,7 +48,7 @@ const Warehouse = ({ hendelNext, hendelCancel }) => {
 
                 <div className='product'>
                     <div className='mb-3 d-flex justify-content-between align-items-center'>
-                        <h2 className='m-0'>Entities</h2>
+                        <h2 className='m-0'>Warehouse</h2>
                         <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => { setEditModal(true); setMode("Add") }}> <img src='../../assets/img/about/plus.png' className='me-2' alt='' />Add</button>
                     </div>
                     <MaterialTable

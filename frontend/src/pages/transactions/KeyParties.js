@@ -184,7 +184,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     }
 
     const handleBuyer = (e, newValue, ind) => {
-        let temp = keyParties.relatedParties.name;
+        let temp = keyParties;
         temp[ind].buyer = newValue.label;
         setkeyParties(temp);
         console.log('handleBuyer keyParties', keyParties);
@@ -261,8 +261,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                     </Col>
                                 </Row>
                         },
-                        { title: 'Name', field: 'name.label' },
-                        { title: 'Label', field: 'type.label' },
+                        { title: 'Party', field: 'name.label' },
+                        { title: 'Role', field: 'type.label' },
 
                     ]}
                     data={tableData}
@@ -322,7 +322,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                                     renderInput={(params) => (
                                                         <TextField {...params} label="Party 1" variant="standard" />
                                                     )}
-                                                    // defaultValue={relatedParties.buyer}
+                                                    defaultValue={relatedParties.buyer}
                                                     getOptionSelected={(option) => option.label === 'test'}
                                                     onChange={(event, newValue) => handleBuyer(event, newValue, ind)}
                                                     disableClearable
@@ -333,7 +333,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                             <Autocomplete
                                                 options={names}
                                                 getOptionLabel={(option) => option.details ? option.details?.name : ""}
-                                                id={"disable-clearable-buyer" + ind}
+                                                id="disable-clearable"
                                                 label="Party"
                                                 renderInput={(params) => (
                                                     <TextField {...params} label="Party 1" variant="standard" />
@@ -367,7 +367,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                             {error && error?.name && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.name}</span>}
                                         </Col>
 
-                                            {/* {warehouses.map((element) => ( */}
+                                        {/* {warehouses.map((element) => ( */}
 
                                         {/* <Col lg={3}>
                                             <><div className='d-flex'>
@@ -381,7 +381,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                                     renderInput={(params) => (
                                                         <TextField {...params} label="Party 2" variant="standard" />
                                                     )}
-                                                    // defaultValue={relatedParties.shipper}
+                                                    defaultValue={relatedParties.shipper}
                                                     getOptionSelected={(option) => option.name === 'test'}
                                                     onChange={(event, newValue) => handleShipper(event, newValue, ind)}
                                                     disableClearable
@@ -426,7 +426,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                                 />
                                             </div>
                                         </Col>}
-                                        
+
                                         {/* <Col lg={2}>
                                         <div className=''>
                                     <MdOutlineDeleteOutline onClick={() => handleRemoveParty(index)} className='cursor-pointer' size={30} />
@@ -457,6 +457,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
 }
 
 export default KeyParties
+
 
 
 

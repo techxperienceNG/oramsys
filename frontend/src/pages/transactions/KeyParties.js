@@ -75,7 +75,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
 
     useEffect(() => {
         dispatch(entityGetAction('Company'))
-    }, [])
+    }, []);
+
     useEffect(() => {
         // console.log('getTransactionByIdData.data?.keyparties',getTransactionByIdData.data?.keyParties[0].relatedParties);
         if (getTransactionByIdData && getTransactionByIdData.data) {
@@ -91,10 +92,36 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
             if (getTransactionByIdData.data?.keyParties[0].relatedParties != undefined && getTransactionByIdData.data?.keyParties[0].relatedParties.length > 0) {
                 // console.log('keyparties at useEffect', keyParties);
                 setkeyParties(getTransactionByIdData.data?.keyParties[0].relatedParties);
+                setRelatedPartyDetails(getTransactionByIdData.data?.keyParties[0].relatedParties);
+                console.log('relatedparties from database',getTransactionByIdData.data?.keyParties[0].relatedParties);
                 setEditMode(true);
             }
         }
     }, [getTransactionByIdData])
+
+    const handleParties = (e, newValue, ind,type) => {
+        let temp = keyParties;
+        if (temp[ind] == undefined) { 
+            temp = [...keyParties, {
+                'party_relation': '', 'buyer': '', 'shipper': '', 'upload_evidence': ''
+            }];
+        }
+
+        if (type == "buyer") {
+            if (temp[ind]!= undefined && temp[ind].buyer != undefined) {
+                temp[ind].buyer = newValue.details?.name;
+            }
+        } else { 
+            temp[ind].shipper = newValue.details?.name;
+        }      
+        // setParty({ ...party, name: { value: newValue._id, label: newValue.details?.name } })
+        setkeyParties(temp)
+    }
+
+    useEffect(() => {
+        console.log('party useEffect', party);
+    }, [party])
+
 
     useEffect(() => {
         if (nameOption?.data) {
@@ -149,7 +176,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         let warehouses = [];
         if (names) {
             names.forEach(element => {
-                // console.log('element ', element);
+                console.log('names element ', element);
                 element.roles.forEach(roleDetail => {
                     // console.log('roleDetail', roleDetail);
                     // console.log('roleDetail.roleId.roleName', roleDetail.roleId.roleName);
@@ -304,7 +331,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                             onClick={handleRelatedParties}>
                             <img src='../../assets/img/about/plus.png' className='me-2' />New party relation</button>
                     </div>
-                    {buyer_data_loop.map((val, ind) => (
+                    
                         <>
                             {relatedPartyDetails?.map((party, index) => (
                                 <Row key={index}>
@@ -333,16 +360,16 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                             <Autocomplete
                                                 options={names}
                                                 getOptionLabel={(option) => option.details ? option.details?.name : ""}
-                                                id="disable-clearable"
+                                                id={"disable-clearable-buyer-" + index}
                                                 label="Party"
                                                 renderInput={(params) => (
                                                     <TextField {...params} label="Party 1" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
-                                                    setParty({ ...party, name: { value: newValue._id, label: newValue.details?.name } });
+                                                    handleParties(event, newValue,index,'buyer');
                                                 }}
                                                 disabled={isView}
-                                                value={(names && party.name) && names.find((ele) => ele._id === party.name?.value)}
+                                                value={(names && party.buyer) && names.find((ele) => ele.details.name === party.buyer)}
                                                 disableClearable
                                             />
                                             {error && error?.name && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.name}</span>}
@@ -352,16 +379,16 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                             <Autocomplete
                                                 options={names}
                                                 getOptionLabel={(option) => option.details ? option.details?.name : ""}
-                                                id="disable-clearable"
+                                                id={"disable-clearable-shipper-" + index}
                                                 label="Party"
                                                 renderInput={(params) => (
                                                     <TextField {...params} label="Party 2" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
-                                                    setParty({ ...party, name: { value: newValue._id, label: newValue.details?.name } });
+                                                    handleParties(event, newValue, index,'shipper');
                                                 }}
                                                 disabled={isView}
-                                                value={(names && party.name) && names.find((ele) => ele._id === party.name?.value)}
+                                                value={(names && party.shipper) && names.find((ele) => ele.details.name === party.shipper)}
                                                 disableClearable
                                             />
                                             {error && error?.name && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.name}</span>}
@@ -397,14 +424,15 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                                     className='ms-3 mb-3'
                                                     options={parties}
                                                     getOptionLabel={(option) => option.label}
-                                                    id={"disable-clearable-relation-party" + ind}
+                                                    id={"disable-clearable-relation-party" + index}
                                                     label="Party Relation"
                                                     renderInput={(params) => (
                                                         <TextField {...params} label="Party Relation" variant="standard" />
                                                     )}
                                                     defaultValue={relatedPartyDetails.party_relation}
                                                     getOptionSelected={(option) => option.label === 'test'}
-                                                    onChange={(event, newValue) => { handleRelation(event, newValue, ind); setRelation(parties) }}
+                                                    onChange={(event, newValue) => { handleRelation(event, newValue, index); setRelation(parties) }}
+                                                    value={parties.find((ele) => ele.label === party.party_relation)}
                                                     disableClearable
                                                 />
                                             </div>
@@ -422,7 +450,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                                     previewGridProps={{ container: { spacing: 1, } }}
                                                     dropzoneText='Upload Evidence'
                                                     previewText=""
-                                                    onChange={(file) => handleChangeFile(file[0], ind)}
+                                                    onChange={(file) => handleChangeFile(file[0], index)}
                                                 />
                                             </div>
                                         </Col>}
@@ -441,7 +469,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                             ))}
                         </>
 
-                    ))}
+                  
 
 
                 </div>

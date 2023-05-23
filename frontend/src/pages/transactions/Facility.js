@@ -601,6 +601,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         if (validation()) {
             return
         }
+       
         delete transactionData.details?._id
         delete transactionData.keyParties?._id
         delete transactionData.documentFlow?._id
@@ -684,6 +685,9 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         if (validation()) {
             return
         }
+        //  alert('edit');
+        // console.log(transactionData.keyParties);
+        // return;
         let body = {
             detail: transactionType !== "Import" ? {
                 ...transactionData.details,

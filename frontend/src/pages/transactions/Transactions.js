@@ -218,7 +218,7 @@ const Transactions = () => {
             </div>
           </header>
 
-          <Fade down>
+          <Fade>
             <main class='py-2'>
               <div class='container-fluid'>
                 <div class='row g-6 mb-4'></div>

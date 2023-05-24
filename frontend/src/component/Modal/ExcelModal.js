@@ -6,16 +6,19 @@ import { termSheetAction } from '../../redux/actions/termSheetAction'
 // import { termSheetAction } from '../../redux/actions/termSheetAction'
 import { toast } from 'react-toastify'
 import { TERM_SHEET } from '../../redux/types'
+import Loader from '../../layout/loader/Loader'
 
 
 const ExcelModal = ({ show, onHide, getId, refreshpage }) => {
 
     const [file, setFile] = useState()
+    const [loading, setLoading] = useState(false)
 
     const dispatch = useDispatch()
     const getExcelDate = useSelector(state => state.termSheet.termSheet)
 
     useEffect(() => {
+
         if (getExcelDate && getExcelDate.status === 200) {
             dispatch({
                 type: TERM_SHEET,
@@ -41,9 +44,13 @@ const ExcelModal = ({ show, onHide, getId, refreshpage }) => {
             termSheetUrl: file
         }
         console.log(body);
-
+        setLoading(true)
         dispatch(termSheetAction(body))
-        refreshpage()
+
+        setTimeout(() => {
+            refreshpage()
+            setLoading(false)
+        }, 1500);
     }
 
 
@@ -66,7 +73,7 @@ const ExcelModal = ({ show, onHide, getId, refreshpage }) => {
                     {/* <Fade > */}
                     <div className='modal-content'>
                         <div className='d-flex justify-content-between'>
-                            <h2 id="transition-modal-title" className='modal-title'></h2>
+                            <h2 id="transition-modal-title" className='modal-title'>Upload Termsheet</h2>
                             <img src='../../assets/img/my-img/Close.png' onClick={() => onHide()} style={{ cursor: "pointer", width: "24px", height: "24px" }} />
                         </div>
                         <div className='add-edit-product p-0 mt-3' id="transition-modal-description" >
@@ -97,7 +104,11 @@ const ExcelModal = ({ show, onHide, getId, refreshpage }) => {
                             </div>
                             <div className='d-flex justify-content-between mt-4'>
                                 <button onClick={() => onHide()} className="footer_cancel_btn">cancel</button>
-                                <button onClick={() => upLoadExcel()} className='footer_next_btn'> Save</button>
+                                <button onClick={() => upLoadExcel()} className='footer_next_btn'>{loading ? <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div> : 'Save'}</button>
                             </div>
                         </div>
                     </div>

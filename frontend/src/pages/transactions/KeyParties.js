@@ -32,7 +32,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         'party_relation': '', 'buyer': '', 'shipper': '', 'upload_evidence': ''
     }])
     const [relatedPartyDetails, setRelatedPartyDetails] = useState([{
-        'buyer': '', 'shipper': '', 'party_relation': '', 'upload_evidence': ''
+        'buyer1': '', 'shippers': '', 'partyRelation': '', 'uploadEvidence': ''
     }])
     const [editMode, setEditMode] = useState(false);
     const [relation, setRelation] = useState();
@@ -65,7 +65,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
 
     const handleRelatedParties = () => {
-        setRelatedPartyDetails([...relatedPartyDetails, { 'buyer': '', 'shipper': '', 'party_relation': '', 'upload_evidence': '' }])
+        setRelatedPartyDetails([...relatedPartyDetails, { 'buyer1': '', 'shippers': '', 'partyRelation': '', 'uploadEvidence': '' }])
     }
     const handleRemoveParty = (index) => {
         const list = [...relatedPartyDetails]
@@ -337,25 +337,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                 <Row key={index}>
                                     <>
 
-                                        {/* <Col lg={3}>
-                                            <div className='d-flex ms-4'>
-                                                <img src='../../../assets/img/about/Tag.png' style={{ "height": "30px", "top": "22px", "position": "relative" }} />
-                                                <Autocomplete
-                                                    className='ms-3 mb-3 w-100'
-                                                    options={names}
-                                                    getOptionLabel={(option) => option.label || ""}
-                                                    id={"disable-clearable-buyer" + ind}
-                                                    label="Buyer"
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Party 1" variant="standard" />
-                                                    )}
-                                                    defaultValue={relatedParties.buyer}
-                                                    getOptionSelected={(option) => option.label === 'test'}
-                                                    onChange={(event, newValue) => handleBuyer(event, newValue, ind)}
-                                                    disableClearable
-                                                />
-                                            </div>
-                                        </Col> */}
+                                       
                                         <Col lg={3}>
                                             <Autocomplete
                                                 options={names}
@@ -394,29 +376,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                             {error && error?.name && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.name}</span>}
                                         </Col>
 
-                                        {/* {warehouses.map((element) => ( */}
-
-                                        {/* <Col lg={3}>
-                                            <><div className='d-flex'>
-                                                <img src='../../../assets/img/about/Deliver.png' style={{ "height": "30px", "top": "22px", "position": "relative" }} />
-                                                <Autocomplete
-                                                    className='ms-3 mb-3 w-100'
-                                                    options={warehouses}
-                                                    getOptionLabel={(option) => option.name}
-                                                    id={"disable-clearable-shipper-" + ind}
-                                                    label="Shipper"
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Party 2" variant="standard" />
-                                                    )}
-                                                    defaultValue={relatedParties.shipper}
-                                                    getOptionSelected={(option) => option.name === 'test'}
-                                                    onChange={(event, newValue) => handleShipper(event, newValue, ind)}
-                                                    disableClearable
-                                                />
-                                            </div></>
-                                                        
-
-                                        </Col> */}
+                                      
                                         <Col lg={4}>
                                             <div className='d-flex align-items-center Related_parties'>
                                                 <p className='mb-0 title-color'>Relation</p>
@@ -429,7 +389,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                                     renderInput={(params) => (
                                                         <TextField {...params} label="Party Relation" variant="standard" />
                                                     )}
-                                                    defaultValue={relatedPartyDetails.party_relation}
+                                                    // defaultValue={relatedPartyDetails.party_relation}
                                                     getOptionSelected={(option) => option.label === 'test'}
                                                     onChange={(event, newValue) => { handleRelation(event, newValue, index); setRelation(parties) }}
                                                     value={parties.find((ele) => ele.label === party.party_relation)}

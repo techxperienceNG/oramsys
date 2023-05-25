@@ -33,6 +33,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
     const [facility, setFacility] = useState({
         _id: "",
         interestPeriod: "",
+        baseRate: "",
         currency: "",
         interestRate: "",
         interestPaymentDate: "",
@@ -109,6 +110,11 @@ const Facility = ({ hendelCancel, hendelNext }) => {
             setFacility({
                 _id: getTransactionByIdData.data?.facility?._id,
                 interestPeriod: getTransactionByIdData.data?.facility?.interestPeriod,
+                baseRate: getTransactionByIdData.data?.facility?.baseRate,
+                currency: getTransactionByIdData.data?.facility?.currency,
+                interestRate: getTransactionByIdData.data?.facility?.interestRate,
+                interestPaymentDate: getTransactionByIdData.data?.facility?.interestPaymentDate && moment(getTransactionByIdData.data?.facility?.interestPaymentDate).format("YYYY-MM-DD"),
+                rePaymentCurrency: getTransactionByIdData.data?.facility?.rePaymentCurrency,
                 currency: getTransactionByIdData.data?.facility?.currency,
                 interestRate: getTransactionByIdData.data?.facility?.interestRate,
                 interestPaymentDate: getTransactionByIdData.data?.facility?.interestPaymentDate && moment(getTransactionByIdData.data?.facility?.interestPaymentDate).format("YYYY-MM-DD"),
@@ -227,6 +233,11 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         'Annual',
     ]
 
+    const baseRateOptions = [
+        'LOBOR',
+        'SOFR',
+    ]
+
     const currencyHedgeOptions = [
         'Yes',
         'No'
@@ -315,6 +326,10 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         if (!facility.interestRate) {
             params = true
             error.interestRate = 'Please enter interest rate!'
+        }
+        if (!facility.baseRate) {
+            params = true
+            error.baseRate = 'Please enter base rate!'
         }
 
         if (!facility.interestPeriod) {
@@ -586,6 +601,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         if (validation()) {
             return
         }
+       
         delete transactionData.details?._id
         delete transactionData.keyParties?._id
         delete transactionData.documentFlow?._id
@@ -669,6 +685,9 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         if (validation()) {
             return
         }
+        //  alert('edit');
+        // console.log(transactionData.keyParties);
+        // return;
         let body = {
             detail: transactionType !== "Import" ? {
                 ...transactionData.details,
@@ -788,11 +807,11 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         <>
 
             <div className='add-edit-product p-0 mb-5'>
+
                 <div className='form'>
-                    <h2 className='mb-3'>Pricing</h2>
-                    <div>
-                        <Row>
-                            <Col lg={3}>
+                    <h2 className='mb-3'>Interest Rate</h2>
+                    <Row>
+                        <Col lg={3}>
                                 <TextField
                                     label="Interest rate"
                                     id="standard-start-adornment"
@@ -805,7 +824,48 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     disabled={isView}
                                 />
                                 {error && error?.interestRate && <span style={{ color: 'red' }}>{error.interestRate}</span>}
+                        </Col>
+                        <Col lg={3}>
+                                <Autocomplete
+                                    options={baseRateOptions}
+                                    getOptionLabel={(option) => option}
+                                    id="disable-clearable"
+                                    label="Base Rate"
+                                    renderInput={(params) => (
+                                        <TextField {...params} label="Base Rate" variant="standard" />
+                                    )}
+                                    onChange={(event, newValue) => {
+                                        setFacility({ ...facility, baseRate: newValue });
+                                    }}
+                                    disabled={isView}
+                                    disableClearable
+                                    value={facility.baseRate}
+                                />
+                                {error && error?.baseRate && <span style={{ color: 'red' }}>{error.baseRate}</span>}
                             </Col>
+
+                            <Col lg={3}>
+                                <TextField
+                                    label="Margin"
+                                    id="standard-start-adornment"
+                                    name='margin'
+                                    value={facility.margin}
+                                    onChange={(e) => handleChangeNumber(e, 'margin')}
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                    }}
+                                    disabled={isView}
+                                />
+                                {error && error?.margin && <span style={{ color: 'red' }}>{error.margin}</span>}
+                            </Col>
+                    </Row>
+                </div>
+
+                <div className='form'>
+                    <h2 className='mb-3'>Pricing</h2>
+                    <div>
+                        <Row>
+                           
                             <Col lg={3}>
                                 <Autocomplete
                                     options={interestPeriodOptions}

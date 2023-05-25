@@ -2,10 +2,49 @@
 
 /* Bootstrap Icons */
 @import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+
+* {
+    font-family: "Poppins", sans-serif;
+
+}
 
 
 /* Header<======================== */
 
+/* body{
+    font-family: 'Open Sans', sans-serif;
+
+} */
+.search{
+  
+  top:6px;
+  left:10px;
+}
+
+.form-control{
+    
+    border:none;
+    padding-left:32px;
+}
+
+.form-control:focus{
+    
+    border:none;
+    box-shadow:none;
+}
+
+.green{
+    
+    color:green;
+}
+.card {
+    transition: all 0.4s;
+}
+.card:hover {
+    transform: scale(1.05);
+}
 .header-topbar-layout1 {
     background-color: #000;
 }
@@ -16,6 +55,16 @@
     border-bottom: 1px solid #e2e2e2;
 }
 
+.page-item,
+.page-link,
+.form-control,
+.form-select,
+.input-group,
+.btn,
+.dropdown {
+    box-shadow: none !important;
+    outline: none !important;
+}
 
 .topbar-left {
     display: flex;
@@ -2873,13 +2922,13 @@ ul {
     margin-bottom: 8px;
 }
 
-.approvalrolemodal .form:nth-child(even){
-    background-color: rgb(243, 243, 243)     ;
+.approvalrolemodal .form:nth-child(even) {
+    background-color: rgb(243, 243, 243);
     border: none !important;
 }
 
 .MuiInputBase-input::-webkit-outer-spin-button,
 .MuiInputBase-input::-webkit-inner-spin-button {
-  -webkit-appearance: none !important;
-  margin: 0;
+    -webkit-appearance: none !important;
+    margin: 0;
 }

@@ -133,7 +133,7 @@ const Financials = ({ hendelNext, hendelCancel }) => {
     return (
         <>
             <div className='add-edit-product'>
-                <h1 className=''>Entity</h1>
+                <h1 className=''>Financials</h1>
                 <div className='form'>
                     <h2 className='mb-3'>Financials</h2>
                     <div>

@@ -34,6 +34,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     const [relatedPartyDetails, setRelatedPartyDetails] = useState([{
         'buyer1': '', 'shippers': '', 'partyRelation': '', 'uploadEvidence': ''
     }])
+
+    const [apiFetched, setApiFetched] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [relation, setRelation] = useState();
 
@@ -65,7 +67,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
 
     const handleRelatedParties = () => {
-        setRelatedPartyDetails([...relatedPartyDetails, { 'buyer1': '', 'shippers': '', 'partyRelation': '', 'uploadEvidence': '' }])
+        let tempRelated = [...relatedPartyDetails, { 'buyer': '', 'shipper': '', 'party_relation': '', 'upload_evidence': '' }];
+        setRelatedPartyDetails(tempRelated)
     }
     const handleRemoveParty = (index) => {
         const list = [...relatedPartyDetails]
@@ -86,42 +89,73 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                     type: { label: ele.type.roleName, value: ele.type._id }
                 }
             }))
+            setApiFetched(true)
             setEditId(getTransactionByIdData?.data?.keyParties[0]?._id)
             setBorrower_Applicant(getLender.borrower_Applicant)
             setLenders(getBorrower.lenders)
             if (getTransactionByIdData.data?.keyParties[0].relatedParties != undefined && getTransactionByIdData.data?.keyParties[0].relatedParties.length > 0) {
                 // console.log('keyparties at useEffect', keyParties);
-                setkeyParties(getTransactionByIdData.data?.keyParties[0].relatedParties);
-                setRelatedPartyDetails(getTransactionByIdData.data?.keyParties[0].relatedParties);
+                setkeyParties(getTransactionByIdData.data?.keyParties[0].relatedParties);                
+                
                 console.log('relatedparties from database',getTransactionByIdData.data?.keyParties[0].relatedParties);
                 setEditMode(true);
             }
         }
     }, [getTransactionByIdData])
 
-    const handleParties = (e, newValue, ind,type) => {
+    useEffect(() => { 
+        console.log('relatedparties useeffect', relatedPartyDetails);
+        setRelatedPartyDetails(getTransactionByIdData.data?.keyParties[0].relatedParties);    
+    }, [getTransactionByIdData])
+    
+    // useEffect(() => { 
+    //     console.log('relatedparties useeffect 2', relatedPartyDetails);
+    // },[relatedPartyDetails])
+
+    let temp = keyParties;
+    const handleRelation = (e, newValue, ind) => {
+        console.log('handleRelation event', e);
+
+        console.log('handleRelation keyParties', keyParties);
+        temp[ind].party_relation = newValue.value;
+        console.log('handleRelation temp ----->', temp);
+        setkeyParties(temp);
+        
+    }
+
+    const handleParties = (e, newValue, ind, type) => {
         let temp = keyParties;
+        let tempRelatedPartyDetails = relatedPartyDetails;
         if (temp[ind] == undefined) { 
             temp = [...keyParties, {
+                'party_relation': '', 'buyer': '', 'shipper': '', 'upload_evidence': ''
+            }];
+            tempRelatedPartyDetails = [...relatedPartyDetails, {
                 'party_relation': '', 'buyer': '', 'shipper': '', 'upload_evidence': ''
             }];
         }
 
         if (type == "buyer") {
-            if (temp[ind]!= undefined && temp[ind].buyer != undefined) {
+            if (temp[ind] != undefined && temp[ind].buyer != undefined) {
                 temp[ind].buyer = newValue.details?.name;
+                tempRelatedPartyDetails[ind].buyer = newValue.details?.name;
             }
         } else { 
-            temp[ind].shipper = newValue.details?.name;
+            if (temp[ind].buyer !== newValue.details?.name) {
+                temp[ind].shipper = newValue.details?.name;
+                tempRelatedPartyDetails[ind].shipper = newValue.details?.name;
+
+            } else { 
+                alert('Party 1 and Party 2 should not be identical');
+            }
         }      
+        console.log('handleParties temp',temp);
         // setParty({ ...party, name: { value: newValue._id, label: newValue.details?.name } })
+        setRelatedPartyDetails([...relatedPartyDetails]);
         setkeyParties(temp)
     }
 
-    useEffect(() => {
-        console.log('party useEffect', party);
-    }, [party])
-
+    
 
     useEffect(() => {
         if (nameOption?.data) {
@@ -148,8 +182,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
 
     const next = () => {
         let relatedParties = keyParties;
-        // console.log(relatedParties);
-        // return false;
+        
         let body = {
             ...transactionData,
             keyParties: {
@@ -168,15 +201,11 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         hendelNext()
     }
 
-    console.log('keyparties at 118', keyParties);
-    console.log(names);
-
     useEffect(() => {
         let buyer_arr = [];
         let warehouses = [];
         if (names) {
             names.forEach(element => {
-                console.log('names element ', element);
                 element.roles.forEach(roleDetail => {
                     // console.log('roleDetail', roleDetail);
                     // console.log('roleDetail.roleId.roleName', roleDetail.roleId.roleName);
@@ -201,14 +230,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         setWarehouses(warehouses);
     }, [names])
 
-    let temp = keyParties;
-    const handleRelation = (e, newValue, ind) => {
-        console.log('handleRelation keyParties', keyParties);
-        temp[ind].party_relation = newValue.label;
-        console.log('handleRelation temp ----->', temp);
-        setkeyParties(temp);
-        console.log(keyParties);
-    }
+    
 
     const handleBuyer = (e, newValue, ind) => {
         let temp = keyParties;
@@ -238,8 +260,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                 temp[ind].upload_evidence = { type: 'img', name: file.name, file: res };
                 setkeyParties(temp);
             });
+            console.log('handleChangeFile keyparties', keyParties);
         }
-        console.log('handleChangeFile keyparties', keyParties);
+        
     }
 
     const buyer_data_loop = [0];
@@ -333,7 +356,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                     </div>
                     
                         <>
-                            {relatedPartyDetails?.map((party, index) => (
+                            {apiFetched && relatedPartyDetails?.map((party, index) => (
                                 <Row key={index}>
                                     <>
 
@@ -382,17 +405,17 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                                 <p className='mb-0 title-color'>Relation</p>
                                                 <Autocomplete
                                                     className='ms-3 mb-3'
-                                                    options={parties}
+                                                    options={[...parties]}
                                                     getOptionLabel={(option) => option.label}
-                                                    id={"disable-clearable-relation-party" + index}
+                                                    id={"disable-clearable-relation-party-" + party.party_relation}
                                                     label="Party Relation"
                                                     renderInput={(params) => (
-                                                        <TextField {...params} label="Party Relation" variant="standard" />
+                                                        <TextField {...params} label="Party Relation " variant="standard" />
                                                     )}
                                                     // defaultValue={relatedPartyDetails.party_relation}
                                                     getOptionSelected={(option) => option.label === 'test'}
-                                                    onChange={(event, newValue) => { handleRelation(event, newValue, index); setRelation(parties) }}
-                                                    value={parties.find((ele) => ele.label === party.party_relation)}
+                                                    onChange={(event, newValue) => { handleRelation(event, newValue, index); setRelation(parties); console.log('parties', parties);console.log('party', party); }}
+                                                    value={parties.find((ele) => ele.value == party.party_relation)}
                                                     disableClearable
                                                 />
                                             </div>

@@ -374,11 +374,12 @@ const HomeLanding = () => {
                   <div className='card-header'>
 
                     <div className="input-group w-50 ">
-                      {/* <input type="text" id='search' onChange={(e) => setSearch(e.target.value)} placeholder="Search transaction..." className="form-control" /> */}
+                    <h4>Applications</h4>
+                      <input type="text" id='search' onChange={(e) => setSearch(e.target.value)} placeholder="Search transaction..." className="form-control" />
                       {/* <button type="button" className="btn btn-primary btn-lg">
                       <FaSearch />
                     </button> */}
-                    <h4>Applications</h4>
+                    
                     </div>
                     <div className='table-responsive text-center'>
                       <table className='table table-bordered border-light caption-top border-2 table-hover table-nowrap'>

@@ -67,6 +67,12 @@ const Countries = ({ showSidebar, setSidebar }) => {
         <div className='mb-3 d-flex justify-content-between align-items-center'>
           <h2 className='m-0'> Countries</h2>
           {/* <button className='add_btn me-3' onClick={() => navigate('/add-product')}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button> */}
+          <div className='search_content  me-3'>
+            <input className='serch_input' id='search' value={search} onChange={(e) => setSearch(e.target.value)} />
+            <label htmlFor='search'>
+              <img src='../assets/img/about/search.png' />
+            </label>
+          </div>
         </div>
         <MaterialTable
           title=""

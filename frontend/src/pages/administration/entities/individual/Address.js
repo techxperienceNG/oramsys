@@ -61,7 +61,9 @@ const IndividualAddress = ({ handleNext, hendelCancel, sendDetailData, common })
 
     const entityGetById = useSelector((state) => state.entityData.getEntityById)
     const entityAddData = useSelector((state) => state.entityData.entityAdd)
-    const editEntityData = useSelector((state) => state.entityData.editEntity)
+    // const editEntityData = useSelector((state) => state.entityData.editEntity)
+    const editEntityData = useSelector((state) => state.entityData.entityUpdate)
+
 
     useEffect(() => {
         if (country && country.data) {

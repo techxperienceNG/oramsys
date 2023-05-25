@@ -22,6 +22,7 @@ const SecurityDocuments = new Schema({
 
 
 var Schema = new Schema({
+    baseRate: { type: String, required: false, default: null },
     transactionId: { type: String, required: false, default: null },
     interestRate: { type: String, required: false, default: null },
     advisoryFee: { type: String, required: false, default: null },
@@ -48,6 +49,7 @@ var Schema = new Schema({
     currencyHedge: { type: Boolean, required: false, default: false },
     currencyHedgeDetails: { type: [CurrencyHedgeDetails], required: false, default: null },
     loanPurposeValidity: { type: String, required: false, default: null },
+    loanPurposJustification: { type: String, required: false, default: null },
     goods: { type: String, required: false, default: null },
     workingCapital: { type: String, required: false, default: null },
     sourceOfRepayment: { type: [SourceOfRepayment], required: false, default: null },

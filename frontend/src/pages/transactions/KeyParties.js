@@ -68,6 +68,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
 
     const handleRelatedParties = () => {
         let tempRelated = [...relatedPartyDetails, { 'buyer': '', 'shipper': '', 'party_relation': '', 'upload_evidence': '' }];
+        console.log(tempRelated);
+        setApiFetched(true);
         setRelatedPartyDetails(tempRelated)
     }
     const handleRemoveParty = (index) => {
@@ -104,13 +106,16 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     }, [getTransactionByIdData])
 
     useEffect(() => { 
-        console.log('relatedparties useeffect', relatedPartyDetails);
-        setRelatedPartyDetails(getTransactionByIdData.data?.keyParties[0].relatedParties);    
-    }, [getTransactionByIdData])
+        if (getTransactionByIdData.data?.keyParties[0].relatedParties != undefined && getTransactionByIdData.data?.keyParties[0].relatedParties.length > 0) {
+            console.log('RELATEDPARTIES FROM API', relatedPartyDetails);
+            setRelatedPartyDetails(getTransactionByIdData.data?.keyParties[0].relatedParties);
+        }    
+        // alert('getTransactionByIdData');
+    }, [getTransactionByIdData]) 
     
-    // useEffect(() => { 
-    //     console.log('relatedparties useeffect 2', relatedPartyDetails);
-    // },[relatedPartyDetails])
+    useEffect(() => { 
+        console.log('RELATEDPARTIES useeffect 2', relatedPartyDetails);
+    },[relatedPartyDetails])
 
     let temp = keyParties;
     const handleRelation = (e, newValue, ind) => {
@@ -136,9 +141,13 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         }
 
         if (type == "buyer") {
-            if (temp[ind] != undefined && temp[ind].buyer != undefined) {
-                temp[ind].buyer = newValue.details?.name;
-                tempRelatedPartyDetails[ind].buyer = newValue.details?.name;
+            if (temp[ind].shipper !== newValue.details?.name) {
+                if (temp[ind] != undefined && temp[ind].buyer != undefined) {
+                    temp[ind].buyer = newValue.details?.name;
+                    tempRelatedPartyDetails[ind].buyer = newValue.details?.name;
+                }
+            } else { 
+                alert('Party 1 and Party 2 should not be identical');
             }
         } else { 
             if (temp[ind].buyer !== newValue.details?.name) {

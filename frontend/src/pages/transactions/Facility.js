@@ -620,12 +620,16 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                     })
                 }
             } : '',
-            keyParties: transactionData.keyParties?.keyParties?.map((ele) => {
-                return {
-                    type: ele.type.value,
-                    name: ele.name.value
-                }
-            }),
+            
+            keyParties: {
+                keyParties: transactionData.keyParties?.keyParties?.map((ele) => {
+                    return {
+                        type: ele.type.value,
+                        name: ele.name.value
+                    }
+                }),
+                relatedParties: transactionData.keyParties?.relatedParties
+            },
             documentFlow: transactionData.documentFlow,
             fundFlow: {
                 ...transactionData.fundFlow,
@@ -667,6 +671,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         }
 
         console.log('body final===', body)
+        // return false;
         dispatch(addTransaction(body))
     }
 

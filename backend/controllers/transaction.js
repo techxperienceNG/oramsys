@@ -31,6 +31,8 @@ class transactionController {
         let fundFlow = req.body.fundFlow;
         let facility = req.body.facility;
 
+        console.log('keyparties----------------------', keyParties);
+
         let updateData = {}
         const newTransaction = {
             type: body.type,
@@ -62,16 +64,20 @@ class transactionController {
                     details: transactionDetailsResponse._id
                 }
             }
-            if (keyParties.length) {
+            console.log('---keyParties.length----',keyParties.keyParties.length);
+            if (keyParties.keyParties.length) {
+                
                 let keyParty = []
-                for (let i = 0; i < keyParties.length; i++) {
-                    let element = keyParties[i];
+                for (let i = 0; i < keyParties.keyParties.length; i++) {
+                    let element = keyParties.keyParties[i];
                     keyParty.push(element)
                 }
                 let element = {
                     parties: keyParty,
-                    transactionId: saveResponse._id
+                    transactionId: saveResponse._id,
+                    relatedParties: keyParties?.relatedParties
                 }
+
                 const transactionKeyPartiesModel = new transactionKeyParties(element);
                 const transactionKeyPartiesResponse = await transactionKeyPartiesModel.save();
 
@@ -79,6 +85,7 @@ class transactionController {
                     ...updateData,
                     keyParties: transactionKeyPartiesResponse._id
                 }
+                console.log('---updateData----',updateData);
             }
             if (documentFlow) {
 
@@ -127,7 +134,7 @@ class transactionController {
                     facility: transactionFacilityResponse._id
                 }
             }
-
+            
             const Transaction = await transaction.updateTransaction(updateData, saveResponse._id)
             if (Transaction) {
                 return res.status(httpStatus.OK).json(new APIResponse(Transaction, 'Transaction added successfully.', httpStatus.OK));
@@ -178,7 +185,6 @@ class transactionController {
                     let element = {
                         parties: keyParty,
                         relatedParties: keyParties?.relatedParties
-
                     }
                     console.log('element keyparties',element);
                     const transactionKeyPartiesResponse = await transactionKeyParties.updateTransactionKeyParties(element, keyParties._id);

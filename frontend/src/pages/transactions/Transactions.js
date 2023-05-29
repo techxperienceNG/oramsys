@@ -21,6 +21,7 @@ import Paginate from './Pagination'
 import { FaSearch } from "react-icons/fa"
 import Fade from 'react-reveal/Fade';
 import Loader from "../../layout/loader/Loader"
+import { FcSearch } from "react-icons/fc"
 
 const Transactions = () => {
   const dispatch = useDispatch()
@@ -32,7 +33,7 @@ const Transactions = () => {
   const navigate = useNavigate()
   const [showSubData, setShowSubData] = useState(false)
   const [transaction, setTransaction] = useState([])
-
+  const [transaction2, setTransaction2] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(10)
   const [search, setSearch] = useState('')
@@ -76,8 +77,30 @@ const Transactions = () => {
           }
         })
       )
+
+      setTransaction2(
+        getAlltransactionData.data?.map((item) => {
+          return {
+            ...item,
+            details: {
+              ...item?.details,
+              shippingOptions: {
+                ...item?.details?.shippingOptions,
+                portOfOrigin:
+                  item?.details?.shippingOptions?.portOfOrigin ??
+                  item?.details?.shippingOptions?.airbaseOfOrigin,
+                destinationPort:
+                  item?.details?.shippingOptions?.destinationPort ??
+                  item?.details?.shippingOptions?.destinationAirbase,
+              },
+            },
+          }
+        })
+      )
+
     }
   }, [getAlltransactionData])
+  
 
   useEffect(() => {
     dispatch(() => refreshPage())
@@ -152,9 +175,16 @@ const Transactions = () => {
 
   const indexOfLastTrans = currentPage * postsPerPage
   const indexOfFirstTrans = indexOfLastTrans - postsPerPage
-  const currentTrans = getAlltransactionData?.data?.slice(indexOfFirstTrans, indexOfLastTrans)
+  const currentTrans = transaction?.slice(indexOfFirstTrans, indexOfLastTrans)
   //page change
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
+
+  const checkSearch = (e) => {
+    const filtered = transaction2.filter((item) => (
+      item.borrower_Applicant.toLowerCase().includes(e.target.value) || item.lenders.toLowerCase().includes(e.target.value)
+    ))
+    setTransaction(filtered)
+  }
 
   return (
     <>
@@ -196,13 +226,6 @@ const Transactions = () => {
                         <></>
                       )}
 
-                      {/* <div class="input-group w-50">
-                        <input type="search" placeholder="Search transaction..." class="form-control" />
-                        <button type="button" class="btn btn-primary btn-sm">
-                          <FaSearch />
-                        </button>
-                      </div> */}
-
 
                       <Link to='/transactions' style={{ borderColor: '#9E3E65' }} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-3'>
                         <span class=' pe-2'>
@@ -228,8 +251,8 @@ const Transactions = () => {
                   <div class="mb-2 d-flex justify-content-between align-items-center">
 
                     <div class="position-relative">
-                      <span class="position-absolute search"><i class="fa fa-search"></i></span>
-                      <input type="text" id='search' onChange={(e) => setSearch(e.target.value)} className="form-control w-100 ps-5" placeholder="Search transaction..." />
+                      <span class="position-absolute search"><FcSearch size={25} /></span>
+                      <input type="text" id='search' onKeyUp={e => checkSearch(e)} onChange={(e) => setSearch(e.target.value)} className="form-control w-100 ps-5" placeholder="Search transaction..." />
                     </div>
 
                     <div class="pe-5">
@@ -254,10 +277,12 @@ const Transactions = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {!currentTrans ? <Loader className='text-center mx-auto container py-5 my-5 m-5' /> : currentTrans.length > 0 &&
-                          currentTrans?.filter((item) => {
-                            return search.toLowerCase() === '' ? item : item.borrower_Applicant.toLowerCase().includes(search)
-                          }).map((data) => (
+                        {!currentTrans ? <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div> : currentTrans.length > 0 &&
+                          currentTrans?.map((data) => (
                             <tr className='text-center'>
                               <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
                                 {new Date(data.createdAt).toLocaleDateString("en-US", DATE_OPTIONS)}
@@ -340,7 +365,7 @@ const Transactions = () => {
                       </tbody>
                      
                     </table>
-                    {!searched && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div> }
+                    {transaction.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div> }
                     {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div> }
                     <div class="card-footer border-0 py-2">
 

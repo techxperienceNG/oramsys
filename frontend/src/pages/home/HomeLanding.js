@@ -192,9 +192,9 @@ const HomeLanding = () => {
                   {/* <!-- Actions --> */}
                   <div className='col-sm-6 col-12 text-sm-end'>
                     <div className='mx-n1'>
-                      <Link to='/transactions' className='btn border border-2 d-inline-flex btn-sm btn-neutral border-base mx-1'>
+                      <Link to='/transactions' className='btn btn-primary rounded d-inline-flex btn-md border-base mx-1'>
                         <span className=' pe-2'><i className='bi bi-pencil'></i></span>
-                        <span>Edit Transactions</span>
+                        <span>Transactions</span>
                       </Link>
 
                     </div>
@@ -374,12 +374,11 @@ const HomeLanding = () => {
                   <div className='card-header'>
 
                     <div className="input-group w-50 ">
-                    <h4>Applications</h4>
-                      <input type="text" id='search' onChange={(e) => setSearch(e.target.value)} placeholder="Search transaction..." className="form-control" />
+                      {/* <input type="text" id='search' onChange={(e) => setSearch(e.target.value)} placeholder="Search transaction..." className="form-control" /> */}
                       {/* <button type="button" className="btn btn-primary btn-lg">
                       <FaSearch />
                     </button> */}
-                    
+                    <h4>Applications</h4>
                     </div>
                     <div className='table-responsive text-center'>
                       <table className='table table-bordered border-light caption-top border-2 table-hover table-nowrap'>

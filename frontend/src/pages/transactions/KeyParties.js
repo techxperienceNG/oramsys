@@ -33,7 +33,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     }])
     const [relatedPartyDetails, setRelatedPartyDetails] = useState([{
         'buyer': '', 'shipper': '', 'party_relation': '', 'upload_evidence': ''
-        }])
+    }])
 
     const [apiFetched, setApiFetched] = useState(false);
     const [editMode, setEditMode] = useState(false);
@@ -68,6 +68,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
 
     const handleRelatedParties = () => {
         let tempRelated = [...relatedPartyDetails, { 'buyer': '', 'shipper': '', 'party_relation': '', 'upload_evidence': '' }];
+        console.log(tempRelated);
+        setApiFetched(true);
         setRelatedPartyDetails(tempRelated)
     }
     const handleRemoveParty = (index) => {
@@ -104,13 +106,16 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     }, [getTransactionByIdData])
 
     useEffect(() => { 
-        console.log('relatedparties useeffect', relatedPartyDetails);
-        setRelatedPartyDetails(getTransactionByIdData.data?.keyParties[0].relatedParties);    
-    }, [getTransactionByIdData])
+        if (getTransactionByIdData.data?.keyParties[0].relatedParties != undefined && getTransactionByIdData.data?.keyParties[0].relatedParties.length > 0) {
+            console.log('RELATEDPARTIES FROM API', relatedPartyDetails);
+            setRelatedPartyDetails(getTransactionByIdData.data?.keyParties[0].relatedParties);
+        }    
+        // alert('getTransactionByIdData');
+    }, [getTransactionByIdData]) 
     
-    // useEffect(() => { 
-    //     console.log('relatedparties useeffect 2', relatedPartyDetails);
-    // },[relatedPartyDetails])
+    useEffect(() => { 
+        console.log('RELATEDPARTIES useeffect 2', relatedPartyDetails);
+    },[relatedPartyDetails])
 
     let temp = keyParties;
     const handleRelation = (e, newValue, ind) => {
@@ -136,9 +141,13 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         }
 
         if (type == "buyer") {
-            if (temp[ind] != undefined && temp[ind].buyer != undefined) {
-                temp[ind].buyer = newValue.details?.name;
-                tempRelatedPartyDetails[ind].buyer = newValue.details?.name;
+            if (temp[ind].shipper !== newValue.details?.name) {
+                if (temp[ind] != undefined && temp[ind].buyer != undefined) {
+                    temp[ind].buyer = newValue.details?.name;
+                    tempRelatedPartyDetails[ind].buyer = newValue.details?.name;
+                }
+            } else { 
+                alert('Party 1 and Party 2 should not be identical');
             }
         } else { 
             if (temp[ind].buyer !== newValue.details?.name) {
@@ -360,7 +369,25 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                 <Row key={index}>
                                     <>
 
-                                       
+                                        {/* <Col lg={3}>
+                                            <div className='d-flex ms-4'>
+                                                <img src='../../../assets/img/about/Tag.png' style={{ "height": "30px", "top": "22px", "position": "relative" }} />
+                                                <Autocomplete
+                                                    className='ms-3 mb-3 w-100'
+                                                    options={names}
+                                                    getOptionLabel={(option) => option.label || ""}
+                                                    id={"disable-clearable-buyer" + ind}
+                                                    label="Buyer"
+                                                    renderInput={(params) => (
+                                                        <TextField {...params} label="Party 1" variant="standard" />
+                                                    )}
+                                                    defaultValue={relatedParties.buyer}
+                                                    getOptionSelected={(option) => option.label === 'test'}
+                                                    onChange={(event, newValue) => handleBuyer(event, newValue, ind)}
+                                                    disableClearable
+                                                />
+                                            </div>
+                                        </Col> */}
                                         <Col lg={3}>
                                             <Autocomplete
                                                 options={names}
@@ -399,7 +426,29 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                             {error && error?.name && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.name}</span>}
                                         </Col>
 
-                                      
+                                        {/* {warehouses.map((element) => ( */}
+
+                                        {/* <Col lg={3}>
+                                            <><div className='d-flex'>
+                                                <img src='../../../assets/img/about/Deliver.png' style={{ "height": "30px", "top": "22px", "position": "relative" }} />
+                                                <Autocomplete
+                                                    className='ms-3 mb-3 w-100'
+                                                    options={warehouses}
+                                                    getOptionLabel={(option) => option.name}
+                                                    id={"disable-clearable-shipper-" + ind}
+                                                    label="Shipper"
+                                                    renderInput={(params) => (
+                                                        <TextField {...params} label="Party 2" variant="standard" />
+                                                    )}
+                                                    defaultValue={relatedParties.shipper}
+                                                    getOptionSelected={(option) => option.name === 'test'}
+                                                    onChange={(event, newValue) => handleShipper(event, newValue, ind)}
+                                                    disableClearable
+                                                />
+                                            </div></>
+                                                        
+
+                                        </Col> */}
                                         <Col lg={4}>
                                             <div className='d-flex align-items-center Related_parties'>
                                                 <p className='mb-0 title-color'>Relation</p>
@@ -412,7 +461,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                                     renderInput={(params) => (
                                                         <TextField {...params} label="Party Relation " variant="standard" />
                                                     )}
-                                                    // defaultValue={relatedPartyDetails.party_relation}
+                                                    defaultValue={relatedPartyDetails.party_relation}
                                                     getOptionSelected={(option) => option.label === 'test'}
                                                     onChange={(event, newValue) => { handleRelation(event, newValue, index); setRelation(parties); console.log('parties', parties);console.log('party', party); }}
                                                     value={parties.find((ele) => ele.value == party.party_relation)}

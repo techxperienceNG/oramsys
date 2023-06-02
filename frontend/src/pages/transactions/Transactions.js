@@ -21,7 +21,7 @@ import Paginate from './Pagination'
 import { FaSearch } from "react-icons/fa"
 import Fade from 'react-reveal/Fade';
 import Loader from "../../layout/loader/Loader"
-import { FcSearch } from "react-icons/fc"
+import { FcSearch, FcSettings } from "react-icons/fc"
 
 const Transactions = () => {
   const dispatch = useDispatch()
@@ -100,7 +100,7 @@ const Transactions = () => {
 
     }
   }, [getAlltransactionData])
-  
+
 
   useEffect(() => {
     dispatch(() => refreshPage())
@@ -278,47 +278,66 @@ const Transactions = () => {
                       </thead>
                       <tbody>
                         {!currentTrans ? <div class="d-flex justify-content-center">
-                                    <div class="spinner-border" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div> : currentTrans.length > 0 &&
-                          currentTrans?.map((data) => (
-                            <tr className='text-center'>
-                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                                {new Date(data.createdAt).toLocaleDateString("en-US", DATE_OPTIONS)}
-                              </td>
-                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                                {data._id}
-                              </td>
-                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                                
-                                  {data.borrower_Applicant}
-                              
-                              </td>
+                          <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                        </div> : currentTrans.length > 0 &&
+                        currentTrans?.map((data) => (
+                          <tr className='text-center'>
+                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                              {new Date(data.createdAt).toLocaleDateString("en-US", DATE_OPTIONS)}
+                            </td>
+                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                              {data._id}
+                            </td>
+                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
 
-                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                                  {data.lenders}
-                              </td>
-                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                                {formateCurrencyValue(data?.details?.contractDetails?.value)}
-                              </td>
-                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                                {data?.details?.productDetails?.name?.name}
-                              </td>
-                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal cursor-pointer'>
-                                <p onClick={() => { data.termSheet === "Not Signed" && setShowExcelModal(true); setSendId(data._id) }}>
-                                  {data.termSheet}
-                                  {data.termSheet === "Signed" ? (
-                                    <Button onClick={() => { downloadTermSheet(data._id) }}><FileDownloadIcon /></Button>
-                                  ) : (<></>)
-                                  }
-                                </p>
-                              </td>
+                              {data.borrower_Applicant}
 
-                              <td class=''>
-                                <div className='container '>
-                                  <div className='d-flex py-3 justify-content-center gap-3'>
-                                    <div class=''>
+                            </td>
+
+                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                              {data.lenders}
+                            </td>
+                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                              {formateCurrencyValue(data?.details?.contractDetails?.value)}
+                            </td>
+                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                              {data?.details?.productDetails?.name?.name}
+                            </td>
+                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal cursor-pointer'>
+                              <p onClick={() => { data.termSheet === "Not Signed" && setShowExcelModal(true); setSendId(data._id) }}>
+                                {data.termSheet}
+                                {data.termSheet === "Signed" ? (
+                                  <Button onClick={() => { downloadTermSheet(data._id) }}><FileDownloadIcon /></Button>
+                                ) : (<></>)
+                                }
+                              </p>
+                            </td>
+
+                            <td class=''>
+                              <div className='container '>
+                                <div className='d-flex py-3 justify-content-center gap-3'>
+                                  
+
+                                  <Dropdown size='sm'>
+                                    <Dropdown.Toggle variant="light" id="dropdown-basic">
+                                    <FcSettings size={25} />
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu variant="light" className="text-white" active>
+                                      <Dropdown.Item onClick={() =>  navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], }) }>Edit</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}>Preview</Dropdown.Item>
+                                      {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ? 
+                                      <Dropdown.Item onClick={() => { dispatch(getRiskAssessment(data._id)); setSelected(data._id)}}>Risk Assesment
+                                      </Dropdown.Item> : "" } 
+                                      
+                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}>View Termsheet</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}>Download Termsheet</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                  </Dropdown>
+
+                                  {/* <div class=''>
                                       <MdEdit onClick={() => { navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], }) }}
                                         data-tooltip-id='edit-id'
                                         data-tooltip-content='Edit Transaction'
@@ -345,7 +364,6 @@ const Transactions = () => {
                                     </div>
                                     <div class=''>
                                         <MdVisibility  onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}data-tooltip-id='viewriskassesment' data-tooltip-content='View Termsheet' size={18} />
-                                        {/* { rowData.termSheet === 'Not Signed' ? downloadTermSheet(rowData._id, 'view') : ViewRiskAssessment() } */}
                                         <Tooltip id='viewriskassesment' place='top' effect='solid' />
                                     
                                     </div>
@@ -355,26 +373,26 @@ const Transactions = () => {
                                         size={18}
                                       />
                                       <Tooltip id='termsheet' place='top' effect='solid' />
-                                    </div>
-                                  </div>
+                                    </div> */}
                                 </div>
-                              </td>
-                            </tr>
-                          )) }
-                       
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+
                       </tbody>
-                     
+
                     </table>
-                    {transaction.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div> }
-                    {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div> }
+                    {transaction.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
+                    {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
                     <div class="card-footer border-0 py-2">
 
-                       <span class="text-muted text-sm"><Paginate postsPerPage={postsPerPage} totalPosts={getAlltransactionData?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} currentTrans={currentTrans} /> </span>
+                      <span class="text-muted text-sm"><Paginate postsPerPage={postsPerPage} totalPosts={getAlltransactionData?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} currentTrans={currentTrans} /> </span>
                     </div>
                   </div>
 
                 </div>
-               
+
               </div>
             </main>
           </Fade>
@@ -401,9 +419,9 @@ export default Transactions
 //   {
 //       icon: 'download',
 //       tooltip: 'Download term sheet',
-    
+
 //       onClick: (event, rowData) => { downloadTermSheet(rowData._id) }
-      
+
 //   },
 // ]
 // const tableAction = [

@@ -28,11 +28,18 @@ const AddWareHouseModal = ({ onHide, show, wareHouseData, wareHouseId }) => {
     useEffect(() => {
         if (entityData && entityData.data) {
             setWareHouseCompanyOption(entityData.data.map((ele) => {
-                return {
-                    label: ele?.details?.name,
-                    value: ele._id
+                if (ele?.details?.name) {
+                    return {
+                        label: ele?.details?.name,
+                        value: ele._id
+                    }
+                } else { 
+                    return {
+                        label: ele?.details?.givenName,
+                        value: ele._id
+                    }
                 }
-            }))
+            })) 
         }
     }, [entityData])
 
@@ -47,8 +54,14 @@ const AddWareHouseModal = ({ onHide, show, wareHouseData, wareHouseId }) => {
                 }
             }))
         }
+
+        console.log('addWarehouse',addWarehouse);
     }, [addWarehouse.warehouseCompany])
 
+
+       useEffect(() => {
+        console.log('addWarehouse 22',addWarehouse);
+    }, [addWarehouse])
     useEffect(() => {
         if (wareHouseId) {
             setAddWarehouse({
@@ -111,9 +124,11 @@ const AddWareHouseModal = ({ onHide, show, wareHouseData, wareHouseId }) => {
                                                     <TextField {...params} label="Warehouse company" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
+                                                   
+                                                    
                                                     setAddWarehouse({ ...addWarehouse, warehouseCompany: newValue })
                                                 }}
-                                                value={(wareHouseCompanyOption && addWarehouse.warehouseCompany) && wareHouseCompanyOption.find((ele) => ele._id === addWarehouse.warehouseCompany?.id)}
+                                                value={(wareHouseCompanyOption && addWarehouse.warehouseCompany) && wareHouseCompanyOption.find((ele) => ele.value === addWarehouse.warehouseCompany?.value)}
                                                 disableClearable
                                             />
                                         </Col>
@@ -127,9 +142,14 @@ const AddWareHouseModal = ({ onHide, show, wareHouseData, wareHouseId }) => {
                                                     <TextField {...params} label="Warehouse" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
+                                                    console.log(newValue);
+                                                     console.log('test 1  ',addWarehouse.warehouseCompany);
+                                                    wareHouseOption.forEach((ele) => {
+                                                            console.log(ele);
+                                                    });
                                                     setAddWarehouse({ ...addWarehouse, warehouse: newValue })
                                                 }}
-                                                value={(wareHouseOption && addWarehouse.warehouse) && wareHouseOption.find((ele) => ele._id === addWarehouse.warehouseCompany?.id)}
+                                                value={(wareHouseOption && addWarehouse.warehouse) && wareHouseOption.find((ele) => ele.value === addWarehouse.warehouse?.value)}
                                                 disableClearable
                                             />
                                         </Col>

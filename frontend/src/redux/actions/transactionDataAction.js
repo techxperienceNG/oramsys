@@ -116,7 +116,6 @@ export const getTransactionById = (id) => async (dispatch) => {
         })
         await ApiGet(`transaction/getById/${id}`)
             .then((res) => {
-                console.log('product.state response',res);
                 dispatch({
                     type: GET_TRANSACTION_BY_ID,
                     payload: res

@@ -112,7 +112,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     // )
     const ports = useSelector((state) => state.ports.port)
     const airBase = useSelector((state) => state.airPorts.airPort)
-
+    const [activeOnChange, setActiveOnChange] = useState('');
+    const [apiCalled, setApiCalled] = useState(true);
     useEffect(() => {
         dispatch(productGetAction("all"))
         dispatch(countrieAction("all"))
@@ -126,45 +127,53 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             ports?.data &&
             ports.data.length > 0
         ) {
-            setOriginCountry([])
-            setPortsOptions([])
-            if (shippingOptions.countryOfOrigin) {
+            if (shippingOptions.countryOfOrigin  && activeOnChange === 'origin') {
+                console.log('SEA ',shippingOptions.countryOfOrigin);
+                setOriginCountry([])
                 let tempData = countries.find(
                     (el) => el?._id === shippingOptions.countryOfOrigin
                 )?.name
                 ports.data[0].country === tempData && setOriginCountry(ports.data)
             }
-            if (shippingOptions.destinationCountry) {
-                let tempData = countries.find(
+            if (shippingOptions.destinationCountry && activeOnChange === 'destination') {
+                console.log('SEA destination',shippingOptions.destinationCountry);
+                setPortsOptions([])
+                let tempData1 = countries.find(
                     (el) => el?._id === shippingOptions.destinationCountry
                 )?.name
-                ports.data[0].country === tempData && setPortsOptions(ports.data)
+                ports.data[0].country === tempData1 && setPortsOptions(ports.data)
+                console.log('ports.data',ports.data);
+                console.log('ports.data[0].country',ports.data[0].country);
+                console.log('tempData',tempData1);
             }
         } else if (
             shippingOptions.shipmentMode === "AIR" &&
             countries.length > 0 &&
             airBase?.data &&
             airBase.data.length > 0
-        ) {
-            setOriginCountry([])
-            setPortsOptions([])
-            if (shippingOptions.countryOfOrigin) {
-                let tempData = countries.find(
+        ) {           
+            if (shippingOptions.countryOfOrigin && activeOnChange === 'origin') {
+                console.log('AIR ',shippingOptions.countryOfOrigin);
+
+                setOriginCountry([])
+                let tempData3 = countries.find(
                     (el) => el?._id === shippingOptions.countryOfOrigin
                 )?.name
-                airBase.data[0].country === tempData && setOriginCountry(airBase.data)
+                airBase.data[0].country === tempData3 && setOriginCountry(airBase.data)
             }
-            if (shippingOptions.destinationCountry) {
-                let tempData = countries.find(
+            if (shippingOptions.destinationCountry && activeOnChange === 'destination') {
+                 console.log('AIR destination',shippingOptions.destinationCountry);
+                setPortsOptions([])
+                let tempData2 = countries.find(
                     (el) => el?._id === shippingOptions.destinationCountry
                 )?.name
-                airBase.data[0].country === tempData && setPortsOptions(airBase.data)
+                console.log('=======airBase --**', airBase.data)
+                airBase.data[0].country === tempData2 && setPortsOptions(airBase.data)
             }
         }
     }, [ports, airBase, countries, shippingOptions])
 
     useEffect(() => {
-         console.log('airBase', airBase);
         console.log('=======airBase', airBase.data)
     }, [airBase])
 
@@ -173,20 +182,93 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     }, [portsOptions])
 
     const setPorts = (country) => {
+        
+        console.log('setPorts shippingOptions.shipmentMode',shippingOptions.shipmentMode);
         if (shippingOptions.shipmentMode === "SEA") {
             dispatch(portsAction(country))
         } else if (shippingOptions.shipmentMode === "AIR") {
             dispatch(airPortsAction(country))
         }
+        setActiveOnChange('origin')
+        // setApiCalled(false)
     }
+
+    const setDestinationPorts = (country) => {
+        if (shippingOptions.shipmentMode === "SEA") {
+            dispatch(portsAction(country))
+        } else if (shippingOptions.shipmentMode === "AIR") {
+            dispatch(airPortsAction(country))
+        }
+        setActiveOnChange('destination')
+        // setApiCalled(false)
+    }
+
+    useEffect(() => {
+        if (shippingOptions.countryOfOrigin && (activeOnChange === "")) {
+             console.log('port setted',shippingOptions.countryOfOrigin);
+            setPorts(
+                countries.find((item) => item._id === shippingOptions.countryOfOrigin)
+                    ?.name
+            )
+        }
+        if (shippingOptions.destinationCountry && (activeOnChange === "")) {
+            console.log('destination port setted',shippingOptions.destinationCountry);
+             setDestinationPorts(
+                countries.find((item) => item._id === shippingOptions.countryOfOrigin)
+                    ?.name
+            )
+        }
+    }, [shippingOptions.countryOfOrigin, shippingOptions.destinationCountry])
+
+    useEffect(() => { 
+
+        console.log('active on change', activeOnChange);
+        // if (
+        //     shippingOptions.shipmentMode === "SEA" &&
+        //     countries.length > 0 &&
+        //     ports?.data &&
+        //     ports.data.length > 0
+        // ) {
+          
+        //     if (shippingOptions.destinationCountry && activeOnChange == 'destination') {
+        //         setPortsOptions([])
+        //         let tempData = countries.find(
+        //             (el) => el?._id === shippingOptions.destinationCountry
+        //         )?.name
+        //         ports.data[0].country === tempData && setPortsOptions(ports.data)
+        //     }
+        // } else if (
+        //     shippingOptions.shipmentMode === "AIR" &&
+        //     countries.length > 0 &&
+        //     airBase?.data &&
+        //     airBase.data.length > 0
+        // ) {
+           
+        //     if (shippingOptions.destinationCountry && activeOnChange == 'destination') {
+        //         setPortsOptions([])
+        //         let tempData = countries.find(
+        //             (el) => el?._id === shippingOptions.destinationCountry
+        //         )?.name
+        //         console.log('---set port optoin-----', airBase.data)
+        //         airBase.data[0].country === tempData && setPortsOptions(airBase.data)
+        //     }
+        // }
+    },[activeOnChange])
 
     useEffect(() => {
         if (entityData && entityData.data) {
             setCounterPartyOption(
                 entityData.data.map((ele) => {
-                    return {
-                        value: ele._id,
-                        label: ele?.details?.name,
+                    if (ele?.details?.name) {
+                        return {
+                            label: ele?.details?.name,
+                            value: ele._id
+                        }
+                    } else { 
+                        return {
+                            label: ele?.details?.givenName,
+                            value: ele._id
+                        }
                     }
                 })
             )
@@ -194,25 +276,17 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     }, [entityData])
 
     useEffect(() => {
-        console.log('-------------------------product.productDetails-Physical start----------------------------------', productDetails);
         if (productType === "Physical") {
-            console.log('product.settingProductDetails by productType');
             setProductDetails({ ...productDetails, nature: "Physical" })
         } else {
-            console.log('product.settingProductDetails by productType');
             setProductDetails({ ...productDetails, nature: "Non-Physical" })
         }
-        console.log('-------------------------product.productDetails-Physical end----------------------------------', productDetails);
     }, [productType])
 
 
 
     useEffect(() => {
-        console.log('called at matric1');
-        console.log('product.Name matric1 ', productName);
-        console.log('product.Details matric1 ', productDetails);
         if (productName.length > 0 && productDetails.name) {
-            console.log('product.settingProductDetails by productName');
             setProductDetails({
                 ...productDetails,
                 metric: productName.find((ele) => ele._id === productDetails.name)?.matric,
@@ -227,155 +301,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     }, [country])
 
     useEffect(() => {
-        console.log('id-------------------------------------', transaction_id);
         transactionDetail(transaction_id);
-        // if (getTransactionByIdData && getTransactionByIdData.data) {
-        //     console.log('product.getTransactionByIdData',getTransactionByIdData.data);
-        //     setEditId(getTransactionByIdData.data?.details?._id)
-        //     setBorrower_Applicant(getTransactionByIdData.data?.borrower_Applicant)
-        //     setLenders(getTransactionByIdData.data?.lenders)
-        //     setProductDetails({
-        //         nature: getTransactionByIdData.data?.details?.productDetails?.nature,
-        //         type: getTransactionByIdData.data?.details?.productDetails?.type,
-        //         commodityType:
-        //             getTransactionByIdData.data?.details?.productDetails?.commodityType,
-        //         commoditySubType:
-        //             getTransactionByIdData.data?.details?.productDetails
-        //                 ?.commoditySubType,
-        //         name: getTransactionByIdData.data?.details?.productDetails?.name?._id,
-        //         quantity:
-        //             getTransactionByIdData.data?.details?.productDetails?.quantity,
-        //         metric: getTransactionByIdData.data?.details?.productDetails?.metric,
-
-        //         quality: getTransactionByIdData.data?.details?.productDetails?.quality,
-        //     })
-
-        //     setContractDetails({
-        //         currency:
-        //             getTransactionByIdData.data?.details?.contractDetails?.currency,
-        //         value: getTransactionByIdData.data?.details?.contractDetails?.value,
-        //         contractDate:
-        //             getTransactionByIdData.data?.details?.contractDetails?.contractDate &&
-        //             moment(
-        //                 getTransactionByIdData.data?.details?.contractDetails?.contractDate
-        //             ).format("YYYY-MM-DD"),
-        //         expiryDate:
-        //             getTransactionByIdData.data?.details?.contractDetails?.expiryDate &&
-        //             moment(
-        //                 getTransactionByIdData.data?.details?.contractDetails?.expiryDate
-        //             ).format("YYYY-MM-DD"),
-        //         conditionsOfContract:
-        //             getTransactionByIdData.data?.details?.contractDetails
-        //                 ?.conditionsOfContract,
-        //         descriptionOfContract:
-        //             getTransactionByIdData.data?.details?.contractDetails
-        //                 ?.descriptionOfContract,
-        //     })
-
-        //     setShippingOptions({
-        //         shipmentDate:
-        //             getTransactionByIdData.data?.details?.shippingOptions?.shipmentDate &&
-        //             moment(
-        //                 getTransactionByIdData.data?.details?.shippingOptions?.shipmentDate
-        //             ).format("YYYY-MM-DD"),
-        //         shipmentMode:
-        //             getTransactionByIdData.data?.details?.shippingOptions?.shipmentMode,
-        //         shipmentTerms:
-        //             getTransactionByIdData.data?.details?.shippingOptions?.shipmentTerms,
-        //         shippedWeights:
-        //             getTransactionByIdData.data?.details?.shippingOptions?.shippedWeights.toLocaleString(),
-        //         countryOfOrigin:
-        //             getTransactionByIdData.data?.details?.shippingOptions?.countryOfOrigin
-        //                 ?._id,
-        //         portOfOrigin:
-        //             getTransactionByIdData.data?.details?.shippingOptions?.portOfOrigin
-        //                 ?._id,
-        //         airbaseOfOrigin:
-        //             getTransactionByIdData.data?.details?.shippingOptions?.airbaseOfOrigin
-        //                 ?._id,
-        //         destinationCountry:
-        //             getTransactionByIdData.data?.details?.shippingOptions
-        //                 ?.destinationCountry?._id,
-        //         destinationPort:
-        //             getTransactionByIdData.data?.details?.shippingOptions?.destinationPort
-        //                 ?._id,
-        //         destinationAirbase:
-        //             getTransactionByIdData.data?.details?.shippingOptions
-        //                 ?.destinationAirbase?._id,
-        //         shipmentFrequency:
-        //             getTransactionByIdData.data?.details?.shippingOptions
-        //                 ?.shipmentFrequency,
-        //         warehouseRequired:
-        //             getTransactionByIdData.data?.details?.shippingOptions
-        //                 ?.warehouseRequired,
-        //         warehouses:
-        //             getTransactionByIdData.data?.details?.shippingOptions?.warehouses.map(
-        //                 (item) => {
-        //                     return {
-        //                         warehouse: {
-        //                             value: item?.warehouse?._id,
-        //                             label: item?.warehouse?.name,
-        //                         },
-        //                         warehouseCompany: {
-        //                             value: item?.warehouseCompany?._id,
-        //                             label: item?.warehouseCompany?.details?.name,
-        //                         },
-        //                     }
-        //                 }
-        //             ),
-        //     })
-
-        //     setTransShipmentOptions({
-        //         tranShipmentRequired:
-        //             getTransactionByIdData.data?.details?.transShipmentOptions
-        //                 ?.tranShipmentRequired,
-        //         street:
-        //             getTransactionByIdData.data?.details?.transShipmentOptions?.street,
-        //         city: getTransactionByIdData.data?.details?.transShipmentOptions?.city,
-        //         country:
-        //             getTransactionByIdData.data?.details?.transShipmentOptions?.country
-        //                 ?._id,
-        //         transShipmentQuantity:
-        //             getTransactionByIdData.data?.details?.transShipmentOptions
-        //                 ?.transShipmentQuantity,
-        //         transShipmentDate:
-        //             getTransactionByIdData.data?.details?.transShipmentOptions
-        //                 ?.transShipmentDate &&
-        //             moment(
-        //                 getTransactionByIdData.data?.details?.transShipmentOptions
-        //                     ?.transShipmentDate
-        //             ).format("YYYY-MM-DD"),
-        //     })
-
-        //     setPricingDetails({
-        //         pricingType:
-        //             getTransactionByIdData.data?.details?.pricingDetails?.pricingType,
-        //         pricingAmount:
-        //             getTransactionByIdData.data?.details?.pricingDetails?.pricingAmount.toLocaleString(),
-        //         pricingUnit:
-        //             getTransactionByIdData.data?.details?.pricingDetails?.pricingUnit,
-        //         previousDayClosingAmount:
-        //             getTransactionByIdData.data?.details?.pricingDetails
-        //                 ?.previousDayClosingAmount,
-        //         pricingFormula:
-        //             getTransactionByIdData.data?.details?.pricingDetails?.pricingFormula,
-        //         pricingHedgeingStatus:
-        //             getTransactionByIdData.data?.details?.pricingDetails
-        //                 ?.pricingHedgingStatus,
-        //         pricingHedgingMethod:
-        //             getTransactionByIdData.data?.details?.pricingDetails
-        //                 ?.pricingHedgingMethod,
-        //         pricingCounterParty:
-        //             getTransactionByIdData.data?.details?.pricingDetails
-        //                 ?.pricingCounterParty?._id,
-        //     })
-
-        //     console.log('-------------------------product.productDetails-----------------------------------', productDetails);
-        //     console.log('-------------------------product.commoditySubType-----------------------------------', productDetails.commoditySubType);
-        //     console.log('-------------------------product.name-----------------------------------', productName);
-        //     console.log('-------------------------product.data-----------------------------------', productData);
-        //     setIsLoading(false);
-        // }
     }, [transaction_id])
 
 
@@ -384,9 +310,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             await ApiGet(`transaction/getById/${id}`)
                 .then((getTransactionByIdData) => {
                     let resp = getTransactionByIdData.data;
-                    console.log('transaction detail API response', resp);
                     let respProductDetails = getTransactionByIdData.data.details.productDetails;
-                    console.log('state response', getTransactionByIdData);
                     if (getTransactionByIdData && getTransactionByIdData.data) {
                         setEditId(getTransactionByIdData.data?.details?._id)
                         setBorrower_Applicant(getTransactionByIdData.data?.borrower_Applicant)
@@ -411,7 +335,6 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     //         ?.commoditySubType
                     // })
 
-                    console.log('product.product details at', productDetails);
                     setContractDetails({
                         currency:
                             getTransactionByIdData.data?.details?.contractDetails?.currency,
@@ -535,7 +458,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     if (respProductDetails.commoditySubType != undefined) {
                         let product = [];
                         productData.data.forEach((item) => {
-                            if (item.commodity_sub_type == respProductDetails.commoditySubType) {
+                            // if (item.commodity_sub_type == respProductDetails.commoditySubType) {
+                            //     product.push(item);
+                            // }
+                            if (item.category == respProductDetails.commodityType) { 
                                 product.push(item);
                             }
                         })
@@ -554,13 +480,17 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         }
     }
 
-
     useEffect(() => {
-        console.log('product.product name loading');
+        
         if (productDetails.commoditySubType != undefined) {
             let product = [];
             productData.data.forEach((item) => {
-                if (item.commodity_sub_type == productDetails.commoditySubType) {
+                console.log('item',item);
+                console.log('productDetails',productDetails);
+                // if (item.commodity_sub_type == productDetails.commoditySubType) {
+                //     product.push(item);
+                // }
+                if (item.category == productDetails.commodityType) { 
                     product.push(item);
                 }
             })
@@ -652,7 +582,6 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     ]
 
     const handleChnage = (e, name, type) => {
-        console.log('product.handleChange');
         if (type === "productDetails") {
             if (name === "quantity") {
                 if (e.target.value === '' || e.target.value) {
@@ -957,8 +886,6 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     }
 
     const warehouseData = (data, id) => {
-        // console.log('id===', id)
-        // console.log('data===', data)
         if (id !== undefined) {
             setShippingOptions({
                 ...shippingOptions,
@@ -979,21 +906,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         }
     }
 
-    useEffect(() => {
-        if (shippingOptions.countryOfOrigin) {
-            setPorts(
-                countries.find((item) => item._id === shippingOptions.countryOfOrigin)
-                    ?.name
-            )
-        }
-        if (shippingOptions.destinationCountry) {
-            setPorts(
-                countries.find(
-                    (item) => item._id === shippingOptions.destinationCountry
-                )?.name
-            )
-        }
-    }, [shippingOptions.countryOfOrigin, shippingOptions.destinationCountry])
+  
 
     const next = () => {
         if (validation()) {
@@ -1026,28 +939,38 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             lenders,
             type: transactionType,
         }
-        // console.log("body===========", body)
-        // console.log('transShipmentOptions', transShipmentOptions)
         dispatch(transactionDataAction(body))
         signalContract(body.details.contractDetails)
         signalBorrower(body.borrower_Applicant)
         signalLender(body.lenders)
         hendelNext()
-        console.log(signalContract)
     }
 
     const handleCommoditySubtypeChange = (e, newVal) => {
-        console.log('product.handlecommoditysubtype', newVal);
+        // let product = [];
+        // productData.data.forEach((item) => {
+            // if (item.commodity_sub_type == newVal) {
+            //     product.push(item);
+            // }
+        // })
+        // setProductName(product);
+        setProductDetails({
+            ...productDetails,
+            commoditySubType: newVal,
+        })
+    }
+
+    const handleCommodityTypeChange = (e, newVal) => {
         let product = [];
         productData.data.forEach((item) => {
-            if (item.commodity_sub_type == newVal) {
+            if (item.category == newVal) {
                 product.push(item);
             }
         })
         setProductName(product);
         setProductDetails({
             ...productDetails,
-            commoditySubType: newVal,
+            commodityType: newVal,
         })
     }
 
@@ -1183,10 +1106,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             label='Commodity type'
                                             id='disable-clearable'
                                             onChange={(e, newVal) =>
-                                                setProductDetails({
-                                                    ...productDetails,
-                                                    commodityType: newVal,
-                                                })
+                                                
+                                                handleCommodityTypeChange(e, newVal)
                                             }
                                             getOptionLabel={(option) => option}
                                             options={commodityTypeOption}
@@ -1849,7 +1770,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                     ...shippingOptions,
                                                     destinationCountry: newVal._id,
                                                 })
-                                                setPorts(newVal.name)
+                                                setDestinationPorts(newVal.name)
                                             }}
                                             getOptionLabel={(option) => option.name}
                                             options={countries}

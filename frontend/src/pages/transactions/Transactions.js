@@ -326,14 +326,14 @@ const Transactions = () => {
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu variant="light" className="text-white" active>
-                                      <Dropdown.Item onClick={() =>  navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], }) }>Edit</Dropdown.Item>
-                                      <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}>Preview</Dropdown.Item>
+                                      <Dropdown.Item onClick={() =>  navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], }) }><MdEdit className="me-2 mb-1" size={15}/>Edit</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}><MdPreview className="me-2 mb-1" size={15}/>Preview</Dropdown.Item>
                                       {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ? 
-                                      <Dropdown.Item onClick={() => { dispatch(getRiskAssessment(data._id)); setSelected(data._id)}}>Risk Assesment
+                                      <Dropdown.Item onClick={() => { dispatch(getRiskAssessment(data._id)); setSelected(data._id)}}><MdAssessment className="me-2 mb-1" size={15}/>Risk Assesment
                                       </Dropdown.Item> : "" } 
                                       
-                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}>View Termsheet</Dropdown.Item>
-                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}>Download Termsheet</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}><MdVisibility className="me-2 mb-1" size={15}/>View Termsheet</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}><FileDownloadIcon className="me-2 mb-1" size={15}/>Download Termsheet</Dropdown.Item>
                                     </Dropdown.Menu>
                                   </Dropdown>
 

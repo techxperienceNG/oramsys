@@ -24,7 +24,7 @@ const PartiesEditModal = ({ show, onHide, getModalData, isView, editData }) => {
 
     useEffect(() => {
         dispatch(entitiesRoleAction())
-        dispatch(entityGetAction('Company'))
+        dispatch(entityGetAction('all'))
     }, [])
 
     useEffect(() => {
@@ -131,14 +131,14 @@ const PartiesEditModal = ({ show, onHide, getModalData, isView, editData }) => {
                                     <Col lg={12} className="mb-4">
                                         <Autocomplete
                                             options={names}
-                                            getOptionLabel={(option) => option.details ? option.details?.name : ""}
+                                            getOptionLabel={(option) =>(option.details && option.details?.name)? option.details?.name : option.details?.givenName}
                                             id="disable-clearable"
                                             label="Party"
                                             renderInput={(params) => (
                                                 <TextField {...params} label="Name" variant="standard" />
                                             )}
                                             onChange={(event, newValue) => {
-                                                setParties({ ...parties, name: { value: newValue._id, label: newValue.details?.name } });
+                                                setParties({ ...parties, name: { value: newValue._id, label: (newValue.details.name != undefined ? newValue.details?.name:newValue.details?.givenName) } });
                                             }}
                                             disabled={isView}
                                             value={(names && parties.name) && names.find((ele) => ele._id === parties.name?.value)}

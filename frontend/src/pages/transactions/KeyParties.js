@@ -79,15 +79,16 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
     }
 
     useEffect(() => {
-        dispatch(entityGetAction('Company'))
+        dispatch(entityGetAction('all'))
     }, []);
 
     useEffect(() => {
         // console.log('getTransactionByIdData.data?.keyparties',getTransactionByIdData.data?.keyParties[0].relatedParties);
         if (getTransactionByIdData && getTransactionByIdData.data) {
             setTableData(getTransactionByIdData.data.keyParties[0].parties.map((ele) => {
+                console.log(ele);
                 return {
-                    name: { label: ele.name.details.name, value: ele.name._id },
+                    name: { label: (ele.name.details.name != null ? ele.name.details.name:ele.name.details.givenName) , value: ele.name._id },
                     type: { label: ele.type.roleName, value: ele.type._id }
                 }
             }))
@@ -139,27 +140,27 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                 'party_relation': '', 'buyer': '', 'shipper': '', 'upload_evidence': ''
             }];
         }
-
+        var temp_name = (newValue.details?.name) ? newValue.details?.name : newValue.details?.givenName;
         if (type == "buyer") {
-            if (temp[ind].shipper !== newValue.details?.name) {
+            if (temp[ind].shipper !== temp_name) {
                 if (temp[ind] != undefined && temp[ind].buyer != undefined) {
-                    temp[ind].buyer = newValue.details?.name;
-                    tempRelatedPartyDetails[ind].buyer = newValue.details?.name;
+                    temp[ind].buyer = temp_name;
+                    tempRelatedPartyDetails[ind].buyer = temp_name;
                 }
             } else { 
                 alert('Party 1 and Party 2 should not be identical');
             }
         } else { 
-            if (temp[ind].buyer !== newValue.details?.name) {
-                temp[ind].shipper = newValue.details?.name;
-                tempRelatedPartyDetails[ind].shipper = newValue.details?.name;
+            if (temp[ind].buyer !== temp_name) {
+                temp[ind].shipper = temp_name;
+                tempRelatedPartyDetails[ind].shipper = temp_name;
 
             } else { 
                 alert('Party 1 and Party 2 should not be identical');
             }
         }      
         console.log('handleParties temp',temp);
-        // setParty({ ...party, name: { value: newValue._id, label: newValue.details?.name } })
+        // setParty({ ...party, name: { value: newValue._id, label: temp_name } })
         setRelatedPartyDetails([...relatedPartyDetails]);
         setkeyParties(temp)
     }
@@ -168,7 +169,14 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
 
     useEffect(() => {
         if (nameOption?.data) {
-            setNames(nameOption?.data)
+            // console.log(nameOption?.data);
+            var temp_names = [];
+            nameOption?.data.forEach((element,index) => { 
+                element.details.name = element.details.name != null ? element.details.name : element.details.givenName;
+                temp_names.push(element)
+            });
+            // console.log(temp_names);
+            setNames(temp_names)
         }
     }, [nameOption])
 
@@ -214,22 +222,18 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
         let buyer_arr = [];
         let warehouses = [];
         if (names) {
-            names.forEach(element => {
+            names.forEach(element => { 
                 element.roles.forEach(roleDetail => {
-                    // console.log('roleDetail', roleDetail);
-                    // console.log('roleDetail.roleId.roleName', roleDetail.roleId.roleName);
                     if (roleDetail.roleId.roleName == "Buyer") {
                         var temp = {
-                            label: element.details.name,
-                            value: element.details.name,
+                            label: element.details.name != null ? element.details.name:element.details.givenName,
+                            value: element.details.name != null ?element.details.name:element.details.givenName,
                             prefix: ''
                         };
                         buyer_arr.push(temp);
-
                         element.warehouses.forEach(warehose => {
                             warehouses.push(warehose);
                         })
-
                     }
                 });
 
@@ -391,17 +395,25 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                         <Col lg={3}>
                                             <Autocomplete
                                                 options={names}
-                                                getOptionLabel={(option) => option.details ? option.details?.name : ""}
+                                                getOptionLabel={(option) => (option.details?.name)}
                                                 id={"disable-clearable-buyer-" + index}
                                                 label="Party"
                                                 renderInput={(params) => (
                                                     <TextField {...params} label="Party 1" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
+                                                    console.log('test1');
+                                                    // names.forEach((ele) => { 
+                                                    //     console.log(ele.details.name);
+                                                    //     console.log('hurre',party.buyer==ele.details.name);
+                                                        console.log(party.buyer);
+                                                    // })
+                                                    // console.log(names.find((ele) => ele.details.name == party.buyer))
+                                                   
                                                     handleParties(event, newValue,index,'buyer');
                                                 }}
                                                 disabled={isView}
-                                                value={(names && party.buyer) && names.find((ele) => ele.details.name === party.buyer)}
+                                                value={names.find((ele) => ele.details.name === party.buyer)}
                                                 disableClearable
                                             />
                                             {error && error?.name && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.name}</span>}
@@ -410,7 +422,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
                                         <Col lg={3}>
                                             <Autocomplete
                                                 options={names}
-                                                getOptionLabel={(option) => option.details ? option.details?.name : ""}
+                                                getOptionLabel={(option) => ( option.details?.name)}
                                                 id={"disable-clearable-shipper-" + index}
                                                 label="Party"
                                                 renderInput={(params) => (

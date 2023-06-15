@@ -601,6 +601,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         if (validation()) {
             return
         }
+       
         delete transactionData.details?._id
         delete transactionData.keyParties?._id
         delete transactionData.documentFlow?._id
@@ -619,12 +620,16 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                     })
                 }
             } : '',
-            keyParties: transactionData.keyParties?.keyParties?.map((ele) => {
-                return {
-                    type: ele.type.value,
-                    name: ele.name.value
-                }
-            }),
+            
+            keyParties: {
+                keyParties: transactionData.keyParties?.keyParties?.map((ele) => {
+                    return {
+                        type: ele.type.value,
+                        name: ele.name.value
+                    }
+                }),
+                relatedParties: transactionData.keyParties?.relatedParties
+            },
             documentFlow: transactionData.documentFlow,
             fundFlow: {
                 ...transactionData.fundFlow,
@@ -666,6 +671,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         }
 
         console.log('body final===', body)
+        // return false;
         dispatch(addTransaction(body))
     }
 
@@ -684,6 +690,9 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         if (validation()) {
             return
         }
+        //  alert('edit');
+        // console.log(transactionData.keyParties);
+        // return;
         let body = {
             detail: transactionType !== "Import" ? {
                 ...transactionData.details,

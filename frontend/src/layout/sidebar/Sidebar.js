@@ -10,11 +10,12 @@ import { Link } from "react-router-dom"
 import LogoutModal from '../../component/Modal/LogoutModal';
 import { BiHomeAlt2 } from "react-icons/bi";
 import { BsAirplane, BsFillBarChartFill, BsFillPeopleFill, BsFlag } from 'react-icons/bs';
-import { GrClose, GrDatabase, GrUserAdmin } from 'react-icons/gr';
+import { GrClose, GrDatabase, GrFlagFill, GrUserAdmin } from 'react-icons/gr';
 import { FaBoxOpen, FaPeopleCarry } from 'react-icons/fa';
 import { HiOutlineUsers } from "react-icons/hi";
 import { GiCargoShip } from "react-icons/gi";
 import { ImOffice } from "react-icons/im";
+import { FcHome, FcLock,FcCollaboration, FcWorkflow, FcViewDetails, FcPositiveDynamic } from "react-icons/fc";
 import { IoMdLogOut } from "react-icons/io";
 import Fade from 'react-reveal/Fade';
 
@@ -51,27 +52,28 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
 
   const navbarDataForSuperAdmin = [
     {
-      img: BiHomeAlt2,
+      img: FcHome,
       text: 'Dashboard',
       path: "homeLanding"
     },
     {
-      img: GrUserAdmin,
+      img: FcLock,
       text: 'Administration',
       path: "",
       subItem: [
         {
-          img: BsFillPeopleFill,
+          img: FcCollaboration,
           text: 'Entities',
           path: "entities"
         },
         {
-          img: FaPeopleCarry,
+          img: FcWorkflow,
           text: 'Entities Role',
           path: "entities-role"
         },
         {
-          img: GrDatabase,
+          img: FcViewDetails,
+          size: 25,
           text: 'Master Data',
           path: "",
           subData: [
@@ -81,7 +83,7 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
               path: "products",
             },
             {
-              img: BsFlag,
+              img: GrFlagFill,
               text: 'Countries',
               path: "countries",
             },
@@ -110,7 +112,7 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
       ]
     },
     {
-      img: BsFillBarChartFill,
+      img: FcPositiveDynamic,
       text: 'Transactions',
       path: "transactions"
     },
@@ -124,12 +126,12 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
       path: "",
       subItem: [
         {
-          img:  BsFillPeopleFill,
+          img:  FcCollaboration,
           text: 'Entities',
           path: "entities"
         },
         {
-          img: FaPeopleCarry,
+          img: FcWorkflow,
           text: 'Entities Role',
           path: "entities-role"
         },
@@ -139,13 +141,13 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
 
   const navbarDataForUser = [
     {
-      img: BiHomeAlt2,
+      img: FcHome,
       text: 'Dashboard',
       path: "homeLanding"
     },
     
     {
-      img: BsFillBarChartFill,
+      img: FcPositiveDynamic,
       text: 'Transactions',
       path: "transactions"
     },
@@ -200,7 +202,7 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
               {
                 navbarData.map((item, i) => (
                   <div key={i} className={`${item.text === "Jobs" ? "d-block navbar-body" : 'navbar-body'}`}>
-                    <div className='d-flex align-items-center ps-3 gap-5 mx-2 my-4'>
+                    <div className='d-flex align-items-center ps-3 gap-3 mx-2 my-4'>
                       <item.img size={20} />
                       <Nav.Link className=' p-0' onClick={() => ShowSubItem({ text: item.text, path: item.path })}>{item.text} {item.text === "Administration" ? <img src='../../../../../assets/img/about/down-filled-triangular-arrow.png' className={`${showItem === "Administration" ? 'img-roted' : 'img-roted_unset'}`} /> : ""}</Nav.Link>
                     </div>
@@ -208,14 +210,14 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
                       showItem === item.text && "subItem" in item &&
                       item.subItem?.map((subItem) => {
                         return <>
-                          <div className='d-flex align-items-center gap-5 mx-4 my-4 ps-2'>
-                          <subItem.img size={16} />
+                          <div className='d-flex align-items-center gap-3 mx-4 my-4 ps-2'>
+                          <subItem.img size={20} />
                             <Nav.Link className=' p-0 ' onClick={() => ShowSubItem({ text: subItem.text, path: subItem.path })}>{subItem.text} {subItem.text === 'Master Data' ? <img src='../../../../../assets/img/about/down-filled-triangular-arrow.png' className={`${showSubItem === "Master Data" ? 'img-roted' : 'img-roted_unset'}`} /> : ""}</Nav.Link>
                           </div>
                           {
                             showSubItem === subItem.text && "subData" in subItem &&
                             subItem.subData?.map((subSubItem) => (
-                              <div className='d-flex align-items-center gap-5 my-4 mx-4 ps-3'>
+                              <div className='d-flex align-items-center gap-3 my-4 mx-4 ps-3'>
                                 <subSubItem.img size={16} />
                                 <NavLink className='text-dark text-decoration-none' to={subSubItem.path} style={{ display: "block" }}>{subSubItem.text}</NavLink>
                               </div>
@@ -231,7 +233,7 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
                <hr className="navbar-divider my-2 opacity-20" />
                 {/* <!-- Navigation --> */}
              
-                <div className="d-flex flex-column mx-3 ps-2 gap-4  my-4">
+                <div className="d-flex flex-column mx-3 ps-2 gap-3  my-4">
                     <div className="">
                         {/* <Link className="nav-link">
                             <i className="bi bi-person-square"></i> <span className='ps-5'>Account</span>
@@ -239,7 +241,7 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
                     </div>
                     <div className="">
                         <Link onClick={() => setshowModal(true)} className="nav-link" href="#">
-                            <IoMdLogOut size={22} /><span className='ps-5 fw-semibold text-danger'>Logout</span>
+                            <IoMdLogOut size={22} /><span className='ps-3 fw-semibold text-danger'>Logout</span>
                         </Link>
                     </div>
                 </div>

@@ -1082,7 +1082,7 @@
                                     label="value"
                                     id="standard-start-adornment"
                                     name=''
-                                    value={((parseInt(facility.amount) / parseInt(transactionData?.details?.contractDetails?.value?.replace(/,/g, ''))) * 100).toFixed(2)}
+                                    value={((parseInt(facility.amount) / parseInt(transactionData?.details?.contractDetails?.value?.replace(/,/g, '')) || 0) * 100).toFixed(2)}
                                     InputProps={{
                                         endAdornment: <InputAdornment position="start">%</InputAdornment>,
                                     }}

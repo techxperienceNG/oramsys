@@ -122,43 +122,56 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
 
     useEffect(() => {
         if (
-          shippingOptions.shipmentMode === "SEA" &&
-          countries.length > 0 &&
-          ports?.data &&
-          ports.data.length > 0
+            shippingOptions.shipmentMode === "SEA" &&
+            countries.length > 0 &&
+            ports?.data &&
+            ports.data.length > 0
         ) {
-          if (shippingOptions.countryOfOrigin) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.countryOfOrigin
-            )?.name
-            ports.data[0].country === tempData && setOriginCountry(ports.data)
-          }
-          if (shippingOptions.destinationCountry) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.destinationCountry
-            )?.name
-            ports.data[0].country === tempData && setPortsOptions(ports.data)
-          }
+            if (shippingOptions.countryOfOrigin  && activeOnChange === 'origin') {
+                console.log('SEA ',shippingOptions.countryOfOrigin);
+                setOriginCountry([])
+                let tempData = countries.find(
+                    (el) => el?._id === shippingOptions.countryOfOrigin
+                )?.name
+                ports.data[0].country === tempData && setOriginCountry(ports.data)
+            }
+            if (shippingOptions.destinationCountry && activeOnChange === 'destination') {
+                console.log('SEA destination',shippingOptions.destinationCountry);
+                setPortsOptions([])
+                let tempData1 = countries.find(
+                    (el) => el?._id === shippingOptions.destinationCountry
+                )?.name
+                ports.data[0].country === tempData1 && setPortsOptions(ports.data)
+                console.log('ports.data',ports.data);
+                console.log('ports.data[0].country',ports.data[0].country);
+                console.log('tempData',tempData1);
+            }
         } else if (
-          shippingOptions.shipmentMode === "AIR" &&
-          countries.length > 0 &&
-          airBase?.data &&
-          airBase.data.length > 0
-        ) {
-          if (shippingOptions.countryOfOrigin) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.countryOfOrigin
-            )?.name
-            airBase.data[0].country === tempData && setOriginCountry(airBase.data)
-          }
-          if (shippingOptions.destinationCountry) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.destinationCountry
-            )?.name
-            airBase.data[0].country === tempData && setPortsOptions(airBase.data)
-          }
+            shippingOptions.shipmentMode === "AIR" &&
+            countries.length > 0 &&
+            airBase?.data &&
+            airBase.data.length > 0
+        ) {           
+            if (shippingOptions.countryOfOrigin && activeOnChange === 'origin') {
+                console.log('AIR ',shippingOptions.countryOfOrigin);
+
+                setOriginCountry([])
+                let tempData3 = countries.find(
+                    (el) => el?._id === shippingOptions.countryOfOrigin
+                )?.name
+                airBase.data[0].country === tempData3 && setOriginCountry(airBase.data)
+            }
+            if (shippingOptions.destinationCountry && activeOnChange === 'destination') {
+                 console.log('AIR destination',shippingOptions.destinationCountry);
+                setPortsOptions([])
+                let tempData2 = countries.find(
+                    (el) => el?._id === shippingOptions.destinationCountry
+                )?.name
+                console.log('=======airBase --**', airBase.data)
+                airBase.data[0].country === tempData2 && setPortsOptions(airBase.data)
+            }
         }
-      }, [ports, airBase, countries, shippingOptions])
+    }, [ports, airBase, countries, shippingOptions])
 
     useEffect(() => {
         console.log('=======airBase', airBase.data)
@@ -191,21 +204,21 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
     }
 
     useEffect(() => {
-        if (shippingOptions.countryOfOrigin) {
-          setPorts(
-            countries.find((item) => item._id === shippingOptions.countryOfOrigin)
-              ?.name
-          )
+        if (shippingOptions.countryOfOrigin && (activeOnChange === "")) {
+             console.log('port setted',shippingOptions.countryOfOrigin);
+            setPorts(
+                countries.find((item) => item._id === shippingOptions.countryOfOrigin)
+                    ?.name
+            )
         }
-        if (shippingOptions.destinationCountry) {
-          setPorts(
-            countries.find(
-              (item) => item._id === shippingOptions.destinationCountry
-            )?.name
-          )
+        if (shippingOptions.destinationCountry && (activeOnChange === "")) {
+            console.log('destination port setted',shippingOptions.destinationCountry);
+             setDestinationPorts(
+                countries.find((item) => item._id === shippingOptions.countryOfOrigin)
+                    ?.name
+            )
         }
-      }, [shippingOptions.countryOfOrigin, shippingOptions.destinationCountry])
-    
+    }, [shippingOptions.countryOfOrigin, shippingOptions.destinationCountry])
 
     useEffect(() => { 
 
@@ -298,8 +311,6 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                 .then((getTransactionByIdData) => {
                     let resp = getTransactionByIdData.data;
                     let respProductDetails = getTransactionByIdData.data.details.productDetails;
-                    console.log('CHECK ALL DATA', getTransactionByIdData.data.details.shippingOptions)
-
                     if (getTransactionByIdData && getTransactionByIdData.data) {
                         setEditId(getTransactionByIdData.data?.details?._id)
                         setBorrower_Applicant(getTransactionByIdData.data?.borrower_Applicant)
@@ -595,8 +606,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         else if (type === "transShipmentOptions") {
             if (name === "transShipmentQuantity") {
                 if (e.target.value === '' || e.target.value) {
-                     setTransShipmentOptions({ ...transShipmentOptions, [name]: e.target.value })
-                    
+                    if (parseInt(productDetails.quantity) >= parseInt(e.target.value)) {
+                        setTransShipmentOptions({ ...transShipmentOptions, [name]: e.target.value })
+                    } else {
+                        setTransShipmentOptions({ ...transShipmentOptions, [name]: '' })
+                    }
                 }
             }
         }
@@ -1096,7 +1110,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 
                                                 handleCommodityTypeChange(e, newVal)
                                             }
-                                            getOptionLabel={(option) => option || ""}
+                                            getOptionLabel={(option) => option}
                                             options={commodityTypeOption}
                                             disableClearable
                                             renderInput={(params) => (
@@ -1143,7 +1157,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             onChange={(e, newVal) =>
                                                 handleCommoditySubtypeChange(e, newVal)
                                             }
-                                            getOptionLabel={(option) => option || ""}
+                                            getOptionLabel={(option) => option}
                                             options={commoditySubTypeOption}
                                             disableClearable
                                             renderInput={(params) => (
@@ -1182,7 +1196,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 setProductDetails({ ...productDetails, name: newVal._id })
                                                 setSelectedProduct(newVal?.unit ? newVal.unit : "")
                                             }}
-                                            getOptionLabel={(option) => option.name || ""}
+                                            getOptionLabel={(option) => option.name}
                                             options={productName}
                                             disableClearable
                                             renderInput={(params) => (
@@ -1265,7 +1279,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             onChange={(e, newVal) =>
                                                 setProductDetails({ ...productDetails, quality: newVal })
                                             }
-                                            getOptionLabel={(option) => option || ""}
+                                            getOptionLabel={(option) => option}
                                             options={productQualityOption}
                                             disableClearable
                                             renderInput={(params) => (
@@ -1308,7 +1322,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                     <Col lg={3}>
                                         <Autocomplete
                                             options={CurrencyOptions}
-                                            getOptionLabel={(option) => option.label || ""}
+                                            getOptionLabel={(option) => option.label}
                                             id='disable-clearable'
                                             label='Contract currency'
                                             renderInput={(params) => (
@@ -1509,7 +1523,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     shipmentMode: newVal,
                                                 })
                                             }
-                                            getOptionLabel={(option) => option || ""}
+                                            getOptionLabel={(option) => option}
                                             options={shipmentModeOptions}
                                             disableClearable
                                             renderInput={(params) => (
@@ -1550,7 +1564,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 })
                                                 setPorts(newVal.name)
                                             }}
-                                            getOptionLabel={(option) => option?.name || ""}
+                                            getOptionLabel={(option) => option?.name}
                                             options={countries}
                                             disableClearable
                                             renderInput={(params) => (
@@ -1600,7 +1614,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     })
                                                 }
                                             }}
-                                            getOptionLabel={(option) => option.name || ""}
+                                            getOptionLabel={(option) => option.name}
                                             options={originCountry}
                                             disableClearable
                                             renderInput={(params) => (
@@ -1687,7 +1701,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     shipmentTerms: newVal,
                                                 })
                                             }
-                                            getOptionLabel={(option) => option || ""}
+                                            getOptionLabel={(option) => option}
                                             options={shipmentTermsOptions}
                                             disableClearable
                                             renderInput={(params) => (
@@ -1757,9 +1771,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     ...shippingOptions,
                                                     destinationCountry: newVal._id,
                                                 })
-                                                setPorts(newVal.name)
+                                                setDestinationPorts(newVal.name)
                                             }}
-                                            getOptionLabel={(option) => option.name || ""}
+                                            getOptionLabel={(option) => option.name}
                                             options={countries}
                                             disableClearable
                                             renderInput={(params) => (
@@ -1791,51 +1805,51 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         )}
                                     </Col>
                                     <Col lg={3}>
-                <Autocomplete
-                  label='Destination port'
-                  id='disable-clearable'
-                  // onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, destinationPort: newVal._id })}
-                  onChange={(e, newVal) => {
-                    const mode = shippingOptions.shipmentMode
-                    if (mode === "SEA") {
-                      setShippingOptions({
-                        ...shippingOptions,
-                        destinationPort: newVal._id,
-                      })
-                    } else if (mode === "AIR") {
-                      setShippingOptions({
-                        ...shippingOptions,
-                        destinationAirbase: newVal._id,
-                      })
-                    }
-                  }}
-                  getOptionLabel={(option) => option.name}
-                  options={portsOptions ?? []}
-                  disableClearable
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Destination port'
-                      variant='standard'
-                    />
-                  )}
-                  disabled={isView}
-                  // value={(portsOptions?.length > 0 && shippingOptions?.destinationPort) && portsOptions.find((ele) => ele?._id === shippingOptions?.destinationPort)}
-                  value={
-                    (shippingOptions.shipmentMode === "SEA" &&
-                      portsOptions?.length > 0 &&
-                      shippingOptions.destinationPort &&
-                      portsOptions.find(
-                        (ele) => ele._id === shippingOptions.destinationPort
-                      )) ||
-                    (shippingOptions.shipmentMode === "AIR" &&
-                      portsOptions?.length > 0 &&
-                      shippingOptions.destinationAirbase &&
-                      portsOptions.find(
-                        (ele) => ele._id === shippingOptions.destinationAirbase
-                      ))
-                  }
-                />
+                                        <Autocomplete
+                                            label='Destination port'
+                                            id='disable-clearable'
+                                            // onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, destinationPort: newVal._id })}
+                                            onChange={(e, newVal) => {
+                                                const mode = shippingOptions.shipmentMode
+                                                if (mode === "SEA") {
+                                                    setShippingOptions({
+                                                        ...shippingOptions,
+                                                        destinationPort: newVal._id,
+                                                    })
+                                                } else if (mode === "AIR") {
+                                                    setShippingOptions({
+                                                        ...shippingOptions,
+                                                        destinationAirbase: newVal._id,
+                                                    })
+                                                }
+                                            }}
+                                            getOptionLabel={(option) => option.name}
+                                            options={portsOptions ?? []}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Destination port'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            disabled={isView}
+                                            // value={(portsOptions?.length > 0 && shippingOptions?.destinationPort) && portsOptions.find((ele) => ele?._id === shippingOptions?.destinationPort)}
+                                            value={
+                                                (shippingOptions.shipmentMode === "SEA" &&
+                                                    portsOptions?.length > 0 &&
+                                                    shippingOptions.destinationPort &&
+                                                    portsOptions.find(
+                                                        (ele) => ele._id === shippingOptions.destinationPort
+                                                    )) ||
+                                                (shippingOptions.shipmentMode === "AIR" &&
+                                                    portsOptions?.length > 0 &&
+                                                    shippingOptions.destinationAirbase &&
+                                                    portsOptions.find(
+                                                        (ele) => ele._id === shippingOptions.destinationAirbase
+                                                    ))
+                                            }
+                                        />
                                         {error?.destinationPort && (
                                             <span
                                                 style={{
@@ -1860,7 +1874,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     shipmentFrequency: newVal,
                                                 })
                                             }
-                                            getOptionLabel={(option) => option || ""}
+                                            getOptionLabel={(option) => option}
                                             options={shipmentFrequencyOptions}
                                             disableClearable
                                             renderInput={(params) => (
@@ -1901,7 +1915,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     warehouseRequired: newVal.value,
                                                 })
                                             }
-                                            getOptionLabel={(option) => option.label || ""}
+                                            getOptionLabel={(option) => option.label}
                                             options={warehouseRequiredOptions}
                                             disableClearable
                                             renderInput={(params) => (
@@ -2132,7 +2146,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                             country: newVal._id,
                                                         })
                                                     }
-                                                    getOptionLabel={(option) => option.name || ""}
+                                                    getOptionLabel={(option) => option.name}
                                                     options={countries}
                                                     disableClearable
                                                     renderInput={(params) => (
@@ -2170,7 +2184,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                         variant='standard'
                                                         color='warning'
                                                         name='conditions_of_contract'
-                                                        value={formateCurrencyValue(transShipmentOptions.transShipmentQuantity)}
+                                                        value={transShipmentOptions.transShipmentQuantity}
                                                         disabled={isView}
                                                         onChange={(e) =>
                                                             handleChnage(
@@ -2323,7 +2337,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     pricingType: newVal,
                                                 })
                                             }
-                                            getOptionLabel={(option) => option || ""}
+                                            getOptionLabel={(option) => option}
                                             options={pricingTypeOption}
                                             disableClearable
                                             renderInput={(params) => (
@@ -2446,7 +2460,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                             pricingFormula: newVal,
                                                         })
                                                     }
-                                                    getOptionLabel={(option) => option || ""}
+                                                    getOptionLabel={(option) => option}
                                                     options={pricingFormulaOption}
                                                     disableClearable
                                                     renderInput={(params) => (
@@ -2487,7 +2501,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                             pricingHedgeingStatus: newVal.value,
                                                         })
                                                     }
-                                                    getOptionLabel={(option) => option.label || ""}
+                                                    getOptionLabel={(option) => option.label}
                                                     options={warehouseRequiredOptions}
                                                     disableClearable
                                                     renderInput={(params) => (
@@ -2532,7 +2546,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                                     pricingHedgingMethod: newVal,
                                                                 })
                                                             }
-                                                            getOptionLabel={(option) => option || ""}
+                                                            getOptionLabel={(option) => option}
                                                             options={hedgingMethodOption}
                                                             disableClearable
                                                             renderInput={(params) => (
@@ -2575,7 +2589,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                                         pricingCounterParty: newVal.value,
                                                                     })
                                                                 }
-                                                                getOptionLabel={(option) => option.label || ""}
+                                                                getOptionLabel={(option) => option.label}
                                                                 options={counterPartyOption}
                                                                 disableClearable
                                                                 renderInput={(params) => (

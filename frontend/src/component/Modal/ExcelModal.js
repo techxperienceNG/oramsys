@@ -50,7 +50,7 @@ const ExcelModal = ({ show, onHide, getId, refreshpage }) => {
         setTimeout(() => {
             refreshpage()
             setLoading(false)
-        }, 1500);
+        }, 3000);
     }
 
 

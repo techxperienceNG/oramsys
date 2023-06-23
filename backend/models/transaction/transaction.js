@@ -659,7 +659,7 @@ Schema.statics.getById = async function (id) {
                         select: ['details'],
                         populate: {
                             path: 'details',
-                            select: ['name']
+                            select: ['name','givenName']
                         }
                     },
                 ]

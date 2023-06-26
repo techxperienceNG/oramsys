@@ -154,8 +154,8 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
         <>
             <div className='add-edit-product'>
                 <div className='d-flex align-items-center justify-content-center error-info mb-3'>
-                    <img src={`../../../assets/img/about/${marketPriceRisk?.contractsBasis?.justification && marketPriceRisk?.priceHedge?.hedgingMethod && marketPriceRisk?.financingSufficiently?.justification ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
-                    {marketPriceRisk?.contractsBasis?.justification && marketPriceRisk?.priceHedge?.hedgingMethod && marketPriceRisk?.financingSufficiently?.contractValue ?
+                    <img src={`../../../assets/img/about/${marketPriceRisk?.contractsBasis?.justification||marketPriceRisk?.priceHedge?.hedgingMethod || marketPriceRisk?.financingSufficiently?.justification ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
+                    {marketPriceRisk?.contractsBasis?.justification || marketPriceRisk?.priceHedge?.hedgingMethod || marketPriceRisk?.financingSufficiently?.contractValue ?
                         <p className='success'>Risks are acceptable due to mitigants</p> :
                         <p className='error'>The below risks require your attention</p>
                     }

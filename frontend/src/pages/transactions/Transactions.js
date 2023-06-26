@@ -332,8 +332,8 @@ const Transactions = () => {
                                       <Dropdown.Item onClick={() => { dispatch(getRiskAssessment(data._id)); setSelected(data._id)}}><MdAssessment className="me-2 mb-1" size={15}/>Risk Assesment
                                       </Dropdown.Item> : "" } 
                                       
-                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}><MdVisibility className="me-2 mb-1" size={15}/>View Termsheet</Dropdown.Item>
-                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}><FileDownloadIcon className="me-2 mb-1" size={15}/>Download Termsheet</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => { data.termSheet ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}><MdVisibility className="me-2 mb-1" size={15}/>View Termsheet</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => { data.termSheet ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}><FileDownloadIcon className="me-2 mb-1" size={15}/>Download Termsheet</Dropdown.Item>
                                     </Dropdown.Menu>
                                   </Dropdown>
 

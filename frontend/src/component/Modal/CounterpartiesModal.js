@@ -1,5 +1,6 @@
 import { Backdrop, Fade, Modal, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+import { DropzoneArea } from 'material-ui-dropzone';
 import { Row, Col } from 'react-bootstrap'
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
@@ -32,6 +33,17 @@ const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption ,da
         getModalData(newData)
         onHide()
     }
+
+    const handleChangeFile = (file) => {
+        if (file) {
+            new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            }).then((res) => setCounterparties({ ...counterparties, evidence: res }));
+        }
+    }
     return (
         <div>
             <Modal
@@ -55,7 +67,7 @@ const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption ,da
                         <div className='add-edit-product p-0 mt-3' id="transition-modal-description" >
                             <div className='form'>
                                 <Row>
-                                    <Col lg={4}>
+                                    <Col lg={6}>
                                         <Autocomplete
                                             // className='ms-3 mb-3'
                                             options={HedgingMethodOption}
@@ -74,7 +86,7 @@ const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption ,da
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
 
-                                    <Col lg={4}>
+                                    <Col lg={6}>
                                         <Autocomplete
                                             options={modalOption ?? []}
                                             getOptionLabel={(option) => option}
@@ -92,7 +104,7 @@ const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption ,da
                                         {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
                                     </Col>
 
-                                    <Col lg={4}>
+                                    {/* <Col lg={4}>
                                         <Autocomplete
                                             options={modalOption ?? []}
                                             getOptionLabel={(option) => option}
@@ -107,7 +119,23 @@ const CounterpartiesModal = ({ show, onHide, getModalData, type, modalOption ,da
                                             disableClearable
                                             value={counterparties?.evidence}
                                         />
-                                        {/* {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>} */}
+                                        {error && error?.justification && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.justification}</span>}
+                                    </Col> */}
+                                    <Col lg={12}>
+                                    <div className='drag-and-drop'>
+                                                    <label>Upload Evidence</label>
+                                                    <DropzoneArea
+                                                        Icon="none"
+                                                        filesLimit={1}
+                                                        showPreviews={true}
+                                                        showPreviewsInDropzone={false}
+                                                        useChipsForPreview
+                                                        previewGridProps={{ container: { spacing: 1, } }}
+                                                        dropzoneText='Drop file here'
+                                                        previewText=""
+                                                        onChange={(file) => handleChangeFile(file[0])}
+                                                    />
+                                                </div>
                                     </Col>
                                 </Row>
                             </div>

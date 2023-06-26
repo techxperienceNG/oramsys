@@ -19,7 +19,7 @@ const makeTermSheet = async (doc, transaction) => {
     doc.font("Times-Bold", 20).text('PARTIES', leftPosition + 220, topPosition += 300);
 
     doc.font('Times-Bold', 14).text('Borrower / Applicant: ', leftPosition, topPosition += 25).moveDown();
-    doc.font('Times-Roman', 14).text(`${transaction.keyParties[0].parties.filter((item) => item.type.roleName === "Buyer" || item.type.roleName === "Seller").map(item => item.name.details.name).join(", ")}`, leftPosition + 135, topPosition).moveDown();
+    doc.font('Times-Roman', 14).text(`${transaction.borrower_Applicant}`, leftPosition + 135, topPosition).moveDown();
 
     doc.font('Times-Bold', 14).text('Mandated Lead Arranger and Bookrunner: ', leftPosition, topPosition += 25).moveDown();
     doc.font('Times-Roman', 14).text(`${transaction.keyParties[0].parties.filter((item) => item.type.roleName === "Buyer" || item.type.roleName === "Seller").map(item => item.name.details.name).join(", ")}`, leftPosition + 265, topPosition).moveDown();

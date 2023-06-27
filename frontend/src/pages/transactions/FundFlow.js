@@ -336,12 +336,12 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
         <>
             <div className='add-edit-product'>
                 <div className='form'>
-                    <h5 className="title-color">Contract value</h5>
+                    <h5 className="title-color">Contract Details</h5>
                     <Row>
                     
                           <Col lg={6}>
                             <TextField
-                                label="Contract currency"
+                                label="Contract Currency"
                                 variant="standard"
                                 color="warning"
                                 value={getTrans.currency}
@@ -353,7 +353,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                         </Col>
                         <Col lg={6}>
                             <TextField
-                                label="Contract value"
+                                label="Contract Value"
                                 variant="standard"
                                 color="warning"
                                 value={formateCurrencyValue(getTrans.value)}
@@ -367,7 +367,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                 </div>
                 <div className='add-edit-product p-0'>
                     <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
-                        <h2 className='mb-3'>Payment method</h2>
+                        <h2 className='mb-3'>Payment Method</h2>
                         <div>
                             <Row>
                                 <Col lg={fundFlow.paymentMethod === 'Open account' ? 6 : 12}>
@@ -377,7 +377,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                         id="disable-clearable"
                                         label="Payment method"
                                         renderInput={(params) => (
-                                            <TextField {...params} label="Payment method" variant="standard" />
+                                            <TextField {...params} label="Payment Methods" variant="standard" />
                                         )}
                                         onChange={(event, newValue) => {
                                             setFundFlow({
@@ -468,13 +468,13 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                     </div>
                 </div>
                 <div className='form'>
-                    <h5 className="title-color">Payment terms</h5>
+                    <h5 className="title-color">Payment Terms</h5>
                     <Row className='mb-3'>
                         <Col lg={3}>
                             <form className="" noValidate>
                                 <TextField
                                     id="date"
-                                    label="Payment date"
+                                    label="Payment Date"
                                     type="date"
                                     name='paymentDate'
                                     value={fundFlow.paymentDate}
@@ -517,7 +517,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                 id="disable-clearable"
                                 label="Payment origin"
                                 renderInput={(params) => (
-                                    <TextField {...params} label="Payment origin" variant="standard" />
+                                    <TextField {...params} label="Payment Origin" variant="standard" />
                                 )}
                                 onChange={(event, newValue) => {
                                     setFundFlow({ ...fundFlow, paymentOrigin: newValue._id });
@@ -555,7 +555,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                 id="disable-clearable"
                                 label="Additonal charges"
                                 renderInput={(params) => (
-                                    <TextField {...params} label="Additonal charges" variant="standard" />
+                                    <TextField {...params} label="Additonal Charges" variant="standard" />
                                 )}
                                 disabled={isView}
                                 value={(additonalChargesOption.length > 0 && fundFlow.additonalCharges === true || fundFlow.additonalCharges === false) && additonalChargesOption.find((ele) => ele.value === fundFlow.additonalCharges)}
@@ -585,7 +585,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                     <>
                         <div className='add-edit-product p-0'>
                             <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
-                                <h2 className='mb-3'>Additional charges</h2>
+                                <h2 className='mb-3'>Additional Charges</h2>
                                 <div>
                                     <Row>
                                         <Col lg={3}>
@@ -611,9 +611,9 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                                 options={CurrencyOptions}
                                                 getOptionLabel={(option) => option?.label}
                                                 id="disable-clearable"
-                                                label="Duties currency"
+                                                label="Duties Currency"
                                                 renderInput={(params) => (
-                                                    <TextField {...params} label="Duties currency" variant="standard" />
+                                                    <TextField {...params} label="Duties Currency" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
                                                     setFundFlow({ ...fundFlow, dutiesCurrency: newValue.label });
@@ -626,7 +626,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                         </Col>
                                         <Col lg={3}>
                                             <TextField
-                                                label="Duties value"
+                                                label="Duties Value"
                                                 variant="standard"
                                                 color="warning"
                                                 name="dutiesValue"
@@ -643,7 +643,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                                 id="disable-clearable"
                                                 label="Taxes currency"
                                                 renderInput={(params) => (
-                                                    <TextField {...params} label="Taxes currency" variant="standard" />
+                                                    <TextField {...params} label="Taxes Currency" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
                                                     setFundFlow({ ...fundFlow, taxesCurrency: newValue?.label });
@@ -658,7 +658,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                     <Row className='mt-3'>
                                         <Col lg={3}>
                                             <TextField
-                                                label="Taxes value"
+                                                label="Taxes Value"
                                                 variant="standard"
                                                 color="warning"
                                                 name="taxesValue"
@@ -675,7 +675,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                                 id="disable-clearable"
                                                 label="Certification currency"
                                                 renderInput={(params) => (
-                                                    <TextField {...params} label="Certification currency" variant="standard" />
+                                                    <TextField {...params} label="Certification Currency" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
                                                     setFundFlow({ ...fundFlow, certificationCurrency: newValue?.label });
@@ -688,7 +688,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                         </Col>
                                         <Col lg={3}>
                                             <TextField
-                                                label="Certification value"
+                                                label="Certification Value"
                                                 variant="standard"
                                                 color="warning"
                                                 name='certificationValue'
@@ -705,7 +705,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                                 id="disable-clearable"
                                                 label="Levies currency"
                                                 renderInput={(params) => (
-                                                    <TextField {...params} label="Levies currency" variant="standard" />
+                                                    <TextField {...params} label="Levies Currency" variant="standard" />
                                                 )}
                                                 onChange={(event, newValue) => {
                                                     setFundFlow({ ...fundFlow, leviesCurrency: newValue?.label });
@@ -721,7 +721,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                     <Row className='mt-3'>
                                         <Col>
                                             <TextField
-                                                label="Levies value"
+                                                label="Levies Value"
                                                 variant="standard"
                                                 color="warning"
                                                 name='leviesValue'
@@ -743,7 +743,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                     <Row>
                                         <Col lg={3}>
                                             <TextField
-                                                label="Taxes value"
+                                                label="Taxes Value"
                                                 variant="standard"
                                                 color="warning"
                                                 value={fundFlow.dutiesValue ? fundFlow.taxesValue ? formateCurrencyValue(JSON.stringify(parseInt(fundFlow.taxesValue.replace(",", "")) + parseInt(fundFlow.dutiesValue.replace(",", "")))) : formateCurrencyValue(fundFlow.dutiesValue) : (fundFlow.taxesValue ? formateCurrencyValue(fundFlow.taxesValue) : formateCurrencyValue(fundFlow.dutiesValue))}
@@ -752,7 +752,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                         </Col>
                                         <Col lg={3}>
                                             <TextField
-                                                label="Taxes currency"
+                                                label="Taxes Currency"
                                                 variant="standard"
                                                 color="warning"
                                                 value={fundFlow.taxesCurrency}
@@ -770,7 +770,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                                         </Col>
                                         <Col lg={3}>
                                             <TextField
-                                                label="Receiver Payout currency"
+                                                label="Receiver Payout Currency"
                                                 variant="standard"
                                                 color="warning"
                                                 value={fundFlow.certificationCurrency}

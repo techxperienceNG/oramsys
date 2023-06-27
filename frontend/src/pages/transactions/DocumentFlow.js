@@ -74,7 +74,7 @@ const DocumentFlow = ({ hendelCancel, hendelNext }) => {
         <>
             <div className='add-edit-product'>
                 <div className='form'>
-                    <h5 className="title-color">Document flow</h5>
+                    <h5 className="title-color">Document Flow</h5>
                     <Row>
                         <Col lg={documentFlow.documentRemittance === "Approved electronic method" ? 6 : 12}>
                             <Autocomplete
@@ -83,7 +83,7 @@ const DocumentFlow = ({ hendelCancel, hendelNext }) => {
                                 id="disable-clearable"
                                 label="Document remittance"
                                 renderInput={(params) => (
-                                    <TextField {...params} label="Document remittance" variant="standard" />
+                                    <TextField {...params} label="Document Remittance" variant="standard" />
                                 )}
                                 onChange={(event, newValue) => {
                                     setdocumentFlow({ ...documentFlow, documentRemittance: newValue });

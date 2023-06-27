@@ -322,7 +322,7 @@ const Transactions = () => {
 
                                   <Dropdown size='sm'>
                                     <Dropdown.Toggle variant="light" id="dropdown-basic">
-                                    <FcSettings size={25} />
+                                    <FcSettings size={17} />
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu variant="light" className="text-white" active>
@@ -332,8 +332,8 @@ const Transactions = () => {
                                       <Dropdown.Item onClick={() => { dispatch(getRiskAssessment(data._id)); setSelected(data._id)}}><MdAssessment className="me-2 mb-1" size={15}/>Risk Assesment
                                       </Dropdown.Item> : "" } 
                                       
-                                      <Dropdown.Item onClick={() => { data.termSheet ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}><MdVisibility className="me-2 mb-1" size={15}/>View Termsheet</Dropdown.Item>
-                                      <Dropdown.Item onClick={() => { data.termSheet ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}><FileDownloadIcon className="me-2 mb-1" size={15}/>Download Termsheet</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}><MdVisibility className="me-2 mb-1" size={15}/>View Termsheet</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}><FileDownloadIcon className="me-2 mb-1" size={15}/>Download Termsheet</Dropdown.Item>
                                     </Dropdown.Menu>
                                   </Dropdown>
 
@@ -385,7 +385,7 @@ const Transactions = () => {
                     </table>
                     {transaction.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
                     {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
-                    <div class="card-footer border-0 py-2">
+                    <div class="card-footer border-0 py-2 mb-5">
 
                       <span class="text-muted text-sm"><Paginate postsPerPage={postsPerPage} totalPosts={getAlltransactionData?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} currentTrans={currentTrans} /> </span>
                     </div>

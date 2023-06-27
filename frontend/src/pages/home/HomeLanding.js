@@ -337,7 +337,7 @@ const HomeLanding = () => {
                           <div className='row'>
                             <div className='col'>
                               <span className='h6 font-semibold text-muted text-sm d-block mb-2'>
-                                Completed Transactions
+                                Transactions in Progress
                               </span>
                               <span className='h3 font-bold mb-0'>
                                 {notSignedCount.length}

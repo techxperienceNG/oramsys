@@ -98,6 +98,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
     const [error, setError] = useState()
     const [editRowData, setEditRowData] = useState('')
     const [view, setView] = useState()
+    const [loading, setLoading] = useState(false)
 
     const transactionData = useSelector((state) => state.transactionData.transactionData)
     const addTransactionData = useSelector((state) => state.transactionData.addTransaction)
@@ -191,7 +192,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
 
     useEffect(() => {
         console.log('transactionData===', transactionData)
-        if(transactionData && transactionData.facility?.currencyHedgeDetails && counterpartyOptions?.data) {
+        if (transactionData && transactionData.facility?.currencyHedgeDetails && counterpartyOptions?.data) {
             setAddCurrencyHedge(transactionData.facility?.currencyHedgeDetails.map((ele) => {
                 return {
                     _id: ele._id,
@@ -200,7 +201,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                 }
             }))
         }
-        
+
     }, [transactionData])
 
     const Delete = (data) => {
@@ -244,9 +245,9 @@ const Facility = ({ hendelCancel, hendelNext }) => {
     ]
 
     let loanPurposeValidityOptions = [
-       'Is the loan purpose valid?',
-       'Yes',
-       'No'
+        'Is the loan purpose valid?',
+        'Yes',
+        'No'
     ]
 
     const hadleChangeModal = (e) => {
@@ -597,11 +598,11 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         console.log('error', error)
     }, [error])
 
-    const save = () => {
+    const save = async () => {
         if (validation()) {
             return
         }
-       
+
         delete transactionData.details?._id
         delete transactionData.keyParties?._id
         delete transactionData.documentFlow?._id
@@ -620,7 +621,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                     })
                 }
             } : '',
-            
+
             keyParties: {
                 keyParties: transactionData.keyParties?.keyParties?.map((ele) => {
                     return {
@@ -672,7 +673,9 @@ const Facility = ({ hendelCancel, hendelNext }) => {
 
         console.log('body final===', body)
         // return false;
-        dispatch(addTransaction(body))
+        setLoading(true)
+        await dispatch(addTransaction(body))
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -686,7 +689,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         }
     }, [addTransactionData])
 
-    const edit = () => {
+    const edit = async () => {
         if (validation()) {
             return
         }
@@ -756,7 +759,11 @@ const Facility = ({ hendelCancel, hendelNext }) => {
             userId: AuthStorage.getStorageData(STORAGEKEY.userId)
         }
         console.log('body final===', body)
-        dispatch(editTransaction(id, body))
+        setLoading(true)
+        await dispatch(editTransaction(id, body))
+        setLoading(false)
+        // setTimeout(() => {
+        // }, 2000);
     }
 
     useEffect(() => {
@@ -799,8 +806,8 @@ const Facility = ({ hendelCancel, hendelNext }) => {
     //     dispatch(transactionDataAction(body))
     // }
 
-    const DeleteCurrencyhedgedetails = (rowData) =>{
-        let DeleteCurrencyhedge = addCurrencyHedge.filter((ele , i)=>i!==rowData.tableData.id)
+    const DeleteCurrencyhedgedetails = (rowData) => {
+        let DeleteCurrencyhedge = addCurrencyHedge.filter((ele, i) => i !== rowData.tableData.id)
         setAddCurrencyHedge(DeleteCurrencyhedge)
     }
     const DeleteSourceOfRepayment = (rowData) => {
@@ -817,52 +824,52 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                     <h2 className='mb-3'>Interest Rate</h2>
                     <Row>
                         <Col lg={3}>
-                                <TextField
-                                    label="Interest rate"
-                                    id="standard-start-adornment"
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                                    }}
-                                    name='interestRate'
-                                    value={facility.interestRate}
-                                    onChange={(e) => handleChangeNumber(e, 'interestRate')}
-                                    disabled={isView}
-                                />
-                                {error && error?.interestRate && <span style={{ color: 'red' }}>{error.interestRate}</span>}
+                            <TextField
+                                label="Interest Rate"
+                                id="standard-start-adornment"
+                                InputProps={{
+                                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                }}
+                                name='interestRate'
+                                value={facility.interestRate}
+                                onChange={(e) => handleChangeNumber(e, 'interestRate')}
+                                disabled={isView}
+                            />
+                            {error && error?.interestRate && <span style={{ color: 'red' }}>{error.interestRate}</span>}
                         </Col>
                         <Col lg={3}>
-                                <Autocomplete
-                                    options={baseRateOptions}
-                                    getOptionLabel={(option) => option}
-                                    id="disable-clearable"
-                                    label="Base Rate"
-                                    renderInput={(params) => (
-                                        <TextField {...params} label="Base Rate" variant="standard" />
-                                    )}
-                                    onChange={(event, newValue) => {
-                                        setFacility({ ...facility, baseRate: newValue });
-                                    }}
-                                    disabled={isView}
-                                    disableClearable
-                                    value={facility.baseRate}
-                                />
-                                {error && error?.baseRate && <span style={{ color: 'red' }}>{error.baseRate}</span>}
-                            </Col>
+                            <Autocomplete
+                                options={baseRateOptions}
+                                getOptionLabel={(option) => option}
+                                id="disable-clearable"
+                                label="Base Rate"
+                                renderInput={(params) => (
+                                    <TextField {...params} label="Base Rate" variant="standard" />
+                                )}
+                                onChange={(event, newValue) => {
+                                    setFacility({ ...facility, baseRate: newValue });
+                                }}
+                                disabled={isView}
+                                disableClearable
+                                value={facility.baseRate}
+                            />
+                            {error && error?.baseRate && <span style={{ color: 'red' }}>{error.baseRate}</span>}
+                        </Col>
 
-                            <Col lg={3}>
-                                <TextField
-                                    label="Margin"
-                                    id="standard-start-adornment"
-                                    name='margin'
-                                    value={facility.margin}
-                                    onChange={(e) => handleChangeNumber(e, 'margin')}
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                                    }}
-                                    disabled={isView}
-                                />
-                                {error && error?.margin && <span style={{ color: 'red' }}>{error.margin}</span>}
-                            </Col>
+                        <Col lg={3}>
+                            <TextField
+                                label="Margin"
+                                id="standard-start-adornment"
+                                name='margin'
+                                value={facility.margin}
+                                onChange={(e) => handleChangeNumber(e, 'margin')}
+                                InputProps={{
+                                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                }}
+                                disabled={isView}
+                            />
+                            {error && error?.margin && <span style={{ color: 'red' }}>{error.margin}</span>}
+                        </Col>
                     </Row>
                 </div>
 
@@ -870,7 +877,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                     <h2 className='mb-3'>Pricing</h2>
                     <div>
                         <Row>
-                           
+
                             <Col lg={3}>
                                 <Autocomplete
                                     options={interestPeriodOptions}
@@ -878,7 +885,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     id="disable-clearable"
                                     label="Interest period"
                                     renderInput={(params) => (
-                                        <TextField {...params} label="Interest period" variant="standard" />
+                                        <TextField {...params} label="Interest Period" variant="standard" />
                                     )}
                                     onChange={(event, newValue) => {
                                         setFacility({ ...facility, interestPeriod: newValue });
@@ -893,7 +900,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 <form className="" noValidate>
                                     <TextField
                                         id="date"
-                                        label="Interest payment date"
+                                        label="Interest Payment Date"
                                         type="date"
                                         name='interestPaymentDate'
                                         value={facility.interestPaymentDate}
@@ -911,7 +918,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             </Col>
                             <Col lg={3}>
                                 <TextField
-                                    label="Tenor of each drawdown"
+                                    label="Tenor of Each Drawdown"
                                     id="standard-start-adornment"
                                     name=' tenor'
                                     value={facility.tenor}
@@ -927,7 +934,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                         <Row className='mt-3'>
                             <Col lg={3}>
                                 <TextField
-                                    label="Annual management fee"
+                                    label="Annual Management Fee"
                                     id="standard-start-adornment"
                                     name='managementFee'
                                     value={facility.managementFee}
@@ -941,7 +948,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             </Col>
                             <Col lg={3}>
                                 <TextField
-                                    label="Drawdown fee"
+                                    label="Drawdown Fee"
                                     id="standard-start-adornment"
                                     name='drawdownFee'
                                     value={facility.drawdownFee}
@@ -955,7 +962,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             </Col>
                             <Col lg={3}>
                                 <TextField
-                                    label="Commitment fee"
+                                    label="Commitment Fee"
                                     id="standard-start-adornment"
                                     name='commitmentFee'
                                     value={facility.commitmentFee}
@@ -969,7 +976,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             </Col>
                             <Col lg={3}>
                                 <TextField
-                                    label="Late interest charges"
+                                    label="Late Interest Charges"
                                     id="standard-start-adornment"
                                     name='lateInterestCharges'
                                     value={facility.lateInterestCharges}
@@ -986,7 +993,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                         <Row className='mt-3'>
                             <Col lg={4}>
                                 <TextField
-                                    label="prePayment"
+                                    label="Pre-Payment"
                                     id="standard-start-adornment"
                                     name='prePayment'
                                     value={facility.prePayment}
@@ -1000,7 +1007,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             </Col>
                             <Col lg={4}>
                                 <TextField
-                                    label="Cancellation fee"
+                                    label="Cancellation Fee"
                                     id="standard-start-adornment"
                                     name='cancellationFee'
                                     value={facility.cancellationFee}
@@ -1075,11 +1082,11 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                 </div>
 
                 <div className='add-edit-product p-0'>
-                    <h4 className=''>Loan to collateral value</h4>
+                    <h4 className=''>Loan to Collateral Value</h4>
                     <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
                         <Col lg={3}>
                             <TextField
-                                label="value"
+                                label="Value"
                                 id="standard-start-adornment"
                                 name=''
                                 value={((parseInt(facility.amount) / parseInt(transactionData?.details?.contractDetails?.value?.replace(/,/g, '')) || 0) * 100).toFixed(2)}
@@ -1114,7 +1121,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
 
                                 <Col lg={3}>
-                                {/* <Col lg={3}>
+                                    {/* <Col lg={3}>
                 <Autocomplete
                   options={CurrencyOptions}
                   getOptionLabel={(option) => option.label}
@@ -1177,7 +1184,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col> */}
                                 <Col lg={3}>
                                     <TextField
-                                        label="Facility amount"
+                                        label="Facility Amount"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1196,7 +1203,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         id="disable-clearable"
                                         label="Repayment currency"
                                         renderInput={(params) => (
-                                            <TextField {...params} label="Repayment currency" variant="standard" />
+                                            <TextField {...params} label="Repayment Currency" variant="standard" />
                                         )}
                                         onChange={(event, newValue) => {
                                             setFacility({ ...facility, rePaymentCurrency: newValue.label });
@@ -1218,7 +1225,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                             id="disable-clearable"
                                             label="Did you contract a currency Hedge?"
                                             renderInput={(params) => (
-                                                <TextField {...params} label="Did you contract a currency Hedge?" variant="standard" />
+                                                <TextField {...params} label="Did You Contract a Currency Hedge?" variant="standard" />
                                             )}
                                             onChange={(event, newValue) => {
                                                 setFacility({ ...facility, currencyHedge: newValue });
@@ -1237,7 +1244,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 <>
                                     <div className='product'>
                                         <div className='mb-3 d-flex justify-content-between align-items-center'>
-                                            <h5 className="title-color">Currency hedge details</h5>
+                                            <h5 className="title-color">Currency Hedge Details</h5>
                                             <button className={`add_btn me-3 ${isView && 'd-none'}`} onClick={() => { setCurrencyHedgeDetailsModal(true) }}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
                                         </div>
                                         <MaterialTable
@@ -1267,7 +1274,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                                 {
                                                     icon: 'delete',
                                                     tooltip: 'Delete hedge details',
-                                                    onClick: (event, rowData) => {DeleteCurrencyhedgedetails(rowData) }
+                                                    onClick: (event, rowData) => { DeleteCurrencyhedgedetails(rowData) }
                                                 }
                                             ]}
                                             options={{
@@ -1290,26 +1297,26 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                         <h2 className='mb-3'>Loan Purpose Justification</h2>
                         <div>
                             <Row>
-                              
-                            
-                                    <Col lg={6}>
-                                        <TextField
-                                            label="Loan Purpose"
-                                            id="standard-start-adornment"
-                                            variant="standard"
-                                            color="warning"
-                                            name='loanPurposJustification'
-                                            value={facility.loanPurposJustification}
-                                            onChange={handleChange}
-                                            multiline
-                                            maxRows={3}
-                                            // onClick={() => { setShowTextEditor(true); setType('Loan Purpose Justification'); setSelectedName('loanPurposJustification') }}
-                                            disabled={isView}
-                                        />
-                                        {error && error?.loanPurposJustification && <span style={{ color: 'red' }}>{error.loanPurposJustification}</span>}
-                                    </Col>
-                                
-                                  <Col lg={6}>
+
+
+                                <Col lg={6}>
+                                    <TextField
+                                        label="Loan Purpose"
+                                        id="standard-start-adornment"
+                                        variant="standard"
+                                        color="warning"
+                                        name='loanPurposJustification'
+                                        value={facility.loanPurposJustification}
+                                        onChange={handleChange}
+                                        multiline
+                                        maxRows={3}
+                                        // onClick={() => { setShowTextEditor(true); setType('Loan Purpose Justification'); setSelectedName('loanPurposJustification') }}
+                                        disabled={isView}
+                                    />
+                                    {error && error?.loanPurposJustification && <span style={{ color: 'red' }}>{error.loanPurposJustification}</span>}
+                                </Col>
+
+                                <Col lg={6}>
                                     <Autocomplete
                                         options={loanPurposeValidityOptions}
                                         getOptionLabel={(option) => option}
@@ -1412,7 +1419,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         {
                                             icon: 'delete',
                                             tooltip: 'Delete source of repayment',
-                                            onClick: (event, rowData) => {DeleteSourceOfRepayment(rowData) }
+                                            onClick: (event, rowData) => { DeleteSourceOfRepayment(rowData) }
                                         },
                                     ]}
                                     options={{
@@ -1510,7 +1517,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             <Row className='mb-4'>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Disbursement mechanism"
+                                        label="Disbursement Mechanism"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1526,7 +1533,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Security undertaking"
+                                        label="Security Undertaking"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1542,7 +1549,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Control accounts"
+                                        label="Control Accounts"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1560,7 +1567,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     <form className="" noValidate>
                                         <TextField
                                             id="date"
-                                            label="Final maturity"
+                                            label="Final Maturity"
                                             type="date"
                                             InputLabelProps={{
                                                 shrink: true,
@@ -1597,7 +1604,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Conditions precedent"
+                                        label="Conditions Precedent"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1613,7 +1620,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Conditions subsequent"
+                                        label="Conditions Subsequent"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1629,7 +1636,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Borrower affirmative covenants"
+                                        label="Borrower Affirmative Covenants"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1647,7 +1654,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             <Row className='mb-4'>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Financial covenants"
+                                        label="Financial Covenants"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1660,7 +1667,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Information covenants"
+                                        label="Information Covenants"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1686,7 +1693,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Taxation & duties"
+                                        label="Taxation & Duties"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1736,7 +1743,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Governing law"
+                                        label="Governing Law"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1753,7 +1760,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 <Col lg={3}>
                                     <TextField
                                         // label="jurisdiction"
-                                        label="Enforcement courts"
+                                        label="Enforcement Courts"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1853,7 +1860,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
-                                        label="Force majeure"
+                                        label="Force Majeure"
                                         id="standard-start-adornment"
                                         variant="standard"
                                         color="warning"
@@ -1866,7 +1873,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                 </Col>
                                 <Col lg={3}>
                                     <TextField
-                                        label="upload termsheet here"
+                                        label="Upload Termsheet"
                                         variant="standard"
                                         color="warning"
                                         name='roleName'
@@ -1934,7 +1941,15 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                 <div className='footer_'>
                     <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">cancel</button>
                     <button onClick={() => { navigate('/transactions') }} className={`footer_next_btn ${isView ? 'd-block' : 'd-none'}`}>Exit</button>
-                    <button onClick={() => { id ? edit() : save() }} className={`footer_next_btn ${isView && 'd-none'}`}>{id ? "Close" : "Save"}</button>
+                    <button onClick={() => { id ? edit() : save() }} className={`footer_next_btn ${isView && 'd-none'}`}>
+                       {!loading ? <>{id ? "Close" : "Save"}</> : null}
+                        {loading && <div class="d-flex justify-content-center">
+                        <strong className='me-2 my-auto'>Saving...</strong>
+                            <div class="spinner-border spinner-border-md" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>}
+                    </button>
                 </div>
             </div>
             {addSourceOfRepayment && <AddSourceOfRepayment show={addSourceOfRepayment} onHide={() => { setAddSourceOfRepayment(false); setRowEditData('') }} getModalData={(e) => setSourceOfRepayment([...sourceOfRepayment, e])} data={rowEditData} getEditData={(e) => propsEditData(e)} isView={view} />}

@@ -298,7 +298,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                 .then((getTransactionByIdData) => {
                     let resp = getTransactionByIdData.data;
                     let respProductDetails = getTransactionByIdData.data.details.productDetails;
-                    console.log('CHECK ALL DATA', getTransactionByIdData.data)
+                    console.log('CHECK ALL DATA', getTransactionByIdData.data.details.shippingOptions)
 
                     if (getTransactionByIdData && getTransactionByIdData.data) {
                         setEditId(getTransactionByIdData.data?.details?._id)
@@ -993,10 +993,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                 </Col>
                                 <Col lg={6}>
                                     <TextField
-                                        label='lenders'
+                                        label='Lenders'
                                         variant='standard'
                                         color='warning'
-                                        name='lenders'
+                                        name='Lenders'
                                         className='mb-3'
                                         onChange={(e) => setLenders(e.target.value)}
                                         value={lenders}
@@ -1027,7 +1027,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                 <Row>
                                     <Col lg={3}>
                                         <TextField
-                                            label='Product nature'
+                                            label='Product Nature'
                                             variant='standard'
                                             color='warning'
                                             name='Product_nature'
@@ -1043,7 +1043,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         }
                                     >
                                         <Autocomplete
-                                            label='Product type'
+                                            label='Product Type'
                                             id='disable-clearable'
                                             onChange={(e, newVal) =>
                                                 setProductDetails({ ...productDetails, type: newVal })
@@ -1054,7 +1054,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Product type'
+                                                    label='Product Type'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1090,7 +1090,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         }
                                     >
                                         <Autocomplete
-                                            label='Commodity type'
+                                            label='Commodity Type'
                                             id='disable-clearable'
                                             onChange={(e, newVal) =>
                                                 
@@ -1102,7 +1102,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Commodity type'
+                                                    label='Commodity Type'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1138,7 +1138,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         }
                                     >
                                         <Autocomplete
-                                            label='Commodity Sub type'
+                                            label='Commodity Sub-Type'
                                             id='disable-clearable'
                                             onChange={(e, newVal) =>
                                                 handleCommoditySubtypeChange(e, newVal)
@@ -1149,7 +1149,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Commodity Sub type'
+                                                    label='Commodity Sub-Type'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1238,7 +1238,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                     <Col lg={3} className='mb-3'>
 
                                         <TextField
-                                            label='Product unit'
+                                            label='Product Unit'
                                             variant='standard'
                                             color='warning'
                                             name='netMetric'
@@ -1310,11 +1310,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             options={CurrencyOptions}
                                             getOptionLabel={(option) => option.label || ""}
                                             id='disable-clearable'
-                                            label='Contract currency'
+                                            label='Contract Currency'
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Contract currency'
+                                                    label='Contract Currency'
                                                     variant='standard' />
                                             )}
                                             onChange={(e, newVal) =>
@@ -1339,7 +1339,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                     </Col>
                                     <Col lg={3}>
                                         <TextField
-                                            label='Contract value'
+                                            label='Contract Value'
                                             variant='standard'
                                             color='warning'
                                             value={formateCurrencyValue(contractDetails.value)}
@@ -1362,7 +1362,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         <form className='' noValidate>
                                             <TextField
                                                 id='date'
-                                                label='Contract date'
+                                                label='Contract Date'
                                                 type='date'
                                                 name='contractDate'
                                                 value={contractDetails.contractDate}
@@ -1399,7 +1399,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         <form className='' noValidate>
                                             <TextField
                                                 id='date'
-                                                label='Expiry date'
+                                                label='Expiry Date'
                                                 type='date'
                                                 name='expiryDate'
                                                 value={contractDetails.expiryDate}
@@ -1438,7 +1438,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                 <Row className='mt-4'>
                                     <Col lg={6}>
                                         <TextField
-                                            label='Conditions of contract'
+                                            label='Conditions of Contract'
                                             variant='standard'
                                             color='warning'
                                             name='conditionsOfContract'
@@ -1463,7 +1463,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                     </Col>
                                     <Col lg={6}>
                                         <TextField
-                                            label='Description of contract'
+                                            label='Description of Contract'
                                             variant='standard'
                                             color='warning'
                                             name='descriptionOfContract'
@@ -1515,7 +1515,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Shipment mode'
+                                                    label='Shipment Mode'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1643,7 +1643,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         <form className='' noValidate>
                                             <TextField
                                                 id='date'
-                                                label='Shipment date'
+                                                label='Shipment Date'
                                                 type='date'
                                                 name='shipmentDate'
                                                 value={shippingOptions.shipmentDate}
@@ -1693,7 +1693,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Shipment terms'
+                                                    label='Shipment Terms'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1719,7 +1719,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                     </Col>
                                     <Col lg={3} className=''>
                                         <TextField
-                                            label='Net shipped weights'
+                                            label='Net Shipped Weights'
                                             variant='standard'
                                             color='warning'
                                             name='netShippedWeights'
@@ -1765,7 +1765,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Destination country'
+                                                    label='Destination Country'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1815,7 +1815,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label='Destination port'
+                      label='Destination Port'
                       variant='standard'
                     />
                   )}
@@ -1866,7 +1866,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Shipment frequency'
+                                                    label='Shipment Frequency'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1907,7 +1907,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Warehouse required?'
+                                                    label='Warehouse Required?'
                                                     variant='standard'
                                                 />
                                             )}
@@ -2043,7 +2043,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Transhipment required?'
+                                                    label='Transhipment Required?'
                                                     variant='standard'
                                                 />
                                             )}
@@ -2166,7 +2166,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             <Row className='mt-4'>
                                                 <Col lg={4}>
                                                     <TextField
-                                                        label='Transshipment quantity'
+                                                        label='Transshipment Quantity'
                                                         variant='standard'
                                                         color='warning'
                                                         name='conditions_of_contract'
@@ -2194,7 +2194,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 </Col>
                                                 <Col lg={4}>
                                                     <TextField
-                                                        label='Transshipment unit'
+                                                        label='Transshipment Unit'
                                                         variant='standard'
                                                         color='warning'
                                                         name='conditions_of_contract'
@@ -2222,7 +2222,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     <form className='' noValidate>
                                                         <TextField
                                                             id='date'
-                                                            label='Transhipment date'
+                                                            label='Transhipment Date'
                                                             type='date'
                                                             name='contract_date'
                                                             value={transShipmentOptions.transShipmentDate}
@@ -2302,7 +2302,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                 </div> */}
                     <div className='add-edit-product pt-0 pb-0'>
                         <div className='form'>
-                            <h2 className='mb-3'>Pricing details</h2>
+                            <h2 className='mb-3'>Pricing Details</h2>
                             <div>
                                 <Row>
                                     <Col
@@ -2329,7 +2329,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Pricing type'
+                                                    label='Pricing Type'
                                                     variant='standard'
                                                 />
                                             )}
@@ -2362,7 +2362,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 }
                                             >
                                                 <TextField
-                                                    label="Pricing amount"
+                                                    label="Pricing Amount"
                                                     // label='Mertic measure'
                                                     variant='standard'
                                                     color='warning'
@@ -2391,7 +2391,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 }
                                             >
                                                 <TextField
-                                                    label='Pricing unit'
+                                                    label='Pricing Unit'
                                                     variant='standard'
                                                     color='warning'
                                                     // value={selectedProduct && selectedProduct}
@@ -2406,7 +2406,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 }
                                             >
                                                 <TextField
-                                                    label='Previous day closing amount'
+                                                    label='Previous Day Closing Amount'
                                                     variant='standard'
                                                     color='warning'
                                                     value={pricingDetails.previousDayClosingAmount}
@@ -2452,7 +2452,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     renderInput={(params) => (
                                                         <TextField
                                                             {...params}
-                                                            label='Pricing formula'
+                                                            label='Pricing Formula'
                                                             variant='standard'
                                                         />
                                                     )}
@@ -2479,7 +2479,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             </Col>
                                             <Col lg={pricingDetails.pricingHedgeingStatus ? 3 : 4}>
                                                 <Autocomplete
-                                                    label='Pricing hedging status'
+                                                    label='Pricing Hedging status'
                                                     id='disable-clearable'
                                                     onChange={(e, newVal) =>
                                                         setPricingDetails({
@@ -2493,7 +2493,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     renderInput={(params) => (
                                                         <TextField
                                                             {...params}
-                                                            label='Pricing hedging status'
+                                                            label='Price Hedging Status'
                                                             variant='standard'
                                                         />
                                                     )}
@@ -2581,7 +2581,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                                 renderInput={(params) => (
                                                                     <TextField
                                                                         {...params}
-                                                                        label='Counter party'
+                                                                        label='Counterparty'
                                                                         variant='standard'
                                                                     />
                                                                 )}

@@ -503,7 +503,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
 
     const productTypesOption = ["Commodity"]
 
-    const commodityTypeOption = ["Hard", "Soft"]
+    const commodityTypeOption = ["Hard", "Energy", "Soft"]
 
     const commoditySubTypeOption =
         productDetails.commodityType === "Hard"

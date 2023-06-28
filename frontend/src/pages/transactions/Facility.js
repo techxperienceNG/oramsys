@@ -1944,8 +1944,8 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                     <button onClick={() => { id ? edit() : save() }} className={`footer_next_btn ${isView && 'd-none'}`}>
                        {!loading ? <>{id ? "Close" : "Save"}</> : null}
                         {loading && <div class="d-flex justify-content-center">
-                        <strong className='me-2 my-auto'>Saving...</strong>
-                            <div class="spinner-border spinner-border-md" role="status">
+                        <strong className='me-2'>Saving...</strong>
+                            <div className="spinner-border spinner-border-sm mt-1" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
                         </div>}

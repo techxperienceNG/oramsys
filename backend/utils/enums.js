@@ -28,6 +28,7 @@ const ProductFamilyTypes = {
 const ProductCategoryTypes = {
     Hard: 'Hard',
     Soft: 'Soft',
+    Energy: 'Energy',
     Manufactures: 'Manufactures',
     Other: 'Other',
 }

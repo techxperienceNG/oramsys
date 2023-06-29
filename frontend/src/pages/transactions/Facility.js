@@ -312,7 +312,8 @@ const Facility = ({ hendelCancel, hendelNext }) => {
             }
         }
         else if (name === "amount") {
-            if (parseInt(transactionData?.details?.contractDetails?.value?.replace(/,/g, '')) >= parseInt(e.target.value)) {
+            // if (parseInt(transactionData?.details?.contractDetails?.value?.replace(/,/g, '')) >= parseInt(e.target.value)) {
+                if (e.target.value === '' || e.target.value) {
                 setFacility({ ...facility, [name]: e.target.value })
             } else {
                 setFacility({ ...facility, [name]: '' })
@@ -676,6 +677,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         setLoading(true)
         await dispatch(addTransaction(body))
         setLoading(false)
+        navigate("/final-page")
     }
 
     useEffect(() => {
@@ -762,6 +764,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         setLoading(true)
         await dispatch(editTransaction(id, body))
         setLoading(false)
+        navigate("/final-page")
         // setTimeout(() => {
         // }, 2000);
     }
@@ -1940,7 +1943,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                 </div>
                 <div className='footer_'>
                     <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">cancel</button>
-                    <button onClick={() => { navigate('/transactions') }} className={`footer_next_btn ${isView ? 'd-block' : 'd-none'}`}>Exit</button>
+                    <button onClick={() => { navigate('/final-page') }} className={`footer_next_btn ${isView ? 'd-block' : 'd-none'}`}>Exit</button>
                     <button onClick={() => { id ? edit() : save() }} className={`footer_next_btn ${isView && 'd-none'}`}>
                        {!loading ? <>{id ? "Close" : "Save"}</> : null}
                         {loading && <div class="d-flex justify-content-center">

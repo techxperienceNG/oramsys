@@ -88,7 +88,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
             setTableData(getTransactionByIdData.data.keyParties[0].parties.map((ele) => {
                 console.log(ele);
                 return {
-                    name: { label: (ele.name.details.name != null ? ele.name.details.name:ele.name.details.givenName) , value: ele.name._id },
+                    name: { label: (ele.name?.details?.name != null ? ele.name?.details?.name:ele.name?.details?.givenName) , value: ele.name?._id },
                     type: { label: ele.type.roleName, value: ele.type._id }
                 }
             }))
@@ -172,7 +172,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getLender, getB
             // console.log(nameOption?.data);
             var temp_names = [];
             nameOption?.data.forEach((element,index) => { 
-                element.details.name = element.details.name != null ? element.details.name : element.details.givenName;
+                element.details.name = element.details?.name != null ? element.details?.name : element.details?.givenName;
                 temp_names.push(element)
             });
             console.log("GET RELATED PARTIES DATA-----",temp_names);

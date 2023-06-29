@@ -122,43 +122,43 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
 
     useEffect(() => {
         if (
-          shippingOptions.shipmentMode === "SEA" &&
-          countries.length > 0 &&
-          ports?.data &&
-          ports.data.length > 0
+            shippingOptions.shipmentMode === "SEA" &&
+            countries.length > 0 &&
+            ports?.data &&
+            ports.data.length > 0
         ) {
-          if (shippingOptions.countryOfOrigin) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.countryOfOrigin
-            )?.name
-            ports.data[0].country === tempData && setOriginCountry(ports.data)
-          }
-          if (shippingOptions.destinationCountry) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.destinationCountry
-            )?.name
-            ports.data[0].country === tempData && setPortsOptions(ports.data)
-          }
+            if (shippingOptions.countryOfOrigin) {
+                let tempData = countries.find(
+                    (el) => el?._id === shippingOptions.countryOfOrigin
+                )?.name
+                ports.data[0].country === tempData && setOriginCountry(ports.data)
+            }
+            if (shippingOptions.destinationCountry) {
+                let tempData = countries.find(
+                    (el) => el?._id === shippingOptions.destinationCountry
+                )?.name
+                ports.data[0].country === tempData && setPortsOptions(ports.data)
+            }
         } else if (
-          shippingOptions.shipmentMode === "AIR" &&
-          countries.length > 0 &&
-          airBase?.data &&
-          airBase.data.length > 0
+            shippingOptions.shipmentMode === "AIR" &&
+            countries.length > 0 &&
+            airBase?.data &&
+            airBase.data.length > 0
         ) {
-          if (shippingOptions.countryOfOrigin) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.countryOfOrigin
-            )?.name
-            airBase.data[0].country === tempData && setOriginCountry(airBase.data)
-          }
-          if (shippingOptions.destinationCountry) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.destinationCountry
-            )?.name
-            airBase.data[0].country === tempData && setPortsOptions(airBase.data)
-          }
+            if (shippingOptions.countryOfOrigin) {
+                let tempData = countries.find(
+                    (el) => el?._id === shippingOptions.countryOfOrigin
+                )?.name
+                airBase.data[0].country === tempData && setOriginCountry(airBase.data)
+            }
+            if (shippingOptions.destinationCountry) {
+                let tempData = countries.find(
+                    (el) => el?._id === shippingOptions.destinationCountry
+                )?.name
+                airBase.data[0].country === tempData && setPortsOptions(airBase.data)
+            }
         }
-      }, [ports, airBase, countries, shippingOptions])
+    }, [ports, airBase, countries, shippingOptions])
 
     useEffect(() => {
         console.log('=======airBase', airBase.data)
@@ -169,8 +169,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
     }, [portsOptions])
 
     const setPorts = (country) => {
-        
-        console.log('setPorts shippingOptions.shipmentMode',shippingOptions.shipmentMode);
+
+        console.log('setPorts shippingOptions.shipmentMode', shippingOptions.shipmentMode);
         if (shippingOptions.shipmentMode === "SEA") {
             dispatch(portsAction(country))
         } else if (shippingOptions.shipmentMode === "AIR") {
@@ -192,22 +192,22 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
 
     useEffect(() => {
         if (shippingOptions.countryOfOrigin) {
-          setPorts(
-            countries.find((item) => item._id === shippingOptions.countryOfOrigin)
-              ?.name
-          )
+            setPorts(
+                countries.find((item) => item._id === shippingOptions.countryOfOrigin)
+                    ?.name
+            )
         }
         if (shippingOptions.destinationCountry) {
-          setPorts(
-            countries.find(
-              (item) => item._id === shippingOptions.destinationCountry
-            )?.name
-          )
+            setPorts(
+                countries.find(
+                    (item) => item._id === shippingOptions.destinationCountry
+                )?.name
+            )
         }
-      }, [shippingOptions.countryOfOrigin, shippingOptions.destinationCountry])
-    
+    }, [shippingOptions.countryOfOrigin, shippingOptions.destinationCountry])
 
-    useEffect(() => { 
+
+    useEffect(() => {
 
         console.log('active on change', activeOnChange);
         // if (
@@ -216,7 +216,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         //     ports?.data &&
         //     ports.data.length > 0
         // ) {
-          
+
         //     if (shippingOptions.destinationCountry && activeOnChange == 'destination') {
         //         setPortsOptions([])
         //         let tempData = countries.find(
@@ -230,7 +230,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         //     airBase?.data &&
         //     airBase.data.length > 0
         // ) {
-           
+
         //     if (shippingOptions.destinationCountry && activeOnChange == 'destination') {
         //         setPortsOptions([])
         //         let tempData = countries.find(
@@ -240,7 +240,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         //         airBase.data[0].country === tempData && setPortsOptions(airBase.data)
         //     }
         // }
-    },[activeOnChange])
+    }, [activeOnChange])
 
     useEffect(() => {
         if (entityData && entityData.data) {
@@ -251,7 +251,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                             label: ele?.details?.name,
                             value: ele._id
                         }
-                    } else { 
+                    } else {
                         return {
                             label: ele?.details?.givenName,
                             value: ele._id
@@ -317,169 +317,169 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                 respProductDetails?.quantity,
                             metric: respProductDetails?.metric,
 
-                        quality: getTransactionByIdData.data?.details?.productDetails?.quality,
-                    })
-                    // setProductDetails({
-                    //      commoditySubType: getTransactionByIdData.data?.details?.productDetails
-                    //         ?.commoditySubType
-                    // })
-
-                    setContractDetails({
-                        currency:
-                            getTransactionByIdData.data?.details?.contractDetails?.currency,
-                        value: getTransactionByIdData.data?.details?.contractDetails?.value,
-                        contractDate:
-                            getTransactionByIdData.data?.details?.contractDetails?.contractDate &&
-                            moment(
-                                getTransactionByIdData.data?.details?.contractDetails?.contractDate
-                            ).format("YYYY-MM-DD"),
-                        expiryDate:
-                            getTransactionByIdData.data?.details?.contractDetails?.expiryDate &&
-                            moment(
-                                getTransactionByIdData.data?.details?.contractDetails?.expiryDate
-                            ).format("YYYY-MM-DD"),
-                        conditionsOfContract:
-                            getTransactionByIdData.data?.details?.contractDetails
-                                ?.conditionsOfContract,
-                        descriptionOfContract:
-                            getTransactionByIdData.data?.details?.contractDetails
-                                ?.descriptionOfContract,
-                    })
-
-                    setShippingOptions({
-                        shipmentDate:
-                            getTransactionByIdData.data?.details?.shippingOptions?.shipmentDate &&
-                            moment(
-                                getTransactionByIdData.data?.details?.shippingOptions?.shipmentDate
-                            ).format("YYYY-MM-DD"),
-                        shipmentMode:
-                            getTransactionByIdData.data?.details?.shippingOptions?.shipmentMode,
-                        shipmentTerms:
-                            getTransactionByIdData.data?.details?.shippingOptions?.shipmentTerms,
-                        shippedWeights:
-                            getTransactionByIdData.data?.details?.shippingOptions?.shippedWeights.toLocaleString(),
-                        countryOfOrigin:
-                            getTransactionByIdData.data?.details?.shippingOptions?.countryOfOrigin
-                                ?._id,
-                        portOfOrigin:
-                            getTransactionByIdData.data?.details?.shippingOptions?.portOfOrigin
-                                ?._id,
-                        airbaseOfOrigin:
-                            getTransactionByIdData.data?.details?.shippingOptions?.airbaseOfOrigin
-                                ?._id,
-                        destinationCountry:
-                            getTransactionByIdData.data?.details?.shippingOptions
-                                ?.destinationCountry?._id,
-                        destinationPort:
-                            getTransactionByIdData.data?.details?.shippingOptions?.destinationPort
-                                ?._id,
-                        destinationAirbase:
-                            getTransactionByIdData.data?.details?.shippingOptions
-                                ?.destinationAirbase?._id,
-                        shipmentFrequency:
-                            getTransactionByIdData.data?.details?.shippingOptions
-                                ?.shipmentFrequency,
-                        warehouseRequired:
-                            getTransactionByIdData.data?.details?.shippingOptions
-                                ?.warehouseRequired,
-                        warehouses:
-                            getTransactionByIdData.data?.details?.shippingOptions?.warehouses.map(
-                                (item) => {
-                                    return {
-                                        warehouse: {
-                                            value: item?.warehouse?._id,
-                                            label: item?.warehouse?.name,
-                                        },
-                                        warehouseCompany: {
-                                            value: item?.warehouseCompany?._id,
-                                            label: item?.warehouseCompany?.details?.name,
-                                        },
-                                    }
-                                }
-                            ),
-                    })
-
-                    setTransShipmentOptions({
-                        tranShipmentRequired:
-                            getTransactionByIdData.data?.details?.transShipmentOptions
-                                ?.tranShipmentRequired,
-                        street:
-                            getTransactionByIdData.data?.details?.transShipmentOptions?.street,
-                        city: getTransactionByIdData.data?.details?.transShipmentOptions?.city,
-                        country:
-                            getTransactionByIdData.data?.details?.transShipmentOptions?.country
-                                ?._id,
-                        transShipmentQuantity:
-                            getTransactionByIdData.data?.details?.transShipmentOptions
-                                ?.transShipmentQuantity,
-                        transShipmentDate:
-                            getTransactionByIdData.data?.details?.transShipmentOptions
-                                ?.transShipmentDate &&
-                            moment(
-                                getTransactionByIdData.data?.details?.transShipmentOptions
-                                    ?.transShipmentDate
-                            ).format("YYYY-MM-DD"),
-                    })
-
-                    setPricingDetails({
-                        pricingType:
-                            getTransactionByIdData.data?.details?.pricingDetails?.pricingType,
-                        pricingAmount:
-                            getTransactionByIdData.data?.details?.pricingDetails?.pricingAmount.toLocaleString(),
-                        pricingUnit:
-                            getTransactionByIdData.data?.details?.pricingDetails?.pricingUnit,
-                        previousDayClosingAmount:
-                            getTransactionByIdData.data?.details?.pricingDetails
-                                ?.previousDayClosingAmount,
-                        pricingFormula:
-                            getTransactionByIdData.data?.details?.pricingDetails?.pricingFormula,
-                        pricingHedgeingStatus:
-                            getTransactionByIdData.data?.details?.pricingDetails
-                                ?.pricingHedgingStatus,
-                        pricingHedgingMethod:
-                            getTransactionByIdData.data?.details?.pricingDetails
-                                ?.pricingHedgingMethod,
-                        pricingCounterParty:
-                            getTransactionByIdData.data?.details?.pricingDetails
-                                ?.pricingCounterParty?._id,
-                    })
-
-                    if (respProductDetails.commoditySubType != undefined) {
-                        let product = [];
-                        productData.data.forEach((item) => {
-                            // if (item.commodity_sub_type == respProductDetails.commoditySubType) {
-                            //     product.push(item);
-                            // }
-                            if (item.category == respProductDetails.commodityType) { 
-                                product.push(item);
-                            }
+                            quality: getTransactionByIdData.data?.details?.productDetails?.quality,
                         })
-                        setProductName(product);
-                    } else {
-                        if (productData && productData.data) {
-                            setProductName(productData.data)
+                        // setProductDetails({
+                        //      commoditySubType: getTransactionByIdData.data?.details?.productDetails
+                        //         ?.commoditySubType
+                        // })
+
+                        setContractDetails({
+                            currency:
+                                getTransactionByIdData.data?.details?.contractDetails?.currency,
+                            value: getTransactionByIdData.data?.details?.contractDetails?.value,
+                            contractDate:
+                                getTransactionByIdData.data?.details?.contractDetails?.contractDate &&
+                                moment(
+                                    getTransactionByIdData.data?.details?.contractDetails?.contractDate
+                                ).format("YYYY-MM-DD"),
+                            expiryDate:
+                                getTransactionByIdData.data?.details?.contractDetails?.expiryDate &&
+                                moment(
+                                    getTransactionByIdData.data?.details?.contractDetails?.expiryDate
+                                ).format("YYYY-MM-DD"),
+                            conditionsOfContract:
+                                getTransactionByIdData.data?.details?.contractDetails
+                                    ?.conditionsOfContract,
+                            descriptionOfContract:
+                                getTransactionByIdData.data?.details?.contractDetails
+                                    ?.descriptionOfContract,
+                        })
+
+                        setShippingOptions({
+                            shipmentDate:
+                                getTransactionByIdData.data?.details?.shippingOptions?.shipmentDate &&
+                                moment(
+                                    getTransactionByIdData.data?.details?.shippingOptions?.shipmentDate
+                                ).format("YYYY-MM-DD"),
+                            shipmentMode:
+                                getTransactionByIdData.data?.details?.shippingOptions?.shipmentMode,
+                            shipmentTerms:
+                                getTransactionByIdData.data?.details?.shippingOptions?.shipmentTerms,
+                            shippedWeights:
+                                getTransactionByIdData.data?.details?.shippingOptions?.shippedWeights.toLocaleString(),
+                            countryOfOrigin:
+                                getTransactionByIdData.data?.details?.shippingOptions?.countryOfOrigin
+                                    ?._id,
+                            portOfOrigin:
+                                getTransactionByIdData.data?.details?.shippingOptions?.portOfOrigin
+                                    ?._id,
+                            airbaseOfOrigin:
+                                getTransactionByIdData.data?.details?.shippingOptions?.airbaseOfOrigin
+                                    ?._id,
+                            destinationCountry:
+                                getTransactionByIdData.data?.details?.shippingOptions
+                                    ?.destinationCountry?._id,
+                            destinationPort:
+                                getTransactionByIdData.data?.details?.shippingOptions?.destinationPort
+                                    ?._id,
+                            destinationAirbase:
+                                getTransactionByIdData.data?.details?.shippingOptions
+                                    ?.destinationAirbase?._id,
+                            shipmentFrequency:
+                                getTransactionByIdData.data?.details?.shippingOptions
+                                    ?.shipmentFrequency,
+                            warehouseRequired:
+                                getTransactionByIdData.data?.details?.shippingOptions
+                                    ?.warehouseRequired,
+                            warehouses:
+                                getTransactionByIdData.data?.details?.shippingOptions?.warehouses.map(
+                                    (item) => {
+                                        return {
+                                            warehouse: {
+                                                value: item?.warehouse?._id,
+                                                label: item?.warehouse?.name,
+                                            },
+                                            warehouseCompany: {
+                                                value: item?.warehouseCompany?._id,
+                                                label: item?.warehouseCompany?.details?.name,
+                                            },
+                                        }
+                                    }
+                                ),
+                        })
+
+                        setTransShipmentOptions({
+                            tranShipmentRequired:
+                                getTransactionByIdData.data?.details?.transShipmentOptions
+                                    ?.tranShipmentRequired,
+                            street:
+                                getTransactionByIdData.data?.details?.transShipmentOptions?.street,
+                            city: getTransactionByIdData.data?.details?.transShipmentOptions?.city,
+                            country:
+                                getTransactionByIdData.data?.details?.transShipmentOptions?.country
+                                    ?._id,
+                            transShipmentQuantity:
+                                getTransactionByIdData.data?.details?.transShipmentOptions
+                                    ?.transShipmentQuantity,
+                            transShipmentDate:
+                                getTransactionByIdData.data?.details?.transShipmentOptions
+                                    ?.transShipmentDate &&
+                                moment(
+                                    getTransactionByIdData.data?.details?.transShipmentOptions
+                                        ?.transShipmentDate
+                                ).format("YYYY-MM-DD"),
+                        })
+
+                        setPricingDetails({
+                            pricingType:
+                                getTransactionByIdData.data?.details?.pricingDetails?.pricingType,
+                            pricingAmount:
+                                getTransactionByIdData.data?.details?.pricingDetails?.pricingAmount.toLocaleString(),
+                            pricingUnit:
+                                getTransactionByIdData.data?.details?.pricingDetails?.pricingUnit,
+                            previousDayClosingAmount:
+                                getTransactionByIdData.data?.details?.pricingDetails
+                                    ?.previousDayClosingAmount,
+                            pricingFormula:
+                                getTransactionByIdData.data?.details?.pricingDetails?.pricingFormula,
+                            pricingHedgeingStatus:
+                                getTransactionByIdData.data?.details?.pricingDetails
+                                    ?.pricingHedgingStatus,
+                            pricingHedgingMethod:
+                                getTransactionByIdData.data?.details?.pricingDetails
+                                    ?.pricingHedgingMethod,
+                            pricingCounterParty:
+                                getTransactionByIdData.data?.details?.pricingDetails
+                                    ?.pricingCounterParty?._id,
+                        })
+
+                        if (respProductDetails.commoditySubType != undefined) {
+                            let product = [];
+                            productData.data.forEach((item) => {
+                                // if (item.commodity_sub_type == respProductDetails.commoditySubType) {
+                                //     product.push(item);
+                                // }
+                                if (item.category == respProductDetails.commodityType) {
+                                    product.push(item);
+                                }
+                            })
+                            setProductName(product);
+                        } else {
+                            if (productData && productData.data) {
+                                setProductName(productData.data)
+                            }
                         }
+                        setIsLoading(false);
                     }
-                    setIsLoading(false);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         }
     }
 
     useEffect(() => {
-        
+
         if (productDetails.commoditySubType != undefined) {
             let product = [];
             productData.data.forEach((item) => {
-                console.log('item',item);
-                console.log('productDetails',productDetails);
+                console.log('item', item);
+                console.log('productDetails', productDetails);
                 // if (item.commodity_sub_type == productDetails.commoditySubType) {
                 //     product.push(item);
                 // }
-                if (item.category == productDetails.commodityType) { 
+                if (item.category == productDetails.commodityType) {
                     product.push(item);
                 }
             })
@@ -509,10 +509,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         productDetails.commodityType === "Hard"
             ? ["Metal"]
             : productDetails.commodityType === "Energy"
-            ? ["Energy"]
-            : productDetails.commodityType === "Soft"
-                ? ["Agricultural"]
-                : []
+                ? ["Energy"]
+                : productDetails.commodityType === "Soft"
+                    ? ["Agricultural"]
+                    : []
 
     const metricOption = ["Ton"]
 
@@ -597,8 +597,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         else if (type === "transShipmentOptions") {
             if (name === "transShipmentQuantity") {
                 if (e.target.value === '' || e.target.value) {
-                     setTransShipmentOptions({ ...transShipmentOptions, [name]: e.target.value })
-                    
+                    setTransShipmentOptions({ ...transShipmentOptions, [name]: e.target.value })
+
                 }
             }
         }
@@ -894,7 +894,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         }
     }
 
-  
+
 
     const next = () => {
         if (validation()) {
@@ -938,9 +938,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
     const handleCommoditySubtypeChange = (e, newVal) => {
         // let product = [];
         // productData.data.forEach((item) => {
-            // if (item.commodity_sub_type == newVal) {
-            //     product.push(item);
-            // }
+        // if (item.commodity_sub_type == newVal) {
+        //     product.push(item);
+        // }
         // })
         // setProductName(product);
         setProductDetails({
@@ -1095,7 +1095,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             label='Commodity Type'
                                             id='disable-clearable'
                                             onChange={(e, newVal) =>
-                                                
+
                                                 handleCommodityTypeChange(e, newVal)
                                             }
                                             getOptionLabel={(option) => option || ""}
@@ -1793,51 +1793,51 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         )}
                                     </Col>
                                     <Col lg={3}>
-                <Autocomplete
-                  label='Destination port'
-                  id='disable-clearable'
-                  // onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, destinationPort: newVal._id })}
-                  onChange={(e, newVal) => {
-                    const mode = shippingOptions.shipmentMode
-                    if (mode === "SEA") {
-                      setShippingOptions({
-                        ...shippingOptions,
-                        destinationPort: newVal._id,
-                      })
-                    } else if (mode === "AIR") {
-                      setShippingOptions({
-                        ...shippingOptions,
-                        destinationAirbase: newVal._id,
-                      })
-                    }
-                  }}
-                  getOptionLabel={(option) => option.name}
-                  options={portsOptions ?? []}
-                  disableClearable
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Destination Port'
-                      variant='standard'
-                    />
-                  )}
-                  disabled={isView}
-                  // value={(portsOptions?.length > 0 && shippingOptions?.destinationPort) && portsOptions.find((ele) => ele?._id === shippingOptions?.destinationPort)}
-                  value={
-                    (shippingOptions.shipmentMode === "SEA" &&
-                      portsOptions?.length > 0 &&
-                      shippingOptions.destinationPort &&
-                      portsOptions.find(
-                        (ele) => ele._id === shippingOptions.destinationPort
-                      )) ||
-                    (shippingOptions.shipmentMode === "AIR" &&
-                      portsOptions?.length > 0 &&
-                      shippingOptions.destinationAirbase &&
-                      portsOptions.find(
-                        (ele) => ele._id === shippingOptions.destinationAirbase
-                      ))
-                  }
-                />
+                                        <Autocomplete
+                                            label='Destination port'
+                                            id='disable-clearable'
+                                            // onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, destinationPort: newVal._id })}
+                                            onChange={(e, newVal) => {
+                                                const mode = shippingOptions.shipmentMode
+                                                if (mode === "SEA") {
+                                                    setShippingOptions({
+                                                        ...shippingOptions,
+                                                        destinationPort: newVal._id,
+                                                    })
+                                                } else if (mode === "AIR") {
+                                                    setShippingOptions({
+                                                        ...shippingOptions,
+                                                        destinationAirbase: newVal._id,
+                                                    })
+                                                }
+                                            }}
+                                            getOptionLabel={(option) => option.name}
+                                            options={portsOptions ?? []}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Destination Port'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            disabled={isView}
+                                            // value={(portsOptions?.length > 0 && shippingOptions?.destinationPort) && portsOptions.find((ele) => ele?._id === shippingOptions?.destinationPort)}
+                                            value={
+                                                (shippingOptions.shipmentMode === "SEA" &&
+                                                    portsOptions?.length > 0 &&
+                                                    shippingOptions.destinationPort &&
+                                                    portsOptions.find(
+                                                        (ele) => ele._id === shippingOptions.destinationPort
+                                                    )) ||
+                                                (shippingOptions.shipmentMode === "AIR" &&
+                                                    portsOptions?.length > 0 &&
+                                                    shippingOptions.destinationAirbase &&
+                                                    portsOptions.find(
+                                                        (ele) => ele._id === shippingOptions.destinationAirbase
+                                                    ))
+                                            }
+                                        />
                                         {error?.destinationPort && (
                                             <span
                                                 style={{
@@ -2504,10 +2504,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                         ((warehouseRequiredOptions.length > 0 &&
                                                             pricingDetails.pricingHedgeingStatus === true) ||
                                                             pricingDetails.pricingHedgeingStatus === false) && Array.isArray(warehouseRequiredOptions) ?
-                                                        warehouseRequiredOptions.find(
-                                                            (ele) =>
-                                                                ele.value === pricingDetails.pricingHedgeingStatus
-                                                        ) : warehouseRequiredOptions === ''
+                                                            warehouseRequiredOptions.find(
+                                                                (ele) =>
+                                                                    ele.value === pricingDetails.pricingHedgeingStatus
+                                                            ) : warehouseRequiredOptions === ''
                                                     }
                                                 />
                                                 {error?.pricingHedgeingStatus && (

@@ -58,12 +58,11 @@ const IndividualAddress = ({ handleNext, hendelCancel, sendDetailData, common })
         fax: '',
         email: '',
     })
+    const [loading, setLoading] = useState(false)
 
     const entityGetById = useSelector((state) => state.entityData.getEntityById)
     const entityAddData = useSelector((state) => state.entityData.entityAdd)
-    // const editEntityData = useSelector((state) => state.entityData.editEntity)
     const editEntityData = useSelector((state) => state.entityData.entityUpdate)
-
 
     useEffect(() => {
         if (country && country.data) {
@@ -270,7 +269,7 @@ const IndividualAddress = ({ handleNext, hendelCancel, sendDetailData, common })
         return flag;
     }
 
-    const save = () => {
+    const Save = async () => {
         if (validation()) {
             return;
         }
@@ -284,7 +283,9 @@ const IndividualAddress = ({ handleNext, hendelCancel, sendDetailData, common })
             type: common?.type,
             addresses: [ResidentialState, ProfessionalState]
         }
-        dispatch(entityAddAction(final))
+        setLoading(true)
+        await dispatch(entityAddAction(final))
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -298,12 +299,20 @@ const IndividualAddress = ({ handleNext, hendelCancel, sendDetailData, common })
         }
     }, [entityAddData])
 
-    const edit = () => {
+    const edit = async () => {
         if (validation()) {
             return;
         }
-        let final = { detail: sendDetailData, email: common?.email, password: common?.password, type: common?.type, addresses: [ResidentialState, ProfessionalState] }
-        dispatch(editEntityAction(id, final))
+        let final = { 
+            detail: sendDetailData, 
+            email: common?.email, 
+            password: common?.password, 
+            type: common?.type, 
+            addresses: [ResidentialState, ProfessionalState] 
+        }
+        setLoading(true)
+       await dispatch(editEntityAction(id, final))
+       setLoading(false)
     }
 
     useEffect(() => {
@@ -313,14 +322,14 @@ const IndividualAddress = ({ handleNext, hendelCancel, sendDetailData, common })
                 type: EDIT_ENTITY,
                 payload: []
             })
-            dispatch({
-                type: ENTITY_GET_BY_ID,
-                payload: []
-            })
-            dispatch({
-                type: COMPANY_DATA,
-                payload: [],
-            });
+            // dispatch({
+            //     type: ENTITY_GET_BY_ID,
+            //     payload: []
+            // })
+            // dispatch({
+            //     type: COMPANY_DATA,
+            //     payload: [],
+            // });
             toast.success(editEntityData.message);
         }
     }, [editEntityData])
@@ -493,7 +502,7 @@ const IndividualAddress = ({ handleNext, hendelCancel, sendDetailData, common })
                 </div>
             </div>
 
-            <div className='add-edit-product pt-0 pb-0'>
+            <div className='add-edit-product pt-0 pb-5'>
                 <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
                     <h2 className='mb-3'>Professional address</h2>
                     <button className='footer_next_btn mb-3' onClick={()=> setProfessionalState({...ResidentialState, type: "Professional"})}>Use Residential Address</button>
@@ -663,7 +672,15 @@ const IndividualAddress = ({ handleNext, hendelCancel, sendDetailData, common })
 
             <div className='footer_'>
                 <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">cancel</button>
-                <button onClick={() => { id ? edit() : save() }} className={`footer_next_btn ${isView ? 'd-none' : 'd-block'}`}>{id ? "Edit" : "Save"}</button>
+                <button onClick={() => { id ? edit() : Save() }} className={`footer_next_btn ${isView ? 'd-none' : 'd-block'}`}>
+                     {!loading ? <>{id ? "Edit" : "Save"}</> : null}
+                    {loading && <div class="d-flex justify-content-center">
+                        <strong className='me-2'>Saving...</strong>
+                            <div className="spinner-border spinner-border-sm mt-1" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>}
+                </button>
             </div>
         </>
     )

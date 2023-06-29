@@ -255,10 +255,6 @@ const Transactions = () => {
                       <input type="text" id='search' onKeyUp={e => checkSearch(e)} onChange={(e) => setSearch(e.target.value)} className="form-control w-100 ps-5" placeholder="Search transaction..." />
                     </div>
 
-                    <div class="pe-5">
-                      {/* <span class="text-muted text-sm"><Paginate postsPerPage={postsPerPage} totalPosts={getAlltransactionData?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} currentTrans={currentTrans} /> </span> */}
-                      {/* <i class="fa fa-ellipsis-h ms-3"></i> */}
-                    </div>
 
                   </div>
                   <div class="table-responsive">
@@ -384,7 +380,7 @@ const Transactions = () => {
 
                     </table>
                     {transaction.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
-                    {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
+                    {/* {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>} */}
                     <div class="card-footer border-0 py-2 mb-5">
 
                       <span class="text-muted text-sm"><Paginate postsPerPage={postsPerPage} totalPosts={getAlltransactionData?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} currentTrans={currentTrans} /> </span>

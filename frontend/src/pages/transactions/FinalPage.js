@@ -51,6 +51,7 @@ const FinalPage = ({ show, onHide }) => {
                     <p class="card-text">
                         <Lottie options={defaultOptions} style={{ size: '30px'}} className='img-fluid' />
                     </p>
+                    <h3 className='text-center'>Transaction Completed</h3>
                     <p>You are being redirected to the transactions list...</p>
                 </div>
             </div>

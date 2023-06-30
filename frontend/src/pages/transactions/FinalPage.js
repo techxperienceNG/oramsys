@@ -34,6 +34,7 @@ const FinalPage = ({ show, onHide }) => {
     //     AuthStorage.deauthenticateUser()
     //     navigate('/');
     // }
+    
     useEffect(() => {
         setTimeout(() => {
             navigate('/transactions')
@@ -52,7 +53,7 @@ const FinalPage = ({ show, onHide }) => {
                         <Lottie options={defaultOptions} style={{ size: '30px'}} className='img-fluid' />
                     </p>
                     <h3 className='text-center'>Transaction Completed</h3>
-                    <p>You are being redirected to the transactions list...</p>
+                    <p>Redirecting...</p>
                 </div>
             </div>
         </div>

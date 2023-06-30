@@ -100,6 +100,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
     const [view, setView] = useState()
     const [loading, setLoading] = useState(false)
 
+    const getAlltransactionData = useSelector((state) => state.transactionData.getAllTransaction)
     const transactionData = useSelector((state) => state.transactionData.transactionData)
     const addTransactionData = useSelector((state) => state.transactionData.addTransaction)
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)

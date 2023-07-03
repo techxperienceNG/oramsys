@@ -19,7 +19,7 @@ import { airPortsAction, portsAction } from "../../redux/actions/portsAction"
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 
-const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalWarehouseCompany, signalContract, signalBorrower, signalLender, transaction_id }) => {
+const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalCounterParty, signalWarehouseCompany, signalContract, signalBorrower, signalLender, transaction_id }) => {
     const navigate = useNavigate()
 
     // let numberReg = /^[0-9\b]+$/;
@@ -930,7 +930,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         dispatch(transactionDataAction(body))
         signalContract(body.details.contractDetails)
         signalBorrower(body.borrower_Applicant)
-        // signalWarehouseCompany(body.detaiils)
+        signalWarehouseCompany(body.details.shippingOptions)
+        signalCounterParty(body.details.pricingDetails)
         signalLender(body.lenders)
         hendelNext()
     }

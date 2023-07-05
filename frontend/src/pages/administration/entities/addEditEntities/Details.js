@@ -87,10 +87,10 @@ const Details = ({ hendelNext, entityType }) => {
     }, [])
 
     useEffect(() => {
-        if (companyData && companyData.email && companyData.password && id) {
+        if (companyData && id) {
             setCommon({
                 email: companyData.email,
-                password: companyData.password,
+                // password: companyData.password,
                 type: companyData.type
             })
             setDetails({
@@ -205,14 +205,14 @@ const Details = ({ hendelNext, entityType }) => {
             error.email = "Please enter valid email!"
             flag = true
         }
-        if (!common.password) {
-            error.password = "Please enter password!"
-            flag = true
-        }
-        else if (common.password.length < 8) {
-            error.password = "Please enter minimun 8 character password!"
-            flag = true
-        }
+        // if (!common.password) {
+        //     error.password = "Please enter password!"
+        //     flag = true
+        // }
+        // else if (common.password.length < 8) {
+        //     error.password = "Please enter minimun 8 character password!"
+        //     flag = true
+        // }
         if (!details.name) {
             error.name = "Please enter name!"
             flag = true
@@ -401,7 +401,7 @@ const Details = ({ hendelNext, entityType }) => {
                 <div className='form'>
                     <h2 className='mb-3'>Details</h2>
                     <div>
-                        <Row className='mb-3'>
+                        {/* <Row className='mb-3'>
                             <Col lg={6}>
                                 <TextField
                                     label="Email"
@@ -428,7 +428,7 @@ const Details = ({ hendelNext, entityType }) => {
                                 />
                                 {formErrors && formErrors?.password && <span style={{ color: 'red' }}>{formErrors.password}</span>}
                             </Col>
-                        </Row>
+                        </Row> */}
                         <Row>
                             <Col xxl={3} xl={4} lg={6} md={4} sm={6} className='mb-3'>
                                 <TextField
@@ -440,6 +440,18 @@ const Details = ({ hendelNext, entityType }) => {
                                     disabled={isView}
                                 />
                                 {formErrors && formErrors?.name && <span style={{ color: 'red' }}>{formErrors.name}</span>}
+                            </Col>
+                            <Col xxl={3} xl={4} lg={6} md={4} sm={6}>
+                                <TextField
+                                    label="Email"
+                                    variant="standard"
+                                    color="warning"
+                                    value={common.email}
+                                    name='email'
+                                    onChange={(e) => setCommon({ ...common, email: e.target.value })}
+                                    disabled={isView}
+                                />
+                                {formErrors && formErrors?.email && <span style={{ color: 'red' }}>{formErrors.email}</span>}
                             </Col>
                             <Col xxl={3} xl={4} lg={6} md={4} sm={6} className='mb-3'>
                                 <Autocomplete
@@ -468,7 +480,10 @@ const Details = ({ hendelNext, entityType }) => {
                                 />
                                 {formErrors && formErrors?.registrationNumber && <span style={{ color: 'red' }}>{formErrors.registrationNumber}</span>}
                             </Col>
-                            <Col xxl={3} xl={4} lg={6} md={4} sm={6} className='mb-3'>
+                           
+                        </Row>
+                        <Row className='mt-4'>
+                        <Col xxl={4} xl={4} lg={6} md={4} sm={6} className='mb-3'>
                                 <form className="" noValidate>
                                     <TextField
                                         id="date"
@@ -484,8 +499,6 @@ const Details = ({ hendelNext, entityType }) => {
                                 </form>
                                 {formErrors && formErrors?.dateOfIncorporation && <span style={{ color: 'red' }}>{formErrors.dateOfIncorporation}</span>}
                             </Col>
-                        </Row>
-                        <Row className='mt-4'>
                             <Col xxl={4} xl={4} lg={6} md={4} sm={6} className='mb-3'>
                                 <Autocomplete
                                     label="Sector"
@@ -661,7 +674,7 @@ const Details = ({ hendelNext, entityType }) => {
                             </Col>
                             <Col xxl={3} xl={4} lg={6} md={4} sm={6} className='mb-3'>
                                 <TextField
-                                    label="Email"
+                                    label="Billing Address Email"
                                     variant="standard"
                                     color="warning"
                                     value={bilingAddress.email}

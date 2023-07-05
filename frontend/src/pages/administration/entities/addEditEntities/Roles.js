@@ -25,7 +25,6 @@ const Roles = ({ hendelNext, hendelCancel }) => {
     const [roles, setRoles] = useState([])
     const [mode, setMode] = useState("")
     const [editData, setEditData] = useState('')
-    const [loading, setLoading] = useState(false)
 
     const companyData = useSelector((state) => state.companydata.companydata)
     const entityAddData = useSelector((state) => state.entityData.entityAdd)
@@ -55,7 +54,7 @@ const Roles = ({ hendelNext, hendelCancel }) => {
         dispatch(companydataAction(body))
     }
 
-    const Save = async () => {
+    const Save = () => {
         delete companyData.detail._id
         delete companyData.financial._id
         const body = {
@@ -85,10 +84,7 @@ const Roles = ({ hendelNext, hendelCancel }) => {
                 return ele
             }),
         }
-        setLoading(true)
-        await dispatch(entityAddAction(body))
-        setLoading(false)
-        console.log('click check')
+        dispatch(entityAddAction(body))
     }
 
     useEffect(() => {
@@ -102,7 +98,7 @@ const Roles = ({ hendelNext, hendelCancel }) => {
         }
     }, [entityAddData])
 
-    const edit = async () => {
+    const edit = () => {
         const body = {
             email: companyData.email,
             password: companyData.password,
@@ -115,9 +111,7 @@ const Roles = ({ hendelNext, hendelCancel }) => {
             warehouses: companyData.warehouses,
             roles: companyData.roles,
         }
-        setLoading(true)
-        await dispatch(entityAddAction(id, body))
-        setLoading(false)
+        dispatch(editEntityAction(id, body))
         navigate('/entities')
 
     }
@@ -197,15 +191,7 @@ const Roles = ({ hendelNext, hendelCancel }) => {
 
                 <div className='footer_'>
                     <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">cancel</button>
-                    <button onClick={() => id ? edit() : Save()} className={`footer_next_btn ${isView ? 'd-none' : 'd-block'}`}>
-                    {!loading ? <>{id ? "Edit" : "Save"}</> : null}
-                    {loading && <div class="d-flex justify-content-center">
-                        <strong className='me-2'>Saving...</strong>
-                            <div className="spinner-border spinner-border-sm mt-1" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>}
-                        </button>
+                    <button onClick={() => id ? edit() : Save()} className={`footer_next_btn ${isView ? 'd-none' : 'd-block'}`}>{id ? 'Edit' : 'Save'}</button>
                 </div>
             </div>
             {

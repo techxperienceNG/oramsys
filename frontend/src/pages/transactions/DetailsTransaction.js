@@ -81,8 +81,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         pricingCounterParty: "",
     })
 
-    const [borrower_Applicant, setBorrower_Applicant] = useState({})
-    const [lenders, setLenders] = useState({})
+    const [borrower_Applicant, setBorrower_Applicant] = useState("")
+    const [lenders, setLenders] = useState("")
 
     const [addWarehouseModal, setAddWarehouseModal] = useState(false)
     const [addInsuranceModal, setAddInsuranceModal] = useState(false)
@@ -385,7 +385,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                 .then((getTransactionByIdData) => {
                     let resp = getTransactionByIdData.data;
                     let respProductDetails = getTransactionByIdData.data.details.productDetails;
-                    console.log('CHECK ALL DATA', getTransactionByIdData.data.details.shippingOptions)
+                    console.log('CHECK ALL DATA', getTransactionByIdData.data)
 
                     if (getTransactionByIdData && getTransactionByIdData.data) {
                         setEditId(getTransactionByIdData.data?.details?._id)
@@ -1069,9 +1069,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                     <Autocomplete
                                         label='Borrower/Applicant'
                                         id='disable-clearable'
-                                        onChange={(e, newVal) =>
-                                            setBorrower_Applicant(newVal)
-                                        }
+                                        onChange={(e, newVal) => {
+                                            setBorrower_Applicant(newVal.label)
+                                        }}
                                         getOptionLabel={(option) => option.label || ""}
                                         options={borrowerOption}
                                         disableClearable
@@ -1090,7 +1090,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             borrower_Applicant &&
                                             borrowerOption.find(
                                                 (ele) =>
-                                                    ele.value ===
+                                                    ele.label ===
                                                     borrower_Applicant
                                             )
                                         }
@@ -1113,7 +1113,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         label='Lender'
                                         id='disable-clearable'
                                         onChange={(e, newVal) =>
-                                            setLenders(newVal)
+                                            setLenders(newVal.label)
                                         }
                                         getOptionLabel={(option) => option.label || ""}
                                         options={lenderOption}
@@ -1133,7 +1133,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             lenders &&
                                             lenderOption.find(
                                                 (ele) =>
-                                                    ele.value ===
+                                                    ele.label ===
                                                     lenders
                                             )
                                         }

@@ -27,7 +27,7 @@ const Details = ({ hendelNext, entityType }) => {
 
     const [common, setCommon] = useState({
         email: '',
-        password: '',
+        // password: '',
         type: entityType
     })
 
@@ -384,7 +384,7 @@ const Details = ({ hendelNext, entityType }) => {
         let body = {
             ...companyData,
             email: common.email,
-            password: common.password,
+            // password: common.password,
             type: entityType,
             detail: details,
             addresses: [bilingAddress, shippingAddress],

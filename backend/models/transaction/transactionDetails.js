@@ -39,6 +39,7 @@ var ShippingOptions = new Schema({
     shipmentFrequency: { type: String, require: false, default: null },
     warehouseRequired: { type: Boolean, require: false, default: false },
     warehouses: [Warehouses],
+    shippingCompany:{ type: Schema.Types.ObjectId, ref: 'Entity', require: false, default: null },
 })
 var InsurancesOptions = new Schema({
     insurer: { type: Schema.Types.ObjectId, ref: "Entity", required: false, default: null },

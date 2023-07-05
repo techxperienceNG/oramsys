@@ -58,6 +58,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         shipmentFrequency: "",
         warehouseRequired: "",
         warehouses: [],
+        shippingCompany: "",
     })
 
     const [transShipmentOptions, setTransShipmentOptions] = useState({
@@ -96,6 +97,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     const [countries, setcountries] = useState([])
     const [sendModalData, setSendModalData] = useState("")
     const [counterPartyOption, setCounterPartyOption] = useState([])
+    const [shippingCompanyOption, setShippingCompanyOption] = useState([])
     const [wareHouseId, setWareHouseId] = useState("")
     const [error, setError] = useState({})
     const [selectedProduct, setSelectedProduct] = useState("")
@@ -243,23 +245,52 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     }, [activeOnChange])
 
     useEffect(() => {
+        let entityDetails = []
         if (entityData && entityData.data) {
-            setCounterPartyOption(
+            console.log('Entity DATA',entityData)
+        
                 entityData.data.map((ele) => {
-                    if (ele?.details?.name) {
-                        return {
-                            label: ele?.details?.name,
-                            value: ele._id
+                    ele.roles.map(roleDetail => {
+                        if(roleDetail.roleId.roleName == "Hedge Counterparty") {
+                            var temp = {
+                                label: ele?.details?.name,
+                                value: ele._id
+                            }
+                            entityDetails.push(temp)
+                        } else {
+                            var temp = {
+                                label: ele?.details?.givenName,
+                                value: ele._id
+                            }
                         }
-                    } else {
-                        return {
-                            label: ele?.details?.givenName,
-                            value: ele._id
-                        }
-                    }
+                    })
                 })
-            )
         }
+        setCounterPartyOption(entityDetails)
+    }, [entityData])
+
+    useEffect(() => {
+        let shipDetails = []
+        if (entityData && entityData.data) {
+        
+                entityData.data.map((ele) => {
+                    ele.roles.map(roleDetail => {
+                        if(roleDetail.roleId.roleName == "Shipping Company") {
+                            var temp = {
+                                label: ele?.details?.name,
+                                value: ele._id
+                            }
+                            shipDetails.push(temp)
+                        } else {
+                            var temp = {
+                                label: ele?.details?.givenName,
+                                value: ele._id
+                            }
+                        }
+                    })
+                })
+        }
+        setShippingCompanyOption(shipDetails)
     }, [entityData])
 
     useEffect(() => {
@@ -397,6 +428,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         }
                                     }
                                 ),
+                            shippingCompany: getTransactionByIdData.data?.details?.shippingOptions
+                                ?.shippingCompany,
                         })
 
                         setTransShipmentOptions({
@@ -868,6 +901,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         ) {
             flag = true
             error.pricingCounterParty = "Please enter counter party!"
+        }
+        if (!shippingOptions.shippingCompany) {
+            flag = true
+            error.shippingCompany = "Please enter a shipping company!"
         }
         setError(error)
         return flag
@@ -1500,6 +1537,53 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                         >
                             <h2 className='mb-3'>Shipping options</h2>
                             <div>
+                                <Row>
+                                    <Col lg={12}>
+                                        <Autocomplete
+                                            label='Shipping Company'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) =>
+                                                setShippingOptions({
+                                                    ...shippingOptions,
+                                                    shippingCompany: newVal.value,
+                                                })
+                                            }
+                                            getOptionLabel={(option) => option.label || ""}
+                                            options={shippingCompanyOption}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Shipping Company'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            disabled={isView}
+                                            value={
+                                                shippingCompanyOption.length > 0 &&
+                                                shippingOptions.shippingCompany !==
+                                                undefined &&
+                                                shippingOptions.shippingCompany &&
+                                                shippingCompanyOption.find(
+                                                    (ele) =>
+                                                        ele.value ===
+                                                        shippingOptions.shippingCompany
+                                                )
+                                            }
+                                        />
+                                        {error?.shippingCompany && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.shippingCompany}
+                                            </span>
+                                        )}
+                                    </Col>
+                                </Row>
                                 <Row>
                                     <Col lg={3}>
                                         <Autocomplete

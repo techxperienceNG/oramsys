@@ -81,8 +81,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         pricingCounterParty: "",
     })
 
-    const [borrower_Applicant, setBorrower_Applicant] = useState("")
-    const [lenders, setLenders] = useState("")
+    const [borrower_Applicant, setBorrower_Applicant] = useState({})
+    const [lenders, setLenders] = useState({})
 
     const [addWarehouseModal, setAddWarehouseModal] = useState(false)
     const [addInsuranceModal, setAddInsuranceModal] = useState(false)
@@ -98,6 +98,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     const [sendModalData, setSendModalData] = useState("")
     const [counterPartyOption, setCounterPartyOption] = useState([])
     const [shippingCompanyOption, setShippingCompanyOption] = useState([])
+    const [borrowerOption, setBorrowerOption] = useState([])
+    const [lenderOption, setLenderOption] = useState([])
     const [wareHouseId, setWareHouseId] = useState("")
     const [error, setError] = useState({})
     const [selectedProduct, setSelectedProduct] = useState("")
@@ -267,7 +269,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             })
         }
         setCounterPartyOption(entityDetails)
-        console.log("TAG", counterPartyOption)
+        console.log("TAG HEDGE COUNTERPARTY", counterPartyOption)
     }, [entityData])
 
     useEffect(() => {
@@ -292,8 +294,60 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             })
         }
         setShippingCompanyOption(shipDetails)
-        console.log("TAG", shippingCompanyOption)
+        console.log("TAG WAREHOUSE", shippingCompanyOption)
     }, [entityData])
+
+    useEffect(() => {
+        let getBuyer = []
+        if (entityData && entityData.data) {
+
+            entityData.data.map((ele) => {
+                ele.roles.map(roleDetail => {
+                    if (roleDetail.roleId.roleName == "Buyer" || roleDetail.roleId.roleName == "Seller") {
+                        var temp1 = {
+                            label: ele?.details?.name,
+                            value: ele._id
+                        }
+                        getBuyer.push(temp1)
+                    } else {
+                        var temp1 = {
+                            label: ele?.details?.givenName,
+                            value: ele._id
+                        }
+                    }
+                })
+            })
+        }
+        setBorrowerOption(getBuyer)
+        console.log("TAG BORROWER", borrowerOption)
+    }, [entityData])
+
+    useEffect(() => {
+        let bankRole = []
+        if (entityData && entityData.data) {
+
+            entityData.data.map((ele) => {
+                ele.roles.map(roleDetail => {
+                    if (roleDetail.roleId.roleName == "Bank") {
+                        var temp = {
+                            label: ele?.details?.name,
+                            value: ele._id
+                        }
+                        bankRole.push(temp)
+                    } else {
+                        var temp = {
+                            label: ele?.details?.givenName,
+                            value: ele._id
+                        }
+                    }
+                })
+            })
+        }
+        setLenderOption(bankRole)
+        console.log("TAG LENDER", lenderOption)
+    }, [entityData])
+
+
 
     useEffect(() => {
         if (productType === "Physical") {
@@ -1011,6 +1065,93 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     <div className='add-edit-product'>
                         <div className='form'>
                             <Row>
+                            <Col lg={6}>
+                                    <Autocomplete
+                                        label='Borrower/Applicant'
+                                        id='disable-clearable'
+                                        onChange={(e, newVal) =>
+                                            setBorrower_Applicant(newVal)
+                                        }
+                                        getOptionLabel={(option) => option.label || ""}
+                                        options={borrowerOption}
+                                        disableClearable
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label='Borrower/Applicant'
+                                                variant='standard'
+                                            />
+                                        )}
+                                        disabled={isView}
+                                        value={
+                                            borrowerOption.length > 0 &&
+                                            borrower_Applicant !==
+                                            undefined &&
+                                            borrower_Applicant &&
+                                            borrowerOption.find(
+                                                (ele) =>
+                                                    ele.value ===
+                                                    borrower_Applicant
+                                            )
+                                        }
+                                    />
+                                    {error?.pricingCounterParty && (
+                                        <span
+                                            style={{
+                                                color: "#da251e",
+                                                width: "100%",
+                                                textAlign: "start",
+                                            }}
+                                        >
+                                            {error?.pricingCounterParty}
+                                        </span>
+                                    )}
+                                </Col>
+
+                                <Col lg={6}>
+                                    <Autocomplete
+                                        label='Lender'
+                                        id='disable-clearable'
+                                        onChange={(e, newVal) =>
+                                            setLenders(newVal)
+                                        }
+                                        getOptionLabel={(option) => option.label || ""}
+                                        options={lenderOption}
+                                        disableClearable
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label='Lender'
+                                                variant='standard'
+                                            />
+                                        )}
+                                        disabled={isView}
+                                        value={
+                                            lenderOption.length > 0 &&
+                                            lenders !==
+                                            undefined &&
+                                            lenders &&
+                                            lenderOption.find(
+                                                (ele) =>
+                                                    ele.value ===
+                                                    lenders
+                                            )
+                                        }
+                                    />
+                                    {error?.pricingCounterParty && (
+                                        <span
+                                            style={{
+                                                color: "#da251e",
+                                                width: "100%",
+                                                textAlign: "start",
+                                            }}
+                                        >
+                                            {error?.pricingCounterParty}
+                                        </span>
+                                    )}
+                                </Col>
+                            </Row>
+                            {/* <Row>
                                 <Col lg={6}>
                                     <TextField
                                         label='Borrower/Applicant Name'
@@ -1057,7 +1198,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         </span>
                                     )}
                                 </Col>
-                            </Row>
+                            </Row> */}
                         </div>
                     </div>
                     <div className='add-edit-product'>

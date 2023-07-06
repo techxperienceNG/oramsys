@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var Schema = new Schema({
-    entityId: { type: String, required: false, default: null },
+    entityId: { type: String, required: true, default: null },
     type: { type: String, required: false, default: null },
     number: { type: String, required: false, default: null },
     authority: { type: String, required: false, default: null },
@@ -13,7 +13,6 @@ var Schema = new Schema({
     expiryDate: { type: Date, required: false, default: null },
     evidence: { type: String, required: false, default: null },
     isDeleted: { type: Boolean, required: false, default: false },
-    warehouseRequired: { type: Boolean, required: false, default: false },
 }, {
     timestamps: true
 })

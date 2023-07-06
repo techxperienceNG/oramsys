@@ -10,7 +10,6 @@ var Schema = new Schema({
     dateOfRating: { type: Date, required: false, default: null },
     expiryDate: { type: Date, required: false, default: null },
     isDeleted: { type: Boolean, required: false, default: false },
-    warehouseRequired: { type: Boolean, required: false, default: false },
 }, {
     timestamps: true
 })

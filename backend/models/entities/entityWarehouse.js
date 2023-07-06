@@ -12,7 +12,6 @@ var Schema = new Schema({
     country: { type: String, required: false, default: null },
     governingLaw: { type: String, required: false, default: null },
     isDeleted: { type: Boolean, required: false, default: false },
-    warehouseRequired: { type: Boolean, required: false, default: false },
 }, {
     timestamps: true
 })

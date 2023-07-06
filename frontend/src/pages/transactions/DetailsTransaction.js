@@ -385,7 +385,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                 .then((getTransactionByIdData) => {
                     let resp = getTransactionByIdData.data;
                     let respProductDetails = getTransactionByIdData.data.details.productDetails;
-                    console.log('CHECK ALL DATA', getTransactionByIdData.data.details.shippingOptions)
+                    console.log('CHECK ALL DATA', getTransactionByIdData.data.details)
 
                     if (getTransactionByIdData && getTransactionByIdData.data) {
                         setEditId(getTransactionByIdData.data?.details?._id)

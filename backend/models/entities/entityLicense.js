@@ -13,7 +13,6 @@ var Schema = new Schema({
     expiryDate: { type: Date, required: false, default: null },
     evidence: { type: String, required: false, default: null },
     isDeleted: { type: Boolean, required: false, default: false },
-    warehouseRequired: { type: Boolean, required: false, default: false },
 }, {
     timestamps: true
 })

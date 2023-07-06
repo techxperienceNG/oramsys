@@ -37,6 +37,7 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
             facilityAmount: "",
         },
     })
+    const [loading, setLoading] = useState(false)
 
     const modalData = (e) => {
         if (e.name === 'internationalCreditStanding') {
@@ -130,7 +131,7 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
         }
     }
 
-    const saveData = () => {
+    const saveData = async () => {
         // if (marketPriceRisk?.contractsBasis && marketPriceRisk?.priceHedge && marketPriceRisk?.financingSufficiently) {
 
         let body = {
@@ -144,7 +145,9 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
         console.log('body final =================>', body)
         // navigate('/transactions')
         // console.log('body', body)
-        dispatch(addRiskAssessment(body));
+        setLoading(true)
+        await dispatch(addRiskAssessment(body));
+        setLoading(false)
         // navigate('/transactions');
         // }
     }
@@ -184,7 +187,15 @@ const MarketPriceRisk = ({ hendelNext, hendelCancel }) => {
             </div>
             <div className='footer_'>
                 <button onClick={() => hendelCancel()} className="footer_cancel_btn">cancel</button>
-                <button onClick={() => { saveData() }} className='footer_next_btn'>Save</button>
+                <button onClick={() => { saveData() }} className='footer_next_btn'>
+                {!loading ? <>Save </> : null}
+                        {loading && <div class="d-flex justify-content-center">
+                        <strong className='me-2'>Saving...</strong>
+                            <div className="spinner-border spinner-border-sm mt-1" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>}
+                </button>
             </div>
 
             {showModal && <LoanPurposeRiskModal show={showModal} onHide={() => setShowModal(false)} getModalData={(e) => getModalData(e)} types={selected} data={marketPriceRisk?.contractsBasis} />}

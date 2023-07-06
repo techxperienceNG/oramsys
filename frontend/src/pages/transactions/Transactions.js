@@ -268,7 +268,7 @@ const Transactions = () => {
                         <tr class="bg-light text-center">
                           <th scope="col" width="5%">Date</th>
                           <th scope="col" width="15%">Transaction Number</th>
-                          <th scope="col" width="10%">Applicant</th>
+                          <th scope="col" width="10%">Borrower</th>
                           <th scope="col" width="15%">Lender</th>
                           <th scope="col" width="10%">Value</th>
                           <th scope="col" width="20%">Product</th>

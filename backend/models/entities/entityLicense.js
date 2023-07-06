@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var Schema = new Schema({
-    entityId: { type: String, required: true, default: null },
+    entityId: { type: String, required: false, default: null },
     type: { type: String, required: false, default: null },
     number: { type: String, required: false, default: null },
     authority: { type: String, required: false, default: null },

@@ -115,7 +115,7 @@ const Roles = ({ hendelNext, hendelCancel }) => {
             roles: companyData.roles,
         }
         setLoading(true)
-        dispatch(editEntityAction(id, body))
+        await dispatch(editEntityAction(id, body))
         setLoading(false)
         navigate('/entities')
 
@@ -128,14 +128,14 @@ const Roles = ({ hendelNext, hendelCancel }) => {
                 type: EDIT_ENTITY,
                 payload: []
             })
-            dispatch({
-                type: ENTITY_GET_BY_ID,
-                payload: []
-            })
-            dispatch({
-                type: COMPANY_DATA,
-                payload: [],
-            });
+            // dispatch({
+            //     type: ENTITY_GET_BY_ID,
+            //     payload: []
+            // })
+            // dispatch({
+            //     type: COMPANY_DATA,
+            //     payload: [],
+            // });
             toast.success(editEntityData.message);
         }
     }, [editEntityData])

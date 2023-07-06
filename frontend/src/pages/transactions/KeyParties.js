@@ -400,7 +400,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                     </Col>
                 </Row>
 
-
+                <div className='mb-3 d-flex justify-content-between align-items-center'>
+                    <h4>Additional Parties</h4>
+                </div>
                 <MaterialTable
                     title=""
                     columns={[

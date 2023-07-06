@@ -103,8 +103,12 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
             setBorrower_Applicant(getLender.borrower_Applicant)
             setLenders(getBorrower.lenders)
             setWarehouseComp(getWarehouseCompany?.warehouses[0]?.warehouseCompany?.label)
-            setCounterPart(getCounterParty?.pricingCounterParty?.details?.name)
-            setShippingComp(getShippingCompany?.shippingCompany?.details?.name)
+            setCounterPart(getTransactionByIdData.data?.details?.pricingDetails
+                ?.pricingCounterParty?.details.name)
+            setShippingComp(getTransactionByIdData.data?.details?.shippingOptions
+                ?.shippingCompany?.details.name)
+            // setCounterPart(getCounterParty?.pricingCounterParty?.details?.name)
+            // setShippingComp(getShippingCompany?.shippingCompany?.details?.name)
             // console.log('check warehouse', getTransactionByIdData.details.shippingOptions?.warehouses[0]?.warehouseCompany?.details.name)
             if (getTransactionByIdData.data?.keyParties[0].relatedParties != undefined && getTransactionByIdData.data?.keyParties[0].relatedParties.length > 0) {
                 // console.log('keyparties at useEffect', keyParties);

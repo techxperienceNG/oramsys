@@ -19,7 +19,7 @@ import { airPortsAction, portsAction } from "../../redux/actions/portsAction"
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 
-const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalCounterParty, signalWarehouseCompany, signalContract, signalBorrower, signalLender, transaction_id }) => {
+const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalCounterParty, signalShippingCompany, signalWarehouseCompany, signalContract, signalBorrower, signalLender, transaction_id }) => {
     const navigate = useNavigate()
 
     // let numberReg = /^[0-9\b]+$/;
@@ -385,7 +385,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                 .then((getTransactionByIdData) => {
                     let resp = getTransactionByIdData.data;
                     let respProductDetails = getTransactionByIdData.data.details.productDetails;
-                    console.log('CHECK ALL DATA', getTransactionByIdData.data)
+                    console.log('CHECK ALL DATA', getTransactionByIdData.data.details.shippingOptions)
 
                     if (getTransactionByIdData && getTransactionByIdData.data) {
                         setEditId(getTransactionByIdData.data?.details?._id)
@@ -470,7 +470,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                 getTransactionByIdData.data?.details?.shippingOptions
                                     ?.warehouseRequired,
                             shippingCompany: getTransactionByIdData.data?.details?.shippingOptions
-                                ?.shippingCompany,
+                                ?.shippingCompany?._id,
                             warehouses:
                                 getTransactionByIdData.data?.details?.shippingOptions?.warehouses.map(
                                     (item) => {
@@ -1024,8 +1024,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         dispatch(transactionDataAction(body))
         signalContract(body.details.contractDetails)
         signalBorrower(body.borrower_Applicant)
-        // signalWarehouseCompany(body.details.shippingOptions)
-        // signalCounterParty(body.details.pricingDetails)
+        signalWarehouseCompany(body.details.shippingOptions)
+        signalCounterParty(body.details.pricingDetails)
+        signalShippingCompany(body.details.shippingOptions)
         signalLender(body.lenders)
         hendelNext()
     }
@@ -1095,7 +1096,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             )
                                         }
                                     />
-                                    {error?.pricingCounterParty && (
+                                    {error?.borrower_Applicant && (
                                         <span
                                             style={{
                                                 color: "#da251e",
@@ -1103,7 +1104,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                 textAlign: "start",
                                             }}
                                         >
-                                            {error?.pricingCounterParty}
+                                            {error?.borrower_Applicant}
                                         </span>
                                     )}
                                 </Col>
@@ -1138,7 +1139,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             )
                                         }
                                     />
-                                    {error?.pricingCounterParty && (
+                                    {error?.lenders && (
                                         <span
                                             style={{
                                                 color: "#da251e",
@@ -1146,7 +1147,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                 textAlign: "start",
                                             }}
                                         >
-                                            {error?.pricingCounterParty}
+                                            {error?.lenders}
                                         </span>
                                     )}
                                 </Col>

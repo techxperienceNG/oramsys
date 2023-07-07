@@ -98,7 +98,7 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
         <>
             <div className='add-edit-product'>
                 <div className='d-flex align-items-center justify-content-center error-info mb-3'>
-                    <img src={`../../../assets/img/about/${data?.currencyHedge && data?.marginFinancing ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
+                    <img src={`../../../assets/img/about/${data?.currencyHedge || data?.marginFinancing ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
                     {data?.currencyHedge || data?.marginFinancing ?
                         <p className='success'>Risks are acceptable due to mitigants</p> :
                         <p className='error'>The below risks require your attention</p>
@@ -111,7 +111,7 @@ const ExchangeRateRisk = ({ hendelNext, hendelCancel }) => {
                             {getTransactionByIdData?.data?.facility?.rePaymentCurrency !== getTransactionByIdData?.data?.details?.contractDetails?.currency &&
                                 <div className='risk-tab' onClick={() => { setcurrencyHedgeModal(true); setSelected("currencyHedge") }}>
                                     <h3>Enter a currency hedge</h3>
-                                    <img src={`../../../assets/img/about/${data?.currencyHedge?.counterparty ? "correct-success.png" : "correct (1).png"}`} />
+                                    <img src={`../../../assets/img/about/${data?.currencyHedge?.counterparty || data?.currencyHedge?.hedgingMethod ? "correct-success.png" : "correct (1).png"}`} />
                                 </div>}
                             <div className='risk-tab' onClick={() => setfinancingSufficientlyModal(true)}>
                                 <h3>Margin the financing sufficiently</h3>

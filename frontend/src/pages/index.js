@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Routes, Route, useLocation, useNavigate, Navigate, Outlet } from "react-router-dom";
 import AuthStorage from '../helper/AuthStorage';
 import AuthLayOut from '../layout/AuthLayOut';
@@ -21,6 +21,7 @@ import Countries from './administration/masterData/countries/Countries';
 import Transactions from './transactions/Transactions';
 import Add_Edit_Entities from './administration/entities/addEditEntities/Add_Edit_Entities';
 import Edit_Transactions from './transactions/Edit_Transactions';
+import FinalPage from './transactions/FinalPage';
 import AdminLogin from './admin/AdminLogin';
 import FunctionalAdmin from './functionalAdmin/FunctionalAdmin';
 import EntitiesRole from './administration/EntitiesRole';
@@ -29,6 +30,7 @@ import RiskAssessment from './transactions/riskAssessment/RiskAssessment';
 import Ports from './administration/masterData/ports/Ports';
 import AirBases from './administration/masterData/airBases/AirBases';
 import { ApiGet, ApiPost } from '../helper/API/ApiData';
+
 
 
 const pathForLayout = ['/', '/signup', '/home', '/admin-login', '/fa-login']
@@ -67,6 +69,8 @@ const Index = () => {
         "airBases",
 
         "risk-assessment",
+        
+        "final-page",
 
     ]
     const location = useLocation()
@@ -92,6 +96,10 @@ const Index = () => {
         {
             path: "risk-assessment",
             component: RiskAssessment,
+        },
+        {
+            path: "final-page",
+            component: FinalPage,
         },
     ]
 
@@ -187,6 +195,10 @@ const Index = () => {
         {
             path: "risk-assessment",
             component: RiskAssessment,
+        },
+        {
+            path: "final-page",
+            component: FinalPage,
         },
     ]
 
@@ -320,6 +332,8 @@ const PublicRoutes = () => {
     const isAuthenticated = AuthStorage.isUserAuthenticated();
     const navigate = useNavigate();
     const location = useLocation();
+ 
+
     useEffect(() => {
         !isAuthenticated ? (
             pathForLayout.includes(location.pathname) ? (

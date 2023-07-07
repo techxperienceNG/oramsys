@@ -19,7 +19,7 @@ import { airPortsAction, portsAction } from "../../redux/actions/portsAction"
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 
-const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalWarehouseCompany, signalContract, signalBorrower, signalLender, transaction_id }) => {
+const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalCounterParty, signalShippingCompany, signalWarehouseCompany, signalContract, signalBorrower, signalLender, transaction_id }) => {
     const navigate = useNavigate()
 
     // let numberReg = /^[0-9\b]+$/;
@@ -58,6 +58,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         shipmentFrequency: "",
         warehouseRequired: "",
         warehouses: [],
+        shippingCompany: "",
     })
 
     const [transShipmentOptions, setTransShipmentOptions] = useState({
@@ -96,6 +97,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
     const [countries, setcountries] = useState([])
     const [sendModalData, setSendModalData] = useState("")
     const [counterPartyOption, setCounterPartyOption] = useState([])
+    const [shippingCompanyOption, setShippingCompanyOption] = useState([])
+    const [borrowerOption, setBorrowerOption] = useState([])
+    const [lenderOption, setLenderOption] = useState([])
     const [wareHouseId, setWareHouseId] = useState("")
     const [error, setError] = useState({})
     const [selectedProduct, setSelectedProduct] = useState("")
@@ -122,43 +126,43 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
 
     useEffect(() => {
         if (
-          shippingOptions.shipmentMode === "SEA" &&
-          countries.length > 0 &&
-          ports?.data &&
-          ports.data.length > 0
+            shippingOptions.shipmentMode === "SEA" &&
+            countries.length > 0 &&
+            ports?.data &&
+            ports.data.length > 0
         ) {
-          if (shippingOptions.countryOfOrigin) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.countryOfOrigin
-            )?.name
-            ports.data[0].country === tempData && setOriginCountry(ports.data)
-          }
-          if (shippingOptions.destinationCountry) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.destinationCountry
-            )?.name
-            ports.data[0].country === tempData && setPortsOptions(ports.data)
-          }
+            if (shippingOptions.countryOfOrigin) {
+                let tempData = countries.find(
+                    (el) => el?._id === shippingOptions.countryOfOrigin
+                )?.name
+                ports.data[0].country === tempData && setOriginCountry(ports.data)
+            }
+            if (shippingOptions.destinationCountry) {
+                let tempData = countries.find(
+                    (el) => el?._id === shippingOptions.destinationCountry
+                )?.name
+                ports.data[0].country === tempData && setPortsOptions(ports.data)
+            }
         } else if (
-          shippingOptions.shipmentMode === "AIR" &&
-          countries.length > 0 &&
-          airBase?.data &&
-          airBase.data.length > 0
+            shippingOptions.shipmentMode === "AIR" &&
+            countries.length > 0 &&
+            airBase?.data &&
+            airBase.data.length > 0
         ) {
-          if (shippingOptions.countryOfOrigin) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.countryOfOrigin
-            )?.name
-            airBase.data[0].country === tempData && setOriginCountry(airBase.data)
-          }
-          if (shippingOptions.destinationCountry) {
-            let tempData = countries.find(
-              (el) => el?._id === shippingOptions.destinationCountry
-            )?.name
-            airBase.data[0].country === tempData && setPortsOptions(airBase.data)
-          }
+            if (shippingOptions.countryOfOrigin) {
+                let tempData = countries.find(
+                    (el) => el?._id === shippingOptions.countryOfOrigin
+                )?.name
+                airBase.data[0].country === tempData && setOriginCountry(airBase.data)
+            }
+            if (shippingOptions.destinationCountry) {
+                let tempData = countries.find(
+                    (el) => el?._id === shippingOptions.destinationCountry
+                )?.name
+                airBase.data[0].country === tempData && setPortsOptions(airBase.data)
+            }
         }
-      }, [ports, airBase, countries, shippingOptions])
+    }, [ports, airBase, countries, shippingOptions])
 
     useEffect(() => {
         console.log('=======airBase', airBase.data)
@@ -169,8 +173,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
     }, [portsOptions])
 
     const setPorts = (country) => {
-        
-        console.log('setPorts shippingOptions.shipmentMode',shippingOptions.shipmentMode);
+
+        console.log('setPorts shippingOptions.shipmentMode', shippingOptions.shipmentMode);
         if (shippingOptions.shipmentMode === "SEA") {
             dispatch(portsAction(country))
         } else if (shippingOptions.shipmentMode === "AIR") {
@@ -192,22 +196,22 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
 
     useEffect(() => {
         if (shippingOptions.countryOfOrigin) {
-          setPorts(
-            countries.find((item) => item._id === shippingOptions.countryOfOrigin)
-              ?.name
-          )
+            setPorts(
+                countries.find((item) => item._id === shippingOptions.countryOfOrigin)
+                    ?.name
+            )
         }
         if (shippingOptions.destinationCountry) {
-          setPorts(
-            countries.find(
-              (item) => item._id === shippingOptions.destinationCountry
-            )?.name
-          )
+            setPorts(
+                countries.find(
+                    (item) => item._id === shippingOptions.destinationCountry
+                )?.name
+            )
         }
-      }, [shippingOptions.countryOfOrigin, shippingOptions.destinationCountry])
-    
+    }, [shippingOptions.countryOfOrigin, shippingOptions.destinationCountry])
 
-    useEffect(() => { 
+
+    useEffect(() => {
 
         console.log('active on change', activeOnChange);
         // if (
@@ -216,7 +220,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         //     ports?.data &&
         //     ports.data.length > 0
         // ) {
-          
+
         //     if (shippingOptions.destinationCountry && activeOnChange == 'destination') {
         //         setPortsOptions([])
         //         let tempData = countries.find(
@@ -230,7 +234,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         //     airBase?.data &&
         //     airBase.data.length > 0
         // ) {
-           
+
         //     if (shippingOptions.destinationCountry && activeOnChange == 'destination') {
         //         setPortsOptions([])
         //         let tempData = countries.find(
@@ -240,27 +244,110 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         //         airBase.data[0].country === tempData && setPortsOptions(airBase.data)
         //     }
         // }
-    },[activeOnChange])
+    }, [activeOnChange])
 
     useEffect(() => {
+        let entityDetails = []
         if (entityData && entityData.data) {
-            setCounterPartyOption(
-                entityData.data.map((ele) => {
-                    if (ele?.details?.name) {
-                        return {
+            console.log('Entity DATA', entityData)
+
+            entityData.data.map((ele) => {
+                ele.roles.map(roleDetail => {
+                    if (roleDetail.roleId?.roleName == "Hedge Counterparty") {
+                        var temp = {
                             label: ele?.details?.name,
                             value: ele._id
                         }
-                    } else { 
-                        return {
+                        entityDetails.push(temp)
+                    } else {
+                        var temp = {
                             label: ele?.details?.givenName,
                             value: ele._id
                         }
                     }
                 })
-            )
+            })
         }
+        setCounterPartyOption(entityDetails)
+        console.log("TAG HEDGE COUNTERPARTY", counterPartyOption)
     }, [entityData])
+
+    useEffect(() => {
+        let shipDetails = []
+        if (entityData && entityData.data) {
+
+            entityData.data.map((ele) => {
+                ele.roles.map(roleDetail => {
+                    if (roleDetail.roleId?.roleName == "Shipping Company") {
+                        var temp = {
+                            label: ele?.details?.name,
+                            value: ele._id
+                        }
+                        shipDetails.push(temp)
+                    } else {
+                        var temp = {
+                            label: ele?.details?.givenName,
+                            value: ele._id
+                        }
+                    }
+                })
+            })
+        }
+        setShippingCompanyOption(shipDetails)
+        console.log("TAG WAREHOUSE", shippingCompanyOption)
+    }, [entityData])
+
+    useEffect(() => {
+        let getBuyer = []
+        if (entityData && entityData.data) {
+
+            entityData.data.map((ele) => {
+                ele.roles.map(roleDetail => {
+                    if (roleDetail.roleId?.roleName == "Buyer" || roleDetail.roleId?.roleName == "Seller") {
+                        var temp1 = {
+                            label: ele?.details?.name,
+                            value: ele._id
+                        }
+                        getBuyer.push(temp1)
+                    } else {
+                        var temp1 = {
+                            label: ele?.details?.givenName,
+                            value: ele._id
+                        }
+                    }
+                })
+            })
+        }
+        setBorrowerOption(getBuyer)
+        console.log("TAG BORROWER", borrowerOption)
+    }, [entityData])
+
+    useEffect(() => {
+        let bankRole = []
+        if (entityData && entityData.data) {
+
+            entityData.data.map((ele) => {
+                ele.roles.map(roleDetail => {
+                    if (roleDetail.roleId?.roleName == "Bank") {
+                        var temp = {
+                            label: ele?.details?.name,
+                            value: ele._id
+                        }
+                        bankRole.push(temp)
+                    } else {
+                        var temp = {
+                            label: ele?.details?.givenName,
+                            value: ele._id
+                        }
+                    }
+                })
+            })
+        }
+        setLenderOption(bankRole)
+        console.log("TAG LENDER", lenderOption)
+    }, [entityData])
+
+
 
     useEffect(() => {
         if (productType === "Physical") {
@@ -317,169 +404,172 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                 respProductDetails?.quantity,
                             metric: respProductDetails?.metric,
 
-                        quality: getTransactionByIdData.data?.details?.productDetails?.quality,
-                    })
-                    // setProductDetails({
-                    //      commoditySubType: getTransactionByIdData.data?.details?.productDetails
-                    //         ?.commoditySubType
-                    // })
-
-                    setContractDetails({
-                        currency:
-                            getTransactionByIdData.data?.details?.contractDetails?.currency,
-                        value: getTransactionByIdData.data?.details?.contractDetails?.value,
-                        contractDate:
-                            getTransactionByIdData.data?.details?.contractDetails?.contractDate &&
-                            moment(
-                                getTransactionByIdData.data?.details?.contractDetails?.contractDate
-                            ).format("YYYY-MM-DD"),
-                        expiryDate:
-                            getTransactionByIdData.data?.details?.contractDetails?.expiryDate &&
-                            moment(
-                                getTransactionByIdData.data?.details?.contractDetails?.expiryDate
-                            ).format("YYYY-MM-DD"),
-                        conditionsOfContract:
-                            getTransactionByIdData.data?.details?.contractDetails
-                                ?.conditionsOfContract,
-                        descriptionOfContract:
-                            getTransactionByIdData.data?.details?.contractDetails
-                                ?.descriptionOfContract,
-                    })
-
-                    setShippingOptions({
-                        shipmentDate:
-                            getTransactionByIdData.data?.details?.shippingOptions?.shipmentDate &&
-                            moment(
-                                getTransactionByIdData.data?.details?.shippingOptions?.shipmentDate
-                            ).format("YYYY-MM-DD"),
-                        shipmentMode:
-                            getTransactionByIdData.data?.details?.shippingOptions?.shipmentMode,
-                        shipmentTerms:
-                            getTransactionByIdData.data?.details?.shippingOptions?.shipmentTerms,
-                        shippedWeights:
-                            getTransactionByIdData.data?.details?.shippingOptions?.shippedWeights.toLocaleString(),
-                        countryOfOrigin:
-                            getTransactionByIdData.data?.details?.shippingOptions?.countryOfOrigin
-                                ?._id,
-                        portOfOrigin:
-                            getTransactionByIdData.data?.details?.shippingOptions?.portOfOrigin
-                                ?._id,
-                        airbaseOfOrigin:
-                            getTransactionByIdData.data?.details?.shippingOptions?.airbaseOfOrigin
-                                ?._id,
-                        destinationCountry:
-                            getTransactionByIdData.data?.details?.shippingOptions
-                                ?.destinationCountry?._id,
-                        destinationPort:
-                            getTransactionByIdData.data?.details?.shippingOptions?.destinationPort
-                                ?._id,
-                        destinationAirbase:
-                            getTransactionByIdData.data?.details?.shippingOptions
-                                ?.destinationAirbase?._id,
-                        shipmentFrequency:
-                            getTransactionByIdData.data?.details?.shippingOptions
-                                ?.shipmentFrequency,
-                        warehouseRequired:
-                            getTransactionByIdData.data?.details?.shippingOptions
-                                ?.warehouseRequired,
-                        warehouses:
-                            getTransactionByIdData.data?.details?.shippingOptions?.warehouses.map(
-                                (item) => {
-                                    return {
-                                        warehouse: {
-                                            value: item?.warehouse?._id,
-                                            label: item?.warehouse?.name,
-                                        },
-                                        warehouseCompany: {
-                                            value: item?.warehouseCompany?._id,
-                                            label: item?.warehouseCompany?.details?.name,
-                                        },
-                                    }
-                                }
-                            ),
-                    })
-
-                    setTransShipmentOptions({
-                        tranShipmentRequired:
-                            getTransactionByIdData.data?.details?.transShipmentOptions
-                                ?.tranShipmentRequired,
-                        street:
-                            getTransactionByIdData.data?.details?.transShipmentOptions?.street,
-                        city: getTransactionByIdData.data?.details?.transShipmentOptions?.city,
-                        country:
-                            getTransactionByIdData.data?.details?.transShipmentOptions?.country
-                                ?._id,
-                        transShipmentQuantity:
-                            getTransactionByIdData.data?.details?.transShipmentOptions
-                                ?.transShipmentQuantity,
-                        transShipmentDate:
-                            getTransactionByIdData.data?.details?.transShipmentOptions
-                                ?.transShipmentDate &&
-                            moment(
-                                getTransactionByIdData.data?.details?.transShipmentOptions
-                                    ?.transShipmentDate
-                            ).format("YYYY-MM-DD"),
-                    })
-
-                    setPricingDetails({
-                        pricingType:
-                            getTransactionByIdData.data?.details?.pricingDetails?.pricingType,
-                        pricingAmount:
-                            getTransactionByIdData.data?.details?.pricingDetails?.pricingAmount.toLocaleString(),
-                        pricingUnit:
-                            getTransactionByIdData.data?.details?.pricingDetails?.pricingUnit,
-                        previousDayClosingAmount:
-                            getTransactionByIdData.data?.details?.pricingDetails
-                                ?.previousDayClosingAmount,
-                        pricingFormula:
-                            getTransactionByIdData.data?.details?.pricingDetails?.pricingFormula,
-                        pricingHedgeingStatus:
-                            getTransactionByIdData.data?.details?.pricingDetails
-                                ?.pricingHedgingStatus,
-                        pricingHedgingMethod:
-                            getTransactionByIdData.data?.details?.pricingDetails
-                                ?.pricingHedgingMethod,
-                        pricingCounterParty:
-                            getTransactionByIdData.data?.details?.pricingDetails
-                                ?.pricingCounterParty?._id,
-                    })
-
-                    if (respProductDetails.commoditySubType != undefined) {
-                        let product = [];
-                        productData.data.forEach((item) => {
-                            // if (item.commodity_sub_type == respProductDetails.commoditySubType) {
-                            //     product.push(item);
-                            // }
-                            if (item.category == respProductDetails.commodityType) { 
-                                product.push(item);
-                            }
+                            quality: getTransactionByIdData.data?.details?.productDetails?.quality,
                         })
-                        setProductName(product);
-                    } else {
-                        if (productData && productData.data) {
-                            setProductName(productData.data)
+                        // setProductDetails({
+                        //      commoditySubType: getTransactionByIdData.data?.details?.productDetails
+                        //         ?.commoditySubType
+                        // })
+
+                        setContractDetails({
+                            currency:
+                                getTransactionByIdData.data?.details?.contractDetails?.currency,
+                            value: getTransactionByIdData.data?.details?.contractDetails?.value,
+                            contractDate:
+                                getTransactionByIdData.data?.details?.contractDetails?.contractDate &&
+                                moment(
+                                    getTransactionByIdData.data?.details?.contractDetails?.contractDate
+                                ).format("YYYY-MM-DD"),
+                            expiryDate:
+                                getTransactionByIdData.data?.details?.contractDetails?.expiryDate &&
+                                moment(
+                                    getTransactionByIdData.data?.details?.contractDetails?.expiryDate
+                                ).format("YYYY-MM-DD"),
+                            conditionsOfContract:
+                                getTransactionByIdData.data?.details?.contractDetails
+                                    ?.conditionsOfContract,
+                            descriptionOfContract:
+                                getTransactionByIdData.data?.details?.contractDetails
+                                    ?.descriptionOfContract,
+                        })
+
+                        setShippingOptions({
+                            shipmentDate:
+                                getTransactionByIdData.data?.details?.shippingOptions?.shipmentDate &&
+                                moment(
+                                    getTransactionByIdData.data?.details?.shippingOptions?.shipmentDate
+                                ).format("YYYY-MM-DD"),
+                            shipmentMode:
+                                getTransactionByIdData.data?.details?.shippingOptions?.shipmentMode,
+                            shipmentTerms:
+                                getTransactionByIdData.data?.details?.shippingOptions?.shipmentTerms,
+                            shippedWeights:
+                                getTransactionByIdData.data?.details?.shippingOptions?.shippedWeights.toLocaleString(),
+                            countryOfOrigin:
+                                getTransactionByIdData.data?.details?.shippingOptions?.countryOfOrigin
+                                    ?._id,
+                            portOfOrigin:
+                                getTransactionByIdData.data?.details?.shippingOptions?.portOfOrigin
+                                    ?._id,
+                            airbaseOfOrigin:
+                                getTransactionByIdData.data?.details?.shippingOptions?.airbaseOfOrigin
+                                    ?._id,
+                            destinationCountry:
+                                getTransactionByIdData.data?.details?.shippingOptions
+                                    ?.destinationCountry?._id,
+                            destinationPort:
+                                getTransactionByIdData.data?.details?.shippingOptions?.destinationPort
+                                    ?._id,
+                            destinationAirbase:
+                                getTransactionByIdData.data?.details?.shippingOptions
+                                    ?.destinationAirbase?._id,
+                            shipmentFrequency:
+                                getTransactionByIdData.data?.details?.shippingOptions
+                                    ?.shipmentFrequency,
+                            warehouseRequired:
+                                getTransactionByIdData.data?.details?.shippingOptions
+                                    ?.warehouseRequired,
+                            shippingCompany: getTransactionByIdData.data?.details?.shippingOptions
+                                ?.shippingCompany?._id,
+                            warehouses:
+                                getTransactionByIdData.data?.details?.shippingOptions?.warehouses.map(
+                                    (item) => {
+                                        return {
+                                            warehouse: {
+                                                value: item?.warehouse?._id,
+                                                label: item?.warehouse?.name,
+                                            },
+                                            warehouseCompany: {
+                                                value: item?.warehouseCompany?._id,
+                                                label: item?.warehouseCompany?.details?.name,
+                                            },
+                                        }
+                                    }
+                                ),
+
+                        })
+
+                        setTransShipmentOptions({
+                            tranShipmentRequired:
+                                getTransactionByIdData.data?.details?.transShipmentOptions
+                                    ?.tranShipmentRequired,
+                            street:
+                                getTransactionByIdData.data?.details?.transShipmentOptions?.street,
+                            city: getTransactionByIdData.data?.details?.transShipmentOptions?.city,
+                            country:
+                                getTransactionByIdData.data?.details?.transShipmentOptions?.country
+                                    ?._id,
+                            transShipmentQuantity:
+                                getTransactionByIdData.data?.details?.transShipmentOptions
+                                    ?.transShipmentQuantity,
+                            transShipmentDate:
+                                getTransactionByIdData.data?.details?.transShipmentOptions
+                                    ?.transShipmentDate &&
+                                moment(
+                                    getTransactionByIdData.data?.details?.transShipmentOptions
+                                        ?.transShipmentDate
+                                ).format("YYYY-MM-DD"),
+                        })
+
+                        setPricingDetails({
+                            pricingType:
+                                getTransactionByIdData.data?.details?.pricingDetails?.pricingType,
+                            pricingAmount:
+                                getTransactionByIdData.data?.details?.pricingDetails?.pricingAmount.toLocaleString(),
+                            pricingUnit:
+                                getTransactionByIdData.data?.details?.pricingDetails?.pricingUnit,
+                            previousDayClosingAmount:
+                                getTransactionByIdData.data?.details?.pricingDetails
+                                    ?.previousDayClosingAmount,
+                            pricingFormula:
+                                getTransactionByIdData.data?.details?.pricingDetails?.pricingFormula,
+                            pricingHedgeingStatus:
+                                getTransactionByIdData.data?.details?.pricingDetails
+                                    ?.pricingHedgeingStatus,
+                            pricingHedgingMethod:
+                                getTransactionByIdData.data?.details?.pricingDetails
+                                    ?.pricingHedgingMethod,
+                            pricingCounterParty:
+                                getTransactionByIdData.data?.details?.pricingDetails
+                                    ?.pricingCounterParty?._id,
+                        })
+
+                        if (respProductDetails.commoditySubType != undefined) {
+                            let product = [];
+                            productData.data.forEach((item) => {
+                                // if (item.commodity_sub_type == respProductDetails.commoditySubType) {
+                                //     product.push(item);
+                                // }
+                                if (item.category == respProductDetails.commodityType) {
+                                    product.push(item);
+                                }
+                            })
+                            setProductName(product);
+                        } else {
+                            if (productData && productData.data) {
+                                setProductName(productData.data)
+                            }
                         }
+                        setIsLoading(false);
                     }
-                    setIsLoading(false);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         }
     }
 
     useEffect(() => {
-        
+
         if (productDetails.commoditySubType != undefined) {
             let product = [];
             productData.data.forEach((item) => {
-                console.log('item',item);
-                console.log('productDetails',productDetails);
+                console.log('item', item);
+                console.log('productDetails', productDetails);
                 // if (item.commodity_sub_type == productDetails.commoditySubType) {
                 //     product.push(item);
                 // }
-                if (item.category == productDetails.commodityType) { 
+                if (item.category == productDetails.commodityType) {
                     product.push(item);
                 }
             })
@@ -503,14 +593,16 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
 
     const productTypesOption = ["Commodity"]
 
-    const commodityTypeOption = ["Hard", "Soft"]
+    const commodityTypeOption = ["Hard", "Energy", "Soft"]
 
     const commoditySubTypeOption =
         productDetails.commodityType === "Hard"
-            ? ["Metal", "Energy"]
-            : productDetails.commodityType === "Soft"
-                ? ["Agricultural"]
-                : []
+            ? ["Metal"]
+            : productDetails.commodityType === "Energy"
+                ? ["Energy"]
+                : productDetails.commodityType === "Soft"
+                    ? ["Agricultural"]
+                    : []
 
     const metricOption = ["Ton"]
 
@@ -595,8 +687,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         else if (type === "transShipmentOptions") {
             if (name === "transShipmentQuantity") {
                 if (e.target.value === '' || e.target.value) {
-                     setTransShipmentOptions({ ...transShipmentOptions, [name]: e.target.value })
-                    
+                    setTransShipmentOptions({ ...transShipmentOptions, [name]: e.target.value })
+
                 }
             }
         }
@@ -867,6 +959,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
             flag = true
             error.pricingCounterParty = "Please enter counter party!"
         }
+        if (!shippingOptions.shippingCompany) {
+            flag = true
+            error.shippingCompany = "Please enter a shipping company!"
+        }
         setError(error)
         return flag
     }
@@ -892,7 +988,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         }
     }
 
-  
+
 
     const next = () => {
         if (validation()) {
@@ -928,7 +1024,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
         dispatch(transactionDataAction(body))
         signalContract(body.details.contractDetails)
         signalBorrower(body.borrower_Applicant)
-        // signalWarehouseCompany(body.detaiils)
+        signalWarehouseCompany(body.details.shippingOptions)
+        signalCounterParty(body.details.pricingDetails)
+        signalShippingCompany(body.details.shippingOptions)
         signalLender(body.lenders)
         hendelNext()
     }
@@ -936,9 +1034,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
     const handleCommoditySubtypeChange = (e, newVal) => {
         // let product = [];
         // productData.data.forEach((item) => {
-            // if (item.commodity_sub_type == newVal) {
-            //     product.push(item);
-            // }
+        // if (item.commodity_sub_type == newVal) {
+        //     product.push(item);
+        // }
         // })
         // setProductName(product);
         setProductDetails({
@@ -968,6 +1066,93 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                     <div className='add-edit-product'>
                         <div className='form'>
                             <Row>
+                            <Col lg={6}>
+                                    <Autocomplete
+                                        label='Borrower/Applicant'
+                                        id='disable-clearable'
+                                        onChange={(e, newVal) => {
+                                            setBorrower_Applicant(newVal.label)
+                                        }}
+                                        getOptionLabel={(option) => option.label || ""}
+                                        options={borrowerOption}
+                                        disableClearable
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label='Borrower/Applicant'
+                                                variant='standard'
+                                            />
+                                        )}
+                                        disabled={isView}
+                                        value={
+                                            borrowerOption.length > 0 &&
+                                            borrower_Applicant !==
+                                            undefined &&
+                                            borrower_Applicant &&
+                                            borrowerOption.find(
+                                                (ele) =>
+                                                    ele.label ===
+                                                    borrower_Applicant
+                                            )
+                                        }
+                                    />
+                                    {error?.borrower_Applicant && (
+                                        <span
+                                            style={{
+                                                color: "#da251e",
+                                                width: "100%",
+                                                textAlign: "start",
+                                            }}
+                                        >
+                                            {error?.borrower_Applicant}
+                                        </span>
+                                    )}
+                                </Col>
+
+                                <Col lg={6}>
+                                    <Autocomplete
+                                        label='Lender'
+                                        id='disable-clearable'
+                                        onChange={(e, newVal) =>
+                                            setLenders(newVal.label)
+                                        }
+                                        getOptionLabel={(option) => option.label || ""}
+                                        options={lenderOption}
+                                        disableClearable
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label='Lender'
+                                                variant='standard'
+                                            />
+                                        )}
+                                        disabled={isView}
+                                        value={
+                                            lenderOption.length > 0 &&
+                                            lenders !==
+                                            undefined &&
+                                            lenders &&
+                                            lenderOption.find(
+                                                (ele) =>
+                                                    ele.label ===
+                                                    lenders
+                                            )
+                                        }
+                                    />
+                                    {error?.lenders && (
+                                        <span
+                                            style={{
+                                                color: "#da251e",
+                                                width: "100%",
+                                                textAlign: "start",
+                                            }}
+                                        >
+                                            {error?.lenders}
+                                        </span>
+                                    )}
+                                </Col>
+                            </Row>
+                            {/* <Row>
                                 <Col lg={6}>
                                     <TextField
                                         label='Borrower/Applicant Name'
@@ -993,10 +1178,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                 </Col>
                                 <Col lg={6}>
                                     <TextField
-                                        label='lenders'
+                                        label='Lenders'
                                         variant='standard'
                                         color='warning'
-                                        name='lenders'
+                                        name='Lenders'
                                         className='mb-3'
                                         onChange={(e) => setLenders(e.target.value)}
                                         value={lenders}
@@ -1014,7 +1199,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         </span>
                                     )}
                                 </Col>
-                            </Row>
+                            </Row> */}
                         </div>
                     </div>
                     <div className='add-edit-product'>
@@ -1027,7 +1212,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                 <Row>
                                     <Col lg={3}>
                                         <TextField
-                                            label='Product nature'
+                                            label='Product Nature'
                                             variant='standard'
                                             color='warning'
                                             name='Product_nature'
@@ -1043,7 +1228,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         }
                                     >
                                         <Autocomplete
-                                            label='Product type'
+                                            label='Product Type'
                                             id='disable-clearable'
                                             onChange={(e, newVal) =>
                                                 setProductDetails({ ...productDetails, type: newVal })
@@ -1054,7 +1239,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Product type'
+                                                    label='Product Type'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1090,10 +1275,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         }
                                     >
                                         <Autocomplete
-                                            label='Commodity type'
+                                            label='Commodity Type'
                                             id='disable-clearable'
                                             onChange={(e, newVal) =>
-                                                
+
                                                 handleCommodityTypeChange(e, newVal)
                                             }
                                             getOptionLabel={(option) => option || ""}
@@ -1102,7 +1287,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Commodity type'
+                                                    label='Commodity Type'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1138,7 +1323,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         }
                                     >
                                         <Autocomplete
-                                            label='Commodity Sub type'
+                                            label='Commodity Sub-Type'
                                             id='disable-clearable'
                                             onChange={(e, newVal) =>
                                                 handleCommoditySubtypeChange(e, newVal)
@@ -1149,7 +1334,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Commodity Sub type'
+                                                    label='Commodity Sub-Type'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1238,7 +1423,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                     <Col lg={3} className='mb-3'>
 
                                         <TextField
-                                            label='Product unit'
+                                            label='Product Unit'
                                             variant='standard'
                                             color='warning'
                                             name='netMetric'
@@ -1310,11 +1495,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             options={CurrencyOptions}
                                             getOptionLabel={(option) => option.label || ""}
                                             id='disable-clearable'
-                                            label='Contract currency'
+                                            label='Contract Currency'
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Contract currency'
+                                                    label='Contract Currency'
                                                     variant='standard' />
                                             )}
                                             onChange={(e, newVal) =>
@@ -1339,7 +1524,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                     </Col>
                                     <Col lg={3}>
                                         <TextField
-                                            label='Contract value'
+                                            label='Contract Value'
                                             variant='standard'
                                             color='warning'
                                             value={formateCurrencyValue(contractDetails.value)}
@@ -1362,7 +1547,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         <form className='' noValidate>
                                             <TextField
                                                 id='date'
-                                                label='Contract date'
+                                                label='Contract Date'
                                                 type='date'
                                                 name='contractDate'
                                                 value={contractDetails.contractDate}
@@ -1399,7 +1584,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         <form className='' noValidate>
                                             <TextField
                                                 id='date'
-                                                label='Expiry date'
+                                                label='Expiry Date'
                                                 type='date'
                                                 name='expiryDate'
                                                 value={contractDetails.expiryDate}
@@ -1438,7 +1623,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                 <Row className='mt-4'>
                                     <Col lg={6}>
                                         <TextField
-                                            label='Conditions of contract'
+                                            label='Conditions of Contract'
                                             variant='standard'
                                             color='warning'
                                             name='conditionsOfContract'
@@ -1463,7 +1648,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                     </Col>
                                     <Col lg={6}>
                                         <TextField
-                                            label='Description of contract'
+                                            label='Description of Contract'
                                             variant='standard'
                                             color='warning'
                                             name='descriptionOfContract'
@@ -1498,6 +1683,53 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                             <h2 className='mb-3'>Shipping options</h2>
                             <div>
                                 <Row>
+                                    <Col lg={4}>
+                                        <Autocomplete
+                                            label='Shipping Company'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) =>
+                                                setShippingOptions({
+                                                    ...shippingOptions,
+                                                    shippingCompany: newVal.value,
+                                                })
+                                            }
+                                            getOptionLabel={(option) => option.label || ""}
+                                            options={shippingCompanyOption}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Shipping Company'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            disabled={isView}
+                                            value={
+                                                shippingCompanyOption.length > 0 &&
+                                                shippingOptions.shippingCompany !==
+                                                undefined &&
+                                                shippingOptions.shippingCompany &&
+                                                shippingCompanyOption.find(
+                                                    (ele) =>
+                                                        ele.value ===
+                                                        shippingOptions.shippingCompany
+                                                )
+                                            }
+                                        />
+                                        {error?.shippingCompany && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.shippingCompany}
+                                            </span>
+                                        )}
+                                    </Col>
+                                </Row>
+                                <Row>
                                     <Col lg={3}>
                                         <Autocomplete
                                             label='Shipment mode'
@@ -1515,7 +1747,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Shipment mode'
+                                                    label='Shipment Mode'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1643,7 +1875,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         <form className='' noValidate>
                                             <TextField
                                                 id='date'
-                                                label='Shipment date'
+                                                label='Shipment Date'
                                                 type='date'
                                                 name='shipmentDate'
                                                 value={shippingOptions.shipmentDate}
@@ -1693,7 +1925,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Shipment terms'
+                                                    label='Shipment Terms'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1719,7 +1951,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                     </Col>
                                     <Col lg={3} className=''>
                                         <TextField
-                                            label='Net shipped weights'
+                                            label='Net Shipped Weights'
                                             variant='standard'
                                             color='warning'
                                             name='netShippedWeights'
@@ -1765,7 +1997,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Destination country'
+                                                    label='Destination Country'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1791,51 +2023,51 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                         )}
                                     </Col>
                                     <Col lg={3}>
-                <Autocomplete
-                  label='Destination port'
-                  id='disable-clearable'
-                  // onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, destinationPort: newVal._id })}
-                  onChange={(e, newVal) => {
-                    const mode = shippingOptions.shipmentMode
-                    if (mode === "SEA") {
-                      setShippingOptions({
-                        ...shippingOptions,
-                        destinationPort: newVal._id,
-                      })
-                    } else if (mode === "AIR") {
-                      setShippingOptions({
-                        ...shippingOptions,
-                        destinationAirbase: newVal._id,
-                      })
-                    }
-                  }}
-                  getOptionLabel={(option) => option.name}
-                  options={portsOptions ?? []}
-                  disableClearable
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Destination port'
-                      variant='standard'
-                    />
-                  )}
-                  disabled={isView}
-                  // value={(portsOptions?.length > 0 && shippingOptions?.destinationPort) && portsOptions.find((ele) => ele?._id === shippingOptions?.destinationPort)}
-                  value={
-                    (shippingOptions.shipmentMode === "SEA" &&
-                      portsOptions?.length > 0 &&
-                      shippingOptions.destinationPort &&
-                      portsOptions.find(
-                        (ele) => ele._id === shippingOptions.destinationPort
-                      )) ||
-                    (shippingOptions.shipmentMode === "AIR" &&
-                      portsOptions?.length > 0 &&
-                      shippingOptions.destinationAirbase &&
-                      portsOptions.find(
-                        (ele) => ele._id === shippingOptions.destinationAirbase
-                      ))
-                  }
-                />
+                                        <Autocomplete
+                                            label='Destination port'
+                                            id='disable-clearable'
+                                            // onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, destinationPort: newVal._id })}
+                                            onChange={(e, newVal) => {
+                                                const mode = shippingOptions.shipmentMode
+                                                if (mode === "SEA") {
+                                                    setShippingOptions({
+                                                        ...shippingOptions,
+                                                        destinationPort: newVal._id,
+                                                    })
+                                                } else if (mode === "AIR") {
+                                                    setShippingOptions({
+                                                        ...shippingOptions,
+                                                        destinationAirbase: newVal._id,
+                                                    })
+                                                }
+                                            }}
+                                            getOptionLabel={(option) => option.name}
+                                            options={portsOptions ?? []}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Destination Port'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            disabled={isView}
+                                            // value={(portsOptions?.length > 0 && shippingOptions?.destinationPort) && portsOptions.find((ele) => ele?._id === shippingOptions?.destinationPort)}
+                                            value={
+                                                (shippingOptions.shipmentMode === "SEA" &&
+                                                    portsOptions?.length > 0 &&
+                                                    shippingOptions.destinationPort &&
+                                                    portsOptions.find(
+                                                        (ele) => ele._id === shippingOptions.destinationPort
+                                                    )) ||
+                                                (shippingOptions.shipmentMode === "AIR" &&
+                                                    portsOptions?.length > 0 &&
+                                                    shippingOptions.destinationAirbase &&
+                                                    portsOptions.find(
+                                                        (ele) => ele._id === shippingOptions.destinationAirbase
+                                                    ))
+                                            }
+                                        />
                                         {error?.destinationPort && (
                                             <span
                                                 style={{
@@ -1866,7 +2098,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Shipment frequency'
+                                                    label='Shipment Frequency'
                                                     variant='standard'
                                                 />
                                             )}
@@ -1907,7 +2139,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Warehouse required?'
+                                                    label='Warehouse Required?'
                                                     variant='standard'
                                                 />
                                             )}
@@ -2043,7 +2275,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Transhipment required?'
+                                                    label='Transhipment Required?'
                                                     variant='standard'
                                                 />
                                             )}
@@ -2166,7 +2398,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             <Row className='mt-4'>
                                                 <Col lg={4}>
                                                     <TextField
-                                                        label='Transshipment quantity'
+                                                        label='Transshipment Quantity'
                                                         variant='standard'
                                                         color='warning'
                                                         name='conditions_of_contract'
@@ -2194,7 +2426,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 </Col>
                                                 <Col lg={4}>
                                                     <TextField
-                                                        label='Transshipment unit'
+                                                        label='Transshipment Unit'
                                                         variant='standard'
                                                         color='warning'
                                                         name='conditions_of_contract'
@@ -2222,7 +2454,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     <form className='' noValidate>
                                                         <TextField
                                                             id='date'
-                                                            label='Transhipment date'
+                                                            label='Transhipment Date'
                                                             type='date'
                                                             name='contract_date'
                                                             value={transShipmentOptions.transShipmentDate}
@@ -2302,7 +2534,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                 </div> */}
                     <div className='add-edit-product pt-0 pb-0'>
                         <div className='form'>
-                            <h2 className='mb-3'>Pricing details</h2>
+                            <h2 className='mb-3'>Pricing Details</h2>
                             <div>
                                 <Row>
                                     <Col
@@ -2329,7 +2561,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
-                                                    label='Pricing type'
+                                                    label='Pricing Type'
                                                     variant='standard'
                                                 />
                                             )}
@@ -2362,7 +2594,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 }
                                             >
                                                 <TextField
-                                                    label="Pricing amount"
+                                                    label="Pricing Amount"
                                                     // label='Mertic measure'
                                                     variant='standard'
                                                     color='warning'
@@ -2391,7 +2623,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 }
                                             >
                                                 <TextField
-                                                    label='Pricing unit'
+                                                    label='Pricing Unit'
                                                     variant='standard'
                                                     color='warning'
                                                     // value={selectedProduct && selectedProduct}
@@ -2406,7 +2638,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                 }
                                             >
                                                 <TextField
-                                                    label='Previous day closing amount'
+                                                    label='Previous Day Closing Amount'
                                                     variant='standard'
                                                     color='warning'
                                                     value={pricingDetails.previousDayClosingAmount}
@@ -2452,7 +2684,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     renderInput={(params) => (
                                                         <TextField
                                                             {...params}
-                                                            label='Pricing formula'
+                                                            label='Pricing Formula'
                                                             variant='standard'
                                                         />
                                                     )}
@@ -2479,7 +2711,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                             </Col>
                                             <Col lg={pricingDetails.pricingHedgeingStatus ? 3 : 4}>
                                                 <Autocomplete
-                                                    label='Pricing hedging status'
+                                                    label='Pricing Hedging status'
                                                     id='disable-clearable'
                                                     onChange={(e, newVal) =>
                                                         setPricingDetails({
@@ -2493,7 +2725,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     renderInput={(params) => (
                                                         <TextField
                                                             {...params}
-                                                            label='Pricing hedging status'
+                                                            label='Price Hedging Status'
                                                             variant='standard'
                                                         />
                                                     )}
@@ -2501,11 +2733,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                     value={
                                                         ((warehouseRequiredOptions.length > 0 &&
                                                             pricingDetails.pricingHedgeingStatus === true) ||
-                                                            pricingDetails.pricingHedgeingStatus === false) && Array.isArray(warehouseRequiredOptions) ?
-                                                        warehouseRequiredOptions.find(
-                                                            (ele) =>
-                                                                ele.value === pricingDetails.pricingHedgeingStatus
-                                                        ) : warehouseRequiredOptions === ''
+                                                            pricingDetails.pricingHedgeingStatus === false) ?
+                                                            warehouseRequiredOptions.find(
+                                                                (ele) =>
+                                                                    ele.value === pricingDetails.pricingHedgeingStatus
+                                                            ) : warehouseRequiredOptions === ''
                                                     }
                                                 />
                                                 {error?.pricingHedgeingStatus && (
@@ -2581,7 +2813,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalW
                                                                 renderInput={(params) => (
                                                                     <TextField
                                                                         {...params}
-                                                                        label='Counter party'
+                                                                        label='Counterparty'
                                                                         variant='standard'
                                                                     />
                                                                 )}

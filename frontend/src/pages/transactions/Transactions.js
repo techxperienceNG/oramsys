@@ -50,9 +50,12 @@ const Transactions = () => {
     let id = AuthStorage.getStorageData(STORAGEKEY.roles) !== "superAdmin"
       ? AuthStorage.getStorageData(STORAGEKEY.userId) : "all"
     dispatch(getAllTransaction(id))
+    // setTransaction(getAllTransaction(id))
   }, [])
 
   const refreshPage = useCallback(() => {
+    console.log(getAlltransactionData.data);
+    
     if (
       getAlltransactionData &&
       getAlltransactionData.data &&
@@ -77,6 +80,7 @@ const Transactions = () => {
           }
         })
       )
+
 
       setTransaction2(
         getAlltransactionData.data?.map((item) => {
@@ -105,7 +109,7 @@ const Transactions = () => {
   useEffect(() => {
     dispatch(() => refreshPage())
     //eslint-disable-next-line
-  }, [])
+  }, [getAlltransactionData])
 
   // const cllickOnRiskAssessment = (id) => {
   //     dispatch(getRiskAssessment(id))
@@ -255,10 +259,6 @@ const Transactions = () => {
                       <input type="text" id='search' onKeyUp={e => checkSearch(e)} onChange={(e) => setSearch(e.target.value)} className="form-control w-100 ps-5" placeholder="Search transaction..." />
                     </div>
 
-                    <div class="pe-5">
-                      {/* <span class="text-muted text-sm"><Paginate postsPerPage={postsPerPage} totalPosts={getAlltransactionData?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} currentTrans={currentTrans} /> </span> */}
-                      {/* <i class="fa fa-ellipsis-h ms-3"></i> */}
-                    </div>
 
                   </div>
                   <div class="table-responsive">
@@ -268,7 +268,7 @@ const Transactions = () => {
                         <tr class="bg-light text-center">
                           <th scope="col" width="5%">Date</th>
                           <th scope="col" width="15%">Transaction Number</th>
-                          <th scope="col" width="10%">Applicant</th>
+                          <th scope="col" width="10%">Borrower</th>
                           <th scope="col" width="15%">Lender</th>
                           <th scope="col" width="10%">Value</th>
                           <th scope="col" width="20%">Product</th>
@@ -318,62 +318,62 @@ const Transactions = () => {
                             <td class=''>
                               <div className='container '>
                                 <div className='d-flex py-3 justify-content-center gap-3'>
-                                  
+
 
                                   <Dropdown size='sm'>
                                     <Dropdown.Toggle variant="light" id="dropdown-basic">
-                                    <FcSettings size={25} />
+                                      <FcSettings size={17} />
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu variant="light" className="text-white" active>
-                                      <Dropdown.Item onClick={() =>  navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], }) }><MdEdit className="me-2 mb-1" size={15}/>Edit</Dropdown.Item>
-                                      <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}><MdPreview className="me-2 mb-1" size={15}/>Preview</Dropdown.Item>
-                                      {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ? 
-                                      <Dropdown.Item onClick={() => { dispatch(getRiskAssessment(data._id)); setSelected(data._id)}}><MdAssessment className="me-2 mb-1" size={15}/>Risk Assesment
-                                      </Dropdown.Item> : "" } 
-                                      
-                                      <Dropdown.Item onClick={() => { data.termSheet ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}><MdVisibility className="me-2 mb-1" size={15}/>View Termsheet</Dropdown.Item>
-                                      <Dropdown.Item onClick={() => { data.termSheet ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}><FileDownloadIcon className="me-2 mb-1" size={15}/>Download Termsheet</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], })}><MdEdit className="me-2 mb-1" size={15} />Edit</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}><MdPreview className="me-2 mb-1" size={15} />Preview</Dropdown.Item>
+                                      {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ?
+                                        <Dropdown.Item onClick={() => { dispatch(getRiskAssessment(data._id)); setSelected(data._id) }}><MdAssessment className="me-2 mb-1" size={15} />Risk Assesment
+                                        </Dropdown.Item> : ""}
+
+                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}><MdVisibility className="me-2 mb-1" size={15} />View Termsheet</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}><FileDownloadIcon className="me-2 mb-1" size={15} />Download Termsheet</Dropdown.Item>
                                     </Dropdown.Menu>
                                   </Dropdown>
 
                                   {/* <div class=''>
-                                      <MdEdit onClick={() => { navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], }) }}
-                                        data-tooltip-id='edit-id'
-                                        data-tooltip-content='Edit Transaction'
-                                        className='cursor-pointer'
-                                        size={18} />
-                                      <Tooltip id='edit-id' place='top' effect='solid' />
-                                    </div>
-                                    <div class=''>
-                                      <MdPreview data-tooltip-id='preview-id' data-tooltip-content='Preview Transaction'
-                                        onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}
-                                        className='cursor-pointer'
-                                        size={18}
-                                      />
-                                      <Tooltip id='preview-id' place='top' effect='solid' />
-                                    </div>
-                                    <div class=''>
-                                      {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ? <MdAssessment data-tooltip-id='riskassesment-id' data-tooltip-content='Risk Assesment' onClick={() => {
-                                        dispatch(getRiskAssessment(data._id)); setSelected(data._id)
-                                      }} className='cursor-pointer'
-                                        size={18}
-                                      /> : ""}
+                                        <MdEdit onClick={() => { navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], }) }}
+                                          data-tooltip-id='edit-id'
+                                          data-tooltip-content='Edit Transaction'
+                                          className='cursor-pointer'
+                                          size={18} />
+                                        <Tooltip id='edit-id' place='top' effect='solid' />
+                                      </div>
+                                      <div class=''>
+                                        <MdPreview data-tooltip-id='preview-id' data-tooltip-content='Preview Transaction'
+                                          onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}
+                                          className='cursor-pointer'
+                                          size={18}
+                                        />
+                                        <Tooltip id='preview-id' place='top' effect='solid' />
+                                      </div>
+                                      <div class=''>
+                                        {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ? <MdAssessment data-tooltip-id='riskassesment-id' data-tooltip-content='Risk Assesment' onClick={() => {
+                                          dispatch(getRiskAssessment(data._id)); setSelected(data._id)
+                                        }} className='cursor-pointer'
+                                          size={18}
+                                        /> : ""}
 
-                                      <Tooltip id='riskassesment-id' place='top' effect='solid' />
-                                    </div>
-                                    <div class=''>
-                                        <MdVisibility  onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}data-tooltip-id='viewriskassesment' data-tooltip-content='View Termsheet' size={18} />
-                                        <Tooltip id='viewriskassesment' place='top' effect='solid' />
-                                    
-                                    </div>
-                                    <div class=''>
-                                      <FileDownloadIcon data-tooltip-id='termsheet' data-tooltip-content='Download Termsheet' onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}
-                                        className='cursor-pointer'
-                                        size={18}
-                                      />
-                                      <Tooltip id='termsheet' place='top' effect='solid' />
-                                    </div> */}
+                                        <Tooltip id='riskassesment-id' place='top' effect='solid' />
+                                      </div>
+                                      <div class=''>
+                                          <MdVisibility  onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}data-tooltip-id='viewriskassesment' data-tooltip-content='View Termsheet' size={18} />
+                                          <Tooltip id='viewriskassesment' place='top' effect='solid' />
+                                      
+                                      </div>
+                                      <div class=''>
+                                        <FileDownloadIcon data-tooltip-id='termsheet' data-tooltip-content='Download Termsheet' onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}
+                                          className='cursor-pointer'
+                                          size={18}
+                                        />
+                                        <Tooltip id='termsheet' place='top' effect='solid' />
+                                      </div> */}
                                 </div>
                               </div>
                             </td>
@@ -384,8 +384,8 @@ const Transactions = () => {
 
                     </table>
                     {transaction.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
-                    {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
-                    <div class="card-footer border-0 py-2">
+                    {/* {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>} */}
+                    <div class="card-footer border-0 py-2 mb-5">
 
                       <span class="text-muted text-sm"><Paginate postsPerPage={postsPerPage} totalPosts={getAlltransactionData?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} currentTrans={currentTrans} /> </span>
                     </div>
@@ -452,27 +452,27 @@ export default Transactions
 //   },
 // ]
 {/* <MaterialTable
-title=""
-columns={[
-    { title: 'Transaction Date', field: 'createdAt', type: 'date' },
-    { title: 'Transaction Number', field: '_id' },
-    { title: 'Applicant', field: 'borrower_Applicant' },
-    { title: 'Lenders', field: 'lenders' },
-    { title: 'Product', field: 'details.productDetails.name.name' },
-    { title: 'Value', render: rowData => formateCurrencyValue(rowData.details.contractDetails.value) },
+  title=""
+  columns={[
+      { title: 'Transaction Date', field: 'createdAt', type: 'date' },
+      { title: 'Transaction Number', field: '_id' },
+      { title: 'Applicant', field: 'borrower_Applicant' },
+      { title: 'Lenders', field: 'lenders' },
+      { title: 'Product', field: 'details.productDetails.name.name' },
+      { title: 'Value', render: rowData => formateCurrencyValue(rowData.details.contractDetails.value) },
 
-    { title: 'Term Sheet', render: rowData => <p onClick={() => { rowData.termSheet === 'Not Signed' && setShowExcelModal(true); setSendId(rowData._id) }}>{rowData.termSheet}{rowData.termSheet === 'Signed' ? <Button onClick={() => { downloadTermSheet(rowData._id) }}><FileDownloadIcon /></Button> : <></>}</p> },
+      { title: 'Term Sheet', render: rowData => <p onClick={() => { rowData.termSheet === 'Not Signed' && setShowExcelModal(true); setSendId(rowData._id) }}>{rowData.termSheet}{rowData.termSheet === 'Signed' ? <Button onClick={() => { downloadTermSheet(rowData._id) }}><FileDownloadIcon /></Button> : <></>}</p> },
 
-data={transaction || <Skeleton />}
+  data={transaction || <Skeleton />}
 
-actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
+  actions={AuthStorage.getStorageData(STORAGEKEY.roles) === 'superAdmin' ? (tableAction.splice(2, 1), tableAction) : AuthStorage.getStorageData(STORAGEKEY.roles) === 'user' ? tableAction : tableAction.slice(1, 2)}
 
 
-options={{
-    filtering: true,
-    actionsColumnIndex: -1,
-    sorting: true,
-    pageSize: 10,
-    search: false,
-}}
-/> */}
+  options={{
+      filtering: true,
+      actionsColumnIndex: -1,
+      sorting: true,
+      pageSize: 10,
+      search: false,
+  }}
+  /> */}

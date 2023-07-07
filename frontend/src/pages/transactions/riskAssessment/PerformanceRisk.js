@@ -144,8 +144,8 @@ const PerformanceRisk = ({ hendelNext, hendelCancel }) => {
             <>
                 <div className='add-edit-product'>
                     <div className='d-flex align-items-center justify-content-center error-info mb-3'>
-                        <img src={`../../../assets/img/about/${performanceRisk?.goodCreditStanding?.type && performanceRisk?.acceptableJurisdiction?.justification && performanceRisk?.cashCollateral?.type && performanceRisk?.coverageOnStock?.type && performanceRisk?.acceptableCMA?.type ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
-                        {performanceRisk?.goodCreditStanding?.type && performanceRisk?.acceptableJurisdiction?.justification && performanceRisk?.cashCollateral?.type && performanceRisk?.coverageOnStock?.type && performanceRisk?.acceptableCMA?.type ?
+                        <img src={`../../../assets/img/about/${performanceRisk?.goodCreditStanding?.type || performanceRisk?.acceptableJurisdiction?.justification || performanceRisk?.cashCollateral?.type || performanceRisk?.coverageOnStock?.type || performanceRisk?.acceptableCMA?.type ? "error-info-success.png" : "error-info.png"}`} className='me-3' />
+                        {performanceRisk?.goodCreditStanding?.type || performanceRisk?.acceptableJurisdiction?.justification || performanceRisk?.cashCollateral?.type || performanceRisk?.coverageOnStock?.type || performanceRisk?.acceptableCMA?.type ?
                             <p className='success'>Risks are acceptable due to mitigants</p> :
                             <p className='error'>The below risks require your attention</p>
                         }

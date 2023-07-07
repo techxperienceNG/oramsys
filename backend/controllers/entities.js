@@ -137,6 +137,29 @@ class entitiesController {
 
     }
 
+    // async updateRole(req, res, next) {
+    //     try {
+    //       const roleId = req.params.id; // Extract the role ID from the request parameters
+    //       const updatedRoleData = req.body; // Extract the updated role information from the reque`enter code here`st body
+      
+    //       const existingRole = await entityRoles.findById(roleId);
+    //       if (!existingRole) {
+    //         return res.status(httpStatus.NOT_FOUND).send({ message: "Role not found." });
+    //       }
+      
+    //       // Update the existing role with the updated role information
+    //       existingRole.name = updatedRoleData.name;
+    //       existingRole.description = updatedRoleData.description;
+    //       // Update other properties as needed
+      
+    //       const updatedRole = await existingRole.save();
+      
+    //       return res.status(httpStatus.OK).json(new APIResponse(updatedRole, 'Role updated successfully.', httpStatus.OK));
+    //     } catch (error) {
+    //       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new APIResponse({}, 'Error updating role.', httpStatus.INTERNAL_SERVER_ERROR, error));
+    //     }
+    //   }
+
     async create(req, res, next) {
         let body = req.body;
         let detail = req.body.detail;
@@ -147,11 +170,11 @@ class entitiesController {
         let warehouses = req.body.warehouses;
         let roles = req.body.roles;
         let updateData = {}
-        const newPassword = await hashPassword(req.body.password, 10);
+        // const newPassword = await hashPassword(req.body.password, 10);
         const newEntity =
         {
             email: body.email.toLowerCase(),
-            password: newPassword,
+            // password: newPassword,
             type: body.type,
         }
         try {

@@ -183,6 +183,7 @@ const Add_Edit_Product = () => {
   const categoryOptions = [
     'Hard',
     'Soft',
+    'Energy',
     'Manufactures',
   ]
 

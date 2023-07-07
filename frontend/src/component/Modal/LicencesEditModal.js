@@ -230,7 +230,7 @@ const LicencesEditModal = ({ onHide, show, mode, editData }) => {
                     <form className="" noValidate>
                       <TextField
                         id="date"
-                        label="Date of rating"
+                        label="Date of License Issued"
                         type="date"
                         InputLabelProps={{
                           shrink: true,

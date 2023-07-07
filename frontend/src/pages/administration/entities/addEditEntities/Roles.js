@@ -25,6 +25,7 @@ const Roles = ({ hendelNext, hendelCancel }) => {
     const [roles, setRoles] = useState([])
     const [mode, setMode] = useState("")
     const [editData, setEditData] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const companyData = useSelector((state) => state.companydata.companydata)
     const entityAddData = useSelector((state) => state.entityData.entityAdd)
@@ -54,7 +55,7 @@ const Roles = ({ hendelNext, hendelCancel }) => {
         dispatch(companydataAction(body))
     }
 
-    const Save = () => {
+    const Save = async () => {
         delete companyData.detail._id
         delete companyData.financial._id
         const body = {
@@ -84,7 +85,9 @@ const Roles = ({ hendelNext, hendelCancel }) => {
                 return ele
             }),
         }
-        dispatch(entityAddAction(body))
+        setLoading(true)
+        await dispatch(entityAddAction(body))
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -98,7 +101,7 @@ const Roles = ({ hendelNext, hendelCancel }) => {
         }
     }, [entityAddData])
 
-    const edit = () => {
+    const edit = async () => {
         const body = {
             email: companyData.email,
             password: companyData.password,
@@ -111,7 +114,9 @@ const Roles = ({ hendelNext, hendelCancel }) => {
             warehouses: companyData.warehouses,
             roles: companyData.roles,
         }
-        dispatch(editEntityAction(id, body))
+        setLoading(true)
+        await dispatch(editEntityAction(id, body))
+        setLoading(false)
         navigate('/entities')
 
     }
@@ -123,14 +128,14 @@ const Roles = ({ hendelNext, hendelCancel }) => {
                 type: EDIT_ENTITY,
                 payload: []
             })
-            dispatch({
-                type: ENTITY_GET_BY_ID,
-                payload: []
-            })
-            dispatch({
-                type: COMPANY_DATA,
-                payload: [],
-            });
+            // dispatch({
+            //     type: ENTITY_GET_BY_ID,
+            //     payload: []
+            // })
+            // dispatch({
+            //     type: COMPANY_DATA,
+            //     payload: [],
+            // });
             toast.success(editEntityData.message);
         }
     }, [editEntityData])
@@ -191,7 +196,15 @@ const Roles = ({ hendelNext, hendelCancel }) => {
 
                 <div className='footer_'>
                     <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">cancel</button>
-                    <button onClick={() => id ? edit() : Save()} className={`footer_next_btn ${isView ? 'd-none' : 'd-block'}`}>{id ? 'Edit' : 'Save'}</button>
+                    <button onClick={() => id ? edit() : Save()} className={`footer_next_btn ${isView ? 'd-none' : 'd-block'}`}>
+                    {!loading ? <>{id ? "Edit" : "Save"}</> : null}
+                        {loading && <div class="d-flex justify-content-center">
+                        <strong className='me-2'>Saving...</strong>
+                            <div className="spinner-border spinner-border-sm mt-1" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>}
+                    </button>
                 </div>
             </div>
             {

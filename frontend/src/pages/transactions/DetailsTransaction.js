@@ -385,7 +385,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                 .then((getTransactionByIdData) => {
                     let resp = getTransactionByIdData.data;
                     let respProductDetails = getTransactionByIdData.data.details.productDetails;
-                    console.log('CHECK ALL DATA', getTransactionByIdData.data.details.shippingOptions.shippingCompany)
+                    console.log('CHECK ALL DATA', getTransactionByIdData.data)
 
                     if (getTransactionByIdData && getTransactionByIdData.data) {
                         setEditId(getTransactionByIdData.data?.details?._id)
@@ -525,7 +525,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                 getTransactionByIdData.data?.details?.pricingDetails?.pricingFormula,
                             pricingHedgeingStatus:
                                 getTransactionByIdData.data?.details?.pricingDetails
-                                    ?.pricingHedgingStatus,
+                                    ?.pricingHedgeingStatus,
                             pricingHedgingMethod:
                                 getTransactionByIdData.data?.details?.pricingDetails
                                     ?.pricingHedgingMethod,
@@ -2733,7 +2733,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                     value={
                                                         ((warehouseRequiredOptions.length > 0 &&
                                                             pricingDetails.pricingHedgeingStatus === true) ||
-                                                            pricingDetails.pricingHedgeingStatus === false) && Array.isArray(warehouseRequiredOptions) ?
+                                                            pricingDetails.pricingHedgeingStatus === false) ?
                                                             warehouseRequiredOptions.find(
                                                                 (ele) =>
                                                                     ele.value === pricingDetails.pricingHedgeingStatus

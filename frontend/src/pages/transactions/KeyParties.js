@@ -13,6 +13,9 @@ import { MdOutlineDeleteOutline } from 'react-icons/md'
 import { entityGetAction } from '../../redux/actions/entityAction'
 
 const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingCompany, getCounterParty, getWarehouseCompany, getLender, getBorrower }) => {
+        console.log(getWarehouseCompany)
+    console.log(getCounterParty)
+    console.log(getShippingCompany)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [showEditModal, setShowEditModal] = useState(false)
@@ -101,9 +104,10 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
             setBorrower_Applicant(getLender.borrower_Applicant)
             setLenders(getBorrower.lenders)
             setWarehouseComp(getWarehouseCompany?.warehouses[0]?.warehouseCompany?.label)
-            setCounterPart(getTransactionByIdData.data?.details?.pricingDetails
+            
+            setCounterPart(getTransactionByIdData?.data?.details?.pricingDetails
                 ?.pricingCounterParty?.details.name)
-            setShippingComp(getTransactionByIdData.data?.details?.shippingOptions
+            setShippingComp(getTransactionByIdData?.data?.details?.shippingOptions
                 ?.shippingCompany?.details.name)
             // setCounterPart(getCounterParty?.pricingCounterParty?.details?.name)
             // setShippingComp(getShippingCompany?.shippingCompany?.details?.name)
@@ -143,6 +147,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
     }
 
     const handleParties = (e, newValue, ind, type) => {
+        console.log(newValue, 'fund mw')
         let temp = keyParties;
         let tempRelatedPartyDetails = relatedPartyDetails;
         if (temp[ind] == undefined) {
@@ -500,9 +505,10 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                     <Col lg={3}>
                                         <Autocomplete
                                             options={partiesData}
-                                            getOptionLabel={(option) => option}
+                                            getOptionLabel={(option) => option || ""}
                                             id={"disable-clearable-buyer-" + index}
                                             label="Party"
+                                            defaultValue={party.buyer}
                                             renderInput={(params) => (
                                                 <TextField {...params} label="Party 1" variant="standard" />
                                             )}
@@ -510,7 +516,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                                 handleParties(event, newValue, index, 'buyer');
                                             }}
                                             disabled={isView}
-                                            value={(partiesData) && partiesData.find((ele) => ele === party.buyer)}
+                                            value={(partiesData && party.buyer) && partiesData.find((ele) => ele === party?.buyer)}
                                             disableClearable
                                         />
                                         {error && error?.buyer && <span style={{ color: 'red' }}>{error?.buyer}</span>}
@@ -520,17 +526,19 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                     <Col lg={3}>
                                         <Autocomplete
                                             options={partiesData}
-                                            getOptionLabel={(option) => option}
+                                            getOptionLabel={(option) => option || ""}
                                             id={"disable-clearable-shipper-" + index}
                                             label="Party"
+                                            defaultValue={party.shipper}
                                             renderInput={(params) => (
                                                 <TextField {...params} label="Party 2" variant="standard" />
                                             )}
                                             onChange={(event, newValue) => {
                                                 handleParties(event, newValue, index, 'shipper');
+                                                console.log(party.shipper, "Check")
                                             }}
                                             disabled={isView}
-                                            value={(partiesData) && partiesData.find((ele) => ele === party.shipper)}
+                                            value={(partiesData && party.shipper) && partiesData.find((ele) => ele === party?.shipper)}
                                             disableClearable
                                         />
                                         {error && error?.shipper && <span style={{ color: 'red' }}>{error?.shipper}</span>}

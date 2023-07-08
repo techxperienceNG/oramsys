@@ -12,10 +12,7 @@ import { transactionDataAction } from '../../redux/actions/transactionDataAction
 import { MdOutlineDeleteOutline } from 'react-icons/md'
 import { entityGetAction } from '../../redux/actions/entityAction'
 
-const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingCompany, getCounterParty, getWarehouseCompany, getLender, getBorrower }) => {
-        console.log(getWarehouseCompany)
-    console.log(getCounterParty)
-    console.log(getShippingCompany)
+const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingCompany, getCounterParty, pricingHedgingStatus, getWarehouseCompany, getLender, getBorrower }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [showEditModal, setShowEditModal] = useState(false)
@@ -382,7 +379,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                             variant='standard'
                             color='warning'
                             name='lenders'
-                            value={shippingComp}
+                            value={getShippingCompany}
                             disabled={true}
                         />
                     </Col>
@@ -399,18 +396,18 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                         />
                     </Col>
                 </Row>
-                <Row>
+                {pricingHedgingStatus && <Row>
                     <Col lg={12} className="mb-4">
                         <TextField
                             label='Hedging Counterparty'
                             variant='standard'
                             color='warning'
                             name='Counterparty'
-                            value={counterPart}
+                            value={getCounterParty}
                             disabled={true}
                         />
                     </Col>
-                </Row>
+                </Row>}
 
                 <div className='mb-3 d-flex justify-content-between align-items-center'>
                     <h4>Additional Parties</h4>

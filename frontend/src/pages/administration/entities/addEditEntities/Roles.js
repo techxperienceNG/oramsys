@@ -113,6 +113,9 @@ const Roles = ({ hendelNext, hendelCancel }) => {
             ratings: companyData.ratings,
             warehouses: companyData.warehouses,
             roles: companyData.roles,
+            isLicense: companyData.isLicense || false,
+            isRatings: companyData.isRatings || false,
+            isWarehouse: companyData.isWarehouse || false,
         }
         setLoading(true)
         await dispatch(editEntityAction(id, body))

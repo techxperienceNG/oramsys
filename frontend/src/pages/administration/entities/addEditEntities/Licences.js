@@ -1,10 +1,13 @@
 import MaterialTable from 'material-table'
-import React, { useEffect, useState } from 'react'
+import { TextField } from "@material-ui/core"
+import React, {useEffect, useState} from 'react'
+import Autocomplete from "@material-ui/lab/Autocomplete"
 import LicencesEditModal from '../../../../component/Modal/LicencesEditModal'
-import { useSelector, useDispatch } from 'react-redux'
-import { companydataAction } from '../../../../redux/actions/companydataAction'
+import {useSelector, useDispatch} from 'react-redux'
+import {companydataAction} from '../../../../redux/actions/companydataAction'
 import moment from 'moment';
-import { useLocation } from 'react-router-dom'
+import {Col, Row} from "react-bootstrap"
+import {useLocation} from 'react-router-dom'
 
 const Licences = ({ hendelNext, hendelCancel }) => {
 
@@ -42,44 +45,108 @@ const Licences = ({ hendelNext, hendelCancel }) => {
         dispatch(companydataAction(body))
     }
 
+    const handleOption = (value) => {
+        let body = {
+            ...companyData,
+            isLicense: value,
+        }
+        dispatch(companydataAction(body))
+    }
+
+    let options = [
+        { label: "Select option", value: "" },
+        { label: "Yes", value: true },
+        { label: "No", value: false },
+    ]
+
     return (
         <>
             <div className='add-edit-product'>
                 <div className='product'>
                     <div className='mb-3 d-flex justify-content-between align-items-center'>
                         <h2 className='m-0'>Licences</h2>
-                        <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => { setEditModal(true); setMode("Add") }}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
+                        {companyData.isLicense && <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => {
+                            setEditModal(true);
+                            setMode("Add")
+                        }}><img src='../../assets/img/about/plus.png' className='me-2'/>Add</button>}
                     </div>
-                    <MaterialTable
+                    <div className='drop-down-container'>
+                        <div className='form'>
+                            <Row>
+                                <Col lg={3}>
+                                    <Autocomplete
+                                        label='Do you want to add licenses?'
+                                        id='disable-clearable'
+                                        onChange={(e, newVal) => {
+                                            handleOption(newVal?.value)
+                                        }}
+                                        getOptionLabel={(option) => option.label || ""}
+                                        options={options}
+                                        value={
+                                            ((options.length > 0 &&
+                                                    companyData.isLicense === true) ||
+                                                companyData.isLicense === false) ?
+                                                options.find(
+                                                    (ele) => ele.value === companyData.isLicense
+                                                ) : options = ''
+                                        }
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label='Do you want to add licenses?'
+                                                variant='standard'
+                                            />
+                                        )}
+                                    />
+                                </Col>
+
+                            </Row>
+                        </div>
+                    </div>
+                    {companyData.isLicense && <MaterialTable
                         title=""
                         columns={[
-                            { title: 'Type', field: 'type' },
-                            { title: 'Number', field: 'number' },
-                            { title: 'Authority', field: 'authority' },
-                            { title: 'Country', field: 'country' },
-                            { title: 'Date Of Rating', field: 'dateofrating' },
-                            { title: 'Expiry Date', field: 'expirydate' },
+                            {title: 'Type', field: 'type'},
+                            {title: 'Number', field: 'number'},
+                            {title: 'Authority', field: 'authority'},
+                            {title: 'Country', field: 'country'},
+                            {title: 'Date Of Rating', field: 'dateofrating'},
+                            {title: 'Expiry Date', field: 'expirydate'},
                         ]}
                         data={licenceTable}
                         actions={isView ? [{
                             icon: 'preview',
                             tooltip: 'View Licences',
-                            onClick: (e, data) => { setEditModal(true); setEditData(data.tableData.id); setMode("View") }
+                            onClick: (e, data) => {
+                                setEditModal(true);
+                                setEditData(data.tableData.id);
+                                setMode("View")
+                            }
                         },] : [
                             {
                                 icon: 'edit',
                                 tooltip: 'Edit Licences',
-                                onClick: (e, data) => { setEditModal(true); setEditData(data.tableData.id); setMode("Edit") }
+                                onClick: (e, data) => {
+                                    setEditModal(true);
+                                    setEditData(data.tableData.id);
+                                    setMode("Edit")
+                                }
                             },
                             {
                                 icon: 'preview',
                                 tooltip: 'View Licences',
-                                onClick: (e, data) => { setEditModal(true); setEditData(data.tableData.id); setMode("View") }
+                                onClick: (e, data) => {
+                                    setEditModal(true);
+                                    setEditData(data.tableData.id);
+                                    setMode("View")
+                                }
                             },
                             {
                                 icon: 'delete',
                                 tooltip: 'Delete Licences',
-                                onClick: (e, data) => { Delete(data) }
+                                onClick: (e, data) => {
+                                    Delete(data)
+                                }
                             }
                         ]}
                         options={{
@@ -89,11 +156,11 @@ const Licences = ({ hendelNext, hendelCancel }) => {
                             pageSize: 10,
                             search: false,
                         }}
-                    />
+                    />}
                 </div>
                 <div className='footer_'>
                     <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">cancel</button>
-                    <button onClick={() => { companyData?.licenses?.length > 0 && hendelNext() }} className='footer_next_btn'> Next</button>
+                    <button onClick={() => { ((companyData?.licenses?.length > 0 && companyData.isLicense) || companyData.isLicense === false) && hendelNext() }} className='footer_next_btn'> Next</button>
                 </div>
             </div>
             {

@@ -1,36 +1,47 @@
 import MaterialTable from 'material-table'
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
+import React, {useEffect, useState} from 'react'
+import {useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import EntitiesRoleAddModal from '../../component/Modal/EntitiesRoleAddModal'
-import { entitiesRoleAction } from '../../redux/actions/entitiesRoleAction'
+import {entitiesRoleAction, entityRoleDeleteAction} from '../../redux/actions/entitiesRoleAction'
+import ConfirmationModel from "../../component/Modal/ConfirmationModel";
 
 const EntitiesRole = () => {
 
     const [entityRole, setEntityRole] = useState([])
-    const [addEntityModal, setAddEntityModal] = useState(false)    
+    const [addEntityModal, setAddEntityModal] = useState(false)
+    const [isDelete, setIsDelete] = useState(false)
+    const [isAdd, setIsAdd] = useState(false)
+    const [formType, setFormType] = useState('add')
     const [rowData, setRowData] = useState({})
+    const [showModal, setShowModal] = useState(false)
+
     const dispatch = useDispatch()
-
-
 
     const entityRoleData = useSelector(state => state.entityRoleData.entityRole)
     useEffect(() => {
-        if (!addEntityModal) {            
-            dispatch(entitiesRoleAction())
+        if (!addEntityModal || isDelete || isAdd) {
+            setIsDelete(false)
+            setIsAdd(false)
+            dispatch(entitiesRoleAction());
         }
-    }, [addEntityModal])
+    }, [addEntityModal, dispatch, isDelete, isAdd]);
 
     useEffect(() => {
-        console.log('entityRoleData ==========', entityRoleData?.data)
-        setEntityRole(entityRoleData)
-    }, [entityRoleData])
+        setEntityRole(entityRoleData);
+    }, [entityRoleData]);
 
-    console.log('entityRole ========', entityRole)
+    const handleAdd = () => {
+        setRowData({})
+        setFormType('add');
+        setAddEntityModal(true);
+    };
 
-    // const getModalData = (data) => {
-    //     setModalData([...modalData, data])
-    // }
+    const handleDelete = (rowData) => {
+        dispatch(entityRoleDeleteAction(rowData._id));
+        setIsDelete(true);
+        setShowModal(false);
+    };
 
     const cardData = [
         {
@@ -101,7 +112,9 @@ const EntitiesRole = () => {
                 <div className='product p-0'>
                     <div className='mb-3 d-flex justify-content-between align-items-center'>
                         <h5 className="title-color">Entities Role</h5>
-                        <button className='add_btn me-3' onClick={() => setAddEntityModal(!addEntityModal)}> <img src='../../assets/img/about/plus.png' className='me-2' alt='' />Add</button>
+                        <button className='add_btn me-3' onClick={() => handleAdd()}><img
+                            src='../../assets/img/about/plus.png' className='me-2' alt=''/>Add
+                        </button>
                     </div>
                     {/* <Row>
           {ratingSchemesCard.map((item) => (
@@ -113,7 +126,7 @@ const EntitiesRole = () => {
                     <MaterialTable
                         title=""
                         columns={[
-                            { title: 'Grade', field: 'roleName' },
+                            {title: 'Grade', field: 'roleName'},
                             // { title: 'Value', field: 'product' },
                             // { title: 'Acceptable', field: 'type' },
                             // { title: 'Comments', field: 'comments' },
@@ -122,13 +135,22 @@ const EntitiesRole = () => {
                         actions={[
                             {
                                 icon: 'edit',
-                                tooltip: 'Edit Users',
-                                onClick: (e,rowData) => {setAddEntityModal(true); setRowData(rowData) }
+                                tooltip: 'Edit Role',
+                                onClick: (e, rowData) => {
+                                    setFormType('edit');
+                                    setAddEntityModal(true);
+                                    setRowData(rowData)
+                                }
                             },
                             {
-                                icon: 'preview',
-                                tooltip: 'View Users',
-                                // onClick: () => setEditModal(true)
+                                icon: 'delete',
+                                tooltip: 'Delete Role',
+                                onClick: (e, rowData) => {
+                                    setRowData(rowData)
+                                    setShowModal(true)
+
+                                    // handleDelete(rowData)
+                                }
                             }
                         ]}
                         options={{
@@ -146,7 +168,15 @@ const EntitiesRole = () => {
                     <button onClick={() => { }} className='footer_next_btn'>Save</button>
                 </div> */}
             </div>
-            {addEntityModal && <EntitiesRoleAddModal data={rowData} show={addEntityModal} onHide={() => setAddEntityModal(false)} />}
+            {addEntityModal &&
+            <EntitiesRoleAddModal formType={formType} data={rowData} show={addEntityModal} onHide={() => {
+                setAddEntityModal(false);
+                if (formType === 'add') {
+                    setIsAdd(true)
+                }
+            }}/>}
+            {showModal &&
+            <ConfirmationModel show={showModal} message={"Are you sure you want to delete?"} onConfirm={() => handleDelete(rowData)} onHide={() => setShowModal(false)}/>}
         </>
     )
 }

@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
-import { entityRoleAddAction } from '../../redux/actions/entitiesRoleAction'
+import {entityRoleAddAction, entityRoleUpdateAction} from '../../redux/actions/entitiesRoleAction'
 
-const EntitiesRoleAddModal = ({ show, onHide, data }) => {
+const EntitiesRoleAddModal = ({ show, onHide, data, formType }) => {
     const dispatch = useDispatch()
-
     const [state, setState] = useState({
         roleName: ""
     })
@@ -53,8 +52,13 @@ const EntitiesRoleAddModal = ({ show, onHide, data }) => {
         if (validation()) {
             return
         }
-        dispatch(entityRoleAddAction(state))
-        onHide()
+        if(formType === 'add') {
+            dispatch(entityRoleAddAction(state))
+            onHide()
+        } else {
+            dispatch(entityRoleUpdateAction(state, data._id))
+            onHide()
+        }
     }
     return (
         <div>

@@ -18,6 +18,9 @@ router.get('/get-roles', Validate, entitiesController.getRoles);
 router.get('/get-warehouses/:id', Validate, entitiesController.getWarehouses);
 router.get('/get-sectors', Validate, entitiesController.getSectors);
 router.post('/add-role', Validate, entitiesController.addRole);
+router.post('/edit-role/:id', Validate, entitiesController.editRole);
+router.delete('/remove-role/:id', Validate, entitiesController.deleteRole);
+
 router.post('/add', Validate, entitiesController.create);
 router.post('/edit/:id', Validate, entitiesController.edit);
 router.delete('/remove/:id', Validate, entitiesController.delete);

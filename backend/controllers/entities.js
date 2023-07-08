@@ -137,6 +137,38 @@ class entitiesController {
 
     }
 
+    //entity role update
+    async editRole(req, res, next) {
+        let params = req.params;
+        let body = req.body;
+        let id = params.id;
+
+        try {
+            const updatedData = await entityRoles.updateEntityRoles(body,id)
+            return res.status(httpStatus.OK).json(new APIResponse(updatedData, 'Role updated successfully.', httpStatus.OK));
+
+        } catch (e) {
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new APIResponse({}, 'Error updating Role', httpStatus.INTERNAL_SERVER_ERROR, e));
+        }
+    }
+
+    // entity role delete
+    async deleteRole(req, res, next) {
+        let params = req.params;
+        let id = params.id;
+        try {
+            const existingData = await entityRoles.getById(id)
+            if (!existingData) {
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new APIResponse({}, 'Can not found Role.', httpStatus.OK));
+            } else {
+                const Data = await entityRoles.deleteEntityRoles(id)
+                return res.status(httpStatus.OK).json(new APIResponse({}, 'Role deleted successfully.', httpStatus.OK));
+            }
+        } catch (e) {
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(new APIResponse({}, 'Error in deleting Role', httpStatus.INTERNAL_SERVER_ERROR, e));
+        }
+    }
+
     // async updateRole(req, res, next) {
     //     try {
     //       const roleId = req.params.id; // Extract the role ID from the request parameters

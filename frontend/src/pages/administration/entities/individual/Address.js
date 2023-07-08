@@ -338,7 +338,7 @@ const IndividualAddress = ({ handleNext, hendelCancel, sendDetailData, common })
         <>
             <div className='add-edit-product'>
                 <div className='form'>
-                    <h2 className='mb-3'>Residential address</h2>
+                    <h2 className='mb-3'>Residential Address</h2>
                     <div>
                         <Row>
                             <Col lg={3}>
@@ -504,7 +504,7 @@ const IndividualAddress = ({ handleNext, hendelCancel, sendDetailData, common })
 
             <div className='add-edit-product pt-0 pb-5'>
                 <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
-                    <h2 className='mb-3'>Professional address</h2>
+                    <h2 className='mb-3'>Professional Address</h2>
                     <button className='footer_next_btn mb-3' onClick={()=> setProfessionalState({...ResidentialState, type: "Professional"})}>Use Residential Address</button>
 
                     <div>

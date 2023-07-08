@@ -76,7 +76,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         pricingUnit: "",
         previousDayClosingAmount: "",
         pricingFormula: "",
-        pricingHedgeingStatus: false,
+        pricingHedgeingStatus: "",
         pricingHedgingMethod: "",
         pricingCounterParty: "",
     })

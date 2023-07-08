@@ -309,7 +309,7 @@ const Details = ({ hendelNext, entityType }) => {
             error[bilingAddress.type].email = "Please enter valid email!"
             flag = true
         }
-        if (!shippingAddress.flatNumber) {
+        if (!shippingAddress?.flatNumber) {
             error[shippingAddress.type].flatNumber = "Please enter flat number!"
             flag = true
         }
@@ -551,7 +551,7 @@ const Details = ({ hendelNext, entityType }) => {
                                     label="Flat number"
                                     variant="standard"
                                     color="warning"
-                                    value={bilingAddress.flatNumber}
+                                    value={bilingAddress?.flatNumber}
                                     onChange={(e) => handleChange(e, 'flatNumber', 'biling')}
                                     disabled={isView}
                                 />
@@ -698,7 +698,7 @@ const Details = ({ hendelNext, entityType }) => {
                                     label="Flat number"
                                     variant="standard"
                                     color="warning"
-                                    value={shippingAddress.flatNumber}
+                                    value={shippingAddress?.flatNumber}
                                     onChange={(e) => handleChange(e, 'flatNumber', 'shipping')}
                                     disabled={isView}
                                 />

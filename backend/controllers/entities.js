@@ -370,6 +370,9 @@ class entitiesController {
         const newEntity =
         {
             email: body.email.toLowerCase(),
+            isLicense: body?.isLicense || false,
+            isRatings: body?.isRatings || false,
+            isWarehouse: body?.isWarehouse || false,
         }
         try {
             const alreadyExist = await entities.getByEmail(req.body.email);

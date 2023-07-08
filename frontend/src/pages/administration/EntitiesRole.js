@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux'
 import {useDispatch} from 'react-redux'
 import EntitiesRoleAddModal from '../../component/Modal/EntitiesRoleAddModal'
 import {entitiesRoleAction, entityRoleDeleteAction} from '../../redux/actions/entitiesRoleAction'
+import ConfirmationModel from "../../component/Modal/ConfirmationModel";
 
 const EntitiesRole = () => {
 
@@ -13,6 +14,8 @@ const EntitiesRole = () => {
     const [isAdd, setIsAdd] = useState(false)
     const [formType, setFormType] = useState('add')
     const [rowData, setRowData] = useState({})
+    const [showModal, setShowModal] = useState(false)
+
     const dispatch = useDispatch()
 
     const entityRoleData = useSelector(state => state.entityRoleData.entityRole)
@@ -37,6 +40,7 @@ const EntitiesRole = () => {
     const handleDelete = (rowData) => {
         dispatch(entityRoleDeleteAction(rowData._id));
         setIsDelete(true);
+        setShowModal(false);
     };
 
     const cardData = [
@@ -142,7 +146,10 @@ const EntitiesRole = () => {
                                 icon: 'delete',
                                 tooltip: 'Delete Role',
                                 onClick: (e, rowData) => {
-                                    handleDelete(rowData)
+                                    setRowData(rowData)
+                                    setShowModal(true)
+
+                                    // handleDelete(rowData)
                                 }
                             }
                         ]}
@@ -168,6 +175,8 @@ const EntitiesRole = () => {
                     setIsAdd(true)
                 }
             }}/>}
+            {showModal &&
+            <ConfirmationModel show={showModal} message={"Are you sure you want to delete?"} onConfirm={() => handleDelete(rowData)} onHide={() => setShowModal(false)}/>}
         </>
     )
 }

@@ -36,6 +36,7 @@ const Edit_Transactions = () => {
     const [getCounterParty, setGetCounterParty] = useState("")
     const [getShippingCompany, setGetShippingCompany] = useState("")
     const [pricingHedgingStatus, setPricingHedgingStatus] = useState(false)
+    const [warehouseStatus, setWarehouseStatus] = useState(false)
 
     const [activeStep, setActiveStep] = useState(0);
     let step = []
@@ -78,6 +79,9 @@ const Edit_Transactions = () => {
     }
     const signalPricingHedgingStatus = (values) => {
         return setPricingHedgingStatus(values)
+    }
+    const signalWarehouseStatus = (values) => {
+        return setWarehouseStatus(values)
     }
 
     const handleNext = () => {
@@ -132,8 +136,8 @@ const Edit_Transactions = () => {
                                     {
                                         productNature === 'Physical' ?
                                             <>
-                                                {activeStep + 1 === 1 && <DetailsTransaction hendelNext={handleNext} signalShippingCompany={signalShippingCompany} signalCounterParty={signalCounterParty} signalPricingHedgingStatus={signalPricingHedgingStatus} signalContract={signalContract} signalWarehouseCompany={signalWarehouseCompany} signalLender={signalLender} signalBorrower={signalBorrower}  transactionType={transactionType} transaction_id={transId} />}
-                                                {activeStep + 1 === 2 && <KeyParties hendelNext={handleNext} getShippingCompany={getShippingCompany} getCounterParty={getCounterParty} pricingHedgingStatus={pricingHedgingStatus} getLender={getLender} getBorrower={getBorrower} getWarehouseCompany={getWarehouseCompany} hendelCancel={handleBack} transactionType={transactionType} />}
+                                                {activeStep + 1 === 1 && <DetailsTransaction hendelNext={handleNext} signalShippingCompany={signalShippingCompany} signalCounterParty={signalCounterParty} signalPricingHedgingStatus={signalPricingHedgingStatus} signalContract={signalContract} signalWarehouseCompany={signalWarehouseCompany} signalWarehouseStatus={signalWarehouseStatus} signalLender={signalLender} signalBorrower={signalBorrower}  transactionType={transactionType} transaction_id={transId} />}
+                                                {activeStep + 1 === 2 && <KeyParties hendelNext={handleNext} getShippingCompany={getShippingCompany} getCounterParty={getCounterParty} pricingHedgingStatus={pricingHedgingStatus} getLender={getLender} getBorrower={getBorrower} getWarehouseCompany={getWarehouseCompany} warehouseStatus={warehouseStatus} hendelCancel={handleBack} transactionType={transactionType} />}
                                                 {activeStep + 1 === 3 && <DocumentFlow hendelNext={handleNext} hendelCancel={handleBack} />}
                                                 {activeStep + 1 === 4 && <FundFlow hendelNext={handleNext} getTrans={getTrans} hendelCancel={handleBack} />}
                                                 {activeStep + 1 === 5 && <Facility hendelNext={handleNext} hendelCancel={handleBack} />}

@@ -19,7 +19,7 @@ import { airPortsAction, portsAction } from "../../redux/actions/portsAction"
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 
-const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalCounterParty, signalShippingCompany, signalWarehouseCompany, signalContract, signalBorrower, signalLender, transaction_id, signalPricingHedgingStatus }) => {
+const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalCounterParty, signalShippingCompany, signalWarehouseCompany, signalWarehouseStatus,  signalContract, signalBorrower, signalLender, transaction_id, signalPricingHedgingStatus }) => {
     const navigate = useNavigate()
 
     // let numberReg = /^[0-9\b]+$/;
@@ -85,6 +85,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     const [shipping_company, setShippingCompany] = useState("")
     const [hedging_party, setHedgingParty] = useState("")
     const [hedging_status, setHedgingStatus] = useState(false)
+    const [warehouse_status, setWarehouseStatus] = useState(false)
     const [lenders, setLenders] = useState("")
 
     const [addWarehouseModal, setAddWarehouseModal] = useState(false)
@@ -494,6 +495,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                 ),
 
                         })
+                        setWarehouseStatus(  getTransactionByIdData.data?.details?.shippingOptions
+                            ?.warehouseRequired)
 
                         setTransShipmentOptions({
                             tranShipmentRequired:
@@ -1032,6 +1035,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             shipping_company,
             hedging_party,
             hedging_status,
+            warehouse_status,
             type: transactionType,
         }
         dispatch(transactionDataAction(body))
@@ -1040,6 +1044,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         signalWarehouseCompany(body.details.shippingOptions)
         signalCounterParty(body.hedging_party)
         signalPricingHedgingStatus(body.hedging_status)
+        signalWarehouseStatus(body.warehouse_status)
         signalShippingCompany(body.shipping_company)
         signalLender(body.lenders)
         hendelNext()
@@ -2143,11 +2148,13 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         <Autocomplete
                                             label='Warehouse required?'
                                             id='disable-clearable'
-                                            onChange={(e, newVal) =>
+                                            onChange={(e, newVal) => {
                                                 setShippingOptions({
                                                     ...shippingOptions,
                                                     warehouseRequired: newVal.value,
                                                 })
+                                                setWarehouseStatus(newVal.value)
+                                                }
                                             }
                                             getOptionLabel={(option) => option.label || ""}
                                             options={warehouseRequiredOptions}

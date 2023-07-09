@@ -12,7 +12,7 @@ import { transactionDataAction } from '../../redux/actions/transactionDataAction
 import { MdOutlineDeleteOutline } from 'react-icons/md'
 import { entityGetAction } from '../../redux/actions/entityAction'
 
-const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingCompany, getCounterParty, pricingHedgingStatus, getWarehouseCompany, getLender, getBorrower }) => {
+const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingCompany, getCounterParty, pricingHedgingStatus, getWarehouseCompany, warehouseStatus, getLender, getBorrower }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [showEditModal, setShowEditModal] = useState(false)
@@ -384,7 +384,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                         />
                     </Col>
                 </Row>
-                <Row>
+                {warehouseStatus && <Row>
                     <Col lg={12} className="mb-4">
                         <TextField
                             label='Warehouse Company'
@@ -395,7 +395,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                             disabled={true}
                         />
                     </Col>
-                </Row>
+                </Row>}
                 {pricingHedgingStatus && <Row>
                     <Col lg={12} className="mb-4">
                         <TextField

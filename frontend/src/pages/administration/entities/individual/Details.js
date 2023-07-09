@@ -157,7 +157,7 @@ const IndividualDetail = ({ hendelNext, getDetailData, entityType, getCommonData
         <>
             <div className='add-edit-product'>
                 <div className='form'>
-                    <h2 className='mb-3'>Residential address</h2>
+                    <h2 className='mb-3'>Details</h2>
                     <div>
                         <Row>
                             <Col lg={6}>

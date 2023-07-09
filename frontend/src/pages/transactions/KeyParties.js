@@ -329,9 +329,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
         const storeData = [
             getBorrower,
             getLender,
-            shippingComp,
+            getShippingCompany,
             warehouseComp,
-            counterPart,
+            getCounterParty,
             ...tdata,
         ]
         setpartiesData(storeData);
@@ -410,7 +410,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                 </Row>}
 
                 <div className='mb-3 d-flex justify-content-between align-items-center'>
-                    <h4>Additional Parties</h4>
+                    <h4>Key Parties</h4>
                 </div>
                 <MaterialTable
                     title=""

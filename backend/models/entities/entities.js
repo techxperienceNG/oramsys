@@ -21,7 +21,7 @@ var Schema = new Schema({
     warehouses: [{ type: Schema.Types.ObjectId, ref: "EntityWarehouse", required: false }],
     roles: [RoleSchema],
     isLicense: { type: Boolean, default: false },
-    isRating: { type: Boolean, default: false },
+    isRatings: { type: Boolean, default: false },
     isWarehouse: { type: Boolean, default: false },
     isDeleted: { type: Boolean, required: true, default: false },
 }, {

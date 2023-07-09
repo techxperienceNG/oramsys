@@ -100,7 +100,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
             setEditId(getTransactionByIdData?.data?.keyParties[0]?._id)
             setBorrower_Applicant(getLender.borrower_Applicant)
             setLenders(getBorrower.lenders)
-            setWarehouseComp(getWarehouseCompany?.warehouses[0]?.warehouseCompany?.label)
+            // setWarehouseComp(getWarehouseCompany?.warehouses[0]?.warehouseCompany?.label)
             
             setCounterPart(getTransactionByIdData?.data?.details?.pricingDetails
                 ?.pricingCounterParty?.details.name)
@@ -324,19 +324,19 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
     tableData.map((item) => {
         tdata.push(item?.name?.label)
     })
-
+const warehouseCo = getWarehouseCompany.warehouses[0]?.warehouseCompany?.label
     const AddUpParties = useCallback(() => {
         const storeData = [
             getBorrower,
             getLender,
             getShippingCompany,
-            warehouseComp,
+            warehouseCo,
             getCounterParty,
             ...tdata,
         ]
         setpartiesData(storeData);
     }, [tableData])
-
+console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCompany?.label)
     useEffect(() => {
         AddUpParties()
     }, [AddUpParties])
@@ -391,7 +391,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                             variant='standard'
                             color='warning'
                             name='warehouse company'
-                            value={warehouseComp}
+                            value={warehouseCo}
                             disabled={true}
                         />
                     </Col>

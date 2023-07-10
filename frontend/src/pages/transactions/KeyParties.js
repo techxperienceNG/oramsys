@@ -480,25 +480,6 @@ console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCom
                             <Row key={index}>
                                 <>
 
-                                    {/* <Col lg={3}>
-                                            <div className='d-flex ms-4'>
-                                                <img src='../../../assets/img/about/Tag.png' style={{ "height": "30px", "top": "22px", "position": "relative" }} />
-                                                <Autocomplete
-                                                    className='ms-3 mb-3 w-100'
-                                                    options={names}
-                                                    getOptionLabel={(option) => option.label || ""}
-                                                    id={"disable-clearable-buyer" + ind}
-                                                    label="Buyer"
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Party 1" variant="standard" />
-                                                    )}
-                                                    defaultValue={relatedParties.buyer}
-                                                    getOptionSelected={(option) => option.label === 'test'}
-                                                    onChange={(event, newValue) => handleBuyer(event, newValue, ind)}
-                                                    disableClearable
-                                                />
-                                            </div>
-                                        </Col> */}
                                     <Col lg={3}>
                                         <Autocomplete
                                             options={partiesData}
@@ -540,30 +521,7 @@ console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCom
                                         />
                                         {error && error?.shipper && <span style={{ color: 'red' }}>{error?.shipper}</span>}
                                     </Col>
-
-                                    {/* {warehouses.map((element) => ( */}
-
-                                    {/* <Col lg={3}>
-                                            <><div className='d-flex'>
-                                                <img src='../../../assets/img/about/Deliver.png' style={{ "height": "30px", "top": "22px", "position": "relative" }} />
-                                                <Autocomplete
-                                                    className='ms-3 mb-3 w-100'
-                                                    options={warehouses}
-                                                    getOptionLabel={(option) => option.name}
-                                                    id={"disable-clearable-shipper-" + ind}
-                                                    label="Shipper"
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Party 2" variant="standard" />
-                                                    )}
-                                                    defaultValue={relatedParties.shipper}
-                                                    getOptionSelected={(option) => option.name === 'test'}
-                                                    onChange={(event, newValue) => handleShipper(event, newValue, ind)}
-                                                    disableClearable
-                                                />
-                                            </div></>
-                                                        
-
-                                        </Col> */}
+                                 
                                     <Col lg={4}>
                                         <div className='d-flex align-items-center Related_parties'>
                                             <p className='mb-0 title-color'>Relation</p>
@@ -607,23 +565,10 @@ console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCom
                                         {error && error?.upload_evidence && <span style={{ color: 'red' }}>{error?.upload_evidence}</span>}
                                     </Col>}
 
-                                    {/* <Col lg={2}>
-                                        <div className=''>
-                                    <MdOutlineDeleteOutline onClick={() => handleRemoveParty(index)} className='cursor-pointer' size={30} />
-                                    </div> 
-                                        </Col> */}
-
                                 </>
-                                {/* <div className='d-flex justify-content-end '>
-                                    <MdOutlineDeleteOutline className='mb-5' size={30} />
-                                    </div> */}
                             </Row>
                         ))}
                     </>
-
-
-
-
                 </div>
             </div>
             <div className='footer_'>

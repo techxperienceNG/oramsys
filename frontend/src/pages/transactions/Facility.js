@@ -238,6 +238,28 @@ const Facility = ({ hendelCancel, hendelNext }) => {
     const baseRateOptions = [
         'LOBOR',
         'SOFR',
+        'Fixed Rate'
+    ]
+    const facilityTypeOptions = [
+        'Trade Finance',
+        'Export Finance',
+        'Pre-Export Finance'
+    ]
+    const governLawOptions = [
+        'French',
+        'English',
+        'Others'
+    ]
+    const documentationOptions = [
+        'Deed of Assignment',
+        'Account Charge',
+    ]
+    const expenseOptions = [
+        'Deed of Assignment',
+        'Account Charge',
+    ]
+    const repsOptions = [
+        'No clear options',
     ]
 
     const currencyHedgeOptions = [
@@ -314,7 +336,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         }
         else if (name === "amount") {
             // if (parseInt(transactionData?.details?.contractDetails?.value?.replace(/,/g, '')) >= parseInt(e.target.value)) {
-                if (e.target.value === '' || e.target.value) {
+            if (e.target.value === '' || e.target.value) {
                 setFacility({ ...facility, [name]: e.target.value })
             } else {
                 setFacility({ ...facility, [name]: '' })
@@ -1110,7 +1132,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                         <h2 className='mb-3'>Detail</h2> */}
                         <div>
                             <Row>
-                                <Col lg={3}>
+                                {/* <Col lg={3}>
                                     <TextField
                                         label="Facility Type"
                                         id="standard-start-adornment"
@@ -1122,41 +1144,28 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         disabled={isView}
                                     />
                                     {error && error?.type && <span style={{ color: 'red' }}>{error.type}</span>}
+                                </Col> */}
+                                <Col lg={3}>
+
+                                    <Autocomplete
+                                        options={facilityTypeOptions}
+                                        getOptionLabel={(option) => option}
+                                        id="disable-clearable"
+                                        label="Facility Type"
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Facility Type" variant="standard" />
+                                        )}
+                                        onChange={(event, newValue) => {
+                                            setFacility({ ...facility, type: newValue });
+                                        }}
+                                        disabled={isView}
+                                        disableClearable
+                                        value={facility.type}
+                                    />
+                                    {error && error?.type && <span style={{ color: 'red' }}>{error.type}</span>}
                                 </Col>
 
                                 <Col lg={3}>
-                                    {/* <Col lg={3}>
-                <Autocomplete
-                  options={CurrencyOptions}
-                  getOptionLabel={(option) => option.label}
-                  id='disable-clearable'
-                  label='Contract currency'
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Contract currency'
-                      variant='standard'/> 
-                      )}
-                  onChange={(e, newVal) =>
-                    setContractDetails({
-                      ...contractDetails,
-                      currency: newVal.label,
-                    })
-                  }
-                  value={CurrencyOptions && contractDetails?.currency && CurrencyOptions.find(
-                      (ele) => ele.label === contractDetails.currency)}
-                  disableClearable
-                  disabled={isView}
-                />
-                {error?.currency && ( <span style={{
-                      color: "#da251e",
-                      width: "100%",
-                      textAlign: "start",
-                    }}>
-                    {error?.currency}
-                  </span>
-                )}
-              </Col> */}
                                     <Autocomplete
                                         options={CurrencyOptions}
                                         getOptionLabel={(option) => option.label}
@@ -1174,18 +1183,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     />
                                     {error && error?.currency && <span style={{ color: 'red' }}>{error.currency}</span>}
                                 </Col>
-                                {/* <Col lg={6}>
-                                    <TextField
-                                        label="Contract currency"
-                                        variant="standard"
-                                        color="warning"
-                                        value={facility.currency}
-                                        name="currency"
-                                    
-                                        disabled={isView || facility.currency?.length > 0}
-                                    />
-                                    {error && error.value && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.value}</span>}
-                                </Col> */}
+
                                 <Col lg={3}>
                                     <TextField
                                         label="Facility Amount"
@@ -1331,6 +1329,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         )}
                                         onChange={(event, newValue) => {
                                             setFacility({ ...facility, loanPurposeValidity: newValue });
+                                            // setFacility({ ...facility, loanPurposeValidity: newValue === "No" ? navigate('/final-page') : "" });
                                         }}
                                         disableClearable
                                         value={facility.loanPurposeValidity}
@@ -1591,7 +1590,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             {/* </div> */}
                             <Row className='mb-4'>
                                 <Col lg={3}>
-                                    <TextField
+                                    {/* <TextField
                                         label="Documentation"
                                         id="standard-start-adornment"
                                         variant="standard"
@@ -1603,6 +1602,21 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         multiline
                                         maxRows={3}
                                     // onClick={() => { setShowTextEditor(true); setType('Documentation'); setSelectedName('documentation') }}
+                                    /> */}
+                                    <Autocomplete
+                                        options={documentationOptions}
+                                        getOptionLabel={(option) => option}
+                                        id="disable-clearable"
+                                        label="Documentation"
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Documentation" variant="standard" />
+                                        )}
+                                        onChange={(event, newValue) => {
+                                            setFacility({ ...facility, documentation: newValue });
+                                        }}
+                                        disabled={isView}
+                                        disableClearable
+                                        value={facility.documentation}
                                     />
                                     {error && error?.documentation && <span style={{ color: 'red' }}>{error.documentation}</span>}
                                 </Col>
@@ -1714,7 +1728,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             </Row>
                             <Row className='mb-4'>
                                 <Col lg={3}>
-                                    <TextField
+                                    {/* <TextField
                                         label="Expenses"
                                         id="standard-start-adornment"
                                         variant="standard"
@@ -1726,6 +1740,21 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         maxRows={3}
                                         // onClick={() => { setShowTextEditor(true); setType('Expenses'); setSelectedName('expenses') }}
                                         disabled={isView}
+                                    /> */}
+                                    <Autocomplete
+                                        options={expenseOptions}
+                                        getOptionLabel={(option) => option}
+                                        id="disable-clearable"
+                                        label="Expenses"
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Expenses" variant="standard" />
+                                        )}
+                                        onChange={(event, newValue) => {
+                                            setFacility({ ...facility, expenses: newValue });
+                                        }}
+                                        disabled={isView}
+                                        disableClearable
+                                        value={facility.expenses}
                                     />
                                     {error && error?.expenses && <span style={{ color: 'red' }}>{error.expenses}</span>}
                                 </Col>
@@ -1746,7 +1775,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     {error && error?.approvals && <span style={{ color: 'red' }}>{error.approvals}</span>}
                                 </Col>
                                 <Col lg={3}>
-                                    <TextField
+                                    {/* <TextField
                                         label="Governing Law"
                                         id="standard-start-adornment"
                                         variant="standard"
@@ -1758,6 +1787,21 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         maxRows={3}
                                         // onClick={() => { setShowTextEditor(true); setType('Governing law'); setSelectedName('governingLaw') }}
                                         disabled={isView}
+                                    /> */}
+                                    <Autocomplete
+                                        options={governLawOptions}
+                                        getOptionLabel={(option) => option}
+                                        id="disable-clearable"
+                                        label="Governing Law"
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Governing Law" variant="standard" />
+                                        )}
+                                        onChange={(event, newValue) => {
+                                            setFacility({ ...facility, governingLaw: newValue });
+                                        }}
+                                        disabled={isView}
+                                        disableClearable
+                                        value={facility.governingLaw}
                                     />
                                     {error && error?.governingLaw && <span style={{ color: 'red' }}>{error.governingLaw}</span>}
                                 </Col>
@@ -1911,7 +1955,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             </Row>
                             <Row className='mb-4'>
                                 <Col lg={6}>
-                                    <TextField
+                                    {/* <TextField
                                         label="Representations"
                                         id="standard-start-adornment"
                                         variant="standard"
@@ -1922,6 +1966,21 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         multiline
                                         maxRows={3}
                                         disabled={isView}
+                                    /> */}
+                                    <Autocomplete
+                                        options={repsOptions}
+                                        getOptionLabel={(option) => option}
+                                        id="disable-clearable"
+                                        label="Representions"
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Representions" variant="standard" />
+                                        )}
+                                        onChange={(event, newValue) => {
+                                            setFacility({ ...facility, representations: newValue });
+                                        }}
+                                        disabled={isView}
+                                        disableClearable
+                                        value={facility.representations}
                                     />
                                     {error && error?.representations && <span style={{ color: 'red' }}>{error.representations}</span>}
                                 </Col>
@@ -1946,9 +2005,9 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                     <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">cancel</button>
                     <button onClick={() => { navigate('/final-page') }} className={`footer_next_btn ${isView ? 'd-block' : 'd-none'}`}>Exit</button>
                     <button onClick={() => { id ? edit() : save() }} className={`footer_next_btn ${isView && 'd-none'}`}>
-                       {!loading ? <>{id ? "Close" : "Save"}</> : null}
+                        {!loading ? <>{id ? "Close" : "Save"}</> : null}
                         {loading && <div class="d-flex justify-content-center">
-                        <strong className='me-2'>Saving...</strong>
+                            <strong className='me-2'>Saving...</strong>
                             <div className="spinner-border spinner-border-sm mt-1" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>

@@ -250,7 +250,7 @@ const Transactions = () => {
               <div class='container-fluid'>
                 <div class='row g-6 mb-4'></div>
 
-                <div class="container mx-auto mt-1 px-2">
+                <div class="container mx-auto">
 
                   <div class="mb-2 d-flex justify-content-between align-items-center">
 
@@ -270,10 +270,10 @@ const Transactions = () => {
                           <th scope="col" width="15%">Transaction Number</th>
                           <th scope="col" width="10%">Borrower</th>
                           <th scope="col" width="15%">Lender</th>
-                          <th scope="col" width="10%">Value</th>
+                          <th scope="col" width="10%">Contract Value</th>
                           <th scope="col" width="20%">Product</th>
                           <th scope="col" width="20%">Termsheet</th>
-                          <th scope="col" class="" width="20%"><span>Actions</span></th>
+                          <th scope="col" width="20%"><span>Actions</span></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -387,7 +387,8 @@ const Transactions = () => {
                     {/* {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>} */}
                     <div class="card-footer border-0 py-2 mb-5">
 
-                      <span class="text-muted text-sm"><Paginate postsPerPage={postsPerPage} totalPosts={getAlltransactionData?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} currentTrans={currentTrans} /> </span>
+                      <span class="text-muted text-sm">
+                        <Paginate postsPerPage={postsPerPage} totalPosts={getAlltransactionData?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} currentTrans={currentTrans} /> </span>
                     </div>
                   </div>
 

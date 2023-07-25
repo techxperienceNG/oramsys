@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import UserCard from '../../../component/UserCard';
 import MaterialTable from 'material-table';
 import { useDispatch, useSelector } from 'react-redux';
 import { userGetAction } from '../../../redux/actions/userAction';
+import { MdEdit, MdPreview } from 'react-icons/md';
+import { Tooltip } from "react-tooltip"
+import Paginate from './userPagination';
 
 const Users = () => {
   const [showspan, setShowspan] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [getUserDatas, setGetUserDatas] = useState()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage, setPostsPerPage] = useState(10)
 
   const userData = useSelector(state => state.userData?.getUserData)
 
@@ -26,106 +31,178 @@ const Users = () => {
     dispatch(userGetAction())
   }, [])
 
+  const indexOfLastItem = currentPage * postsPerPage
+  const indexOfFirstItem = indexOfLastItem - postsPerPage
+  const getAllUsers = getUserDatas?.data?.slice(indexOfFirstItem, indexOfLastItem)
+  //page change
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
-  // const ratingSchemesCard = [
-  //   {
-  //     name:"joony",
-  //     lastname:'vinci',
-  //     department: "TIMBUKTU",
-  //     profile:"abc",
-
-  //   },
-  //   {
-  //     name:"joni",
-  //     lastname:'vinci',
-  //     department: "TIMBUKTU",
-  //     profile:"def",
-
-  //   },
-  //   {
-  //     name:"jonty",
-  //     lastname:'vinci',
-  //     department: "TIMBUKTU",
-  //     profile:"ghi",
-
-  //   },
-  //   {
-  //     name:"johnny",
-  //     lastname:'vinci',
-  //     department: "TIMBUKTU",
-  //     profile:"jkl",
-
-  //   },
-  //   {
-  //     name:"john",
-  //     lastname:'vinci',
-  //     department: "TIMBUKTU",
-  //     profile:"mno",
-
-  //   },
-  //   {
-  //     name:"leonardo",
-  //     lastname:'vinci',
-  //     department: "TIMBUKTU",
-  //     profile:"pqr",
-
-  //   }
-  // ]
 
   return (
     <>
-      {/* <div className='authheader_main'>
-        <h1>Users</h1>
-        <div className='d-flex'>
-          <button className='add_btn me-3' onClick={() => navigate('/add-edit-user')}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>          
-          <div className='search_content'>
-            <input className='serch_input' id='search' />
-            <label htmlFor='search'>
-              <img src='../assets/img/about/search.png' />
-            </label>
-          </div>
-        </div>
-      </div>
-      <div className='product'>
-        <Row>
-          <Col xxl={3} xl={6} lg={6} md={6} sm={6}>
-            <UserCard />
-          </Col>
-          <Col xxl={3} xl={6} lg={6} md={6} sm={6}>
-            <UserCard />
-          </Col>
-          <Col xxl={3} xl={6} lg={6} md={6} sm={6}>
-            <UserCard />
-          </Col>
-          <Col xxl={3} xl={6} lg={6} md={6} sm={6}>
-            <UserCard />
-          </Col>
-        </Row>
-      </div> */}
+
 
       <div className='product'>
-        <div className='mb-3 d-flex justify-content-between align-items-center'>
-          <h2 className='m-0'>Users</h2>
-          <button className='add_btn me-3' onClick={() => navigate("/add-user")}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
+        <div class='container-fluid'>
+          <div id='dash' class='mb-npx'>
+            <header class='bg-surface-primary border-bottom pt-6'>
+              <div class='row align-items-center mb-3'>
+                <div class='col-sm-6 col-12 mb-4 mb-sm-0'>
+
+                  <h1 class='h2 mb-0 fw-bold fs-4 ls-tight'>Users</h1>
+                </div>
+
+                <div class='col-sm-6 col-12 text-sm-end'>
+                  <div class='mx-n1 me-5 d-flex align-items-center justify-content-end gap-2'>
+
+
+
+                    <Link to='/add-user' style={{ borderColor: '#9E3E65' }} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-3'>
+                      <span class=' pe-2'>
+                        <i class="bi bi-plus"></i>
+                      </span>
+                      <span className='fw-bold'>Add User</span>
+                    </Link>
+
+                  </div>
+                </div>
+              </div>
+            </header>
+
+          </div>
         </div>
-        {/* <Row>
-          {
-            productGetData?.data?.map((item) => (
-              <Col xxl={3} xl={6} lg={6} md={6}>
-                <ProductCard product={item} />
-              </Col>
-            ))
-          }
-        </Row> */}
-        {/* <div className='container mx-auto'>
+        <div className='container mx-auto'>
+          <div class='row g-6 mb-4'></div>
+          <div className='table-responsive'>
+            <table class="table align-middle mb-0 bg-white border-light border-5">
+              <thead class="bg-light">
+                <tr className=''>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Department</th>
+                  <th>Profile</th>
+                  <th className='text-end'>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {!getAllUsers ? <div class="d-flex justify-content-center">
+                          <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                        </div> : getAllUsers.length > 0 && getAllUsers?.map((data, index) => (
+                  <tr key={index} className='text-center'>
+                    <td>
+                      <div class="d-flex align-items-center">
+
+                        <div class="">
+                          <p class="fw-normal m-2">{data.name}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+
+                        <div class="">
+                          <p class="fw-normal m-2">{data.email}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="d-flex align-items-center">
+
+                        <div class="align-items-center">
+                          <span class="badge badge-success rounded-pill m-2 me-3">{data.department}</span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="d-flex align-items-center">
+
+                        <div class="align-items-center">
+                          <p class="fw-bold m-2">{data.profile}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="d-flex justify-content-end m-2">
+
+                        <div class="align-items-center">
+                          <MdEdit onClick={() => { navigate(`/edit-user?id=${data?._id}`) }}
+                            data-tooltip-id='edit-id'
+                            data-tooltip-content='Edit User'
+                            className='cursor-pointer'
+                            size={18} />
+                          <Tooltip id='edit-id' place='top' effect='solid' />
+                        </div>
+                        <div class="align-items-center ms-3">
+                          <MdPreview data-tooltip-id='preview-id' data-tooltip-content='Preview Information'
+                            onClick={() => navigate(`/add-user?id=${data?._id}`, { state: { isView: true } })}
+                            className='cursor-pointer'
+                            size={18}
+                          />
+                          <Tooltip id='preview-id' place='top' effect='solid' />
+                        </div>
+                      </div>
+
+                    </td>
+
+                  </tr>
+                ))}
+
+              </tbody>
+            </table>
+            {getUserDatas?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
+            <div class="card-footer border-0 py-2 mb-5">
+
+              <span class="text-muted text-sm">
+                <Paginate postsPerPage={postsPerPage} totalPosts={userData?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} getAllUsers={getAllUsers} /> </span>
+            </div>
+          </div>
+        </div>
+
+        {/* <MaterialTable
+          title=""
+          columns={[
+            { title: 'Name', field: 'name' },
+            { title: 'Email', field: 'email' },
+            { title: 'Department', field: 'department' },
+            { title: 'Profile', field: 'profile' },
+          ]}
+          data={getUserDatas?.data}
+          actions={[
+            {
+              icon: 'edit',
+              tooltip: 'Edit Users',
+              onClick: (e, rowData) => navigate(`/edit-user?id=${rowData?._id}`)
+            },
+            {
+              icon: 'preview',
+              tooltip: 'View Users',
+              onClick: (e, rowData) => navigate(`/add-user?id=${rowData?._id}`, { state: { isView: true } })
+            }
+          ]}
+          options={{
+            filtering: true,
+            actionsColumnIndex: -1,
+            sorting: true,
+            pageSize: 10,
+            search: false,
+          }}
+        /> */}
+
+        {/*  <div className='container mx-auto'>
           <div className='table-responsive'>
             <table class="table align-middle mb-0 bg-white">
               <thead class="bg-light">
                 <tr>
                   <th>Name</th>
-                  <th>Title</th>
-                  <th>Status</th>
-                  <th>Position</th>
+                  <th>Email</th>
+                  <th>Department</th>
+                  <th>Profile</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -133,12 +210,7 @@ const Users = () => {
                 <tr>
                   <td>
                     <div class="d-flex align-items-center">
-                      <img
-                        src="https://mdbootstrap.com/img/new/avatars/8.jpg"
-                        alt=""
-                        style={{ width: "45px", height: "45px" }}
-                        class="rounded-circle"
-                      />
+                     
                       <div class="ms-3">
                         <p class="fw-bold mb-1">John Doe</p>
                         <p class="text-muted mb-0">john.doe@gmail.com</p>
@@ -162,12 +234,7 @@ const Users = () => {
                 <tr>
                   <td>
                     <div class="d-flex align-items-center">
-                      <img
-                        src="https://mdbootstrap.com/img/new/avatars/6.jpg"
-                        class="rounded-circle"
-                        alt=""
-                        style={{ width: "45px", height: "45px" }}
-                      />
+                     
                       <div class="ms-3">
                         <p class="fw-bold mb-1">Alex Ray</p>
                         <p class="text-muted mb-0">alex.ray@gmail.com</p>
@@ -197,12 +264,7 @@ const Users = () => {
                 <tr>
                   <td>
                     <div class="d-flex align-items-center">
-                      <img
-                        src="https://mdbootstrap.com/img/new/avatars/7.jpg"
-                        class="rounded-circle"
-                        alt=""
-                        style={{ width: "45px", height: "45px" }}
-                      />
+                     
                       <div class="ms-3">
                         <p class="fw-bold mb-1">Kate Hunington</p>
                         <p class="text-muted mb-0">kate.hunington@gmail.com</p>
@@ -231,36 +293,6 @@ const Users = () => {
             </table>
           </div>
         </div> */}
-
-        <MaterialTable
-          title=""
-          columns={[
-            { title: 'Name', field: 'name' },
-            { title: 'Email', field: 'email' },
-            { title: 'Department', field: 'department' },
-            { title: 'Profile', field: 'profile' },
-          ]}
-          data={getUserDatas?.data}
-          actions={[
-            {
-              icon: 'edit',
-              tooltip: 'Edit Users',
-              onClick: (e, rowData) => navigate(`/edit-user?id=${rowData?._id}`)
-            },
-            {
-              icon: 'preview',
-              tooltip: 'View Users',
-              onClick: (e, rowData) => navigate(`/add-user?id=${rowData?._id}`, { state: { isView: true } })
-            }
-          ]}
-          options={{
-            filtering: true,
-            actionsColumnIndex: -1,
-            sorting: true,
-            pageSize: 10,
-            search: false,
-          }}
-        />
       </div>
     </>
   )

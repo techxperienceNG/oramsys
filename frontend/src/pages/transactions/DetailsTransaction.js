@@ -32,6 +32,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         name: "",
         quantity: "",
         metric: "",
+        unit: "",
         quality: "",
     })
 
@@ -115,6 +116,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     const productData = useSelector((state) => state.product.product)
     const country = useSelector((state) => state.countryData.country)
     const entityData = useSelector((state) => state.entityData.entity)
+    console.log('PRodcutd data', productData)
     // const getTransactionByIdData = useSelector(
     //     (state) => state.transactionData.getTransactionById
     // )
@@ -197,7 +199,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         setActiveOnChange('destination')
         // setApiCalled(false)
     }
-
+    
     useEffect(() => {
         if (shippingOptions.countryOfOrigin) {
             setPorts(
@@ -368,6 +370,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             setProductDetails({
                 ...productDetails,
                 metric: productName.find((ele) => ele._id === productDetails.name)?.matric,
+                unit: productName.find((ele) => ele._id === productDetails.name)?.unit
             })
         }
     }, [productDetails.name, productName])
@@ -407,6 +410,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                             quantity:
                                 respProductDetails?.quantity,
                             metric: respProductDetails?.metric,
+                            unit: respProductDetails?.unit,
 
                             quality: getTransactionByIdData.data?.details?.productDetails?.quality,
                         })
@@ -2650,9 +2654,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                     variant='standard'
                                                     color='warning'
                                                     // value={selectedProduct && selectedProduct}
-                                                    value={selectedProduct && selectedProduct}
-                                                    onChange={(e) => handleChnage(e, "pricingUnit", "pricingDetails")}
-                                                    disabled
+                                                    value={productDetails.unit}
+                                                    onChange={(e) => handleChnage(e, "unit", "productDetails")}
+                                                    disabled={true}
                                                 />
                                             </Col>
                                             <Col

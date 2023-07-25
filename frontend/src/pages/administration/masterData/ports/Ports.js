@@ -10,6 +10,9 @@ import axios from 'axios';
 import { ApiPost, BaseURL } from '../../../../helper/API/ApiData';
 import { portsAction } from '../../../../redux/actions/portsAction';
 import { toast } from 'react-toastify'
+import Paginate from './portsPagination';
+import { MdEdit } from 'react-icons/md';
+import { Tooltip } from 'react-tooltip';
 
 
 
@@ -21,6 +24,9 @@ const Ports = ({ showSidebar, setSidebar }) => {
   const [PortForEdit, setPortForEdit] = useState()
   const [search, setSearch] = useState('')
   const dispatch = useDispatch()
+  
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage, setPostsPerPage] = useState(200)
 
   useEffect(() => {
     dispatch(portsAction(search ? search : "all"))
@@ -47,6 +53,12 @@ const Ports = ({ showSidebar, setSidebar }) => {
     })
   }
 
+  const indexOfLastItem = currentPage * postsPerPage
+  const indexOfFirstItem = indexOfLastItem - postsPerPage
+  const getPorts = PortData?.data?.slice(indexOfFirstItem, indexOfLastItem)
+  //page change
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+
   const navigate = useNavigate()
 
   return (
@@ -65,17 +77,90 @@ const Ports = ({ showSidebar, setSidebar }) => {
         </div>
       </div> */}
       <div className='product'>
-        <div className='mb-3 d-flex justify-content-between align-items-center'>
-          <h2 className='m-0'> Ports</h2>
-          {/* <button className='add_btn me-3' onClick={() => navigate('/add-product')}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button> */}
+        <div class='col-sm-6 col-12 mb-4 mb-sm-0'>
+          <h1 class='h2 mb-0 fw-bold fs-2 ls-tight'>Ports</h1>
         </div>
-        <MaterialTable
+
+        <div className='container mx-auto'>
+          <div class='row g-6 mb-4'></div>
+          <div className='table-responsive'>
+            <table class="table align-middle mb-0 bg-white border-light border-5">
+              <thead class="bg-light">
+                <tr className=''>
+                  <th className='fw-bold'>Name</th>
+                  <th className='fw-bold'>Nature</th>
+                  <th className='fw-bold'>Flag</th>
+                  <th className='fw-bold text-end'>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {!getPorts ? <div class="d-flex justify-content-center">
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div> : getPorts.length > 0 && getPorts?.map((data, index) => (
+                  <tr key={index} className='text-center'>
+                    <td>
+                      <div class="d-flex align-items-center">
+
+                        <div class="align-items-center">
+                          <p class="fw-normal m-2">{data.name}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <div class="align-items-center">
+                          <p class="fw-normal m-2">{data.country}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <div class="align-items-center">
+                          <p class="fw-normal m-2">{data.refcode}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="d-flex justify-content-end m-2">
+                        <div class="align-items-center">
+                          <MdEdit onClick={() => {
+                              setShow(true); setPortForEdit(PortData?.data?.find(item => item._id === data._id))
+                           }}
+                            data-tooltip-id='edit-id'
+                            data-tooltip-content='Edit Product'
+                            className='cursor-pointer'
+                            size={18} />
+                          <Tooltip id='edit-id' place='top' effect='solid' />
+                        </div>
+                      </div>
+                    </td>
+
+                  </tr>
+                ))}
+
+              </tbody>
+            </table>
+            {PortData?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
+            <div class="card-footer border-0 py-2 mb-5">
+
+              <span class="text-muted text-sm">
+                <Paginate postsPerPage={postsPerPage} totalPosts={ports?.data?.length} paginate={paginate} prevPagefunc={() => setCurrentPage(prev => prev - 1)} nextPagefunc={() => setCurrentPage(prev => prev + 1)} currentPage={currentPage} getPorts={getPorts} /> </span>
+            </div>
+          </div>
+        </div>
+
+        {/* <MaterialTable
           title=""
           columns={[
             { title: 'Name', field: 'name' },
             { title: 'Country', field: 'country' },
             { title: 'Ref. code', field: 'refcode' },
-            // { title: 'Flag', render: rowData => <Col xs={2} className="mt-auto p-0"><img className="img-fluid" src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${rowData.code}.svg`} alt="" /></Col> }
+            { title: 'Flag', render: rowData => <Col xs={2} className="mt-auto p-0"><img className="img-fluid" src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${rowData.code}.svg`} alt="" /></Col> }
           ]}
           data={PortData?.data}
           actions={[
@@ -85,11 +170,11 @@ const Ports = ({ showSidebar, setSidebar }) => {
               // onClick: (event, rowData) => { setShow(true);console.log('rowData', rowData)}
               onClick: (event, rowData) => { setShow(true); setPortForEdit(PortData?.data?.find(item => item._id === rowData._id)) }
             },
-            // {
-            //   icon: 'preview',
-            //   tooltip: 'View User',
-            //   onClick: (event, rowData) => navigate(`/edit-product?id=${rowData?._id}`, { state: { isView: true } })
-            // }
+            {
+              icon: 'preview',
+              tooltip: 'View User',
+              onClick: (event, rowData) => navigate(`/edit-product?id=${rowData?._id}`, { state: { isView: true } })
+            }
           ]}
           options={{
             filtering: true,
@@ -98,7 +183,7 @@ const Ports = ({ showSidebar, setSidebar }) => {
             pageSize: 10,
             search: false
           }}
-        />
+        /> */}
       </div>
       <Modal
         aria-labelledby="transition-modal-title"

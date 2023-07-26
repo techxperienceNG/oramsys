@@ -109,11 +109,7 @@ const EntitiesRole = () => {
                                 </thead>
                                 <tbody>
 
-                                    {!getAllEntities ? <div class="d-flex justify-content-center">
-                                        <div class="spinner-border" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
-                                    </div> : getAllEntities.length > 0 && getAllEntities?.map((data, index) => (
+                                    {getAllEntities?.length > 0 && getAllEntities?.map((data, index) => (
                                         <tr key={index} className='text-center'>
                                             <td>
                                                 <div class="d-flex align-items-center">
@@ -152,6 +148,11 @@ const EntitiesRole = () => {
 
                                 </tbody>
                             </table>
+                            {!getAllEntities && <div class="d-flex justify-content-center mx-auto container py-5 my-5 m-5">
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div> }
                             {entityRole?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
                             <div class="card-footer border-0 py-2 mb-5">
 

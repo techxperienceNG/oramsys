@@ -13,6 +13,7 @@ import { toast } from 'react-toastify'
 import Paginate from './portsPagination';
 import { MdEdit } from 'react-icons/md';
 import { Tooltip } from 'react-tooltip';
+import { FcSearch } from 'react-icons/fc';
 
 
 
@@ -24,9 +25,9 @@ const Ports = ({ showSidebar, setSidebar }) => {
   const [PortForEdit, setPortForEdit] = useState()
   const [search, setSearch] = useState('')
   const dispatch = useDispatch()
-  
+
   const [currentPage, setCurrentPage] = useState(1)
-  const [postsPerPage, setPostsPerPage] = useState(200)
+  const [postsPerPage, setPostsPerPage] = useState(20)
 
   useEffect(() => {
     dispatch(portsAction(search ? search : "all"))
@@ -77,8 +78,27 @@ const Ports = ({ showSidebar, setSidebar }) => {
         </div>
       </div> */}
       <div className='product'>
-        <div class='col-sm-6 col-12 mb-4 mb-sm-0'>
-          <h1 class='h2 mb-0 fw-bold fs-2 ls-tight'>Ports</h1>
+        <div class='container-fluid'>
+          <div id='dash' class='mb-npx'>
+            <header class='bg-surface-primary border-bottom pt-6'>
+              <div class='row align-items-center mb-3'>
+                <div class='col-sm-6 col-12 mb-4 mb-sm-0'>
+                  <h1 class='h2 mb-0 fw-bold fs-4 ls-tight'>Ports</h1>
+                </div>
+
+                <div class='col-sm-6 col-12 text-sm-end'>
+                  <div class='mx-n1 me-5 d-flex align-items-center justify-content-end gap-2'>
+                    <div class="position-relative">
+                      <span class="position-absolute search"><FcSearch size={25} /></span>
+                      <input type="text" id='search' value={search} onChange={(e) => setSearch(e.target.value)} className="form-control w-100 ps-5" placeholder="Search..." />
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </header>
+
+          </div>
         </div>
 
         <div className='container mx-auto'>
@@ -95,11 +115,7 @@ const Ports = ({ showSidebar, setSidebar }) => {
               </thead>
               <tbody>
 
-                {!getPorts ? <div class="d-flex justify-content-center">
-                  <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                </div> : getPorts.length > 0 && getPorts?.map((data, index) => (
+                {getPorts?.length > 0 && getPorts?.map((data, index) => (
                   <tr key={index} className='text-center'>
                     <td>
                       <div class="d-flex align-items-center">
@@ -129,8 +145,8 @@ const Ports = ({ showSidebar, setSidebar }) => {
                       <div class="d-flex justify-content-end m-2">
                         <div class="align-items-center">
                           <MdEdit onClick={() => {
-                              setShow(true); setPortForEdit(PortData?.data?.find(item => item._id === data._id))
-                           }}
+                            setShow(true); setPortForEdit(PortData?.data?.find(item => item._id === data._id))
+                          }}
                             data-tooltip-id='edit-id'
                             data-tooltip-content='Edit Product'
                             className='cursor-pointer'
@@ -145,6 +161,11 @@ const Ports = ({ showSidebar, setSidebar }) => {
 
               </tbody>
             </table>
+            {!getPorts && <div class="d-flex justify-content-center mx-auto container py-5 my-5 m-5">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>}
             {PortData?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
             <div class="card-footer border-0 py-2 mb-5">
 

@@ -86,11 +86,7 @@ const Users = () => {
               </thead>
               <tbody>
 
-                {!getAllUsers ? <div class="d-flex justify-content-center">
-                          <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                          </div>
-                        </div> : getAllUsers.length > 0 && getAllUsers?.map((data, index) => (
+                {getAllUsers?.length > 0 && getAllUsers?.map((data, index) => (
                   <tr key={index} className='text-center'>
                     <td>
                       <div class="d-flex align-items-center">
@@ -155,6 +151,11 @@ const Users = () => {
 
               </tbody>
             </table>
+            {!getAllUsers && <div class="d-flex justify-content-center mx-auto container py-5 my-5 m-5">
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div> }
             {getUserDatas?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
             <div class="card-footer border-0 py-2 mb-5">
 

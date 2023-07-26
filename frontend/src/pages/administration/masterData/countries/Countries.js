@@ -26,7 +26,7 @@ const Countries = ({ showSidebar, setSidebar }) => {
   const dispatch = useDispatch()
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [postsPerPage, setPostsPerPage] = useState(50)
+  const [postsPerPage, setPostsPerPage] = useState(10)
   useEffect(() => {
     dispatch(countrieAction(search ? search : "all"))
     // console.log('search===============??', search)
@@ -98,7 +98,7 @@ const Countries = ({ showSidebar, setSidebar }) => {
                   <div class='mx-n1 me-5 d-flex align-items-center justify-content-end gap-2'>
                   <div class="position-relative">
                       <span class="position-absolute search"><FcSearch size={25} /></span>
-                      <input type="text" id='search' value={search} onChange={(e) => setSearch(e.target.value)} className="form-control w-100 ps-5" placeholder="Search transaction..." />
+                      <input type="text" id='search' value={search} onChange={(e) => setSearch(e.target.value)} className="form-control w-100 ps-5" placeholder="Search..." />
                     </div>
 
                   </div>
@@ -124,11 +124,7 @@ const Countries = ({ showSidebar, setSidebar }) => {
               </thead>
               <tbody>
 
-                {!getCountries ? <div class="d-flex justify-content-center">
-                  <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                </div> : getCountries.length > 0 && getCountries?.map((data, index) => (
+                {getCountries?.length > 0 && getCountries?.map((data, index) => (
                   <tr key={index} className='text-center'>
                     <td>
                       <div class="d-flex align-items-center">
@@ -177,6 +173,11 @@ const Countries = ({ showSidebar, setSidebar }) => {
 
               </tbody>
             </table>
+            {!getCountries && <div class="d-flex justify-content-center mx-auto container py-5 my-5 m-5">
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div> }
             {contryData?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
             <div class="card-footer border-0 py-2 mb-5">
 

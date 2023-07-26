@@ -277,11 +277,7 @@ const Transactions = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {!currentTrans ? <div class="d-flex justify-content-center">
-                          <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                          </div>
-                        </div> : currentTrans.length > 0 &&
+                        {currentTrans?.length > 0 &&
                         currentTrans?.map((data) => (
                           <tr className='text-center'>
                             <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
@@ -383,6 +379,11 @@ const Transactions = () => {
                       </tbody>
 
                     </table>
+                    {!currentTrans && <div class="d-flex justify-content-center mx-auto container py-5 my-5 m-5">
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div> }
                     {transaction.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
                     {/* {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>} */}
                     <div class="card-footer border-0 py-2 mb-5">

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
+import { Steps } from 'antd';
 
 import Box from '@material-ui/core/Box';
 import Stepper from '@material-ui/core/Stepper';

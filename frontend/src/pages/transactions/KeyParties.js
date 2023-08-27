@@ -2,7 +2,7 @@ import { TextField } from '@material-ui/core'
 import MaterialTable from 'material-table'
 import { DropzoneArea } from 'material-ui-dropzone'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom'
 import PartiesEditModal from '../../component/Modal/PartiesEditModal'
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -101,7 +101,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
             setBorrower_Applicant(getLender.borrower_Applicant)
             setLenders(getBorrower.lenders)
             // setWarehouseComp(getWarehouseCompany?.warehouses[0]?.warehouseCompany?.label)
-            
+
             setCounterPart(getTransactionByIdData?.data?.details?.pricingDetails
                 ?.pricingCounterParty?.details.name)
             setShippingComp(getTransactionByIdData?.data?.details?.shippingOptions
@@ -256,7 +256,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
             },
             type: transactionType
         }
-        
+
         dispatch(transactionDataAction(body))
         hendelNext()
     }
@@ -324,7 +324,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
     tableData.map((item) => {
         tdata.push(item?.name?.label)
     })
-const warehouseCo = getWarehouseCompany.warehouses[0]?.warehouseCompany?.label
+    const warehouseCo = getWarehouseCompany.warehouses[0]?.warehouseCompany?.label
     const AddUpParties = useCallback(() => {
         const storeData = [
             getBorrower,
@@ -336,7 +336,7 @@ const warehouseCo = getWarehouseCompany.warehouses[0]?.warehouseCompany?.label
         ]
         setpartiesData(storeData);
     }, [tableData])
-console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCompany?.label)
+    console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCompany?.label)
     useEffect(() => {
         AddUpParties()
     }, [AddUpParties])
@@ -345,72 +345,71 @@ console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCom
         <>
             <div className='product'>
                 <div className='mb-3 d-flex justify-content-between align-items-center'>
-                    <h5 className="title-color">Parties</h5>
-                    <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => { setShowEditModal(!showEditModal) }}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
+                    <h6 className="fs-5 fw-bold title-admin">PARTIES</h6>
                 </div>
-                <Row>
-                    <Col lg={12} className="mb-4">
-                        <TextField
-                            label='Borrower/Applicant Name'
-                            variant='standard'
-                            color='warning'
-                            name='borrower_Applicant'
-                            value={getBorrower}
-                            disabled={true}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg={12} className="mb-4">
-                        <TextField
-                            label='Lenders'
-                            variant='standard'
-                            color='warning'
-                            name='lenders'
-                            value={getLender}
-                            disabled={true}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg={12} className="mb-4">
-                        <TextField
-                            label='Shipping Company'
-                            variant='standard'
-                            color='warning'
-                            name='lenders'
-                            value={getShippingCompany}
-                            disabled={true}
-                        />
-                    </Col>
-                </Row>
-                {warehouseStatus && <Row>
-                    <Col lg={12} className="mb-4">
-                        <TextField
-                            label='Warehouse Company'
-                            variant='standard'
-                            color='warning'
-                            name='warehouse company'
-                            value={warehouseCo}
-                            disabled={true}
-                        />
-                    </Col>
-                </Row>}
-                {pricingHedgingStatus && <Row>
-                    <Col lg={12} className="mb-4">
-                        <TextField
-                            label='Hedging Counterparty'
-                            variant='standard'
-                            color='warning'
-                            name='Counterparty'
-                            value={getCounterParty}
-                            disabled={true}
-                        />
-                    </Col>
-                </Row>}
+                <Form>
+                    <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                        <Form.Label column sm={2}> Borrower/Applicant </Form.Label>
+                        <Col lg={4} sm={10}>
+                            <Form.Control type="text"
+                                name='borrower_Applicant'
+                                value={getBorrower}
+                                disabled={true} />
+                        </Col>
+                    </Form.Group>
 
-                <div className='mb-3 d-flex justify-content-between align-items-center'>
-                    <h4>Key Parties</h4>
+                    <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                        <Form.Label column sm={2}>Lender</Form.Label>
+                        <Col lg={4} sm={10}>
+                            <Form.Control
+                                name='lenders'
+                                value={getLender}
+                                disabled={true} />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                        <Form.Label column sm={2}>Shipping Company</Form.Label>
+                        <Col lg={4} sm={10}>
+                            <Form.Control
+                                name='lenders'
+                                value={getShippingCompany}
+                                disabled={true} />
+                        </Col>
+                    </Form.Group>
+
+                    {warehouseStatus &&
+                        <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                            <Form.Label column sm={2}>Warehouse Company</Form.Label>
+                            <Col lg={4} sm={10}>
+                                <Form.Control name='warehouse company'
+                                    value={warehouseCo}
+                                    disabled={true} />
+                            </Col>
+                        </Form.Group>
+                    }
+
+                    {pricingHedgingStatus &&
+                        <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                            <Form.Label column sm={2}>Hedging Counterparty</Form.Label>
+                            <Col lg={4} sm={10}>
+                                <Form.Control
+                                    name='Counterparty'
+                                    value={getCounterParty}
+                                    disabled={true} />
+                            </Col>
+                        </Form.Group>}
+
+                </Form>
+
+
+                <div className='mb-2 pt-4 d-flex justify-content-between align-items-center'>
+                    <h6 className='fs-5 fw-bold title-admin' >KEY PARTIES</h6>
+
+                    <Button onClick={() => { setShowEditModal(!showEditModal) }} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-1'>
+                        <span class=' pe-2'><i class="bi bi-plus pe-1 "></i></span>
+                        <span className='fw-bold'>Add Party</span>
+                    </Button>
                 </div>
                 <MaterialTable
                     title=""
@@ -464,15 +463,13 @@ console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCom
                 />
             </div>
             <div className='add-edit-product parties_main mb-4'>
-                <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
-                    {/* <h5 className="title-color">Related parties</h5>
-                    <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => { setShowEditModal(!showEditModal) }}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button> */}
-
+                <div className='p-4 mb-3 pb-4' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>                   
                     <div className='mb-3 d-flex justify-content-between align-items-center'>
-                        <h5 className="title-color">Related Parties</h5>
-                        <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`}
-                            onClick={handleRelatedParties}>
-                            <img src='../../assets/img/about/plus.png' className='me-2' />Add Party Relation</button>
+                        <h6 className="fs-5 fw-bold title-admin">RELATED PARTIES</h6>
+                            <Button onClick={handleRelatedParties} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-1'>
+                        <span class=' pe-2'><i class="bi bi-plus pe-1 "></i></span>
+                        <span className='fw-bold'>Add Related Parties</span>
+                    </Button>
                     </div>
 
                     <>
@@ -521,7 +518,7 @@ console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCom
                                         />
                                         {error && error?.shipper && <span style={{ color: 'red' }}>{error?.shipper}</span>}
                                     </Col>
-                                 
+
                                     <Col lg={4}>
                                         <div className='d-flex align-items-center Related_parties'>
                                             <p className='mb-0 title-color'>Relation</p>

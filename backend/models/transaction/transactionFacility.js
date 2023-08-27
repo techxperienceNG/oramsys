@@ -24,6 +24,7 @@ const SecurityDocuments = new Schema({
 var Schema = new Schema({
     baseRate: { type: String, required: false, default: null },
     transactionId: { type: String, required: false, default: null },
+    interestRateType: { type: String, required: false, default: null },
     interestRate: { type: String, required: false, default: null },
     advisoryFee: { type: String, required: false, default: null },
     agencyFee: { type: String, required: false, default: null },

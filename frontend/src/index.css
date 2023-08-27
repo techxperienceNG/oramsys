@@ -15643,6 +15643,7 @@ div#wrapper.open>.offcanvas-mask {
   /* padding: 25px; */
   /* background: #082979; */
   /* height: 100vh; */
+  background-image: linear-gradient(to top, #141327, #1a1930, #201e39, #272342, #2e294b);
   border-right: 1px solid #F1F1F1;
   display: block;
   position: none;
@@ -15671,8 +15672,9 @@ div#wrapper.open>.offcanvas-mask {
   display: flex;
   box-sizing: border-box;
   /* max-width: 100%; */
-  /* background: linear-gradient(rgb(147, 56, 99) 0%, rgb(255, 116, 119) 100%); */
-  background-color: #F1F1F1;
+  /* background-image: linear-gradient(to right bottom, #f14d4c, #f25756, #f26160, #f26a6a, #f17373); */
+  background-image: linear-gradient(to top, #141327, #1a1930, #201e39, #272342, #2e294b);
+  /* background-color: #F1F1F1; */
   min-width: 0px;
   min-height: 0px;
   flex-direction: column;
@@ -15693,7 +15695,7 @@ div#wrapper.open>.offcanvas-mask {
 }
 
 .profile-name h1 {
-  color: #333333;
+  color: #ffffff;
   font-family: Lato;
   font-size: 16px;
   font-weight: bold;
@@ -15719,7 +15721,7 @@ div#wrapper.open>.offcanvas-mask {
 }
 
 .sidebar-nav .dropdown .btn-primary {
-  background-color: transparent !important;
+  background-color: #f1f1f1 !important;
   border: none;
   color: rgb(140, 140, 140);
 }

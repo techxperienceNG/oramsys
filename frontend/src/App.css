@@ -2936,3 +2936,13 @@ ul {
     -webkit-appearance: none !important;
     margin: 0;
 }
+
+.title-admin:after {
+    content: '';
+    background-color: #00A9EF;
+    height: 3px;
+    width: 190px;
+    margin: 10px 0 0;
+    display: block;
+    clear: both;
+  }

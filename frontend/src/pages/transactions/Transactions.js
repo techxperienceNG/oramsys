@@ -55,7 +55,7 @@ const Transactions = () => {
 
   const refreshPage = useCallback(() => {
     console.log(getAlltransactionData.data);
-    
+
     if (
       getAlltransactionData &&
       getAlltransactionData.data &&
@@ -190,6 +190,23 @@ const Transactions = () => {
     setTransaction(filtered)
   }
 
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedData = transaction.sort((a, b) => {
+    if (sortConfig.direction === 'ascending') {
+      return a[sortConfig.key] - b[sortConfig.key];
+    }
+    return b[sortConfig.key] - a[sortConfig.key];
+  });
+
   return (
     <>
 
@@ -265,75 +282,79 @@ const Transactions = () => {
                     <table class="table border-light border-5 table-nowrap caption-top table-hover">
 
                       <thead>
-                        <tr class="bg-light text-center">
-                          <th scope="col" width="5%">Date</th>
-                          <th scope="col" width="15%">Transaction Number</th>
-                          <th scope="col" width="10%">Borrower</th>
-                          <th scope="col" width="15%">Lender</th>
-                          <th scope="col" width="10%">Contract Value</th>
-                          <th scope="col" width="20%">Product</th>
-                          <th scope="col" width="20%">Termsheet</th>
-                          <th scope="col" width="20%"><span>Actions</span></th>
+                        <tr className="bg-light text-center">
+                          <th  className='fs-normal' onClick={() => handleSort('createdAt')} style={{ cursor: 'pointer' }} scope="col" width="5%">Date {' '}
+                            {sortConfig.key === 'createdAt' && (
+                              <i className={`bi bi-arrow-${sortConfig.direction === 'ascending' ? 'up' : 'down'}`}></i>
+                            )}
+                          </th>
+                          <th className=' fs-normal' scope="col" width="15%">Transaction Number</th>
+                          <th className=' fs-normal' scope="col" width="10%">Borrower</th>
+                          <th className=' fs-normal' scope="col" width="15%">Lender</th>
+                          <th className=' fs-normal' scope="col" width="10%">Contract Value</th>
+                          <th className=' fs-normal' scope="col" width="20%">Product</th>
+                          <th className=' fs-normal' scope="col" width="20%">Termsheet</th>
+                          <th className=' fs-normal' scope="col" width="20%"><span>Actions</span></th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentTrans?.length > 0 &&
-                        currentTrans?.map((data) => (
-                          <tr className='text-center'>
-                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                              {new Date(data.createdAt).toLocaleDateString("en-US", DATE_OPTIONS)}
-                            </td>
-                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                              {data._id}
-                            </td>
-                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                          currentTrans?.map((data) => (
+                            <tr className='text-center'>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                                {new Date(data.createdAt).toLocaleDateString("en-US", DATE_OPTIONS)}
+                              </td>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                                {data._id}
+                              </td>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
 
-                              {data.borrower_Applicant}
+                                {data.borrower_Applicant}
 
-                            </td>
+                              </td>
 
-                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                              {data.lenders}
-                            </td>
-                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                              {formateCurrencyValue(data?.details?.contractDetails?.value)}
-                            </td>
-                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
-                              {data?.details?.productDetails?.name?.name}
-                            </td>
-                            <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal cursor-pointer'>
-                              <p onClick={() => { data.termSheet === "Not Signed" && setShowExcelModal(true); setSendId(data._id) }}>
-                                {data.termSheet}
-                                {data.termSheet === "Signed" ? (
-                                  <Button onClick={() => { downloadTermSheet(data._id) }}><FileDownloadIcon /></Button>
-                                ) : (<></>)
-                                }
-                              </p>
-                            </td>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                                {data.lenders}
+                              </td>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                                {formateCurrencyValue(data?.details?.contractDetails?.value)}
+                              </td>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
+                                {data?.details?.productDetails?.name?.name}
+                              </td>
+                              <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal cursor-pointer'>
+                                <p onClick={() => { data.termSheet === "Not Signed" && setShowExcelModal(true); setSendId(data._id) }}>
+                                  {data.termSheet}
+                                  {data.termSheet === "Signed" ? (
+                                    <Button onClick={() => { downloadTermSheet(data._id) }}><FileDownloadIcon /></Button>
+                                  ) : (<></>)
+                                  }
+                                </p>
+                              </td>
 
-                            <td class=''>
-                              <div className='container '>
-                                <div className='d-flex py-3 justify-content-center gap-3'>
+                              <td class=''>
+                                <div className='container '>
+                                  <div className='d-flex py-3 justify-content-center gap-3'>
 
 
-                                  <Dropdown size='sm'>
-                                    <Dropdown.Toggle variant="light" id="dropdown-basic">
-                                      <FcSettings size={17} />
-                                    </Dropdown.Toggle>
+                                    <Dropdown size='sm'>
+                                      <Dropdown.Toggle variant="light" id="dropdown-basic">
+                                        <FcSettings size={17} />
+                                      </Dropdown.Toggle>
 
-                                    <Dropdown.Menu variant="light" className="text-white" active>
-                                      <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], })}><MdEdit className="me-2 mb-1" size={15} />Edit</Dropdown.Item>
-                                      <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}><MdPreview className="me-2 mb-1" size={15} />Preview</Dropdown.Item>
-                                      {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ?
-                                        <Dropdown.Item onClick={() => { dispatch(getRiskAssessment(data._id)); setSelected(data._id) }}><MdAssessment className="me-2 mb-1" size={15} />Risk Assesment
-                                        </Dropdown.Item> : ""}
+                                      <Dropdown.Menu variant="light" className="text-white" active>
+                                        <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], })}><MdEdit className="me-2 mb-1" size={15} />Edit</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}><MdPreview className="me-2 mb-1" size={15} />Preview</Dropdown.Item>
+                                        {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ?
+                                          <Dropdown.Item onClick={() => { dispatch(getRiskAssessment(data._id)); setSelected(data._id) }}><MdAssessment className="me-2 mb-1" size={15} />Risk Assesment
+                                          </Dropdown.Item> : ""}
 
-                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}><MdVisibility className="me-2 mb-1" size={15} />View Termsheet</Dropdown.Item>
-                                      <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}><FileDownloadIcon className="me-2 mb-1" size={15} />Download Termsheet</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                  </Dropdown>
+                                        <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}><MdVisibility className="me-2 mb-1" size={15} />View Termsheet</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}><FileDownloadIcon className="me-2 mb-1" size={15} />Download Termsheet</Dropdown.Item>
+                                      </Dropdown.Menu>
+                                    </Dropdown>
 
-                                  {/* <div class=''>
+                                    {/* <div class=''>
                                         <MdEdit onClick={() => { navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], }) }}
                                           data-tooltip-id='edit-id'
                                           data-tooltip-content='Edit Transaction'
@@ -370,20 +391,20 @@ const Transactions = () => {
                                         />
                                         <Tooltip id='termsheet' place='top' effect='solid' />
                                       </div> */}
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
+                              </td>
+                            </tr>
+                          ))}
 
                       </tbody>
 
                     </table>
                     {!currentTrans && <div class="d-flex justify-content-center mx-auto container py-5 my-5 m-5">
-                  <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                </div> }
+                      <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    </div>}
                     {transaction.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
                     {/* {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>} */}
                     <div class="card-footer border-0 py-2 mb-5">

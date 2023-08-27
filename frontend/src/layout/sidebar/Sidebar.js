@@ -187,8 +187,8 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
       <div className={`${showSidebar ? ' sidebar-main' : 'sidebar-main '}`}>
         <GrClose size={30} className="close_sidebar" onClick={() => setSidebar(!showSidebar)} />
         {/* <img src="../../../assets/img/about/close.png" className="close_sidebar" onClick={() => setSidebar(!showSidebar)} /> */}
-          <div className='profile-content'>
-            <img src='../../../assets/img/lgo-red.png' alt="" className='align-items-center m-2 mt-3 mx-auto profile-img' />
+          <div className='profile-content pe-5'>
+            <img src='../../../assets/img/logo.png' alt="" className='align-items-center m-2 mx-auto mt-3 profile-img' />
             <img src='../../../assets/img/profile.png' className='user_img' />
             <div className='profile-name text-center'>
               <h1>{userData?.name}</h1>
@@ -198,10 +198,10 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
 
         <div className='sidebar-nav'>
           <Navbar>
-            <div style={{ 'width': "100%",'zIndex':'11111' }} className='navbar-light bg-white' >
+            <div style={{ 'width': "100%",'zIndex':'11111' }} className='navbar-light' >
               {
                 navbarData.map((item, i) => (
-                  <div key={i} className={`${item.text === "Jobs" ? "d-block navbar-body" : 'navbar-body'}`}>
+                  <div key={i} className={`${item.text === "Jobs" ? "d-block navbar-body" : 'navbar-body'} text-white`}>
                     <div className='d-flex align-items-center ps-3 gap-3 mx-2 my-4'>
                       <item.img size={20} />
                       <Nav.Link className=' p-0' onClick={() => ShowSubItem({ text: item.text, path: item.path })}>{item.text} {item.text === "Administration" ? <img src='../../../../../assets/img/about/down-filled-triangular-arrow.png' className={`${showItem === "Administration" ? 'img-roted' : 'img-roted_unset'}`} /> : ""}</Nav.Link>
@@ -219,7 +219,7 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
                             subItem.subData?.map((subSubItem, i) => (
                               <div key={i} className='d-flex align-items-center gap-3 my-4 mx-4 ps-3'>
                                 <subSubItem.img size={16} />
-                                <NavLink className='text-dark text-decoration-none' to={subSubItem.path} style={{ display: "block" }}>{subSubItem.text}</NavLink>
+                                <NavLink className='text-white text-decoration-none' to={subSubItem.path} style={{ display: "block" }}>{subSubItem.text}</NavLink>
                               </div>
                             ))
                           }
@@ -234,14 +234,15 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
                 {/* <!-- Navigation --> */}
              
                 <div className="d-flex flex-column mx-3 ps-2 gap-3  my-4">
-                    <div className="">
+                    <div className="p-3">
                         {/* <Link className="nav-link">
                             <i className="bi bi-person-square"></i> <span className='ps-5'>Account</span>
                         </Link> */}
                     </div>
+                    <hr width='100%' className="my-2 text-white opacity-10" />
                     <div className="">
                         <Link onClick={() => setshowModal(true)} className="nav-link" href="#">
-                            <IoMdLogOut size={22} /><span className='ps-3 fw-semibold text-danger'>Logout</span>
+                            <IoMdLogOut className='text-white' size={22} /><span className='ps-3 fw-semibold text-danger'>Logout</span>
                         </Link>
                     </div>
                 </div>

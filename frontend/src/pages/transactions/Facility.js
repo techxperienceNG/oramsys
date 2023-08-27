@@ -1,7 +1,7 @@
 import { InputAdornment, TextField } from '@material-ui/core'
 import MaterialTable from 'material-table'
 import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Col, Row, Button, Form } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import AddSourceOfRepayment from '../../component/Modal/AddSourceOfRepayment'
@@ -18,6 +18,11 @@ import { toast } from 'react-toastify'
 import moment from "moment"
 import { productGetAction } from '../../redux/actions/productAction'
 import { companydataAction } from '../../redux/actions/companydataAction'
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { DatePicker, Space } from 'antd';
+dayjs.extend(customParseFormat);
+
 
 const Facility = ({ hendelCancel, hendelNext }) => {
 
@@ -36,6 +41,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         baseRate: "",
         currency: "",
         interestRate: "",
+        interestRateType: "",
         interestPaymentDate: "",
         rePaymentCurrency: "",
         tenor: "",
@@ -115,12 +121,13 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                 baseRate: getTransactionByIdData.data?.facility?.baseRate,
                 currency: getTransactionByIdData.data?.facility?.currency,
                 interestRate: getTransactionByIdData.data?.facility?.interestRate,
+                interestRateType: getTransactionByIdData.data?.facility?.interestRateType,
                 interestPaymentDate: getTransactionByIdData.data?.facility?.interestPaymentDate && moment(getTransactionByIdData.data?.facility?.interestPaymentDate).format("YYYY-MM-DD"),
                 rePaymentCurrency: getTransactionByIdData.data?.facility?.rePaymentCurrency,
                 currency: getTransactionByIdData.data?.facility?.currency,
-                interestRate: getTransactionByIdData.data?.facility?.interestRate,
-                interestPaymentDate: getTransactionByIdData.data?.facility?.interestPaymentDate && moment(getTransactionByIdData.data?.facility?.interestPaymentDate).format("YYYY-MM-DD"),
-                rePaymentCurrency: getTransactionByIdData.data?.facility?.rePaymentCurrency,
+                // interestRate: getTransactionByIdData.data?.facility?.interestRate,
+                // interestPaymentDate: getTransactionByIdData.data?.facility?.interestPaymentDate && moment(getTransactionByIdData.data?.facility?.interestPaymentDate).format("YYYY-MM-DD"),
+                // rePaymentCurrency: getTransactionByIdData.data?.facility?.rePaymentCurrency,
                 tenor: getTransactionByIdData.data?.facility?.tenor,
                 managementFee: getTransactionByIdData.data?.facility?.managementFee,
                 currencyHedge: getTransactionByIdData.data?.facility?.currencyHedge === true ? "Yes" : "No",
@@ -238,7 +245,10 @@ const Facility = ({ hendelCancel, hendelNext }) => {
     const baseRateOptions = [
         'LOBOR',
         'SOFR',
-        'Fixed Rate'
+    ]
+    const interestRateTypeOptions = [
+        'Fixed Rate',
+        'Variable Rate'
     ]
     const facilityTypeOptions = [
         'Trade Finance',
@@ -351,6 +361,10 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         if (!facility.interestRate) {
             params = true
             error.interestRate = 'Please enter interest rate!'
+        }
+        if (!facility.interestRateType) {
+            params = true
+            error.interestRateType = 'Please select an interest rate type!'
         }
         if (!facility.baseRate) {
             params = true
@@ -840,6 +854,14 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         let DeleteRepaymentsource = sourceOfRepayment.filter((ele, i) => i !== rowData.tableData.id)
         setSourceOfRepayment(DeleteRepaymentsource)
     }
+    const disabledDate = (current) => {
+        // Can not select days before today and today
+        return current > moment().subtract(1, 'day');
+    };
+    const disabledDate2 = (current) => {
+        // Can not select days before today and today
+        return current < moment().subtract(1, 'day');
+    };
 
     return (
         <>
@@ -847,55 +869,82 @@ const Facility = ({ hendelCancel, hendelNext }) => {
             <div className='add-edit-product p-0 mb-5'>
 
                 <div className='form'>
-                    <h2 className='mb-3'>Interest Rate</h2>
+                    <h2 className='mb-3'>Interest</h2>
                     <Row>
                         <Col lg={3}>
-                            <TextField
-                                label="Interest Rate"
-                                id="standard-start-adornment"
-                                InputProps={{
-                                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                                }}
-                                name='interestRate'
-                                value={facility.interestRate}
-                                onChange={(e) => handleChangeNumber(e, 'interestRate')}
-                                disabled={isView}
-                            />
-                            {error && error?.interestRate && <span style={{ color: 'red' }}>{error.interestRate}</span>}
-                        </Col>
-                        <Col lg={3}>
                             <Autocomplete
-                                options={baseRateOptions}
+                                options={interestRateTypeOptions}
                                 getOptionLabel={(option) => option}
                                 id="disable-clearable"
-                                label="Base Rate"
+                                label="Interest Rate Type"
                                 renderInput={(params) => (
-                                    <TextField {...params} label="Base Rate" variant="standard" />
+                                    <TextField {...params} label="Interest Rate Type" variant="standard" />
                                 )}
                                 onChange={(event, newValue) => {
-                                    setFacility({ ...facility, baseRate: newValue });
+                                    setFacility({ ...facility, interestRateType: newValue });
                                 }}
                                 disabled={isView}
                                 disableClearable
-                                value={facility.baseRate}
+                                value={facility.interestRateType}
                             />
-                            {error && error?.baseRate && <span style={{ color: 'red' }}>{error.baseRate}</span>}
+                            {error && error?.interestRateType && <span style={{ color: 'red' }}>{error.interestRateType}</span>}
                         </Col>
+                        {facility.interestRateType === 'Fixed Rate' && (
+                            <>
+                                <Col lg={3}>
+                                    <TextField
+                                        label="Interest Rate"
+                                        id="standard-start-adornment"
+                                        InputProps={{
+                                            endAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                        }}
+                                        name='interestRate'
+                                        value={facility.interestRate}
+                                        onChange={(e) => handleChangeNumber(e, 'interestRate')}
+                                        disabled={isView}
+                                    />
+                                </Col>
+                                {error && error?.interestRate && <span style={{ color: 'red' }}>{error.interestRate}</span>}
+                            </>
+                        )}
+                        {facility.interestRateType === 'Variable Rate' && (
+                            <>
+                                <Col lg={3}>
+                                    <Autocomplete
+                                        options={baseRateOptions}
+                                        getOptionLabel={(option) => option}
+                                        id="disable-clearable"
+                                        label="Base Rate"
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Base Rate" variant="standard" />
+                                        )}
+                                        onChange={(event, newValue) => {
+                                            setFacility({ ...facility, baseRate: newValue });
+                                        }}
+                                        disabled={isView}
+                                        disableClearable
+                                        value={facility.baseRate}
+                                    />
+                                    {error && error?.baseRate && <span style={{ color: 'red' }}>{error.baseRate}</span>}
+                                </Col>
 
-                        <Col lg={3}>
-                            <TextField
-                                label="Margin"
-                                id="standard-start-adornment"
-                                name='margin'
-                                value={facility.margin}
-                                onChange={(e) => handleChangeNumber(e, 'margin')}
-                                InputProps={{
-                                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                                }}
-                                disabled={isView}
-                            />
-                            {error && error?.margin && <span style={{ color: 'red' }}>{error.margin}</span>}
-                        </Col>
+                                <Col lg={3}>
+                                    <TextField
+                                        label="Margin"
+                                        id="standard-start-adornment"
+                                        name='margin'
+                                        value={facility.margin}
+                                        onChange={(e) => handleChangeNumber(e, 'margin')}
+                                        InputProps={{
+                                            endAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                        }}
+                                        disabled={isView}
+                                    />
+                                    {error && error?.margin && <span style={{ color: 'red' }}>{error.margin}</span>}
+                                </Col>
+                            </>
+                        )}
+
                     </Row>
                 </div>
 
@@ -1511,430 +1560,303 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                     </div>
                 </div>
 
+                <hr />
 
                 <div className='add-edit-product p-0'>
-                    <div className='form'>
-                        <h2 className='mb-3'>Terms</h2>
+                    <div className=''>
+                        <h4 className='fw-bold mb-3'>Terms</h4>
+
+
                         <div>
                             {/* <div className='mb-3'> */}
                             <Row className='mb-4'>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Disbursement Mechanism"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                <Form.Group as={Col} controlId="formGridCity">
+                                    <Form.Label>Disbursement Mechanism</Form.Label>
+                                    <Form.Control
                                         value={facility.disbursementMechanism}
                                         name='disbursementMechanism'
                                         onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                        // onClick={() => { setShowTextEditor(true); setType('Disbursement mechanism'); setSelectedName('disbursementMechanism') }}
                                         disabled={isView}
                                     />
                                     {error && error?.disbursementMechanism && <span style={{ color: 'red' }}>{error.disbursementMechanism}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Security Undertaking"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Security Undertaking</Form.Label>
+                                    <Form.Control
                                         value={facility.securityUndertaking}
                                         name='securityUndertaking'
-                                        disabled={isView}
                                         onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                    // onClick={() => { setShowTextEditor(true); setType('Security undertaking'); setSelectedName('securityUndertaking') }}
                                     />
                                     {error && error?.securityUndertaking && <span style={{ color: 'red' }}>{error.securityUndertaking}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Control Accounts"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Control Accounts</Form.Label>
+                                    <Form.Control
                                         value={facility.controlAccounts}
                                         name='controlAccounts'
                                         disabled={isView}
                                         onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                    // onClick={() => { setShowTextEditor(true); setType('Control accounts'); setSelectedName('controlAccounts') }}
                                     />
                                     {error && error?.controlAccounts && <span style={{ color: 'red' }}>{error.controlAccounts}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <form className="" noValidate>
-                                        <TextField
-                                            id="date"
-                                            label="Final Maturity"
-                                            type="date"
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            inputProps={{
-                                                min: transactionData.details.contractDetails.contractDate ? new Date(transactionData.details.contractDetails.contractDate).toISOString().split("T")[0] : ""
-                                            }}
-                                            disabled={isView}
-                                            name='finalMaturity'
-                                            value={facility.finalMaturity}
-                                            onChange={handleChange}
-                                        />
-                                    </form>
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                <Form.Label>Final Maturity</Form.Label>
+                                    <DatePicker
+                                    disabledDate={disabledDate}
+                                     name="finalMaturity"
+                                     placeholder="dd-mm-yyyy"
+                                    //  value={facility.finalMaturity}
+                                    //     onChange={handleChange}
+                                        // min={transactionData.details.contractDetails.contractDate ? new Date(transactionData.details.contractDetails.contractDate).toISOString().split("T")[0] : ""}
+                                         />
+                                </Form.Group>
+
+
+                                {/* <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Final Maturity</Form.Label>
+                                    <Form.Control
+                                        type="date"
+                                        name="finalMaturity"
+                                        placeholder="dd-mm-yyyy"
+                                        min={transactionData.details.contractDetails.contractDate ? new Date(transactionData.details.contractDetails.contractDate).toISOString().split("T")[0] : ""}
+                                        value={facility.finalMaturity}
+                                        onChange={handleChange}
+                                    />
                                     {error && error?.finalMaturity && <span style={{ color: 'red' }}>{error.finalMaturity}</span>}
-                                </Col>
+                                </Form.Group> */}
                             </Row>
                             {/* </div> */}
                             <Row className='mb-4'>
-                                <Col lg={3}>
-                                    {/* <TextField
-                                        label="Documentation"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
-                                        value={facility.documentation}
-                                        name='documentation'
-                                        disabled={isView}
-                                        onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                    // onClick={() => { setShowTextEditor(true); setType('Documentation'); setSelectedName('documentation') }}
-                                    /> */}
-                                    <Autocomplete
-                                        options={documentationOptions}
-                                        getOptionLabel={(option) => option}
-                                        id="disable-clearable"
-                                        label="Documentation"
-                                        renderInput={(params) => (
-                                            <TextField {...params} label="Documentation" variant="standard" />
-                                        )}
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Documentation</Form.Label>
+                                    <Form.Select
                                         onChange={(event, newValue) => {
                                             setFacility({ ...facility, documentation: newValue });
-                                        }}
-                                        disabled={isView}
-                                        disableClearable
-                                        value={facility.documentation}
-                                    />
+                                        }} value={facility.documentation} defaultValue="Choose...">
+                                        <option>Choose...</option>
+                                        {documentationOptions.map((item) => (
+                                            <option value={item}>{item}</option>
+                                        ))}
+
+                                    </Form.Select>
                                     {error && error?.documentation && <span style={{ color: 'red' }}>{error.documentation}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Conditions Precedent"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Conditions Precedent</Form.Label>
+                                    <Form.Control
                                         value={facility.conditionsPrecedent}
                                         name='conditionsPrecedent'
                                         onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                        // onClick={() => { setShowTextEditor(true); setType('Conditions precedent'); setSelectedName('conditionsPrecedent') }}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.conditionsPrecedent && <span style={{ color: 'red' }}>{error.conditionsPrecedent}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Conditions Subsequent"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Conditions Subsequent</Form.Label>
+                                    <Form.Control
                                         value={facility.conditionsSubsequent}
                                         name='conditionsSubsequent'
                                         onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                        // onClick={() => { setShowTextEditor(true); setType('Conditions subsequent'); setSelectedName('conditionsSubsequent') }}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.conditionsSubsequent && <span style={{ color: 'red' }}>{error.conditionsSubsequent}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Borrower Affirmative Covenants"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Borrower Affirmative Covenants</Form.Label>
+                                    <Form.Control
                                         value={facility.borrowerAffirmativeCovenants}
                                         name='borrowerAffirmativeCovenants'
                                         onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                        // onClick={() => { setShowTextEditor(true); setType('Borrower affirmative covenants'); setSelectedName('borrowerAffirmativeCovenants') }}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.borrowerAffirmativeCovenants && <span style={{ color: 'red' }}>{error.borrowerAffirmativeCovenants}</span>}
-                                </Col>
+                                </Form.Group>
                             </Row>
+
                             <Row className='mb-4'>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Financial Covenants"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>FInancial Covenants</Form.Label>
+                                    <Form.Control
                                         value={facility.financialCovenants}
                                         name='financialCovenants'
                                         onChange={handleChange}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.financialCovenants && <span style={{ color: 'red' }}>{error.financialCovenants}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Information Covenants"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
-                                        value={facility.informationCovenants}
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Information Covenants</Form.Label>
+                                    <Form.Control value={facility.informationCovenants}
                                         name='informationCovenants'
                                         onChange={handleChange}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.informationCovenants && <span style={{ color: 'red' }}>{error.informationCovenants}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="General Undertakings"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>General Undertakings</Form.Label>
+                                    <Form.Control
                                         value={facility.generalUndertakings}
                                         name='generalUndertakings'
                                         onChange={handleChange}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.generalUndertakings && <span style={{ color: 'red' }}>{error.generalUndertakings}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Taxation & Duties"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Zip</Form.Label>
+                                    <Form.Control
                                         value={facility.taxationDuties}
                                         name='taxationDuties'
                                         onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                        // onClick={() => { setShowTextEditor(true); setType('Taxation & duties'); setSelectedName('taxationDuties') }}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.taxationDuties && <span style={{ color: 'red' }}>{error.taxationDuties}</span>}
-                                </Col>
+                                </Form.Group>
                             </Row>
+
                             <Row className='mb-4'>
-                                <Col lg={3}>
-                                    {/* <TextField
-                                        label="Expenses"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
-                                        value={facility.expenses}
-                                        name='expenses'
-                                        onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                        // onClick={() => { setShowTextEditor(true); setType('Expenses'); setSelectedName('expenses') }}
-                                        disabled={isView}
-                                    /> */}
-                                    <Autocomplete
-                                        options={expenseOptions}
-                                        getOptionLabel={(option) => option}
-                                        id="disable-clearable"
-                                        label="Expenses"
-                                        renderInput={(params) => (
-                                            <TextField {...params} label="Expenses" variant="standard" />
-                                        )}
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Expenses</Form.Label>
+                                    <Form.Select
                                         onChange={(event, newValue) => {
                                             setFacility({ ...facility, expenses: newValue });
                                         }}
-                                        disabled={isView}
-                                        disableClearable
                                         value={facility.expenses}
-                                    />
+                                        disabled={isView}
+                                        defaultValue="Choose...">
+                                        <option>Choose...</option>
+                                        {expenseOptions.map((item) => (
+                                            <option value={item}>{item}</option>
+                                        ))}
+
+                                    </Form.Select>
                                     {error && error?.expenses && <span style={{ color: 'red' }}>{error.expenses}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Approvals"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Approvals</Form.Label>
+                                    <Form.Control
                                         value={facility.approvals}
                                         name='approvals'
                                         onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                        // onClick={() => { setShowTextEditor(true); setType('Approvals'); setSelectedName('approvals') }}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.approvals && <span style={{ color: 'red' }}>{error.approvals}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    {/* <TextField
-                                        label="Governing Law"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
-                                        value={facility.governingLaw}
-                                        name='governingLaw'
-                                        onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                        // onClick={() => { setShowTextEditor(true); setType('Governing law'); setSelectedName('governingLaw') }}
-                                        disabled={isView}
-                                    /> */}
-                                    <Autocomplete
-                                        options={governLawOptions}
-                                        getOptionLabel={(option) => option}
-                                        id="disable-clearable"
-                                        label="Governing Law"
-                                        renderInput={(params) => (
-                                            <TextField {...params} label="Governing Law" variant="standard" />
-                                        )}
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Governing Law</Form.Label>
+                                    <Form.Select
                                         onChange={(event, newValue) => {
                                             setFacility({ ...facility, governingLaw: newValue });
                                         }}
                                         disabled={isView}
                                         disableClearable
                                         value={facility.governingLaw}
-                                    />
+                                        defaultValue="Choose...">
+                                        <option>Choose...</option>
+                                        {governLawOptions.map((item) => (
+                                            <option value={item}>{item}</option>
+                                        ))}
+
+                                    </Form.Select>
                                     {error && error?.governingLaw && <span style={{ color: 'red' }}>{error.governingLaw}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        // label="jurisdiction"
-                                        label="Enforcement Courts"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Enforcement Courts</Form.Label>
+                                    <Form.Control
                                         value={facility.jurisdiction}
                                         name='jurisdiction'
                                         onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                        // onClick={() => { setShowTextEditor(true); setType('jurisdiction'); setSelectedName('jurisdiction') }}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.jurisdiction && <span style={{ color: 'red' }}>{error.jurisdiction}</span>}
-                                </Col>
+                                </Form.Group>
                             </Row>
+
                             <Row className='mb-4'>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Availability Period"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Availability Period</Form.Label>
+                                    <Form.Control
                                         value={facility.availabilityPeriod}
                                         name='availabilityPeriod'
                                         onChange={handleChange}
                                         multiline
                                         maxRows={3}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.availabilityPeriod && <span style={{ color: 'red' }}>{error.availabilityPeriod}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Repayment"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Repayment</Form.Label>
+                                    <Form.Control
                                         value={facility.repayment}
                                         name='repayment'
                                         onChange={handleChange}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.repayment && <span style={{ color: 'red' }}>{error.repayment}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Transaction Structure"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Transaction Structure</Form.Label>
+                                    <Form.Control
                                         value={facility.transactionStructure}
                                         name='transactionStructure'
                                         onChange={handleChange}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.transactionStructure && <span style={{ color: 'red' }}>{error.transactionStructure}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Permitted Accounts"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Permitted Accounts</Form.Label>
+                                    <Form.Control
                                         value={facility.permittedAccounts}
                                         name='permittedAccounts'
                                         onChange={handleChange}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.permittedAccounts && <span style={{ color: 'red' }}>{error.permittedAccounts}</span>}
-                                </Col>
+                                </Form.Group>
+
                             </Row>
+
+
                             <Row>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Assignments"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Assignments</Form.Label>
+                                    <Form.Control
                                         value={facility.assignments}
                                         name='assignments'
                                         onChange={handleChange}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.assignments && <span style={{ color: 'red' }}>{error.assignments}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Miscellaneous Provisions"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Miscellaneous Provisions</Form.Label>
+                                    <Form.Control
                                         value={facility.miscellaneousProvisions}
                                         name='miscellaneousProvisions'
                                         onChange={handleChange}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.miscellaneousProvisions && <span style={{ color: 'red' }}>{error.miscellaneousProvisions}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Force Majeure"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Force Majeure</Form.Label>
+                                    <Form.Control
                                         value={facility.forceMajeure}
                                         name='forceMajeure'
                                         onChange={handleChange}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.forceMajeure && <span style={{ color: 'red' }}>{error.forceMajeure}</span>}
-                                </Col>
-                                <Col lg={3}>
-                                    <TextField
-                                        label="Upload Termsheet"
-                                        variant="standard"
-                                        color="warning"
-                                        name='roleName'
-                                        type='file'
-                                        autoFocus={true}
-                                        inputProps={{ multiple: true }}
-                                        // value={state.roleName}
-                                        // onChange={(e) => getBase64(e.target.file, (result) => {
-                                        //     // idCardBase64 = result;
-                                        //     console.log('result', result)
-                                        //     setFile(result)
-                                        // })}
+                                </Form.Group>
 
+                                <Form.Group as={Col} controlId="formFileMultiple">
+                                    <Form.Label>Upload Termsheet</Form.Label>
+                                    <Form.Control
+                                        type="file"
                                         onChange={(e) => {
                                             console.log("===", e?.target?.files)
                                             let temp = [...securityDocuments];
@@ -1947,56 +1869,44 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                             })
                                             setSecurityDocuments(temp)
                                         }}
-                                    // disable={isView}
+                                        name="roleName"
+                                        multiple
                                     />
-                                    {/* {securityDocuments?.length ? securityDocuments?.map((ele) => <><p>{ele.name}</p> <br /></>) : <></>} */}
                                     {error?.securityDocuments && <span style={{ color: 'red' }}>{error?.securityDocuments}</span>}
-                                </Col>
+                                </Form.Group>
+
                             </Row>
-                            <Row className='mb-4'>
-                                <Col lg={6}>
-                                    {/* <TextField
-                                        label="Representations"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
-                                        value={facility.representations}
-                                        name='representations'
-                                        onChange={handleChange}
-                                        multiline
-                                        maxRows={3}
-                                        disabled={isView}
-                                    /> */}
-                                    <Autocomplete
-                                        options={repsOptions}
-                                        getOptionLabel={(option) => option}
-                                        id="disable-clearable"
-                                        label="Representions"
-                                        renderInput={(params) => (
-                                            <TextField {...params} label="Representions" variant="standard" />
-                                        )}
+
+                            <Row className='mb-5'>
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Representions</Form.Label>
+                                    <Form.Select
                                         onChange={(event, newValue) => {
                                             setFacility({ ...facility, representations: newValue });
                                         }}
                                         disabled={isView}
                                         disableClearable
                                         value={facility.representations}
-                                    />
+                                        defaultValue="Choose...">
+                                        <option>Choose...</option>
+                                        {repsOptions.map((item) => (
+                                            <option value={item}>{item}</option>
+                                        ))}
+
+                                    </Form.Select>
                                     {error && error?.representations && <span style={{ color: 'red' }}>{error.representations}</span>}
-                                </Col>
-                                <Col lg={6}>
-                                    <TextField
-                                        label="Events of Default"
-                                        id="standard-start-adornment"
-                                        variant="standard"
-                                        color="warning"
+                                </Form.Group>
+
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Events of Default</Form.Label>
+                                    <Form.Control
                                         value={facility.eventsOfDefault}
                                         name='eventsOfDefault'
                                         onChange={handleChange}
-                                        disabled={isView}
-                                    />
+                                        disabled={isView} />
                                     {error && error?.eventsOfDefault && <span style={{ color: 'red' }}>{error.eventsOfDefault}</span>}
-                                </Col>
+                                </Form.Group>
+
                             </Row>
                         </div>
                     </div>

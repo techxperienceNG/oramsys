@@ -1,7 +1,7 @@
 import { InputAdornment, TextField } from "@material-ui/core"
-import React, { useCallback, useEffect, useState } from "react"
-import { Col, Row, Button, Form, InputGroup } from 'react-bootstrap'
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import React, { useEffect, useState } from "react"
+import { Col, Row, Button, Form } from 'react-bootstrap'
+import { useLocation, useNavigate } from "react-router-dom"
 import AddWareHouseModal from "../../component/Modal/AddWareHouseModal"
 import AddInsuranceModal from "../../component/Modal/AddInsuranceModal"
 import MaterialTable from "material-table"
@@ -18,10 +18,6 @@ import moment from "moment"
 import { airPortsAction, portsAction } from "../../redux/actions/portsAction"
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { DatePicker, Space } from 'antd';
-dayjs.extend(customParseFormat);
 
 const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalCounterParty, signalShippingCompany, signalWarehouseCompany, signalWarehouseStatus, signalContract, signalBorrower, signalLender, transaction_id, signalPricingHedgingStatus }) => {
     const navigate = useNavigate()
@@ -81,12 +77,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         pricingUnit: "",
         previousDayClosingAmount: "",
         pricingFormula: "",
-        pricingHedgingStatus: "",
+        pricingHedgeingStatus: false,
         pricingHedgingMethod: "",
         pricingCounterParty: "",
     })
 
-    const [loading, setLoading] = useState(false)
     const [borrower_Applicant, setBorrower_Applicant] = useState("")
     const [shipping_company, setShippingCompany] = useState("")
     const [hedging_party, setHedgingParty] = useState("")
@@ -121,7 +116,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     const productData = useSelector((state) => state.product.product)
     const country = useSelector((state) => state.countryData.country)
     const entityData = useSelector((state) => state.entityData.entity)
-    console.log('Country DATA data', country)
+    console.log('PRodcutd data', productData)
     // const getTransactionByIdData = useSelector(
     //     (state) => state.transactionData.getTransactionById
     // )
@@ -386,7 +381,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         }
     }, [country])
 
-    const transactionDetail = useCallback(async (id) => {
+    let transactionDetail = async (id) => {
         if (id) {
             await ApiGet(`transaction/getById/${id}`)
                 .then((getTransactionByIdData) => {
@@ -408,7 +403,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                             commoditySubType:
                                 respProductDetails
                                     ?.commoditySubType,
-                            name: respProductDetails?.name?._id,
+                            name: respProductDetails?.name?.name,
                             quantity:
                                 respProductDetails?.quantity,
                             metric: respProductDetails?.metric,
@@ -575,13 +570,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                 .catch((error) => {
                     console.log(error);
                 })
-            setLoading(false)
         }
-    }, [])
+    }
 
     useEffect(() => {
         transactionDetail(transaction_id);
-
     }, [transaction_id])
 
 
@@ -612,7 +605,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     }
 
     let options = [
-        { label: 'Select Option', value: '', },
+        { label: "Select option", value: "" },
         { label: "Yes", value: true },
         { label: "No", value: false },
     ]
@@ -675,7 +668,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     ]
 
     let warehouseRequiredOptions = [
-        { value: '', label: 'Select Option' },
+        { value: '', label: "Select option" },
         { value: true, label: "Yes" },
         { value: false, label: "No" },
     ]
@@ -1090,16 +1083,6 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             commodityType: e,
         })
     }
-    const disabledDate = (current) => {
-        // Can not select days before today and today
-        return current > moment().subtract(1, 'day');
-    };
-    const disabledDate2 = (current) => {
-        // Can not select days before today and today
-        return current < moment(contractDetails?.contractDate);
-    };
-    const dateFormat = 'DD/MM/YYYY'
-
 
     return (
         <>
@@ -1238,7 +1221,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     <div className='m-3' />
                     <div className='add-edit-product'>
                         <div className=''>
-                            <h4 className='fw-bold fs-5 mb-3 title-admin'>PRODUCT DETAILS</h4>
+                            <h4 className='fw-bold mb-3'>Product Details</h4>
                             <div>
                                 <Row>
                                     <Form.Group as={Col} controlId="formGridZip">
@@ -1273,13 +1256,57 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         {error && error?.type && <span style={{ color: 'red' }}>{error.type}</span>}
                                     </Form.Group>
 
-
+                                    {/* <Col
+                                        lg={3}
+                                        className={
+                                            productType === "Non-Physical" ? "d-none" : "d-block"
+                                        }
+                                    >
+                                        <Autocomplete
+                                            label='Product Type'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) =>
+                                                setProductDetails({ ...productDetails, type: newVal })
+                                            }
+                                            getOptionLabel={(option) => option}
+                                            options={productTypesOption ?? []}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Product Type'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            value={
+                                                productTypesOption &&
+                                                productDetails?.type &&
+                                                productTypesOption.find(
+                                                    (ele) => ele === productDetails.type
+                                                )
+                                            }
+                                            disabled={isView}
+                                        />
+                                        {error && error?.type && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error.type}
+                                            </span>
+                                        )}
+                                    </Col> */}
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Commodity Type</Form.Label>
                                         <Form.Select
                                             onChange={(e, newVal) => {
                                                 handleCommodityTypeChange(e.target.value, newVal);
-                                            }}
+                                                console.log(newVal, e.target.value, commoditySubTypeOption, 'from the face')
+                                            }
+                                            }
                                             disabled={isView}
                                             value={productDetails.commodityType}
                                             defaultValue="Choose...">
@@ -1290,6 +1317,45 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         </Form.Select>
                                         {error && error?.commodityType && <span style={{ color: 'red' }}>{error.commodityType}</span>}
                                     </Form.Group>
+
+                                    {/* <Col lg={3} className={productType === "Non-Physical" ? "d-none" : productDetails.type? "d-block" : "d-none"}>
+                                        <Autocomplete
+                                            label='Commodity Type'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) =>
+                                                handleCommodityTypeChange(e, newVal)
+                                            }
+                                            getOptionLabel={(option) => option || ""}
+                                            options={commodityTypeOption}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Commodity Type'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            value={
+                                                commodityTypeOption.length > 0 &&
+                                                productDetails?.commodityType &&
+                                                commodityTypeOption.find(
+                                                    (ele) => ele === productDetails.commodityType
+                                                )
+                                            }
+                                            disabled={isView}
+                                        />
+                                        {error?.commodityType && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.commodityType}
+                                            </span>
+                                        )}
+                                    </Col> */}
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Commodity Sub-Type</Form.Label>
@@ -1305,10 +1371,55 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                 <option value={item}>{item}</option>
                                             ))}
                                         </Form.Select>
-                                        {error && error?.commoditySubType && <span style={{ color: 'red' }}>{error.commoditySubType}</span>}
+                                        {error && error?.commoditySbType && <span style={{ color: 'red' }}>{error.commoditySbType}</span>}
                                     </Form.Group>
-
-
+                                    {/* <Col
+                                        lg={3}
+                                        className={
+                                            productType === "Non-Physical"
+                                                ? "d-none"
+                                                : productDetails.type
+                                                    ? "d-block"
+                                                    : "d-none"
+                                        }
+                                    >
+                                        <Autocomplete
+                                            label='Commodity Sub-Type'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) =>
+                                                handleCommoditySubtypeChange(e, newVal)
+                                            }
+                                            getOptionLabel={(option) => option || ""}
+                                            options={commoditySubTypeOption}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Commodity Sub-Type'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            value={
+                                                commoditySubTypeOption.length > 0 &&
+                                                productDetails?.commoditySubType &&
+                                                commoditySubTypeOption.find(
+                                                    (ele) => ele === productDetails.commoditySubType
+                                                )
+                                            }
+                                            disabled={isView}
+                                        />
+                                        {error?.commoditySubType && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.commoditySubType}
+                                            </span>
+                                        )}
+                                    </Col> */}
                                 </Row>
 
                                 <Row>
@@ -1317,19 +1428,55 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         <Form.Select
                                             onChange={(e, newVal) => {
                                                 setProductDetails({ ...productDetails, name: e.target.value })
-                                                setSelectedProduct(newVal?.unit ? newVal.unit : "")
+                                                setSelectedProduct(productDetails.unit ? productDetails.unit : "")
                                             }}
                                             disabled={isView}
                                             value={productDetails.name}
                                             defaultValue="Choose...">
                                             <option>Choose...</option>
                                             {productName.map((item) => (
-                                                <option value={item._id}>{item.name}</option>
+                                                <option value={item.name}>{item.name}</option>
                                             ))}
                                         </Form.Select>
                                         {error && error?.name && <span style={{ color: 'red' }}>{error.name}</span>}
                                     </Form.Group>
-
+                                    {/* <Col lg={3} className='mb-3'>
+                                        <Autocomplete
+                                            label='Product Name'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) => {
+                                                setProductDetails({ ...productDetails, name: newVal._id })
+                                                setSelectedProduct(newVal?.unit ? newVal.unit : "")
+                                            }}
+                                            getOptionLabel={(option) => option.name || ""}
+                                            options={productName}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Product Name'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            disabled={isView}
+                                            value={
+                                                productName.length > 0 &&
+                                                productDetails.name &&
+                                                productName.find((ele) => ele._id === productDetails.name)
+                                            }
+                                        />
+                                        {error?.name && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.name}
+                                            </span>
+                                        )}
+                                    </Col> */}
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Product Quantity</Form.Label>
@@ -1353,20 +1500,44 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         )}
                                     </Form.Group>
 
-                                    <Form.Group as={Col} controlId="formGridZip">
+                                    {/* <Col lg={3} className='mb-3'>
+                                        <TextField
+                                            label='Product Quantity'
+                                            variant='standard'
+                                            color='warning'
+                                            name='Product_nature'
+                                            value={formateCurrencyValue(productDetails.quantity)}
+                                            onChange={(e) =>
+                                                handleChnage(e, "quantity", "productDetails")
+                                            }
+                                            disabled={isView}
+                                        />
+                                        {error?.quantity && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.quantity}
+                                            </span>
+                                        )}
+                                    </Col> */}
+                                    {/* <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Product Unit</Form.Label>
                                         <Form.Control
                                             name='netMetric'
                                             value={productDetails.metric}
                                             onChange={(e) => handleChnage(e, "metric", "productDetails")}
                                             disabled={true} />
-                                        {error?.metric && (
+                                            {error?.metric && (
                                             <span style={{ color: "#da251e", width: "100%", textAlign: "start", }}>
                                                 {error?.metric}
                                             </span>
                                         )}
-                                    </Form.Group>
-                                    {/* <Col lg={3} className='mb-3'>
+                                    </Form.Group> */}
+                                    <Col lg={3} className='mb-3'>
 
                                         <TextField
                                             label='Product Unit'
@@ -1377,7 +1548,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             onChange={(e) => handleChnage(e, "metric", "productDetails")}
                                             disabled={true}
                                         />
-                                        <Autocomplete
+                                        {/* <Autocomplete
                                             options={metricOptions}
                                             getOptionLabel={(option) => option}
                                             id="disable-clearable"
@@ -1391,7 +1562,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             disabled={isView}
                                             disableClearable
                                             value={productDetails.metric}
-                                        />
+                                        /> */}
                                         {error?.metric && (
                                             <span
                                                 style={{
@@ -1403,7 +1574,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                 {error?.metric}
                                             </span>
                                         )}
-                                    </Col> */}
+                                    </Col>
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Product Quality</Form.Label>
@@ -1423,7 +1594,44 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         {error && error?.quality && <span style={{ color: 'red' }}>{error.quality}</span>}
                                     </Form.Group>
 
-
+                                    {/* <Col lg={productDetails.type ? 3 : 6} className='mb-3'>
+                                        <Autocomplete
+                                            label='Product Quality'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) =>
+                                                setProductDetails({ ...productDetails, quality: newVal })
+                                            }
+                                            getOptionLabel={(option) => option || ""}
+                                            options={productQualityOption}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Product Quality'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            value={
+                                                productQualityOption.length > 0 &&
+                                                productDetails.quality &&
+                                                productQualityOption.find(
+                                                    (ele) => ele === productDetails.quality
+                                                )
+                                            }
+                                            disabled={isView}
+                                        />
+                                        {error?.quality && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.quality}
+                                            </span>
+                                        )}
+                                    </Col> */}
                                 </Row>
                             </div>
                         </div>
@@ -1433,7 +1641,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                     <div className='add-edit-product pt-0 pb-0'>
                         <div className=''>
-                            <h4 className='fw-bold mb-3 title-admin fs-5'>CONTRACT DETAILS</h4>
+                            <h4 className='fw-bold mb-3'>Contract details</h4>
                             <div>
                                 <Row>
                                     <Form.Group as={Col} controlId="formGridZip">
@@ -1453,6 +1661,38 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         </Form.Select>
                                         {error && error?.currency && <span style={{ color: 'red' }}>{error.currency}</span>}
                                     </Form.Group>
+                                    {/* <Col lg={3}>
+                                        <Autocomplete
+                                            options={CurrencyOptions}
+                                            getOptionLabel={(option) => option.label || ""}
+                                            id='disable-clearable'
+                                            label='Contract Currency'
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Contract Currency'
+                                                    variant='standard' />
+                                            )}
+                                            onChange={(e, newVal) =>
+                                                setContractDetails({
+                                                    ...contractDetails,
+                                                    currency: newVal.label,
+                                                })
+                                            }
+                                            value={CurrencyOptions && contractDetails?.currency && CurrencyOptions.find(
+                                                (ele) => ele.label === contractDetails.currency)}
+                                            disableClearable
+                                            disabled={isView}
+                                        />
+                                        {error?.currency && (<span style={{
+                                            color: "#da251e",
+                                            width: "100%",
+                                            textAlign: "start",
+                                        }}>
+                                            {error?.currency}
+                                        </span>
+                                        )}
+                                    </Col> */}
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Contract Value</Form.Label>
@@ -1463,6 +1703,27 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         {error && error?.value && <span style={{ color: 'red' }}>{error.value}</span>}
                                     </Form.Group>
 
+                                    {/* <Col lg={3}>
+                                        <TextField
+                                            label='Contract Value'
+                                            variant='standard'
+                                            color='warning'
+                                            value={formateCurrencyValue(contractDetails.value)}
+                                            onChange={(e) => handleChnage(e, "value", "contractDetails")}
+                                            disabled={isView}
+                                        />
+                                        {error?.value && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.value}
+                                            </span>
+                                        )}
+                                    </Col> */}
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Contract Date</Form.Label>
@@ -1471,13 +1732,43 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             name="contractDate"
                                             placeholder="dd-mm-yyyy"
                                             max={new Date().toISOString().split("T")[0]}
-                                            value={contractDetails?.contractDate}
+                                            value={contractDetails.contractDate}
                                             onChange={(e) => setContractDetails({ ...contractDetails, contractDate: e.target.value })}
                                             required
                                         />
                                         {error && error?.contractDate && <span style={{ color: 'red' }}>{error.contractDate}</span>}
                                     </Form.Group>
-
+                                    {/* <Col lg={3}>
+                                        <form className='' noValidate>
+                                            <TextField
+                                                id='date'
+                                                label='Contract Date'
+                                                type='date'
+                                                name='contractDate'
+                                                value={contractDetails.contractDate}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                inputProps={{
+                                                    max: new Date().toISOString().split("T")[0]
+                                                }}
+                                                onChange={(e) => setContractDetails({ ...contractDetails, contractDate: e.target.value })}
+                                                disabled={isView}
+                                                required
+                                            />
+                                        </form>
+                                        {error?.contractDate && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.contractDate}
+                                            </span>
+                                        )}
+                                    </Col> */}
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Expiry Date</Form.Label>
@@ -1493,7 +1784,45 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         />
                                         {error && error?.expiryDate && <span style={{ color: 'red' }}>{error.expiryDate}</span>}
                                     </Form.Group>
-
+                                    {/* <Col lg={3}>
+                                        <form className='' noValidate>
+                                            <TextField
+                                                id='date'
+                                                label='Expiry Date'
+                                                type='date'
+                                                name='expiryDate'
+                                                value={contractDetails.expiryDate}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                inputProps={{
+                                                    min: contractDetails.contractDate
+                                                        ? new Date(contractDetails.contractDate)
+                                                            .toISOString()
+                                                            .split("T")[0]
+                                                        : "",
+                                                }}
+                                                onChange={(e) =>
+                                                    setContractDetails({
+                                                        ...contractDetails,
+                                                        expiryDate: e.target.value,
+                                                    })
+                                                }
+                                                disabled={isView}
+                                            />
+                                        </form>
+                                        {error?.expiryDate && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.expiryDate}
+                                            </span>
+                                        )}
+                                    </Col> */}
                                 </Row>
                                 <Row className='mt-4'>
 
@@ -1507,7 +1836,31 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         {error && error?.conditionsOfContract && <span style={{ color: 'red' }}>{error.conditionsOfContract}</span>}
                                     </Form.Group>
 
-
+                                    {/* <Col lg={6}>
+                                        <TextField
+                                            label='Conditions of Contract'
+                                            variant='standard'
+                                            color='warning'
+                                            name='conditionsOfContract'
+                                            value={contractDetails.conditionsOfContract}
+                                            multiline
+                                            maxRows={3}
+                                            onChange={(e) => handleChnages(e)}
+                                            // onClick={() => { setShowTextEditModal(true); setType('Conditions of contract'); setSelectedName('conditionsOfContract'); setSendModalData(contractDetails.conditionsOfContract) }}
+                                            disabled={isView}
+                                        />
+                                        {error?.conditionsOfContract && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.conditionsOfContract}
+                                            </span>
+                                        )}
+                                    </Col> */}
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Description of Contract</Form.Label>
                                         <Form.Control
@@ -1517,7 +1870,31 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             disabled={isView} />
                                         {error && error?.descriptionOfContract && <span style={{ color: 'red' }}>{error.descriptionOfContract}</span>}
                                     </Form.Group>
-
+                                    {/* <Col lg={6}>
+                                        <TextField
+                                            label='Description of Contract'
+                                            variant='standard'
+                                            color='warning'
+                                            name='descriptionOfContract'
+                                            value={contractDetails.descriptionOfContract}
+                                            multiline
+                                            maxRows={3}
+                                            onChange={(e) => handleChnages(e)}
+                                            // onClick={() => { setShowTextEditModal(true); setType('Description of contract'); setSelectedName('descriptionOfContract'); setSendModalData(contractDetails.descriptionOfContract) }}
+                                            disabled={isView}
+                                        />
+                                        {error?.descriptionOfContract && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.descriptionOfContract}
+                                            </span>
+                                        )}
+                                    </Col> */}
                                 </Row>
                             </div>
                         </div>
@@ -1525,244 +1902,453 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                     <div className='m-3' />
                     <div className='add-edit-product'>
-                        <div className='p-2 m-0' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
-                            <h4 className='fw-bold fs-5 mb-3 title-admin'>SHIPPING OPTIONS</h4>
+                        <div className='' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
+                            <h4 className='fw-bold mb-3'>Shipping options</h4>
                             <div>
                                 <Row>
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Shipping Company</Form.Label>
-                                        <Form.Select
-                                            onChange={(e, newVal) => {
-                                                setShippingOptions({ ...shippingOptions, shippingCompany: e.target.value });
-                                                setShippingCompany(e.target.value)
-                                            }
-                                            }
-                                            disabled={isView}
-                                            value={shippingOptions.shippingCompany}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
-                                            {shippingCompanyOption.map((item) => (
-                                                <option value={item.value}>{item.label}</option>
-                                            ))}
 
-                                        </Form.Select>
-                                        {error && error?.shippingCompany && <span style={{ color: 'red' }}>{error.shippingCompany}</span>}
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Shipment Mode</Form.Label>
-                                        <Form.Select
-                                            onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, shipmentMode: e.target.value })}
-                                            disabled={isView}
-                                            disableClearable
-                                            value={shippingOptions.shipmentMode}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
-                                            {shipmentModeOptions.map((item) => (
-                                                <option value={item}>{item}</option>
-                                            ))}
-
-                                        </Form.Select>
-                                        {error && error?.shipmentMode && <span style={{ color: 'red' }}>{error.shipmentMode}</span>}
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Country of Origin</Form.Label>
-                                        <Form.Select
-                                            onChange={(e, newVal) => {
-                                                setShippingOptions({ ...shippingOptions, countryOfOrigin: e.target.value })
-                                                setPorts(newVal.name)
-                                            }}
-                                            disabled={isView}
-                                            value={shippingOptions.countryOfOrigin}
-                                            defaultValue="Select...">
-                                            <option>Select...</option>
-                                            {countries.map((item) => (
-                                                <option value={item._id}>{item.name}</option>
-                                            ))}
-                                        </Form.Select>
-                                        {error && error?.countryOfOrigin && <span style={{ color: 'red' }}>{error.countryOfOrigin}</span>}
-                                    </Form.Group>
-
-                                </Row>
-
-
-                                <Row className="mt-4">
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Port of Origin</Form.Label>
-                                        <Form.Select
-                                            onChange={(e, newVal) => {
-                                                const mode = shippingOptions.shipmentMode
-                                                if (mode === "SEA") {
-                                                    setShippingOptions({ ...shippingOptions, portOfOrigin: e.target.value })
-                                                } else if (mode === "AIR") {
-                                                    setShippingOptions({ ...shippingOptions, airbaseOfOrigin: e.target.value })
-                                                }
-                                            }}
-                                            disabled={isView}
-                                            value={
-                                                (shippingOptions.shipmentMode === "SEA" && shippingOptions.portOfOrigin) ||
-                                                (shippingOptions.shipmentMode === "AIR" && shippingOptions.airbaseOfOrigin)
-                                            }
-                                            defaultValue="Select...">
-                                            <option>Select...</option>
-                                            {originCountry.map((item) => (
-                                                <option value={item._id}>{item.name}</option>
-                                            ))}
-                                        </Form.Select>
-                                        {error && error?.portOfOrigin && <span style={{ color: 'red' }}>{error.portOfOrigin}</span>}
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Shipment  Date</Form.Label>
-                                        <Form.Control
-                                            type="date"
-                                            name="contractDate"
-                                            placeholder="DD/MM/YYYY"
-                                            min={contractDetails.contractDate}
-                                            max={contractDetails.expiryDate}
-                                            value={shippingOptions.shipmentDate}
-                                            onChange={(e) =>
-                                                setShippingOptions({ ...shippingOptions, shipmentDate: e.target.value })}
-                                            required
-                                        />
-                                        {error && error?.shipmentDate && <span style={{ color: 'red' }}>{error.shipmentDate}</span>}
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Shipment Terms</Form.Label>
-                                        <Form.Select
-                                            onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, shipmentTerms: newVal })}
-                                            value={shippingOptions.shipmentTerms}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
-                                            {shipmentTermsOptions.map((item) => (
-                                                <option value={item}>{item}</option>
-                                            ))}
-
-                                        </Form.Select>
-                                        {error && error?.shipmentTerms && <span style={{ color: 'red' }}>{error.shipmentTerms}</span>}
-                                    </Form.Group>
-
-                                </Row>
-                                <Row className='mt-4'>
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Net Shipped Weights</Form.Label>
-                                        <InputGroup>
-
-                                            <Form.Control
-                                                name='netShippedWeights'
-                                                value={formateCurrencyValue(shippingOptions.shippedWeights)}
-                                                onChange={(e) =>
-                                                    handleChnage(e, "shippedWeights", "shippingOptions")
-                                                } />
-                                            <InputGroup.Text className="bg-primary text-white">
-                                                {productDetails.metric}
-                                            </InputGroup.Text>
-                                        </InputGroup>
-                                        {error && error?.shippedWeights && <span style={{ color: 'red' }}>{error.shippedWeights}</span>}
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Destination country</Form.Label>
-                                        <Form.Select
+                                    <Col lg={4}>
+                                        <Autocomplete
+                                            label='Shipping Company'
+                                            id='disable-clearable'
                                             onChange={(e, newVal) => {
                                                 setShippingOptions({
                                                     ...shippingOptions,
-                                                    destinationCountry: e.target.value,
+                                                    shippingCompany: newVal.value,
+                                                });
+                                                setShippingCompany(newVal.label)
+                                            }
+                                            }
+                                            getOptionLabel={(option) => option.label || ""}
+                                            options={shippingCompanyOption}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Shipping Company'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            disabled={isView}
+                                            value={
+                                                shippingCompanyOption.length > 0 &&
+                                                shippingOptions.shippingCompany !==
+                                                undefined &&
+                                                shippingOptions.shippingCompany &&
+                                                shippingCompanyOption.find(
+                                                    (ele) =>
+                                                        ele.value ===
+                                                        shippingOptions.shippingCompany
+                                                )
+                                            }
+                                        />
+                                        {error?.shippingCompany && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.shippingCompany}
+                                            </span>
+                                        )}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col lg={3}>
+                                        <Autocomplete
+                                            label='Shipment mode'
+                                            id='disable-clearable'
+                                            // onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, shipmentMode: newVal })}
+                                            onChange={(e, newVal) =>
+                                                setShippingOptions({
+                                                    ...shippingOptions,
+                                                    shipmentMode: newVal,
+                                                })
+                                            }
+                                            getOptionLabel={(option) => option || ""}
+                                            options={shipmentModeOptions}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Shipment Mode'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            value={
+                                                shippingOptions.shipmentMode &&
+                                                shipmentModeOptions.find(
+                                                    (ele) => ele === shippingOptions.shipmentMode
+                                                )
+                                            }
+                                            disabled={isView}
+                                        />
+                                        {error?.shipmentMode && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.shipmentMode}
+                                            </span>
+                                        )}
+                                    </Col>
+                                    <Col lg={3}>
+                                        <Autocomplete
+                                            label='Country of Origin'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) => {
+                                                setShippingOptions({
+                                                    ...shippingOptions,
+                                                    countryOfOrigin: newVal._id,
                                                 })
                                                 setPorts(newVal.name)
                                             }}
+                                            getOptionLabel={(option) => option?.name || ""}
+                                            options={countries}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Country of Origin'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            value={
+                                                countries.length > 0 &&
+                                                shippingOptions.countryOfOrigin &&
+                                                countries.find(
+                                                    (ele) => ele._id === shippingOptions.countryOfOrigin
+                                                )
+                                            }
                                             disabled={isView}
-                                            value={shippingOptions.destinationCountry}
-                                            defaultValue="Select...">
-                                            <option>Select...</option>
-                                            {countries.map((item) => (
-                                                <option value={item._id}>{item.name}</option>
-                                            ))}
-                                        </Form.Select>
-                                        {error && error?.destinationCountry && <span style={{ color: 'red' }}>{error.destinationCountry}</span>}
-                                    </Form.Group>
+                                        />
+                                        {error?.countryOfOrigin && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.countryOfOrigin}
+                                            </span>
+                                        )}
+                                    </Col>
+                                    <Col lg={3}>
+                                        <Autocomplete
+                                            label='Port of Origin'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) => {
+                                                const mode = shippingOptions.shipmentMode
 
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Destination Port</Form.Label>
-                                        <Form.Select
+                                                if (mode === "SEA") {
+                                                    setShippingOptions({
+                                                        ...shippingOptions,
+                                                        portOfOrigin: newVal._id,
+                                                    })
+                                                } else if (mode === "AIR") {
+                                                    setShippingOptions({
+                                                        ...shippingOptions,
+                                                        airbaseOfOrigin: newVal._id,
+                                                    })
+                                                }
+                                            }}
+                                            getOptionLabel={(option) => option.name || ""}
+                                            options={originCountry}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Port of Origin'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            // value={(originCountry?.length > 0 && shippingOptions.portOfOrigin) && originCountry.find((ele) => ele._id === shippingOptions.portOfOrigin)}
+                                            value={
+                                                (shippingOptions.shipmentMode === "SEA" &&
+                                                    originCountry?.length > 0 &&
+                                                    shippingOptions.portOfOrigin &&
+                                                    originCountry.find(
+                                                        (ele) => ele._id === shippingOptions.portOfOrigin
+                                                    )) ||
+                                                (shippingOptions.shipmentMode === "AIR" &&
+                                                    originCountry?.length > 0 &&
+                                                    shippingOptions.airbaseOfOrigin &&
+                                                    originCountry.find(
+                                                        (ele) => ele._id === shippingOptions.airbaseOfOrigin
+                                                    ))
+                                            }
+                                            disabled={isView}
+                                        />
+                                        {error?.portOfOrigin && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.portOfOrigin}
+                                            </span>
+                                        )}
+                                    </Col>
+                                    <Col lg={3}>
+                                        <form className='' noValidate>
+                                            <TextField
+                                                id='date'
+                                                label='Shipment Date'
+                                                type='date'
+                                                name='shipmentDate'
+                                                value={shippingOptions.shipmentDate}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                inputProps={{
+                                                    min: contractDetails.contractDate,
+                                                    max: contractDetails.expiryDate,
+                                                }}
+                                                disabled={isView}
+                                                onChange={(e) =>
+                                                    setShippingOptions({
+                                                        ...shippingOptions,
+                                                        shipmentDate: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </form>
+                                        {error?.shipmentDate && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.shipmentDate}
+                                            </span>
+                                        )}
+                                    </Col>
+                                </Row>
+                                <Row className='mt-4'>
+                                    <Col lg={3}>
+                                        <Autocomplete
+                                            label='Shipment terms'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) =>
+                                                setShippingOptions({
+                                                    ...shippingOptions,
+                                                    shipmentTerms: newVal,
+                                                })
+                                            }
+                                            getOptionLabel={(option) => option || ""}
+                                            options={shipmentTermsOptions}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Shipment Terms'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            value={
+                                                shippingOptions.shipmentTerms &&
+                                                shipmentTermsOptions.find(
+                                                    (ele) => ele === shippingOptions.shipmentTerms
+                                                )
+                                            }
+                                            disabled={isView}
+                                        />
+                                        {error?.shipmentTerms && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.shipmentTerms}
+                                            </span>
+                                        )}
+                                    </Col>
+                                    <Col lg={3} className=''>
+                                        <TextField
+                                            label='Net Shipped Weights'
+                                            variant='standard'
+                                            color='warning'
+                                            name='netShippedWeights'
+                                            value={formateCurrencyValue(shippingOptions.shippedWeights)}
+                                            onChange={(e) =>
+                                                handleChnage(e, "shippedWeights", "shippingOptions")
+                                            }
+                                            InputProps={{
+                                                endAdornment: (
+                                                    <InputAdornment position='start'>
+                                                        {productDetails.metric}
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                            disabled={isView}
+                                        />
+                                        {error?.shippedWeights && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.shippedWeights}
+                                            </span>
+                                        )}
+                                    </Col>
+                                    <Col lg={3}>
+                                        <Autocomplete
+                                            label='Destination country'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) => {
+                                                setShippingOptions({
+                                                    ...shippingOptions,
+                                                    destinationCountry: newVal._id,
+                                                })
+                                                setPorts(newVal.name)
+                                            }}
+                                            getOptionLabel={(option) => option.name || ""}
+                                            options={countries}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Destination Country'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            disabled={isView}
+                                            value={
+                                                countries.length > 0 &&
+                                                shippingOptions.destinationCountry &&
+                                                countries.find(
+                                                    (ele) => ele._id === shippingOptions.destinationCountry
+                                                )
+                                            }
+                                        />
+                                        {error?.destinationCountry && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.destinationCountry}
+                                            </span>
+                                        )}
+                                    </Col>
+                                    <Col lg={3}>
+                                        <Autocomplete
+                                            label='Destination port'
+                                            id='disable-clearable'
+                                            // onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, destinationPort: newVal._id })}
                                             onChange={(e, newVal) => {
                                                 const mode = shippingOptions.shipmentMode
                                                 if (mode === "SEA") {
                                                     setShippingOptions({
                                                         ...shippingOptions,
-                                                        destinationPort: e.target.value,
+                                                        destinationPort: newVal._id,
                                                     })
                                                 } else if (mode === "AIR") {
                                                     setShippingOptions({
                                                         ...shippingOptions,
-                                                        destinationAirbase: e.target.value,
+                                                        destinationAirbase: newVal._id,
                                                     })
                                                 }
                                             }}
-                                            disabled={isView}
-                                            value={
-                                                (shippingOptions.shipmentMode === "SEA" && shippingOptions.destinationPort) ||
-                                                (shippingOptions.shipmentMode === "AIR" && shippingOptions.destinationAirbase)
-                                            }
-                                            defaultValue="Select...">
-                                            <option>Select...</option>
-                                            {portsOptions.map((item) => (
-                                                <option value={item._id}>{item.name}</option>
-                                            ))}
-                                        </Form.Select>
-                                        {error && error?.destinationPort && <span style={{ color: 'red' }}>{error.destinationPort}</span>}
-                                    </Form.Group>
-
-                                </Row>
-
-                                <Row className='mt-4'>
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Shipment Frequency</Form.Label>
-                                        <Form.Select
-                                            onChange={(e, newVal) =>
-                                                setShippingOptions({ ...shippingOptions, shipmentFrequency: e.target.value })}
-                                            disabled={isView}
+                                            getOptionLabel={(option) => option.name}
+                                            options={portsOptions ?? []}
                                             disableClearable
-                                            value={shippingOptions.shipmentFrequency}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
-                                            {shipmentFrequencyOptions.map((item) => (
-                                                <option value={item}>{item}</option>
-                                            ))}
-
-                                        </Form.Select>
-                                        {error && error?.shipmentFrequency && <span style={{ color: 'red' }}>{error.shipmentFrequency}</span>}
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Warehouse required?</Form.Label>
-                                        <Form.Select
-                                            onChange={(e) => {
-                                                const newValue = e.target.value === 'true'; // Convert to boolean
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Destination Port'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            disabled={isView}
+                                            // value={(portsOptions?.length > 0 && shippingOptions?.destinationPort) && portsOptions.find((ele) => ele?._id === shippingOptions?.destinationPort)}
+                                            value={
+                                                (shippingOptions.shipmentMode === "SEA" &&
+                                                    portsOptions?.length > 0 &&
+                                                    shippingOptions.destinationPort &&
+                                                    portsOptions.find(
+                                                        (ele) => ele._id === shippingOptions.destinationPort
+                                                    )) ||
+                                                (shippingOptions.shipmentMode === "AIR" &&
+                                                    portsOptions?.length > 0 &&
+                                                    shippingOptions.destinationAirbase &&
+                                                    portsOptions.find(
+                                                        (ele) => ele._id === shippingOptions.destinationAirbase
+                                                    ))
+                                            }
+                                        />
+                                        {error?.destinationPort && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.destinationPort}
+                                            </span>
+                                        )}
+                                    </Col>
+                                </Row>
+                                <Row className='mt-4'>
+                                    <Col lg={6}>
+                                        <Autocomplete
+                                            label='Shipment frequency'
+                                            id='disable-clearable'
+                                            onChange={(e, newVal) =>
                                                 setShippingOptions({
                                                     ...shippingOptions,
-                                                    warehouseRequired: newValue,
-                                                });
-                                                setWarehouseStatus(newValue);
-                                                console.log(newValue, 'from boots', typeof (newValue));
-                                            }}
+                                                    shipmentFrequency: newVal,
+                                                })
+                                            }
+                                            getOptionLabel={(option) => option || ""}
+                                            options={shipmentFrequencyOptions}
+                                            disableClearable
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Shipment Frequency'
+                                                    variant='standard'
+                                                />
+                                            )}
                                             disabled={isView}
-                                            value={shippingOptions.warehouseRequired.toString()} // Convert to string
-                                            defaultValue={'Choose...'}
-                                        >
-                                            <option>Choose...</option>
-                                            {warehouseRequiredOptions.map((item, i) => (
-                                                <option key={i} value={item.value}>{item.label}</option>
-                                            ))}
-                                        </Form.Select>
-                                        {error && error?.warehouseRequired && <span style={{ color: 'red' }}>{error.warehouseRequired}</span>}
-                                    </Form.Group>
-                                    {/* 
+                                            value={
+                                                shipmentFrequencyOptions.length > 0 &&
+                                                shippingOptions.shipmentFrequency &&
+                                                shipmentFrequencyOptions.find(
+                                                    (ele) => ele === shippingOptions.shipmentFrequency
+                                                )
+                                            }
+                                        />
+                                        {error?.shipmentFrequency && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.shipmentFrequency}
+                                            </span>
+                                        )}
+                                    </Col>
                                     <Col lg={6}>
                                         <Autocomplete
                                             label='Warehouse required?'
@@ -1773,7 +2359,6 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                     warehouseRequired: newVal.value,
                                                 })
                                                 setWarehouseStatus(newVal.value)
-                                                console.log(newVal.value, 'from mui')
                                             }
                                             }
                                             getOptionLabel={(option) => option.label || ""}
@@ -1807,20 +2392,25 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                 {error?.warehouseRequired}
                                             </span>
                                         )}
-                                    </Col> */}
+                                    </Col>
                                 </Row>
                                 {shippingOptions.warehouseRequired && (
                                     <div className='product p-0'>
                                         <div className='d-flex justify-content-between mt-5 mb-3 align-items-center'>
-                                            <h2 className='m-0 fw-bold title-admin fs-5'>WAREHOUSE</h2>
-                                            {/* <button className={`add_btn me-3 ${isView ? "d-none" : "d-block"}`} onClick={() => { setAddWarehouseModal(true) }}>
+                                            <h2 className='m-0'>Warehouses</h2>
+                                            <button
+                                                className={`add_btn me-3 ${isView ? "d-none" : "d-block"}`}
+                                                onClick={() => {
+                                                    setAddWarehouseModal(true)
+                                                }}
+                                            >
                                                 {" "}
-                                                <img src='../../assets/img/about/plus.png' className='me-2' /> Add
-                                            </button> */}
-                                            <Button onClick={() => { setAddWarehouseModal(true) }} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-3'>
-                                                <span class=' pe-2'><i class="bi bi-plus pe-2 "></i></span>
-                                                <span className='fw-bold'>Add</span>
-                                            </Button>
+                                                <img
+                                                    src='../../assets/img/about/plus.png'
+                                                    className='me-2'
+                                                />
+                                                Add
+                                            </button>
                                         </div>
                                         <div>
                                             {shippingOptions.warehouses?.length > 0 ? (
@@ -1881,113 +2471,249 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     <div className='m-3' />
 
                     <div className='add-edit-product pt-0 pb-0'>
-                        <div className='mb-3'>
-                            <h4 className='fw-bold mb-3 fs-5 title-admin'>TRANSHIPMENT OPTIONS</h4>
+                        <div className='' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
+                            <h4 className='fw-bold mb-3'>Transshipment Options</h4>
                             <div>
                                 <Row>
-                                    <Form.Group as={Col} lg={3} controlId="formGridZip">
-                                        <Form.Label>Transhipment required?</Form.Label>
-                                        <Form.Select
+                                    <Col lg={3}>
+                                        <Autocomplete
+                                            label='Transhipment required?'
+                                            id='disable-clearable'
                                             onChange={(e, newVal) => {
-                                                const newValue = e.target.value === 'true'; // Convert to boolean
-
-                                                    setTransShipmentOptions({ ...transShipmentOptions, tranShipmentRequired: newValue })
-                                               
+                                                if (newVal.value) {
+                                                    setTransShipmentOptions({
+                                                        ...transShipmentOptions,
+                                                        tranShipmentRequired: newVal.value,
+                                                    })
+                                                } else {
+                                                    setTransShipmentOptions({
+                                                        tranShipmentRequired: newVal.value,
+                                                        street: "",
+                                                        city: "",
+                                                        country: "",
+                                                        transShipmentQuantity: "",
+                                                        transShipmentDate: "",
+                                                    })
+                                                }
                                             }}
+                                            getOptionLabel={(option) => option.label}
+                                            options={options}
+                                            disableClearable
                                             disabled={isView}
-                                            value={transShipmentOptions.tranShipmentRequired.toString()}
-                                            defaultValue={'Choose...'}>
-                                            <option>Choose..</option>
-                                            {options.map((item, i) => (
-                                                <option key={i} value={item.value}>{item.label}</option>
-                                            ))}
-
-                                        </Form.Select>
-                                        {error && error?.tranShipmentRequired && <span style={{ color: 'red' }}>{error.tranShipmentRequired}</span>}
-                                    </Form.Group>
-                                </Row>
-                                <Row className='mt-4'>
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Transhipment Required?'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            value={((options.length > 0 && transShipmentOptions.tranShipmentRequired === true) || transShipmentOptions.tranShipmentRequired === false) ?
+                                                options.find(
+                                                    (ele) =>
+                                                        ele.value === transShipmentOptions.tranShipmentRequired
+                                                ) : options = ""
+                                            }
+                                        />
+                                        {error?.tranShipmentRequired && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.tranShipmentRequired}
+                                            </span>
+                                        )}
+                                    </Col>
                                     {transShipmentOptions.tranShipmentRequired && (
                                         <>
-                                            <Form.Group as={Col} controlId="formGridZip">
-                                                <Form.Label>Street</Form.Label>
-                                                <Form.Control
+                                            <Col lg={3}>
+                                                <TextField
+                                                    label='Street'
+                                                    variant='standard'
+                                                    color='warning'
                                                     value={transShipmentOptions.street}
                                                     name='street'
                                                     onChange={(e) =>
-                                                        setTransShipmentOptions({ ...transShipmentOptions, street: e.target.value })
-                                                    } />
-                                                {error?.street && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.street}</span>)}
-                                            </Form.Group>
-
-                                            <Form.Group as={Col} controlId="formGridZip">
-                                                <Form.Label>City</Form.Label>
-                                                <Form.Control
+                                                        setTransShipmentOptions({
+                                                            ...transShipmentOptions,
+                                                            street: e.target.value,
+                                                        })
+                                                    }
+                                                    disabled={isView}
+                                                />
+                                                {error?.street && (
+                                                    <span
+                                                        style={{
+                                                            color: "#da251e",
+                                                            width: "100%",
+                                                            textAlign: "start",
+                                                        }}
+                                                    >
+                                                        {error?.street}
+                                                    </span>
+                                                )}
+                                            </Col>
+                                            <Col lg={3}>
+                                                <TextField
+                                                    label='City'
+                                                    variant='standard'
+                                                    color='warning'
                                                     value={transShipmentOptions.city}
                                                     name='city'
                                                     onChange={(e) =>
-                                                        setTransShipmentOptions({ ...transShipmentOptions, city: e.target.value })
-                                                    } />
-                                                {error?.city && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.city}</span>)}
-                                            </Form.Group>
-
-
-                                            <Form.Group as={Col} controlId="formGridZip">
-                                                <Form.Label>Country</Form.Label>
-                                                <Form.Select
-                                                    onChange={(e, newVal) =>
-                                                        setTransShipmentOptions({ ...transShipmentOptions, country: e.target.value })
+                                                        setTransShipmentOptions({
+                                                            ...transShipmentOptions,
+                                                            city: e.target.value,
+                                                        })
                                                     }
                                                     disabled={isView}
-                                                    value={transShipmentOptions.country}
-                                                    defaultValue="Select...">
-                                                    <option>Select...</option>
-                                                    {countries.map((item) => (
-                                                        <option value={item._id}>{item.name}</option>
-                                                    ))}
-                                                </Form.Select>
-                                                {error && error?.country && <span style={{ color: 'red' }}>{error.country}</span>}
-                                            </Form.Group>
-
-
-
+                                                />
+                                                {error?.city && (
+                                                    <span
+                                                        style={{
+                                                            color: "#da251e",
+                                                            width: "100%",
+                                                            textAlign: "start",
+                                                        }}
+                                                    >
+                                                        {error?.city}
+                                                    </span>
+                                                )}
+                                            </Col>
+                                            <Col lg={3}>
+                                                <Autocomplete
+                                                    label='Country'
+                                                    id='disable-clearable'
+                                                    onChange={(e, newVal) =>
+                                                        setTransShipmentOptions({
+                                                            ...transShipmentOptions,
+                                                            country: newVal._id,
+                                                        })
+                                                    }
+                                                    getOptionLabel={(option) => option.name || ""}
+                                                    options={countries}
+                                                    disableClearable
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            label='Country'
+                                                            variant='standard'
+                                                        />
+                                                    )}
+                                                    disabled={isView}
+                                                    value={
+                                                        countries.length > 0 &&
+                                                        transShipmentOptions.country &&
+                                                        countries.find(
+                                                            (ele) => ele._id === transShipmentOptions.country
+                                                        )
+                                                    }
+                                                />
+                                                {error?.country && (
+                                                    <span
+                                                        style={{
+                                                            color: "#da251e",
+                                                            width: "100%",
+                                                            textAlign: "start",
+                                                        }}
+                                                    >
+                                                        {error?.country}
+                                                    </span>
+                                                )}
+                                            </Col>
                                             <Row className='mt-4'>
-                                                <Form.Group as={Col} controlId="formGridZip">
-                                                    <Form.Label>Transshipment Quantity</Form.Label>
-                                                    <Form.Control
+                                                <Col lg={4}>
+                                                    <TextField
+                                                        label='Transshipment Quantity'
+                                                        variant='standard'
+                                                        color='warning'
                                                         name='conditions_of_contract'
                                                         value={formateCurrencyValue(transShipmentOptions.transShipmentQuantity)}
                                                         disabled={isView}
-                                                        onChange={(e) => handleChnage(e, "transShipmentQuantity", "transShipmentOptions")} />
-                                                    {error?.transShipmentQuantity && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.transShipmentQuantity}</span>)}
-                                                </Form.Group>
-
-                                                <Form.Group as={Col} controlId="formGridZip">
-                                                    <Form.Label>Transhipment Unit</Form.Label>
-                                                    <Form.Control
-                                                        name='conditions_of_contract'
-                                                        value={transShipmentOptions.tranShipmentRequired && productDetails.metric}
-
-                                                        disabled={isView || productDetails.metric} />
-                                                    {error?.transShipmentUnit && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.transShipmentUnit}</span>)}
-                                                </Form.Group>
-
-                                                <Form.Group as={Col} controlId="formGridZip">
-                                                    <Form.Label>Transshipment Date</Form.Label>
-                                                    <Form.Control
-                                                        type="date"
-                                                        name="contract_date"
-                                                        placeholder="dd-mm-yyyy"
-                                                        min={shippingOptions.shipmentDate}
-                                                        max={contractDetails.expiryDate}
-                                                        value={transShipmentOptions.transShipmentDate}
-                                                        onChange={(e) => setTransShipmentOptions({ ...transShipmentOptions, transShipmentDate: e.target.value })}
-                                                        required
+                                                        onChange={(e) =>
+                                                            handleChnage(
+                                                                e,
+                                                                "transShipmentQuantity",
+                                                                "transShipmentOptions"
+                                                            )
+                                                        }
                                                     />
-                                                    {error && error?.transShipmentDate && <span style={{ color: 'red' }}>{error.transShipmentDate}</span>}
-                                                </Form.Group>
-
-
+                                                    {error?.transShipmentQuantity && (
+                                                        <span
+                                                            style={{
+                                                                color: "#da251e",
+                                                                width: "100%",
+                                                                textAlign: "start",
+                                                            }}
+                                                        >
+                                                            {error?.transShipmentQuantity}
+                                                        </span>
+                                                    )}
+                                                </Col>
+                                                <Col lg={4}>
+                                                    <TextField
+                                                        label='Transshipment Unit'
+                                                        variant='standard'
+                                                        color='warning'
+                                                        name='conditions_of_contract'
+                                                        value={
+                                                            transShipmentOptions.tranShipmentRequired &&
+                                                            productDetails.metric
+                                                        }
+                                                        // value={transShipmentOptions.transShipmentUnit}
+                                                        disabled={isView || productDetails.metric}
+                                                    // onChange={(e) => handleChnage(e, 'transShipmentUnit', 'transShipmentOptions')}
+                                                    />
+                                                    {error?.transShipmentUnit && (
+                                                        <span
+                                                            style={{
+                                                                color: "#da251e",
+                                                                width: "100%",
+                                                                textAlign: "start",
+                                                            }}
+                                                        >
+                                                            {error?.transShipmentUnit}
+                                                        </span>
+                                                    )}
+                                                </Col>
+                                                <Col lg={4}>
+                                                    <form className='' noValidate>
+                                                        <TextField
+                                                            id='date'
+                                                            label='Transhipment Date'
+                                                            type='date'
+                                                            name='contract_date'
+                                                            value={transShipmentOptions.transShipmentDate}
+                                                            InputLabelProps={{
+                                                                shrink: true,
+                                                            }}
+                                                            inputProps={{
+                                                                min: shippingOptions.shipmentDate,
+                                                                max: contractDetails.expiryDate,
+                                                            }}
+                                                            disabled={isView}
+                                                            onChange={(e) =>
+                                                                setTransShipmentOptions({
+                                                                    ...transShipmentOptions,
+                                                                    transShipmentDate: e.target.value,
+                                                                })
+                                                            }
+                                                        />
+                                                    </form>
+                                                    {error?.transShipmentDate && (
+                                                        <span
+                                                            style={{
+                                                                color: "#da251e",
+                                                                width: "100%",
+                                                                textAlign: "start",
+                                                            }}
+                                                        >
+                                                            {error?.transShipmentDate}
+                                                        </span>
+                                                    )}
+                                                </Col>
                                             </Row>
                                         </>
                                     )}
@@ -2034,169 +2760,278 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                         }}
                     />
                 </div> */}
-                    <div className='add-edit-product pt-1 pb-5'>
-                        <div className='p-2 mb-3 pb-4' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
-                            <h2 className='mb-3 fs-5 fw-bold title-admin'>PRICING DETAILS</h2>
+                    <div className='add-edit-product pt-0 pb-0'>
+                        <div className='form'>
+                            <h2 className='mb-3'>Pricing Details</h2>
                             <div>
                                 <Row>
-                                    <Form.Group as={Col} lg={pricingDetails.pricingType === "Firm fixed price"
-                                        ? 3 : 4 || pricingDetails.pricingHedgingStatus === "Yes" ? 3 : 4} controlId="formGridZip">
-                                        <Form.Label>Pricing Type</Form.Label>
-                                        <Form.Select
+                                    <Col lg={pricingDetails.pricingType === "Firm fixed price"
+                                        ? 3 : 4 || pricingDetails.pricingHedgingStatus === "Yes" ? 3 : 4}>
+                                        <Autocomplete
+                                            label='Pricing type'
+                                            id='disable-clearable'
                                             onChange={(e, newVal) =>
-                                                setPricingDetails({ ...pricingDetails, pricingType: e.target.value })
+                                                setPricingDetails({
+                                                    ...pricingDetails,
+                                                    pricingType: newVal,
+                                                })
                                             }
-                                            disabled={isView}
+                                            getOptionLabel={(option) => option || ""}
+                                            options={pricingTypeOption}
                                             disableClearable
-                                            value={pricingDetails.pricingType}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
-                                            {pricingTypeOption.map((item) => (
-                                                <option value={item}>{item}</option>
-                                            ))}
-
-                                        </Form.Select>
-                                        {error && error?.pricingType && <span style={{ color: 'red' }}>{error.pricingType}</span>}
-                                    </Form.Group>
-
-
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label='Pricing Type'
+                                                    variant='standard'
+                                                />
+                                            )}
+                                            disabled={isView}
+                                            value={
+                                                pricingTypeOption.length > 0 &&
+                                                pricingDetails.pricingType &&
+                                                pricingTypeOption.find(
+                                                    (ele) => ele === pricingDetails.pricingType
+                                                )
+                                            }
+                                        />
+                                        {error?.pricingType && (
+                                            <span
+                                                style={{
+                                                    color: "#da251e",
+                                                    width: "100%",
+                                                    textAlign: "start",
+                                                }}
+                                            >
+                                                {error?.pricingType}
+                                            </span>
+                                        )}
+                                    </Col>
                                     {pricingDetails.pricingType === "Firm fixed price" && (
                                         <>
-                                            <Form.Group as={Col} lg={pricingDetails.pricingType === "Firm fixed price" ? 3 : 4} controlId="formGridZip">
-                                                <Form.Label>Pricing Amount</Form.Label>
-                                                <Form.Control
+                                            <Col
+                                                lg={
+                                                    pricingDetails.pricingType === "Firm fixed price" ? 3 : 4
+                                                }
+                                            >
+                                                <TextField
+                                                    label="Pricing Amount"
+                                                    // label='Mertic measure'
+                                                    variant='standard'
+                                                    color='warning'
                                                     value={formateCurrencyValue(pricingDetails.pricingAmount)}
                                                     name='contract_value'
                                                     onChange={(e) =>
                                                         handleChnage(e, "pricingAmount", "pricingDetails")
                                                     }
-                                                    disabled={isView} />
+                                                    disabled={isView}
+                                                />
                                                 {error?.pricingAmount && (
-                                                    <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.pricingAmount}</span>
+                                                    <span
+                                                        style={{
+                                                            color: "#da251e",
+                                                            width: "100%",
+                                                            textAlign: "start",
+                                                        }}
+                                                    >
+                                                        {error?.pricingAmount}
+                                                    </span>
                                                 )}
-                                            </Form.Group>
-
-                                            <Form.Group as={Col} lg={pricingDetails.pricingType === "Firm fixed price" ? 3 : 4} controlId="formGridZip">
-                                                <Form.Label>Pricing Unit</Form.Label>
-                                                <Form.Control
+                                            </Col>
+                                            <Col
+                                                lg={
+                                                    pricingDetails.pricingType === "Firm fixed price" ? 3 : 4
+                                                }
+                                            >
+                                                <TextField
+                                                    label='Pricing Unit'
+                                                    variant='standard'
+                                                    color='warning'
+                                                    // value={selectedProduct && selectedProduct}
                                                     value={productDetails.unit}
                                                     onChange={(e) => handleChnage(e, "unit", "productDetails")}
-                                                    disabled={true} />
-                                                {error && error?.value && <span style={{ color: 'red' }}>{error.value}</span>}
-                                            </Form.Group>
-
-                                            <Form.Group as={Col} lg={pricingDetails.pricingType === "Firm fixed price" ? 3 : 4} controlId="formGridZip">
-                                                <Form.Label>Previous Day Closing Amount</Form.Label>
-                                                <Form.Control
+                                                    disabled={true}
+                                                />
+                                            </Col>
+                                            <Col
+                                                lg={
+                                                    pricingDetails.pricingType === "Firm fixed price" ? 3 : 4
+                                                }
+                                            >
+                                                <TextField
+                                                    label='Previous Day Closing Amount'
+                                                    variant='standard'
+                                                    color='warning'
                                                     value={pricingDetails.previousDayClosingAmount}
                                                     name='previous_day_closing_amount'
                                                     onChange={(e) =>
-                                                        handleChnage(e, "previousDayClosingAmount", "pricingDetails")
+                                                        handleChnage(
+                                                            e,
+                                                            "previousDayClosingAmount",
+                                                            "pricingDetails"
+                                                        )
                                                     }
-                                                    disabled={isView} />
-                                                {error?.previousDayClosingAmount && (<span
-                                                    style={{ color: "#da251e", width: "100%", textAlign: "start" }}>
-                                                    {error?.previousDayClosingAmount}
-                                                </span>
+                                                    disabled={isView}
+                                                />
+                                                {error?.previousDayClosingAmount && (
+                                                    <span
+                                                        style={{
+                                                            color: "#da251e",
+                                                            width: "100%",
+                                                            textAlign: "start",
+                                                        }}
+                                                    >
+                                                        {error?.previousDayClosingAmount}
+                                                    </span>
                                                 )}
-                                            </Form.Group>
-
+                                            </Col>
                                         </>
                                     )}
-
-
                                     {pricingDetails.pricingType === "Price to be fixed" && (
                                         <>
-                                            <Form.Group as={Col} lg={pricingDetails.pricingHedgingStatus ? 3 : 4} controlId="formGridZip">
-                                                <Form.Label>Pricing Formula</Form.Label>
-                                                <Form.Select
+                                            <Col lg={pricingDetails.pricingHedgingStatus ? 3 : 4}>
+                                                <Autocomplete
+                                                    label='Pricing formula'
+                                                    id='disable-clearable'
                                                     onChange={(e, newVal) =>
-                                                        setPricingDetails({ ...pricingDetails, pricingFormula: e.target.value })
+                                                        setPricingDetails({
+                                                            ...pricingDetails,
+                                                            pricingFormula: newVal,
+                                                        })
                                                     }
-                                                    disabled={isView}
+                                                    getOptionLabel={(option) => option || ""}
+                                                    options={pricingFormulaOption}
                                                     disableClearable
-                                                    value={pricingDetails.pricingFormula}
-                                                    defaultValue="Choose...">
-                                                    <option>Choose...</option>
-                                                    {pricingFormulaOption.map((item) => (
-                                                        <option value={item}>{item}</option>
-                                                    ))}
-
-                                                </Form.Select>
-                                                {error && error?.pricingFormula && <span style={{ color: 'red' }}>{error.pricingFormula}</span>}
-                                            </Form.Group>
-
-
-                                            <Form.Group as={Col} lg={pricingDetails.pricingHedgingStatus ? 3 : 4} controlId="formGridZip">
-                                                <Form.Label>Pricing Hedging status</Form.Label>
-                                                <Form.Select
-                                                    onChange={(e, newVal) => {
-                                                        const newValue = e.target.value === 'true'; // Convert to boolean
-                                                        setPricingDetails({ ...pricingDetails, pricingHedgingStatus: newValue, })
-                                                        setHedgingStatus(newValue)
-                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            label='Pricing Formula'
+                                                            variant='standard'
+                                                        />
+                                                    )}
                                                     disabled={isView}
-
-                                                    value={pricingDetails.pricingHedgingStatus.toString()}
-                                                    defaultValue={'Choose...'}>
-                                                    <option>Choose...</option>
-                                                    {warehouseRequiredOptions.map((item, i) => (
-                                                        <option key={i} value={item.value}>{item.label}</option>
-                                                    ))}
-
-                                                </Form.Select>
-                                                {error && error?.pricingHedgingStatus && <span style={{ color: 'red' }}>{error.pricingHedgingStatus}</span>}
-                                            </Form.Group>
-
-
+                                                    value={
+                                                        pricingFormulaOption.length > 0 &&
+                                                        pricingDetails.pricingFormula &&
+                                                        pricingFormulaOption.find(
+                                                            (ele) => ele === pricingDetails.pricingFormula
+                                                        )
+                                                    }
+                                                />
+                                                {error?.pricingFormula && (
+                                                    <span
+                                                        style={{
+                                                            color: "#da251e",
+                                                            width: "100%",
+                                                            textAlign: "start",
+                                                        }}
+                                                    >
+                                                        {error?.pricingFormula}
+                                                    </span>
+                                                )}
+                                            </Col>
+                                            <Col lg={pricingDetails.pricingHedgingStatus ? 3 : 4}>
+                                                <Autocomplete
+                                                    label='Pricing Hedging status'
+                                                    id='disable-clearable'
+                                                    onChange={(e, newVal) => {
+                                                        setPricingDetails({
+                                                            ...pricingDetails,
+                                                            pricingHedgingStatus: newVal.value,
+                                                        })
+                                                        setHedgingStatus(newVal.value)
+                                                    }
+                                                    }
+                                                    getOptionLabel={(option) => option.label || ""}
+                                                    options={warehouseRequiredOptions}
+                                                    disableClearable
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            label='Price Hedging Status'
+                                                            variant='standard'
+                                                        />
+                                                    )}
+                                                    disabled={isView}
+                                                    value={
+                                                        ((warehouseRequiredOptions.length > 0 &&
+                                                            pricingDetails.pricingHedgingStatus === true) ||
+                                                            pricingDetails.pricingHedgingStatus === false) ?
+                                                            warehouseRequiredOptions.find(
+                                                                (ele) =>
+                                                                    ele.value === pricingDetails.pricingHedgingStatus
+                                                            ) : warehouseRequiredOptions === ''
+                                                    }
+                                                />
+                                                {error?.pricingHedgingStatus && (
+                                                    <span
+                                                        style={{
+                                                            color: "#da251e",
+                                                            width: "100%",
+                                                            textAlign: "start",
+                                                        }}
+                                                    >
+                                                        {error?.pricingHedgingStatus}
+                                                    </span>
+                                                )}
+                                            </Col>
                                             {pricingDetails.pricingHedgingStatus && (
                                                 <>
-                                                    <Row className="mt-4">
-                                                        <Form.Group as={Col} controlId="formGridZip">
-                                                            <Form.Label>Hedging Method</Form.Label>
-                                                            <Form.Select
-                                                                onChange={(e, newVal) => setPricingDetails({ ...pricingDetails, pricingHedgingMethod: e.target.value })}
-                                                                disabled={isView}
-                                                                disableClearable
-                                                                value={pricingDetails.pricingHedgingMethod}
-                                                                defaultValue="Choose...">
-                                                                <option>Choose...</option>
-                                                                {hedgingMethodOption.map((item) => (
-                                                                    <option value={item}>{item}</option>
-                                                                ))}
-
-                                                            </Form.Select>
-                                                            {error && error?.pricingHedgingMethod && <span style={{ color: 'red' }}>{error.pricingHedgingMethod}</span>}
-                                                        </Form.Group>
-
-                                                        <Form.Group as={Col} controlId="formGridZip">
-                                                            <Form.Label>CounterParty</Form.Label>
-                                                            <Form.Select
-                                                                onChange={(e, newVal) => {
-                                                                    setPricingDetails({ ...pricingDetails, pricingCounterParty: e.target.value });
-                                                                    setHedgingParty(e.target.value)
+                                                    <Col lg={3}>
+                                                        <Autocomplete
+                                                            label='Hedging method'
+                                                            id='disable-clearable'
+                                                            onChange={(e, newVal) =>
+                                                                setPricingDetails({
+                                                                    ...pricingDetails,
+                                                                    pricingHedgingMethod: newVal,
+                                                                })
+                                                            }
+                                                            getOptionLabel={(option) => option || ""}
+                                                            options={hedgingMethodOption}
+                                                            disableClearable
+                                                            renderInput={(params) => (
+                                                                <TextField
+                                                                    {...params}
+                                                                    label='Hedging method'
+                                                                    variant='standard'
+                                                                />
+                                                            )}
+                                                            disabled={isView}
+                                                            value={
+                                                                hedgingMethodOption.length > 0 &&
+                                                                pricingDetails.pricingHedgingMethod &&
+                                                                hedgingMethodOption.find(
+                                                                    (ele) =>
+                                                                        ele === pricingDetails.pricingHedgingMethod
+                                                                )
+                                                            }
+                                                        />
+                                                        {error?.pricingHedgingMethod && (
+                                                            <span
+                                                                style={{
+                                                                    color: "#da251e",
+                                                                    width: "100%",
+                                                                    textAlign: "start",
                                                                 }}
-                                                                disabled={isView}
-                                                                disableClearable
-                                                                value={pricingDetails.pricingCounterParty}
-                                                                defaultValue="Choose...">
-                                                                <option>Choose...</option>
-                                                                {counterPartyOption.map((item) => (
-                                                                    <option value={item.value}>{item.label}</option>
-                                                                ))}
-
-                                                            </Form.Select>
-                                                            {error && error?.pricingCounterParty && <span style={{ color: 'red' }}>{error.pricingCounterParty}</span>}
-                                                        </Form.Group>
-
-                                                        {/* <Col lg={12}>
+                                                            >
+                                                                {error?.pricingHedgingMethod}
+                                                            </span>
+                                                        )}
+                                                    </Col>
+                                                    <Row>
+                                                        <Col lg={12}>
                                                             <Autocomplete
                                                                 label='Counter party'
                                                                 id='disable-clearable'
-                                                                onChange={(e, newVal) => { 
-                                                                    setPricingDetails({ ...pricingDetails, pricingCounterParty: newVal.value });
+                                                                onChange={(e, newVal) => {
+                                                                    setPricingDetails({
+                                                                        ...pricingDetails,
+                                                                        pricingCounterParty: newVal.value,
+                                                                    });
                                                                     setHedgingParty(newVal.label)
-                                                                }}
+                                                                }
+                                                                }
                                                                 getOptionLabel={(option) => option.label || ""}
                                                                 options={counterPartyOption}
                                                                 disableClearable
@@ -2231,11 +3066,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                                     {error?.pricingCounterParty}
                                                                 </span>
                                                             )}
-                                                        </Col> */}
+                                                        </Col>
                                                     </Row>
                                                 </>
                                             )}
-
                                         </>
                                     )}
                                 </Row>

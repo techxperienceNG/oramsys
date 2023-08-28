@@ -463,21 +463,38 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                 />
             </div>
             <div className='add-edit-product parties_main mb-4'>
-                <div className='p-4 mb-3 pb-4' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>                   
+                <div className='p-4 mb-3 pb-4' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
                     <div className='mb-3 d-flex justify-content-between align-items-center'>
                         <h6 className="fs-5 fw-bold title-admin">RELATED PARTIES</h6>
-                            <Button onClick={handleRelatedParties} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-1'>
-                        <span class=' pe-2'><i class="bi bi-plus pe-1 "></i></span>
-                        <span className='fw-bold'>Add Related Parties</span>
-                    </Button>
+                        <Button onClick={handleRelatedParties} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-1'>
+                            <span class=' pe-2'><i class="bi bi-plus pe-1 "></i></span>
+                            <span className='fw-bold'>Add Related Parties</span>
+                        </Button>
                     </div>
 
                     <>
                         {apiFetched && relatedPartyDetails?.map((party, index) => (
                             <Row key={index}>
                                 <>
+                                    <Form.Group as={Col} controlId="formGridZip">
+                                        <Form.Label>Party 1</Form.Label>
+                                        <Form.Select
+                                            onChange={(event, newValue) => {
+                                                handleParties(event, newValue, index, 'buyer');
+                                            }}
+                                            disabled={isView}
+                                            value={party.buyer}
+                                        >
+                                            {partiesData.map((item) => (
+                                                <option key={item} value={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                        {error && error?.buyer && <span style={{ color: 'red' }}>{error.buyer}</span>}
+                                    </Form.Group>
 
-                                    <Col lg={3}>
+                                    {/* <Col lg={3}>
                                         <Autocomplete
                                             options={partiesData}
                                             getOptionLabel={(option) => option || ""}
@@ -495,10 +512,26 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                             disableClearable
                                         />
                                         {error && error?.buyer && <span style={{ color: 'red' }}>{error?.buyer}</span>}
-                                    </Col>
+                                    </Col> */}
+                                    <Form.Group as={Col} controlId="formGridZip">
+                                        <Form.Label>Party 2</Form.Label>
+                                        <Form.Select
+                                            onChange={(event, newValue) => {
+                                                handleParties(event, newValue, index, 'shipper');
+                                            }}
+                                            disabled={isView}
+                                            value={party.shipper}
+                                        >
+                                            {partiesData.map((item) => (
+                                                <option key={item} value={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                        {error && error?.shipper && <span style={{ color: 'red' }}>{error.shipper}</span>}
+                                    </Form.Group>
 
-
-                                    <Col lg={3}>
+                                    {/* <Col lg={3}>
                                         <Autocomplete
                                             options={partiesData}
                                             getOptionLabel={(option) => option || ""}
@@ -509,15 +542,14 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                                 <TextField {...params} label="Party 2" variant="standard" />
                                             )}
                                             onChange={(event, newValue) => {
-                                                handleParties(event, newValue, index, 'shipper');
-                                                console.log(party.shipper, "Check")
+                                                handleParties(event, newValue, index, 'shipper')
                                             }}
                                             disabled={isView}
                                             value={(partiesData && party.shipper) && partiesData.find((ele) => ele === party?.shipper)}
                                             disableClearable
                                         />
                                         {error && error?.shipper && <span style={{ color: 'red' }}>{error?.shipper}</span>}
-                                    </Col>
+                                    </Col> */}
 
                                     <Col lg={4}>
                                         <div className='d-flex align-items-center Related_parties'>
@@ -533,7 +565,10 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                                 )}
                                                 defaultValue={relatedPartyDetails.party_relation}
                                                 getOptionSelected={(option) => option.label === 'test'}
-                                                onChange={(event, newValue) => { handleRelation(event, newValue, index); setRelation(parties); console.log('parties', parties); console.log('party', party); }}
+                                                onChange={(event, newValue) => {
+                                                    handleRelation(event, newValue, index);
+                                                    setRelation(parties); console.log('parties', parties); console.log('party', party);
+                                                }}
                                                 value={parties.find((ele) => ele.value == party.party_relation)}
                                                 disableClearable
                                             />

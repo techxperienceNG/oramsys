@@ -1066,14 +1066,14 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     const handleCommoditySubtypeChange = (e, newVal) => {
         // let product = [];
         // productData.data.forEach((item) => {
-        // if (item.commodity_sub_type == newVal) {
+        // if (item.commodity_sub_type == e) {
         //     product.push(item);
         // }
         // })
         // setProductName(product);
         setProductDetails({
             ...productDetails,
-            commoditySubType: newVal,
+            commoditySubType: e,
         })
     }
 
@@ -1295,14 +1295,14 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         <Form.Label>Commodity Sub-Type</Form.Label>
                                         <Form.Select
                                             onChange={(e, newVal) =>
-                                                handleCommoditySubtypeChange(e, newVal)
+                                                handleCommoditySubtypeChange(e.target.value, newVal)
                                             }
                                             disabled={isView}
                                             value={productDetails.commoditySubType}
                                             defaultValue="Choose...">
                                             <option>Choose...</option>
                                             {commoditySubTypeOption.map((item) => (
-                                                <option value={item}>{item}</option>
+                                                <option key={item} value={item}>{item}</option>
                                             ))}
                                         </Form.Select>
                                         {error && error?.commoditySubType && <span style={{ color: 'red' }}>{error.commoditySubType}</span>}
@@ -1542,7 +1542,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             defaultValue="Choose...">
                                             <option>Choose...</option>
                                             {shippingCompanyOption.map((item) => (
-                                                <option value={item.value}>{item.label}</option>
+                                                <option key={item} value={item.label}>{item.label}</option>
                                             ))}
 
                                         </Form.Select>
@@ -1633,7 +1633,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Shipment Terms</Form.Label>
                                         <Form.Select
-                                            onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, shipmentTerms: newVal })}
+                                            onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, shipmentTerms: e.target.value })}
+                                            disabled={isView}
                                             value={shippingOptions.shipmentTerms}
                                             defaultValue="Choose...">
                                             <option>Choose...</option>
@@ -2182,7 +2183,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                                 defaultValue="Choose...">
                                                                 <option>Choose...</option>
                                                                 {counterPartyOption.map((item) => (
-                                                                    <option value={item.value}>{item.label}</option>
+                                                                    <option value={item.label}>{item.label}</option>
                                                                 ))}
 
                                                             </Form.Select>

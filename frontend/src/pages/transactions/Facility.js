@@ -66,6 +66,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         forceMajeure: "",
         loanPurposeValidity: "",
         cancellationFee: "",
+        loanPurposeReason: "",
 
         drawdownFee: "",
         commitmentFee: "",
@@ -122,6 +123,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                 currency: getTransactionByIdData.data?.facility?.currency,
                 interestRate: getTransactionByIdData.data?.facility?.interestRate,
                 interestRateType: getTransactionByIdData.data?.facility?.interestRateType,
+                loanPurposeReason: getTransactionByIdData.data?.facility?.loanPurposeReason,
                 interestPaymentDate: getTransactionByIdData.data?.facility?.interestPaymentDate && moment(getTransactionByIdData.data?.facility?.interestPaymentDate).format("YYYY-MM-DD"),
                 rePaymentCurrency: getTransactionByIdData.data?.facility?.rePaymentCurrency,
                 currency: getTransactionByIdData.data?.facility?.currency,
@@ -414,6 +416,10 @@ const Facility = ({ hendelCancel, hendelNext }) => {
         if (!facility.cancellationFee) {
             params = true
             error.cancellationFee = 'Please enter cancellation fee!'
+        }
+        if (!facility.loanPurposeReason) {
+            params = true
+            error.loanPurposeReason = 'Please enter reason'
         }
 
         if (!facility.type) {
@@ -1350,7 +1356,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             <Row>
 
 
-                                <Col lg={6}>
+                                <Col lg={facility.loanPurposeValidity === 'Yes' ? 4 : 6}>
                                     <TextField
                                         label="Loan Purpose"
                                         id="standard-start-adornment"
@@ -1367,7 +1373,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     {error && error?.loanPurposJustification && <span style={{ color: 'red' }}>{error.loanPurposJustification}</span>}
                                 </Col>
 
-                                <Col lg={6}>
+                                <Col lg={facility.loanPurposeValidity === 'Yes' ? 4 : 6}>
                                     <Autocomplete
                                         options={loanPurposeValidityOptions}
                                         getOptionLabel={(option) => option}
@@ -1386,6 +1392,16 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     />
                                     {error && error?.loanPurposeValidity && <span style={{ color: 'red' }}>{error.loanPurposeValidity}</span>}
                                 </Col>
+                                {facility.loanPurposeValidity === 'Yes' ?
+                                    <Form.Group as={Col} lg={4} controlId="formGridZip">
+                                        <Form.Label>Loan Purpose Validity Reason</Form.Label>
+                                        <Form.Control
+                                            value={facility.loanPurposeReason}
+                                            name='loanPurposeReason'
+                                            onChange={handleChange}
+                                        />
+                                        {error && error?.loanPurposeReason && <span style={{ color: 'red' }}>{error.loanPurposeReason}</span>}
+                                    </Form.Group> : ''}
 
                             </Row>
                         </div>
@@ -1602,20 +1618,20 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                     {error && error?.controlAccounts && <span style={{ color: 'red' }}>{error.controlAccounts}</span>}
                                 </Form.Group>
 
-                                <Form.Group as={Col} controlId="formGridZip">
-                                <Form.Label>Final Maturity</Form.Label>
-                                    <DatePicker
-                                    disabledDate={disabledDate}
-                                     name="finalMaturity"
-                                     placeholder="dd-mm-yyyy"
-                                    //  value={facility.finalMaturity}
-                                    //     onChange={handleChange}
-                                        // min={transactionData.details.contractDetails.contractDate ? new Date(transactionData.details.contractDetails.contractDate).toISOString().split("T")[0] : ""}
-                                         />
-                                </Form.Group>
-
-
                                 {/* <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Final Maturity</Form.Label>
+                                    <DatePicker
+                                        disabledDate={disabledDate}
+                                        name="finalMaturity"
+                                        placeholder="dd-mm-yyyy"
+                                     value={facility.finalMaturity}
+                                        onChange={handleChange}
+                                    min={transactionData.details.contractDetails.contractDate ? new Date(transactionData.details.contractDetails.contractDate).toISOString().split("T")[0] : ""}
+                                    />
+                                </Form.Group> */}
+
+
+                                <Form.Group as={Col} controlId="formGridZip">
                                     <Form.Label>Final Maturity</Form.Label>
                                     <Form.Control
                                         type="date"
@@ -1626,7 +1642,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                                         onChange={handleChange}
                                     />
                                     {error && error?.finalMaturity && <span style={{ color: 'red' }}>{error.finalMaturity}</span>}
-                                </Form.Group> */}
+                                </Form.Group>
                             </Row>
                             {/* </div> */}
                             <Row className='mb-4'>
@@ -1822,7 +1838,7 @@ const Facility = ({ hendelCancel, hendelNext }) => {
                             </Row>
 
 
-                            <Row>
+                            <Row className='mb-4'>
                                 <Form.Group as={Col} controlId="formGridZip">
                                     <Form.Label>Assignments</Form.Label>
                                     <Form.Control

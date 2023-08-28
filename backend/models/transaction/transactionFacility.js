@@ -27,6 +27,7 @@ var Schema = new Schema({
     interestRateType: { type: String, required: false, default: null },
     interestRate: { type: String, required: false, default: null },
     advisoryFee: { type: String, required: false, default: null },
+    loanPurposeReason: { type: String, required: false, default: null },
     agencyFee: { type: String, required: false, default: null },
     margin: { type: String, required: false, default: null },
     defaultInterest: { type: String, required: false, default: null },

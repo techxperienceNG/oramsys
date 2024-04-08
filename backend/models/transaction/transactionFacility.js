@@ -35,7 +35,7 @@ var Schema = new Schema({
     otherRate: { type: String, required: false, default: null },
     specifyFacilityType: { type: String, required: false, default: null },
     defaultInterest: { type: String, required: false, default: null },
-    representations: { type: Array, required: false, default: null },
+    representations: { type: Array ,  required: false, default: null },
     eventsOfDefault: { type: Array, required: false, default: null },
     miscellaneousProvisions: { type: String, required: false, default: null },
     generalUndertakings: { type: Array, required: false, default: null },

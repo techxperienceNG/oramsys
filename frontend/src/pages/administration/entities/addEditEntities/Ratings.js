@@ -5,6 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { companydataAction } from '../../../../redux/actions/companydataAction';
 import { ratingAgenciesAction } from '../../../../redux/actions/ratingAgenciesAction';
 import { useLocation } from 'react-router-dom';
+import {Col, Row} from "react-bootstrap"
+import {TextField} from "@material-ui/core"
+import Autocomplete from "@material-ui/lab/Autocomplete"
 
 const Ratings = ({ hendelNext, hendelCancel }) => {
 
@@ -15,6 +18,11 @@ const Ratings = ({ hendelNext, hendelCancel }) => {
     const [editData, setEditData] = useState('')
     const location = useLocation()
     const isView = location.state[1]?.isView
+    let options = [
+        { label: "Select option", value: "" },
+        { label: "Yes", value: true },
+        { label: "No", value: false },
+    ]
 
     const companyData = useSelector((state) => state.companydata.companydata)
     const agencyData = useSelector((state) => state.ratingAgenciesData.ratingAgencies)
@@ -44,44 +52,102 @@ const Ratings = ({ hendelNext, hendelCancel }) => {
         dispatch(companydataAction(body))
     }
 
+    const handleOption = (value) => {
+        let body = {
+            ...companyData,
+            isRatings: value,
+        }
+        dispatch(companydataAction(body))
+    }
+
     return (
         <>
             <div className='add-edit-product'>
                 <div className='product'>
                     <div className='mb-3 d-flex justify-content-between align-items-center'>
                         <h2 className='m-0'>Ratings</h2>
-                        <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => { setEditModal(true); setMode("Add") }}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
+                        {companyData.isRatings && <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => {
+                            setEditModal(true);
+                            setMode("Add")
+                        }}><img src='../../assets/img/about/plus.png' className='me-2'/>Add</button>}
                     </div>
-                    <MaterialTable
+                    <div className='drop-down-container'>
+                        <div className='form'>
+                            <Row>
+                                <Col lg={3}>
+                                    <Autocomplete
+                                        label='Do you want to add ratings?'
+                                        id='disable-clearable'
+                                        onChange={(e, newVal) => {
+                                            handleOption(newVal?.value)
+                                        }}
+                                        getOptionLabel={(option) => option.label || ""}
+                                        options={options}
+                                        value={
+                                            ((options.length > 0 &&
+                                                    companyData.isRatings === true) ||
+                                                companyData.isRatings === false) ?
+                                                options.find(
+                                                    (ele) => ele.value === companyData.isRatings
+                                                ) : options = ''
+                                        }
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label='Do you want to add ratings?'
+                                                variant='standard'
+                                            />
+                                        )}
+                                    />
+                                </Col>
+
+                            </Row>
+                        </div>
+                    </div>
+                    {companyData.isRatings && <MaterialTable
                         title=""
                         columns={[
-                            { title: 'Agency', field: 'agency' },
-                            { title: 'Rating', field: 'rating' },
-                            { title: 'Date of rating', field: 'dateOfRating', type: "date" },
-                            { title: 'Expiry date', field: 'expiryDate', type: "date" },
+                            {title: 'Agency', field: 'agency'},
+                            {title: 'Rating', field: 'rating'},
+                            {title: 'Date of rating', field: 'dateOfRating', type: "date"},
+                            {title: 'Expiry date', field: 'expiryDate', type: "date"},
                         ]}
                         data={rating}
                         actions={isView ? [
                             {
                                 icon: 'preview',
                                 tooltip: 'View Rating',
-                                onClick: (e, data) => { setEditModal(true); setMode("View"); setEditData(data.tableData.id) }
+                                onClick: (e, data) => {
+                                    setEditModal(true);
+                                    setMode("View");
+                                    setEditData(data.tableData.id)
+                                }
                             },
                         ] : [
                             {
                                 icon: 'edit',
                                 tooltip: 'Edit Rating',
-                                onClick: (e, data) => { setEditModal(true); setMode("Edit"); setEditData(data.tableData.id) }
+                                onClick: (e, data) => {
+                                    setEditModal(true);
+                                    setMode("Edit");
+                                    setEditData(data.tableData.id)
+                                }
                             },
                             {
                                 icon: 'preview',
                                 tooltip: 'View Rating',
-                                onClick: (e, data) => { setEditModal(true); setMode("View"); setEditData(data.tableData.id) }
+                                onClick: (e, data) => {
+                                    setEditModal(true);
+                                    setMode("View");
+                                    setEditData(data.tableData.id)
+                                }
                             },
                             {
                                 icon: 'delete',
                                 tooltip: 'Delete Rating',
-                                onClick: (e, data) => { Delete(data) }
+                                onClick: (e, data) => {
+                                    Delete(data)
+                                }
                             }
                         ]}
                         options={{
@@ -91,11 +157,11 @@ const Ratings = ({ hendelNext, hendelCancel }) => {
                             pageSize: 10,
                             search: false,
                         }}
-                    />
+                    />}
                 </div>
                 <div className='footer_'>
                     <button onClick={() => { hendelCancel() }} className="footer_cancel_btn">cancel</button>
-                    <button onClick={() => { companyData?.ratings?.length > 0 && hendelNext() }} className='footer_next_btn'> Next</button>
+                    <button onClick={() => { ((companyData?.ratings?.length > 0 && companyData.isRatings) || companyData.isRatings === false) && hendelNext() }} className='footer_next_btn'> Next</button>
                 </div>
             </div>
             {

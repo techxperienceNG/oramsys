@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Paginate = ({ postsPerPage, totalPosts, currentTrans, paginate, prevPagefunc, currentPage, nextPagefunc }) => {
+const Paginate = ({ postsPerPage, totalPosts, getAllEntity, paginate, prevPagefunc, currentPage, nextPagefunc }) => {
   const pageNumbers = [];
   const ellipsis = '...';
 
@@ -48,7 +48,7 @@ const Paginate = ({ postsPerPage, totalPosts, currentTrans, paginate, prevPagefu
   return (
     <div className='d-flex align-items-center justify-content-between' aria-label="...">
       <div className='pe-4'>
-        <span className="text-muted fs-6 fw-light">Showing {currentTrans?.length} out of {totalPosts}</span>
+        <span className="text-muted fs-6 fw-light">Showing {getAllEntity?.length} out of {totalPosts}</span>
       </div>
       <ul className="pagination pagination-md">
         <li className={`page-item cursor-pointer ${currentPage === 1 ? 'disabled' : ''}`}>

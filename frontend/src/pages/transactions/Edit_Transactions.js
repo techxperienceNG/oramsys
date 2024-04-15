@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-
+import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
+import { Steps, Button, Typography } from 'antd';
 import Box from '@material-ui/core/Box';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+// import Button from '@material-ui/core/Button';
+// import Typography from '@material-ui/core/Typography';
 import { useLocation } from 'react-router-dom';
 import DetailsTransaction from './DetailsTransaction';
 import KeyParties from './KeyParties';
@@ -15,6 +16,8 @@ import Facility from './Facility';
 import { getTransactionById } from '../../redux/actions/transactionDataAction';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { FaCheckCircle, FaUser, FaFileAlt, FaDollarSign, FaWarehouse } from 'react-icons/fa'; // Import Bootstrap icons
+
 
 const stepsforexport = ['TransactionDetails', 'Key Parties', 'Document Flow', 'Fund Flow', 'Facility'];
 const stepsforimport = ['Key Parties', 'Document Flow', 'Fund Flow', 'Facility'];
@@ -25,7 +28,7 @@ const Edit_Transactions = () => {
     const dispatch = useDispatch()
     const queryParams = new URLSearchParams(location.search)
     const id = queryParams.get("id")
-    const transactionType = location?.state[0]?.type    
+    const transactionType = location?.state[0]?.type
     const productNature = location?.state[1]?.type
     const isView = location?.state[2]?.isView
     const [getTrans, setGetTrans] = useState({})
@@ -35,11 +38,13 @@ const Edit_Transactions = () => {
     const [getWarehouseCompany, setGetWarehouseCompany] = useState("")
     const [getCounterParty, setGetCounterParty] = useState("")
     const [getShippingCompany, setGetShippingCompany] = useState("")
+    const [pricingHedgingStatus, setPricingHedgingStatus] = useState(false)
+    const [warehouseStatus, setWarehouseStatus] = useState(false)
 
     const [activeStep, setActiveStep] = useState(0);
     let step = []
+    const { Step } = Steps;
     const getTransactionId = useSelector(state => state.transactionData.getTransactionById)
-    // console.log('check this', getTransactionId.data.details?.contractDetails?.currency)
 
     useEffect(() => {
         if (id) {
@@ -65,15 +70,21 @@ const Edit_Transactions = () => {
     const signalBorrower = (values) => {
         setGetBorrower(values)
     }
-    
+
     const signalWarehouseCompany = (values) => {
         setGetWarehouseCompany(values)
     }
     const signalCounterParty = (values) => {
-       return setGetCounterParty(values)
+        return setGetCounterParty(values)
     }
     const signalShippingCompany = (values) => {
         return setGetShippingCompany(values)
+    }
+    const signalPricingHedgingStatus = (values) => {
+        return setPricingHedgingStatus(values)
+    }
+    const signalWarehouseStatus = (values) => {
+        return setWarehouseStatus(values)
     }
 
     const handleNext = () => {
@@ -90,46 +101,56 @@ const Edit_Transactions = () => {
         step = stepsforimport
     }
 
+    const getStepIcon = (label) => {
+        switch (label) {
+            case 'TransactionDetails':
+                return <FaCheckCircle />;
+            case 'Key Parties':
+                return <FaUser />;
+            case 'Document Flow':
+                return <FaFileAlt />;
+            case 'Fund Flow':
+                return <FaDollarSign />;
+            case 'Facility':
+                return <FaWarehouse />;
+            default:
+                return null;
+        }
+    };
     const handleReset = () => {
         setActiveStep(0);
     };
     return (
         <>
             <div className='add-edit-product'>
-
                 <Box sx={{ width: '100%' }}>
-                    {productNature === 'Physical' &&
-                        <Stepper activeStep={activeStep} alternativeLabel>
-                            {step.length && step?.map((label, index) => {
-                                const stepProps = {};
-                                const labelProps = {};
-                                return (
-                                    <Step key={label} {...stepProps}>
-                                        <StepLabel {...labelProps}>{label}</StepLabel>
-                                    </Step>
-                                );
-                            })}
-                        </Stepper>}
+                    {productNature === 'Physical' && (
+                        <Steps className='container mb-5' current={activeStep}>
+                            {step.length &&
+                                step.map((label, index) => (
+                                    <Step key={label} title={label} icon={getStepIcon(label)} />
+                                ))}
+                        </Steps>
+                    )}
                     {activeStep === step.length ? (
                         <React.Fragment>
-                            <Typography sx={{ mt: 2, mb: 1 }}>
+                            <Typography style={{ marginTop: '2px', marginBottom: '6px' }}>
                                 All steps completed - you&apos;re finished
                             </Typography>
-                            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                                <Box sx={{ flex: '1 1 auto' }} />
+                            <div style={{ display: 'flex', flexDirection: 'row', paddingTop: '2px' }}>
+                                <div style={{ flex: '1 1 auto' }} />
                                 <Button onClick={handleReset}>Reset</Button>
-                            </Box>
+                            </div>
                         </React.Fragment>
                     ) : (
                         <>
                             {
-
                                 transactionType === "Export" ? <React.Fragment>
                                     {
                                         productNature === 'Physical' ?
                                             <>
-                                                {activeStep + 1 === 1 && <DetailsTransaction hendelNext={handleNext} signalShippingCompany={signalShippingCompany} signalCounterParty={signalCounterParty} signalContract={signalContract} signalWarehouseCompany={signalWarehouseCompany} signalLender={signalLender} signalBorrower={signalBorrower} transactionType={transactionType} transaction_id={transId} />}
-                                                {activeStep + 1 === 2 && <KeyParties hendelNext={handleNext} getShippingCompany={getShippingCompany} getCounterParty={getCounterParty} getLender={getLender} getBorrower={getBorrower} getWarehouseCompany={getWarehouseCompany} hendelCancel={handleBack} transactionType={transactionType} />}
+                                                {activeStep + 1 === 1 && <DetailsTransaction hendelNext={handleNext} signalShippingCompany={signalShippingCompany} signalCounterParty={signalCounterParty} signalPricingHedgingStatus={signalPricingHedgingStatus} signalContract={signalContract} signalWarehouseCompany={signalWarehouseCompany} signalWarehouseStatus={signalWarehouseStatus} signalLender={signalLender} signalBorrower={signalBorrower} transactionType={transactionType} transaction_id={transId} />}
+                                                {activeStep + 1 === 2 && <KeyParties hendelNext={handleNext} getShippingCompany={getShippingCompany} getCounterParty={getCounterParty} pricingHedgingStatus={pricingHedgingStatus} getLender={getLender} getBorrower={getBorrower} getWarehouseCompany={getWarehouseCompany} warehouseStatus={warehouseStatus} hendelCancel={handleBack} transactionType={transactionType} />}
                                                 {activeStep + 1 === 3 && <DocumentFlow hendelNext={handleNext} hendelCancel={handleBack} />}
                                                 {activeStep + 1 === 4 && <FundFlow hendelNext={handleNext} getTrans={getTrans} hendelCancel={handleBack} />}
                                                 {activeStep + 1 === 5 && <Facility hendelNext={handleNext} hendelCancel={handleBack} />}
@@ -143,23 +164,12 @@ const Edit_Transactions = () => {
                                     }
                                 </React.Fragment>
                                     :
-                                    <React.Fragment>
-                                        <div style={{ height: "88vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                            <p style={{ fontSize: '48px', fontWeight: "bold" }}>Product not yet available. Coming soon</p>
-                                        </div>
-                                        {/* 
-                                        {activeStep + 1 === 1 && <KeyParties hendelNext={handleNext} hendelCancel={handleBack} transactionType={transactionType}/>}
-                                        {activeStep + 1 === 2 && <DocumentFlow hendelNext={handleNext} hendelCancel={handleBack} />}
-                                        {activeStep + 1 === 3 && <FundFlow hendelNext={handleNext} hendelCancel={handleBack} />}
-                                        {activeStep + 1 === 4 && <Facility hendelNext={handleNext} hendelCancel={handleBack} />} */}
-                                    </React.Fragment>
+                                    ''
                             }
                         </>
 
                     )}
                 </Box>
-
-
             </div>
         </>
     )

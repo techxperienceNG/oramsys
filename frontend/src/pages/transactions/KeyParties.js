@@ -2,7 +2,7 @@ import { TextField } from '@material-ui/core'
 import MaterialTable from 'material-table'
 import { DropzoneArea } from 'material-ui-dropzone'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom'
 import PartiesEditModal from '../../component/Modal/PartiesEditModal'
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -12,10 +12,7 @@ import { transactionDataAction } from '../../redux/actions/transactionDataAction
 import { MdOutlineDeleteOutline } from 'react-icons/md'
 import { entityGetAction } from '../../redux/actions/entityAction'
 
-const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingCompany, getCounterParty, getWarehouseCompany, getLender, getBorrower }) => {
-        console.log(getWarehouseCompany)
-    console.log(getCounterParty)
-    console.log(getShippingCompany)
+const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingCompany, getCounterParty, pricingHedgingStatus, getWarehouseCompany, warehouseStatus, getLender, getBorrower }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [showEditModal, setShowEditModal] = useState(false)
@@ -103,8 +100,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
             setEditId(getTransactionByIdData?.data?.keyParties[0]?._id)
             setBorrower_Applicant(getLender.borrower_Applicant)
             setLenders(getBorrower.lenders)
-            setWarehouseComp(getWarehouseCompany?.warehouses[0]?.warehouseCompany?.label)
-            
+            // setWarehouseComp(getWarehouseCompany?.warehouses[0]?.warehouseCompany?.label)
+
             setCounterPart(getTransactionByIdData?.data?.details?.pricingDetails
                 ?.pricingCounterParty?.details.name)
             setShippingComp(getTransactionByIdData?.data?.details?.shippingOptions
@@ -259,7 +256,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
             },
             type: transactionType
         }
-        
+
         dispatch(transactionDataAction(body))
         hendelNext()
     }
@@ -327,19 +324,19 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
     tableData.map((item) => {
         tdata.push(item?.name?.label)
     })
-
+    const warehouseCo = getWarehouseCompany.warehouses[0]?.warehouseCompany?.label
     const AddUpParties = useCallback(() => {
         const storeData = [
             getBorrower,
             getLender,
-            shippingComp,
-            warehouseComp,
-            counterPart,
+            getShippingCompany,
+            warehouseCo,
+            getCounterParty,
             ...tdata,
         ]
         setpartiesData(storeData);
     }, [tableData])
-
+    console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCompany?.label)
     useEffect(() => {
         AddUpParties()
     }, [AddUpParties])
@@ -348,72 +345,71 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
         <>
             <div className='product'>
                 <div className='mb-3 d-flex justify-content-between align-items-center'>
-                    <h5 className="title-color">Parties</h5>
-                    <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => { setShowEditModal(!showEditModal) }}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
+                    <h6 className="fs-5 fw-bold title-admin">PARTIES</h6>
                 </div>
-                <Row>
-                    <Col lg={12} className="mb-4">
-                        <TextField
-                            label='Borrower/Applicant Name'
-                            variant='standard'
-                            color='warning'
-                            name='borrower_Applicant'
-                            value={getBorrower}
-                            disabled={true}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg={12} className="mb-4">
-                        <TextField
-                            label='Lenders'
-                            variant='standard'
-                            color='warning'
-                            name='lenders'
-                            value={getLender}
-                            disabled={true}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg={12} className="mb-4">
-                        <TextField
-                            label='Shipping Company'
-                            variant='standard'
-                            color='warning'
-                            name='lenders'
-                            value={shippingComp}
-                            disabled={true}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg={12} className="mb-4">
-                        <TextField
-                            label='Warehouse Company'
-                            variant='standard'
-                            color='warning'
-                            name='warehouse company'
-                            value={warehouseComp}
-                            disabled={true}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg={12} className="mb-4">
-                        <TextField
-                            label='Hedging Counterparty'
-                            variant='standard'
-                            color='warning'
-                            name='Counterparty'
-                            value={counterPart}
-                            disabled={true}
-                        />
-                    </Col>
-                </Row>
+                <Form>
+                    <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                        <Form.Label column sm={2}> Borrower/Applicant </Form.Label>
+                        <Col lg={4} sm={10}>
+                            <Form.Control type="text"
+                                name='borrower_Applicant'
+                                value={getBorrower}
+                                disabled={true} />
+                        </Col>
+                    </Form.Group>
 
-                <div className='mb-3 d-flex justify-content-between align-items-center'>
-                    <h4>Additional Parties</h4>
+                    <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                        <Form.Label column sm={2}>Lender</Form.Label>
+                        <Col lg={4} sm={10}>
+                            <Form.Control
+                                name='lenders'
+                                value={getLender}
+                                disabled={true} />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                        <Form.Label column sm={2}>Shipping Company</Form.Label>
+                        <Col lg={4} sm={10}>
+                            <Form.Control
+                                name='lenders'
+                                value={getShippingCompany}
+                                disabled={true} />
+                        </Col>
+                    </Form.Group>
+
+                    {warehouseStatus &&
+                        <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                            <Form.Label column sm={2}>Warehouse Company</Form.Label>
+                            <Col lg={4} sm={10}>
+                                <Form.Control name='warehouse company'
+                                    value={warehouseCo}
+                                    disabled={true} />
+                            </Col>
+                        </Form.Group>
+                    }
+
+                    {pricingHedgingStatus &&
+                        <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+                            <Form.Label column sm={2}>Hedging Counterparty</Form.Label>
+                            <Col lg={4} sm={10}>
+                                <Form.Control
+                                    name='Counterparty'
+                                    value={getCounterParty}
+                                    disabled={true} />
+                            </Col>
+                        </Form.Group>}
+
+                </Form>
+
+
+                <div className='mb-2 pt-4 d-flex justify-content-between align-items-center'>
+                    <h6 className='fs-5 fw-bold title-admin' >KEY PARTIES</h6>
+
+                    <Button onClick={() => { setShowEditModal(!showEditModal) }} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-1'>
+                        <span class=' pe-2'><i class="bi bi-plus pe-1 "></i></span>
+                        <span className='fw-bold'>Add Party</span>
+                    </Button>
                 </div>
                 <MaterialTable
                     title=""
@@ -467,42 +463,38 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                 />
             </div>
             <div className='add-edit-product parties_main mb-4'>
-                <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
-                    {/* <h5 className="title-color">Related parties</h5>
-                    <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`} onClick={() => { setShowEditModal(!showEditModal) }}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button> */}
-
+                <div className='p-4 mb-3 pb-4' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
                     <div className='mb-3 d-flex justify-content-between align-items-center'>
-                        <h5 className="title-color">Related Parties</h5>
-                        <button className={`add_btn me-3 ${isView ? 'd-none' : 'd-block'}`}
-                            onClick={handleRelatedParties}>
-                            <img src='../../assets/img/about/plus.png' className='me-2' />Add Party Relation</button>
+                        <h6 className="fs-5 fw-bold title-admin">RELATED PARTIES</h6>
+                        <Button onClick={handleRelatedParties} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-1'>
+                            <span class=' pe-2'><i class="bi bi-plus pe-1 "></i></span>
+                            <span className='fw-bold'>Add Related Parties</span>
+                        </Button>
                     </div>
 
                     <>
                         {apiFetched && relatedPartyDetails?.map((party, index) => (
                             <Row key={index}>
                                 <>
+                                    <Form.Group as={Col} controlId="formGridZip">
+                                        <Form.Label>Party 1</Form.Label>
+                                        <Form.Select
+                                            onChange={(event, newValue) => {
+                                                handleParties(event, newValue, index, 'buyer');
+                                            }}
+                                            disabled={isView}
+                                            value={party.buyer}
+                                        >
+                                            {partiesData.map((item) => (
+                                                <option key={item} value={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                        {error && error?.buyer && <span style={{ color: 'red' }}>{error.buyer}</span>}
+                                    </Form.Group>
 
                                     {/* <Col lg={3}>
-                                            <div className='d-flex ms-4'>
-                                                <img src='../../../assets/img/about/Tag.png' style={{ "height": "30px", "top": "22px", "position": "relative" }} />
-                                                <Autocomplete
-                                                    className='ms-3 mb-3 w-100'
-                                                    options={names}
-                                                    getOptionLabel={(option) => option.label || ""}
-                                                    id={"disable-clearable-buyer" + ind}
-                                                    label="Buyer"
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Party 1" variant="standard" />
-                                                    )}
-                                                    defaultValue={relatedParties.buyer}
-                                                    getOptionSelected={(option) => option.label === 'test'}
-                                                    onChange={(event, newValue) => handleBuyer(event, newValue, ind)}
-                                                    disableClearable
-                                                />
-                                            </div>
-                                        </Col> */}
-                                    <Col lg={3}>
                                         <Autocomplete
                                             options={partiesData}
                                             getOptionLabel={(option) => option || ""}
@@ -520,10 +512,26 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                             disableClearable
                                         />
                                         {error && error?.buyer && <span style={{ color: 'red' }}>{error?.buyer}</span>}
-                                    </Col>
+                                    </Col> */}
+                                    <Form.Group as={Col} controlId="formGridZip">
+                                        <Form.Label>Party 2</Form.Label>
+                                        <Form.Select
+                                            onChange={(event, newValue) => {
+                                                handleParties(event, newValue, index, 'shipper');
+                                            }}
+                                            disabled={isView}
+                                            value={party.shipper}
+                                        >
+                                            {partiesData.map((item) => (
+                                                <option key={item} value={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                        {error && error?.shipper && <span style={{ color: 'red' }}>{error.shipper}</span>}
+                                    </Form.Group>
 
-
-                                    <Col lg={3}>
+                                    {/* <Col lg={3}>
                                         <Autocomplete
                                             options={partiesData}
                                             getOptionLabel={(option) => option || ""}
@@ -534,39 +542,15 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                                 <TextField {...params} label="Party 2" variant="standard" />
                                             )}
                                             onChange={(event, newValue) => {
-                                                handleParties(event, newValue, index, 'shipper');
-                                                console.log(party.shipper, "Check")
+                                                handleParties(event, newValue, index, 'shipper')
                                             }}
                                             disabled={isView}
                                             value={(partiesData && party.shipper) && partiesData.find((ele) => ele === party?.shipper)}
                                             disableClearable
                                         />
                                         {error && error?.shipper && <span style={{ color: 'red' }}>{error?.shipper}</span>}
-                                    </Col>
+                                    </Col> */}
 
-                                    {/* {warehouses.map((element) => ( */}
-
-                                    {/* <Col lg={3}>
-                                            <><div className='d-flex'>
-                                                <img src='../../../assets/img/about/Deliver.png' style={{ "height": "30px", "top": "22px", "position": "relative" }} />
-                                                <Autocomplete
-                                                    className='ms-3 mb-3 w-100'
-                                                    options={warehouses}
-                                                    getOptionLabel={(option) => option.name}
-                                                    id={"disable-clearable-shipper-" + ind}
-                                                    label="Shipper"
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} label="Party 2" variant="standard" />
-                                                    )}
-                                                    defaultValue={relatedParties.shipper}
-                                                    getOptionSelected={(option) => option.name === 'test'}
-                                                    onChange={(event, newValue) => handleShipper(event, newValue, ind)}
-                                                    disableClearable
-                                                />
-                                            </div></>
-                                                        
-
-                                        </Col> */}
                                     <Col lg={4}>
                                         <div className='d-flex align-items-center Related_parties'>
                                             <p className='mb-0 title-color'>Relation</p>
@@ -581,7 +565,10 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                                 )}
                                                 defaultValue={relatedPartyDetails.party_relation}
                                                 getOptionSelected={(option) => option.label === 'test'}
-                                                onChange={(event, newValue) => { handleRelation(event, newValue, index); setRelation(parties); console.log('parties', parties); console.log('party', party); }}
+                                                onChange={(event, newValue) => {
+                                                    handleRelation(event, newValue, index);
+                                                    setRelation(parties); console.log('parties', parties); console.log('party', party);
+                                                }}
                                                 value={parties.find((ele) => ele.value == party.party_relation)}
                                                 disableClearable
                                             />
@@ -610,23 +597,10 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                         {error && error?.upload_evidence && <span style={{ color: 'red' }}>{error?.upload_evidence}</span>}
                                     </Col>}
 
-                                    {/* <Col lg={2}>
-                                        <div className=''>
-                                    <MdOutlineDeleteOutline onClick={() => handleRemoveParty(index)} className='cursor-pointer' size={30} />
-                                    </div> 
-                                        </Col> */}
-
                                 </>
-                                {/* <div className='d-flex justify-content-end '>
-                                    <MdOutlineDeleteOutline className='mb-5' size={30} />
-                                    </div> */}
                             </Row>
                         ))}
                     </>
-
-
-
-
                 </div>
             </div>
             <div className='footer_'>

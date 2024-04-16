@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { FaPowerOff } from "react-icons/fa";
+import { HiOutlineLogout } from 'react-icons/hi';
+import { IoSettingsOutline } from "react-icons/io5";
 
 const AuthHeader = ({ showSidebar, setSidebar }) => {
   const [showspan, setShowspan] = useState(false)
@@ -37,8 +40,27 @@ const AuthHeader = ({ showSidebar, setSidebar }) => {
           </div>
         </div>
       </div> */}
-      <div className=' open-sidebar' style={{backgroundColor:"#f1f1f1", padding:"15px"}}>
-        <img src='./assets/img/my-img/barmanu.svg' alt='' width="30px" onClick={() => setSidebar(!showSidebar)} />
+      <div className='open-sidebar d-flex align-items-center' style={{ backgroundColor: "#f1f1f1", padding: "15px" }}>
+        <div className="d-flex align-items-center">
+          <img src='./assets/img/my-img/barmanu.svg' alt='' width="30px" onClick={() => setSidebar(!showSidebar)} />
+          <span className="ms-2 fw-bold fs-5">Oramsys</span>
+        </div>
+        <div className="d-flex align-items-center me-5 ms-auto">
+          <div className='me-2'>
+            <IoSettingsOutline className='me-1' size={15} />
+            <span>Settings</span>
+          </div>
+
+          <div className='ms-2 mx-auto'>
+            <HiOutlineLogout className='me-1' size={15} />
+            <span>Logout</span>
+          </div>
+
+        </div>
+        {/* <div className="d-flex align-items-center ms-auto">
+      <FaPowerOff size={30} />
+        <span>Logout</span>
+    </div> */}
       </div>
     </>
   )

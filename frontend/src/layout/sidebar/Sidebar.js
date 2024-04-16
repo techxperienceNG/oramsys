@@ -12,7 +12,7 @@ import { BiHomeAlt2 } from "react-icons/bi";
 import { BsAirplane, BsFillBarChartFill, BsFillPeopleFill, BsFlag } from 'react-icons/bs';
 import { GrClose, GrDatabase, GrFlagFill, GrUserAdmin } from 'react-icons/gr';
 import { FaBoxOpen, FaPeopleCarry } from 'react-icons/fa';
-import { HiOutlineUsers } from "react-icons/hi";
+import { HiOutlineLogout, HiOutlineUsers } from "react-icons/hi";
 import { GiCargoShip } from "react-icons/gi";
 import { ImOffice } from "react-icons/im";
 import { FcHome, FcLock,FcCollaboration, FcWorkflow, FcViewDetails, FcPositiveDynamic } from "react-icons/fc";
@@ -183,80 +183,77 @@ const Sidebar = ({ showSidebar, setSidebar }) => {
     
 
          {/* <!-- Vertical Navbar --> */}
-        <Fade left>
-      <div className={`${showSidebar ? ' sidebar-main' : 'sidebar-main '}`}>
-        <GrClose size={30} className="close_sidebar" onClick={() => setSidebar(!showSidebar)} />
-        {/* <img src="../../../assets/img/about/close.png" className="close_sidebar" onClick={() => setSidebar(!showSidebar)} /> */}
+      <Fade left>
+        <div className={`${showSidebar ? ' sidebar-main' : 'sidebar-main '}`}>
+          <GrClose size={30} className="close_sidebar" onClick={() => setSidebar(!showSidebar)} />
+          {/* <img src="../../../assets/img/about/close.png" className="close_sidebar" onClick={() => setSidebar(!showSidebar)} /> */}
           <div className='profile-content pe-5'>
-            <img src='../../../assets/img/logo.png' alt="" className='align-items-center m-2 mx-auto mt-3 profile-img' />
-            <img src='../../../assets/img/profile.png' className='user_img' />
-            <div className='profile-name text-center'>
-              <h1>{userData?.name}</h1>
-              {/* <img src='../../../assets/img/about/logout.png' onClick={(e) => Logout(e)} className='mt-2' style={{ cursor: "pointer" }} /> */}
-            </div>
+              <img src='../../../assets/img/logo.png' alt="" className='align-items-center m-2 mx-auto mt-3 profile-img' />
+              <img src='../../../assets/img/profile.png' className='user_img' />
+              <div className='profile-name text-center'>
+                <h1>{userData?.name}</h1>
+                {/* <img src='../../../assets/img/about/logout.png' onClick={(e) => Logout(e)} className='mt-2' style={{ cursor: "pointer" }} /> */}
+              </div>
           </div>
 
-        <div className='sidebar-nav'>
-          <Navbar>
-            <div style={{ 'width': "100%",'zIndex':'11111' }} className='navbar-light' >
-              {
-                navbarData.map((item, i) => (
-                  <div key={i} className={`${item.text === "Jobs" ? "d-block navbar-body" : 'navbar-body'} text-white`}>
-                    <div className='d-flex align-items-center ps-3 gap-3 mx-2 my-4'>
-                      <item.img size={20} />
-                      <Nav.Link className=' p-0' onClick={() => ShowSubItem({ text: item.text, path: item.path })}>{item.text} {item.text === "Administration" ? <img src='../../../../../assets/img/about/down-filled-triangular-arrow.png' className={`${showItem === "Administration" ? 'img-roted' : 'img-roted_unset'}`} /> : ""}</Nav.Link>
+          <div className='sidebar-nav'>
+            <Navbar>
+              <div style={{ 'width': "100%", 'zIndex': '11111' }} className='navbar-light'>
+                {
+                  navbarData.map((item, i) => (
+                    <div key={i} className={`${item.text === "Jobs" ? "d-block navbar-body" : 'navbar-body'} text-white`}>
+                      <div className='d-flex align-items-center ps-3 gap-3 mx-2 my-4'>
+                        <item.img size={20} />
+                        <Nav.Link className=' p-0' onClick={() => ShowSubItem({ text: item.text, path: item.path })}>{item.text} {item.text === "Administration" ? <img src='../../../../../assets/img/about/down-filled-triangular-arrow.png' className={`${showItem === "Administration" ? 'img-roted' : 'img-roted_unset'}`} /> : ""}</Nav.Link>
+                      </div>
+                      {
+                        showItem === item.text && "subItem" in item &&
+                        item.subItem?.map((subItem, i) => {
+                          return <>
+                            <div key={i} className='d-flex align-items-center gap-3 mx-4 my-4 ps-2'>
+                              <subItem.img size={20} />
+                              <Nav.Link className=' p-0 ' onClick={() => ShowSubItem({ text: subItem.text, path: subItem.path })}>{subItem.text} {subItem.text === 'Master Data' ? <img src='../../../../../assets/img/about/down-filled-triangular-arrow.png' className={`${showSubItem === "Master Data" ? 'img-roted' : 'img-roted_unset'}`} /> : ""}</Nav.Link>
+                            </div>
+                            {
+                              showSubItem === subItem.text && "subData" in subItem &&
+                              subItem.subData?.map((subSubItem, i) => (
+                                <div key={i} className='d-flex align-items-center gap-3 my-4 mx-4 ps-3'>
+                                  <subSubItem.img size={16} />
+                                  <NavLink className='text-white text-decoration-none' to={subSubItem.path} style={{ display: "block" }}>{subSubItem.text}</NavLink>
+                                </div>
+                              ))
+                            }
+                          </>
+                        })
+                      }
                     </div>
-                    {
-                      showItem === item.text && "subItem" in item &&
-                      item.subItem?.map((subItem, i) => {
-                        return <>
-                          <div key={i} className='d-flex align-items-center gap-3 mx-4 my-4 ps-2'>
-                          <subItem.img size={20} />
-                            <Nav.Link className=' p-0 ' onClick={() => ShowSubItem({ text: subItem.text, path: subItem.path })}>{subItem.text} {subItem.text === 'Master Data' ? <img src='../../../../../assets/img/about/down-filled-triangular-arrow.png' className={`${showSubItem === "Master Data" ? 'img-roted' : 'img-roted_unset'}`} /> : ""}</Nav.Link>
-                          </div>
-                          {
-                            showSubItem === subItem.text && "subData" in subItem &&
-                            subItem.subData?.map((subSubItem, i) => (
-                              <div key={i} className='d-flex align-items-center gap-3 my-4 mx-4 ps-3'>
-                                <subSubItem.img size={16} />
-                                <NavLink className='text-white text-decoration-none' to={subSubItem.path} style={{ display: "block" }}>{subSubItem.text}</NavLink>
-                              </div>
-                            ))
-                          }
-                        </>
-                      })
-                    }
-                  </div>
-                ))
-              }
-               {/* <!-- Divider --> */}
-               <hr className="navbar-divider my-2 opacity-20" />
+                  ))
+                }
+                {/* <!-- Divider --> */}
+                <hr className="navbar-divider my-2 opacity-20" />
                 {/* <!-- Navigation --> */}
-             
                 <div className="d-flex flex-column mx-3 ps-2 gap-3  my-4">
-                    <div className="p-3">
-                        {/* <Link className="nav-link">
-                            <i className="bi bi-person-square"></i> <span className='ps-5'>Account</span>
-                        </Link> */}
-                    </div>
-                    <hr width='100%' className="my-2 text-white opacity-10" />
-                    <div className="">
-                        <Link onClick={() => setshowModal(true)} className="nav-link" href="#">
-                            <IoMdLogOut className='text-white' size={22} /><span className='ps-3 fw-semibold text-danger'>Logout</span>
-                        </Link>
-                    </div>
+                  <div className="p-3">
+                    {/* <Link className="nav-link">
+                      <i className="bi bi-person-square"></i> <span className='ps-5'>Account</span>
+                    </Link> */}
+                  </div>
+                  <hr width='100%' className="my-2 text-white opacity-10" />
+                  <div className="">
+                    <Link onClick={() => setshowModal(true)} className="nav-link" href="#">
+                      <HiOutlineLogout className='text-white' size={22} /><span className='ps-3 fw-semibold text-danger'>Logout</span>
+                    </Link>
+                  </div>
                 </div>
-            </div>
-          </Navbar>
+              </div>
+            </Navbar>
+          </div>
         </div>
-      </div> 
 
 
 
-      <div className="sidebar_responsive">
-
-      </div>
-      </Fade>
+        <div className="sidebar_responsive"></div>
+    </Fade>
       {showModal && <LogoutModal show={showModal} onHide={() => setshowModal(false)} />}
     </>
   )

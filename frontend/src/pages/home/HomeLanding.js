@@ -20,6 +20,8 @@ import { entityGetAction } from "../../redux/actions/entityAction"
 import { userGetAction } from "../../redux/actions/userAction"
 import { ApiGet, ApiGet2 } from "../../helper/API/ApiData"
 import Slide from 'react-reveal/Slide';
+import { Chart as ChartJS } from 'chart.js/auto'
+import { Bar } from 'react-chartjs-2';
 
 const HomeLanding = () => {
   const token = AuthStorage.getToken()
@@ -27,6 +29,19 @@ const HomeLanding = () => {
   const [showSubData, setShowSubData] = useState(false)
   const [search, setSearch] = useState('')
   console.log(search)
+
+  const data = {
+    labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'],
+    datasets: [
+      {
+        label: 'Graph Data',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+        data: [12, 19, 8, 10, 9],
+      },
+    ],
+  };
 
   const dispatch = useDispatch()
   const cards = [
@@ -208,87 +223,87 @@ const HomeLanding = () => {
             <div className='container-fluid'>
               <div className='row g-6 mb-6'>
                 <Slide down>
-                {AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin" &&
-                  cards.map((card, i) => (
-                    <div className='col-xl-4 mb-3 col-sm-6 col-12' key={i}>
-                      <div className='card shadow border-0'>
-                        <div className='card-body'>
-                          <div className='row'>
-                            <div className='col'>
-                              <span className='h6 font-semibold text-muted text-sm d-block mb-2'>
-                                {card.title}
-                              </span>
-                              <span className='h3 font-bold mb-0'>
-                                {getCount(card.name)}
-                              </span>
-                            </div>
-                            <div className='col-auto'>
-                              <div
-                                className={`icon icon-shape ${card.color} text-white text-lg rounded-circle`}
-                              >
-                                <card.icon size={56} />
+                  {AuthStorage.getStorageData(STORAGEKEY.roles) === "superAdmin" &&
+                    cards.map((card, i) => (
+                      <div className='col-xl-4 mb-3 col-sm-6 col-12' key={i}>
+                        <div className='card shadow border-0'>
+                          <div className='card-body'>
+                            <div className='row'>
+                              <div className='col'>
+                                <span className='h6 font-semibold text-muted text-sm d-block mb-2'>
+                                  {card.title}
+                                </span>
+                                <span className='h3 font-bold mb-0'>
+                                  {getCount(card.name)}
+                                </span>
+                              </div>
+                              <div className='col-auto'>
+                                <div
+                                  className={`icon icon-shape ${card.color} text-white text-lg rounded-circle`}
+                                >
+                                  <card.icon size={56} />
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className='mt-2 mb-0 text-sm'>
-                            {card.status === "Completed" ? (
-                              <>
-                                {" "}
-                                <span className='badge badge-pill bg-soft-success text-success me-2'>
-                                  {signedCount.length}
-                                </span>
-                                <span className='text-nowrap text-xs text-muted'>
-                                  Completed
-                                </span>
-                                <span className='badge mx-2 badge-pill bg-danger text-success-white me-2'>
-                                  {notSignedCount.length}
-                                </span>
-                                <span className='text-nowrap text-xs text-muted'>
-                                  In Progress...
-                                </span>
-                              </>
-                            ) : (
-                              <>
-                                <span className='badge badge-pill bg-soft-success text-success me-2'>
-                                  <i className='bi bi-arrow-up me-1'></i>13%
-                                </span>
-                                <span className='text-nowrap text-xs text-muted'>
-                                  {card.title === "Available Products" ? (
-                                    <Link
-                                      className='text-decoration-none'
-                                      to='/products'
-                                    >
-                                      View Products{" "}
-                                      <i className='bi bi-arrow-right me-1'></i>
-                                    </Link>
-                                  ) : card.title === "Registered Users" ? (
-                                    <Link
-                                      className='text-decoration-none'
-                                      to='/users'
-                                    >
-                                      View Users{" "}
-                                      <i className='bi bi-arrow-right me-1'></i>
-                                    </Link>
-                                  ) : card.title === "Entities" ? (
-                                    <Link
-                                      className='text-decoration-none'
-                                      to='/entities'
-                                    >
-                                      View Entities{" "}
-                                      <i className='bi bi-arrow-right me-1'></i>
-                                    </Link>
-                                  ) : (
-                                    ""
-                                  )}
-                                </span>
-                              </>
-                            )}
+                            <div className='mt-2 mb-0 text-sm'>
+                              {card.status === "Completed" ? (
+                                <>
+                                  {" "}
+                                  <span className='badge badge-pill bg-soft-success text-success me-2'>
+                                    {signedCount.length}
+                                  </span>
+                                  <span className='text-nowrap text-xs text-muted'>
+                                    Completed
+                                  </span>
+                                  <span className='badge mx-2 badge-pill bg-danger text-success-white me-2'>
+                                    {notSignedCount.length}
+                                  </span>
+                                  <span className='text-nowrap text-xs text-muted'>
+                                    In Progress...
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <span className='badge badge-pill bg-soft-success text-success me-2'>
+                                    <i className='bi bi-arrow-up me-1'></i>13%
+                                  </span>
+                                  <span className='text-nowrap text-xs text-muted'>
+                                    {card.title === "Available Products" ? (
+                                      <Link
+                                        className='text-decoration-none'
+                                        to='/products'
+                                      >
+                                        View Products{" "}
+                                        <i className='bi bi-arrow-right me-1'></i>
+                                      </Link>
+                                    ) : card.title === "Registered Users" ? (
+                                      <Link
+                                        className='text-decoration-none'
+                                        to='/users'
+                                      >
+                                        View Users{" "}
+                                        <i className='bi bi-arrow-right me-1'></i>
+                                      </Link>
+                                    ) : card.title === "Entities" ? (
+                                      <Link
+                                        className='text-decoration-none'
+                                        to='/entities'
+                                      >
+                                        View Entities{" "}
+                                        <i className='bi bi-arrow-right me-1'></i>
+                                      </Link>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </span>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                }
+                    ))
+                  }
                 </Slide>
 
 
@@ -369,6 +384,11 @@ const HomeLanding = () => {
                 }
               </div>
 
+              <div className="container mt-5">
+                <h2>My Graph</h2>
+                <Bar data={data} />
+              </div>
+
               <Slide up>
                 <div className='card shadow border-0 mb-7'>
                   <div className='card-header'>
@@ -378,7 +398,7 @@ const HomeLanding = () => {
                       {/* <button type="button" className="btn btn-primary btn-lg">
                       <FaSearch />
                     </button> */}
-                    <h4>Applications</h4>
+                      <h4>Applications</h4>
                     </div>
                     <div className='table-responsive text-center'>
                       <table className='table table-bordered border-light caption-top border-2 table-hover table-nowrap'>
@@ -449,7 +469,7 @@ const HomeLanding = () => {
 
                         </tbody>
                       </table>
-                      {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div> }
+                      {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
 
                     </div>
                     {/* <div className='card-footer border-0 py-5'>
@@ -459,7 +479,7 @@ const HomeLanding = () => {
                     </div> */}
                   </div>
                 </div>
-                </Slide>
+              </Slide>
             </div>
           </main>
         </div>

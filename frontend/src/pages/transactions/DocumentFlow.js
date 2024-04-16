@@ -1,6 +1,6 @@
 import { TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Col, Form, Row } from 'react-bootstrap'
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useDispatch, useSelector } from 'react-redux';
 import { transactionDataAction } from '../../redux/actions/transactionDataAction';
@@ -74,9 +74,27 @@ const DocumentFlow = ({ hendelCancel, hendelNext }) => {
         <>
             <div className='add-edit-product'>
                 <div className='form'>
-                    <h5 className="title-color">Document Flow</h5>
+                    <h5 className="fs-5 fw-bold mb-4 title-admin">DOCUMENT FLOW</h5>
                     <Row>
-                        <Col lg={documentFlow.documentRemittance === "Approved electronic method" ? 6 : 12}>
+                        <Form.Group as={Col} lg={documentFlow.documentRemittance === "Approved electronic method" || documentFlow.documentRemittance === "Other" ? 6 : 12} controlId="formGridZip">
+                            <Form.Label>Document Remittance</Form.Label>
+                            <Form.Select
+                                onChange={(event, newValue) => {
+                                    setdocumentFlow({ ...documentFlow, documentRemittance: event.target.value });
+                                }}
+                                disabled={isView}
+                                value={documentFlow.documentRemittance}
+                                defaultValue="Choose...">
+                                <option>Choose...</option>
+                                {disableClearableOptions.map((item) => (
+                                    <option value={item}>{item}</option>
+                                ))}
+
+                            </Form.Select>
+                            {error && error?.documentRemittance && <span style={{ color: 'red' }}>{error.documentRemittance}</span>}
+                        </Form.Group>
+
+                        {/* <Col lg={documentFlow.documentRemittance === "Approved electronic method" ? 6 : 12}>
                             <Autocomplete
                                 options={disableClearableOptions}
                                 getOptionLabel={(option) => option}
@@ -93,36 +111,44 @@ const DocumentFlow = ({ hendelCancel, hendelNext }) => {
                                 value={(disableClearableOptions.length > 0 && documentFlow.documentRemittance) && disableClearableOptions.find((ele) => ele === documentFlow.documentRemittance)}
                             />
                             {error && error?.documentRemittance && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.documentRemittance}</span>}
-                        </Col>
+                        </Col> */}
                         {
                             documentFlow.documentRemittance === "Approved electronic method" &&
-                            <Col lg={6}>
-                                <TextField
-                                    label="Details"
-                                    variant="standard"
-                                    color="warning"
-                                    value={documentFlow.details}
-                                    name="details"
-                                    disabled={isView}
-                                    onChange={(e) => setdocumentFlow({ ...documentFlow, details: e.target.value })}
-                                />
-                                {error && error?.details && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.details}</span>}
-                            </Col>
+                            <Form.Group as={Col} lg={6} controlId="formGridZip">
+                            <Form.Label>Details</Form.Label>
+                            <Form.Control
+                                 value={documentFlow.details}
+                                 name="details"
+                                 disabled={isView}
+                                 onChange={(e) => setdocumentFlow({ ...documentFlow, details: e.target.value })} />
+                             {error?.details && (<span style={{color: "#da251e", width: "100%", textAlign: "start"}}>{error?.details}</span>)}
+                        </Form.Group>
+
+                            // <Col lg={6}>
+                            //     <TextField
+                            //         label="Details"
+                            //         variant="standard"
+                            //         color="warning"
+                            //         value={documentFlow.details}
+                            //         name="details"
+                            //         disabled={isView}
+                            //         onChange={(e) => setdocumentFlow({ ...documentFlow, details: e.target.value })}
+                            //     />
+                            //     {error && error?.details && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.details}</span>}
+                            // </Col>
                         }
-                         {
+                        {
                             documentFlow.documentRemittance === "Other" &&
-                            <Col lg={6}>
-                                <TextField
-                                    label="Details"
-                                    variant="standard"
-                                    color="warning"
-                                    value={documentFlow.details}
-                                    name="details"
-                                    disabled={isView}
-                                    onChange={(e) => setdocumentFlow({ ...documentFlow, details: e.target.value })}
-                                />
-                                {error && error?.details && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.details}</span>}
-                            </Col>
+                            <Form.Group as={Col} lg={6} controlId="formGridZip">
+                            <Form.Label>Details</Form.Label>
+                            <Form.Control
+                                value={documentFlow.details}
+                                name="details"
+                                disabled={isView}
+                                onChange={(e) => setdocumentFlow({ ...documentFlow, details: e.target.value })} />
+                             {error?.details && (<span style={{color: "#da251e", width: "100%", textAlign: "start"}}>{error?.details}</span>)}
+                        </Form.Group>
+                           
                         }
                     </Row>
                 </div>

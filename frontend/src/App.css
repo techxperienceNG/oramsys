@@ -5,7 +5,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 
 
-* {
+*, h1, h2, h3, h4, h5, h6 {
     font-family: "Poppins", sans-serif;
 
 }
@@ -235,7 +235,7 @@
     color: #000;
     font-size: 18px;
     font-weight: 700;
-    font-family: 'Barlow', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 .topbar-right2 ul .header-right-button .header-btn {
@@ -601,7 +601,7 @@ nav.template-main-menu>ul>li>a {
     display: block;
     color: #000000;
     text-transform: uppercase;
-    font-family: 'Barlow', sans-serif;
+    font-family: "Poppins", sans-serif;
     position: relative;
 }
 
@@ -629,7 +629,7 @@ nav.template-main-menu2>ul>li>a {
     display: block;
     color: #000000;
     text-transform: uppercase;
-    font-family: 'Barlow', sans-serif;
+    font-family: "Poppins", sans-serif;
     position: relative;
 }
 
@@ -1027,7 +1027,7 @@ nav.template-main-menu>ul>li:hover .template-mega-menu {
     font-size: 18px;
     font-weight: 700;
     margin-top: -7px;
-    font-family: 'Barlow', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 @media only screen and (max-width: 1199px) {
@@ -1352,7 +1352,7 @@ nav.template-main-menu>ul>li:hover .template-mega-menu {
     color: #000;
     font-size: 18px;
     font-weight: 700;
-    font-family: 'Barlow', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 .topbar-right2 ul .header-right-button .header-btn {
@@ -2788,20 +2788,22 @@ ul {
     padding: 20px;
 }
 
-.add-edit-product h1 {
+.add-edit-product h1, h2, h3, h4, h5, h6 {
     margin-left: 48px;
     font-size: 26px;
     line-height: 32px;
     max-width: 624px;
     font-weight: 600;
     color: rgb(161, 195, 195);
+    font-family: "Poppins", sans-serif;
 }
 
 .add-edit-product .form {
     flex-direction: column;
     padding: 30px 20px;
     margin: 0px 0px 24px;
-    border: 1px solid rgb(161, 195, 195);
+    border: 0.5px solid #E5E5E5;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .add-edit-product .form h2 {
@@ -2941,8 +2943,11 @@ ul {
     content: '';
     background-color: #00A9EF;
     height: 3px;
-    width: 190px;
-    margin: 10px 0 0;
-    display: block;
+    display: inline-block;
     clear: both;
-  }
+}
+.no-border {
+  border-left: none !important;
+  border-top: none !important;
+  border-right: none !important;
+}

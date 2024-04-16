@@ -1,7 +1,7 @@
 import { TextField, } from '@material-ui/core'
 import MaterialTable from 'material-table'
 import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import LCPartiesModal from '../../component/Modal/LCPartiesModal'
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextEditerModal from '../../component/Modal/TextEditerModal'
@@ -137,10 +137,10 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
 
     const handleChnages = (e) => {
         setContractDetails({
-          ...contractDetails,
-          [e.target.name]: e.target.value,
+            ...contractDetails,
+            [e.target.name]: e.target.value,
         })
-      }
+    }
 
     const hadleChangeModal = (e) => {
         setFundFlow({
@@ -164,6 +164,7 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
         if (beneficiaries && beneficiaries.data && beneficiaries.status === 200) {
             setbeneficiary(beneficiaries.data)
         }
+        console.log('BENEFICIARIS', beneficiaries)
     }, [beneficiaries])
 
     const termsOptions = [
@@ -336,91 +337,82 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
         <>
             <div className='add-edit-product'>
                 <div className='form'>
-                    <h5 className="title-color">Contract Details</h5>
+                    <h4 className="text-muted fs-5 fw-bold mb-4 title-admin">CONTRACT DETAILS</h4>
                     <Row>
-                    
-                          <Col lg={6}>
-                            <TextField
-                                label="Contract Currency"
-                                variant="standard"
-                                color="warning"
+                        <Form.Group as={Col} lg={6} controlId="formGridZip">
+                            <Form.Label className='text-muted'>Contract Currency</Form.Label>
+                            <Form.Control
+                            className='text-muted'
                                 value={getTrans.currency}
                                 name="currency"
-                             
-                                disabled={true}
-                            />
-                            {error && error.value && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.value}</span>}
-                        </Col>
-                        <Col lg={6}>
-                            <TextField
-                                label="Contract Value"
-                                variant="standard"
-                                color="warning"
+                                disabled={true} />
+                        </Form.Group>
+
+                        <Form.Group as={Col} lg={6} controlId="formGridZip">
+                            <Form.Label className='text-muted'>Contract Currency</Form.Label>
+                            <Form.Control
+                            className='text-muted'
                                 value={formateCurrencyValue(getTrans.value)}
                                 name="value"
                                 onChange={handleChange}
-                                disabled={true}
-                            />
-                            {error && error.value && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.value}</span>}
-                        </Col>
+                                disabled={true} />
+                        </Form.Group>
+
+
                     </Row>
                 </div>
+
+
                 <div className='add-edit-product p-0'>
-                    <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
-                        <h2 className='mb-3'>Payment Method</h2>
+                    <div className='form' style={{ backgroundColor: "#F4F4F4", border: "none" }}>
+                        <h4 className='fs-5 fw-bold mb-4 title-admin'>PAYMENT METHOD</h4>
                         <div>
                             <Row>
-                                <Col lg={fundFlow.paymentMethod === 'Open account' ? 6 : 12}>
-                                    <Autocomplete
-                                        options={paymentMethodOption}
-                                        getOptionLabel={(option) => option}
-                                        id="disable-clearable"
-                                        label="Payment method"
-                                        renderInput={(params) => (
-                                            <TextField {...params} label="Payment Methods" variant="standard" />
-                                        )}
+                                <Form.Group as={Col} lg={fundFlow.paymentMethod === 'Open account' ? 6 : 12} controlId="formGridZip">
+                                    <Form.Label>Payment Method</Form.Label>
+                                    <Form.Select
                                         onChange={(event, newValue) => {
                                             setFundFlow({
-                                                ...fundFlow,
-                                                paymentMethod: newValue,
-                                                openAccount: '',
-                                                terms: newValue === 'Cash against documents (CAD)' ? 'At sight' : fundFlow.terms
-
+                                                ...fundFlow, paymentMethod: event.target.value, openAccount: '',
+                                                terms: event.target.value === 'Cash against documents (CAD)' ? 'At sight' : fundFlow.terms
                                             });
-                                            console.log(newValue)
                                             setLettersOfCredit([])
                                         }}
-                                        value={fundFlow.paymentMethod}
-                                        disableClearable
                                         disabled={isView}
-                                    />
-                                    {error && error.paymentMethod && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.paymentMethod}</span>}
-                                </Col>
-                                {
-                                    fundFlow.paymentMethod === 'Open account' &&
-                                    <Col lg={6}>
-                                        <TextField
-                                            label="For 'Open account', specify terms as per contract"
-                                            variant="standard"
-                                            color="warning"
-                                            // disabled
+                                        value={fundFlow.paymentMethod}
+                                        defaultValue="Choose...">
+                                        <option>Choose...</option>
+                                        {paymentMethodOption.map((item) => (
+                                            <option value={item}>{item}</option>
+                                        ))}
+
+                                    </Form.Select>
+                                    {error && error?.paymentMethod && <span style={{ color: 'red' }}>{error.paymentMethod}</span>}
+                                </Form.Group>
+
+
+                                {fundFlow.paymentMethod === 'Open account' &&
+                                    <Form.Group as={Col} lg={6} controlId="formGridZip">
+                                        <Form.Label>For 'Open account', specify terms as per contract</Form.Label>
+                                        <Form.Control
                                             name='openAccount'
                                             value={fundFlow.openAccount}
-                                            multiline
-                                            maxRows={3}
-                                            onChange={(e) => handleChnage(e)}
-                                        // onClick={() => { setShowTextEditor(true); setType(`'For 'Open account', specify terms as per contract'`); setSelectedName('openAccount') }}
-                                        />
-                                        {error && error.openAccount && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.openAccount}</span>}
-                                    </Col>
+                                            onChange={(e) => handleChnage(e)} />
+                                        {error?.openAccount && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.openAccount}</span>)}
+                                    </Form.Group>
                                 }
                                 {
                                     fundFlow.paymentMethod === 'Letter of Credit (LC)' &&
                                     <>
                                         <div className='product'>
                                             <div className='mb-3 d-flex justify-content-between align-items-center'>
-                                                <h5 className="title-color">Letters of credit</h5>
-                                                <button className={`add_btn me-3 ${lettersOfCredit.length && 'd-none'} ${isView ? 'd-none' : 'd-block'}`} onClick={() => setShowEditModal(!showEditModal)}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button>
+                                                <h5 className="fs-5 mb-2 title-admin">Letters of credit</h5>
+                                                {/* <button className={`add_btn me-3 ${lettersOfCredit.length && 'd-none'} ${isView ? 'd-none' : 'd-block'}`} onClick={() => setShowEditModal(!showEditModal)}> <img src='../../assets/img/about/plus.png' className='me-2' />Add</button> */}
+
+                                                <Button onClick={() => setShowEditModal(!showEditModal)} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-1'>
+                                                    <span class=' pe-2'><i class="bi bi-plus pe-1 "></i></span>
+                                                    <span className='fw-bold'>Add</span>
+                                                </Button>
                                             </div>
                                             {lettersOfCredit.length > 0 ? <MaterialTable
                                                 title="LC Parties"
@@ -468,116 +460,112 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                     </div>
                 </div>
                 <div className='form'>
-                    <h5 className="title-color">Payment Terms</h5>
+                    <h4 className="fs-5 fw-bold mb-4 title-admin">PAYMENT TERMS</h4>
                     <Row className='mb-3'>
-                        <Col lg={3}>
-                            <form className="" noValidate>
-                                <TextField
-                                    id="date"
-                                    label="Payment Date"
-                                    type="date"
-                                    name='paymentDate'
-                                    value={fundFlow.paymentDate}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        min: transactionData.details.contractDetails.contractDate ? new Date(transactionData.details.contractDetails.contractDate).toISOString().split("T")[0] : ""
-                                    }}
-                                    onChange={handleChange}
-                                    disabled={isView}
-                                />
-                            </form>
-                            {error && error.paymentDate && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.paymentDate}</span>}
-                        </Col>
-                        <Col lg={3}>
-                            <Autocomplete
-                                options={termsOptions}
-                                getOptionLabel={(option) => option}
-                                id="disable-clearable"
-                                label="Terms"
-                                renderInput={(params) => (
-                                    <TextField {...params} label="Terms" variant="standard" />
-                                )}
+
+                        <Form.Group as={Col} controlId="formGridZip">
+                            <Form.Label>Payment Date</Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="paymentDate"
+                                placeholder="dd-mm-yyyy"
+                                min={transactionData.details.contractDetails.contractDate ? new Date(transactionData.details.contractDetails.contractDate).toISOString().split("T")[0] : ""}
+                                value={fundFlow.paymentDate}
+                                onChange={handleChange}
+                                required
+                            />
+                            {error && error?.paymentDate && <span style={{ color: 'red' }}>{error.paymentDate}</span>}
+                        </Form.Group>
+
+
+
+                        <Form.Group as={Col} controlId="formGridZip">
+                            <Form.Label>Terms</Form.Label>
+                            <Form.Select
                                 onChange={(event, newValue) => {
-                                    setFundFlow({ ...fundFlow, terms: newValue });
+                                    setFundFlow({ ...fundFlow, terms: event.target.value });
                                 }}
                                 disabled={fundFlow.paymentMethod === 'Cash against documents (CAD)' || isView}
-        
                                 value={fundFlow.terms}
-                                // value={(termsOptions.length > 0 && fundFlow.terms) && termsOptions.find((ele) => ele === fundFlow.terms)}
-                                disableClearable
-                            />
-                            {error && error.terms && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.terms}</span>}
-                        </Col>
-                        <Col lg={3}>
-                            <Autocomplete
-                                options={country}
-                                getOptionLabel={(option) => option.name}
-                                id="disable-clearable"
-                                label="Payment origin"
-                                renderInput={(params) => (
-                                    <TextField {...params} label="Payment Origin" variant="standard" />
-                                )}
+                                defaultValue="Choose...">
+                                <option>Choose...</option>
+                                {termsOptions.map((item) => (
+                                    <option value={item}>{item}</option>
+                                ))}
+
+                            </Form.Select>
+                            {error && error?.terms && <span style={{ color: 'red' }}>{error.terms}</span>}
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridZip">
+                            <Form.Label>Payment Origin</Form.Label>
+                            <Form.Select
                                 onChange={(event, newValue) => {
-                                    setFundFlow({ ...fundFlow, paymentOrigin: newValue._id });
+                                    setFundFlow({ ...fundFlow, paymentOrigin: event.target.value });
                                 }}
                                 disabled={isView}
-                                value={(country.length > 0 && fundFlow.paymentOrigin) && country.find((ele) => ele._id === fundFlow.paymentOrigin)}
-                                disableClearable
-                            />
-                            {error && error.paymentOrigin && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.paymentOrigin}</span>}
-                        </Col>
-                        <Col lg={3}>
-                            <Autocomplete
-                                options={beneficiary}
-                                getOptionLabel={(option) => option?.details?.name}
-                                id="disable-clearable"
-                                label="Beneficiary"
-                                renderInput={(params) => (
-                                    <TextField {...params} label="Beneficiary" variant="standard" />
-                                )}
-                                disabled={isView}
+                                value={fundFlow.paymentOrigin}
+                                defaultValue="Choose...">
+                                <option>Choose...</option>
+                                {country.map((item) => (
+                                    <option value={item._id}>{item.name}</option>
+                                ))}
+
+                            </Form.Select>
+                            {error && error.paymentOrigin && <span style={{ color: 'red' }}>{error.paymentOrigin}</span>}
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridZip">
+                            <Form.Label>Beneficiary</Form.Label>
+                            <Form.Select
                                 onChange={(event, newValue) => {
-                                    setFundFlow({ ...fundFlow, beneficiary: newValue._id });
+                                    setFundFlow({ ...fundFlow, beneficiary: event.target.value });
                                 }}
-                                value={(beneficiary.length > 0 && fundFlow.beneficiary) && beneficiary.find((ele) => ele._id === fundFlow.beneficiary)}
-                                disableClearable
-                            />
-                            {error && error.beneficiary && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.beneficiary}</span>}
-                        </Col>
+                                disabled={isView}
+                                value={fundFlow.beneficiary}
+                                defaultValue="Choose...">
+                                <option>Choose...</option>
+                                {beneficiary.map((item) => (
+                                    <option value={item._id}>{item.details?.name}</option>
+                                ))}
+
+                            </Form.Select>
+                            {error && error?.beneficiary && <span style={{ color: 'red' }}>{error.beneficiary}</span>}
+                        </Form.Group>
+
                     </Row>
                     <Row>
-                        <Col lg={12}>
-                            <Autocomplete
-                                options={additonalChargesOption}
-                                getOptionLabel={(option) => option.label}
-                                id="disable-clearable"
-                                label="Additonal charges"
-                                renderInput={(params) => (
-                                    <TextField {...params} label="Additonal Charges" variant="standard" />
-                                )}
-                                disabled={isView}
-                                value={(additonalChargesOption.length > 0 && fundFlow.additonalCharges === true || fundFlow.additonalCharges === false) && additonalChargesOption.find((ele) => ele.value === fundFlow.additonalCharges)}
-                                onChange={(event, newValue) => {
+                        <Form.Group as={Col} lg={12} controlId="formGridZip">
+                            <Form.Label>Additional Charges?</Form.Label>
+                            <Form.Select
+                                onChange={(e) => {
+                                    const newValue = e.target.value === 'true'; // Convert to boolean
                                     setFundFlow({
                                         ...fundFlow,
-                                        additonalCharges: newValue.value,
-                                        payer: "",
-                                        dutiesCurrency: "",
-                                        dutiesValue: "",
-                                        taxesCurrency: "",
-                                        taxesValue: "",
-                                        certificationCurrency: "",
-                                        certificationValue: "",
-                                        leviesCurrency: "",
-                                        leviesValue: "",
+                                        additonalCharges: newValue,
+                                        payer: newValue ? fundFlow.payer : "",
+                                        dutiesCurrency: newValue ? fundFlow.dutiesCurrency : "",
+                                        dutiesValue: newValue ? fundFlow.dutiesValue : "",
+                                        taxesCurrency: newValue ? fundFlow.taxesCurrency : "",
+                                        taxesValue: newValue ? fundFlow.taxesValue : "",
+                                        certificationCurrency: newValue ? fundFlow.certificationCurrency : "",
+                                        certificationValue: newValue ? fundFlow.certificationValue : "",
+                                        leviesCurrency: newValue ? fundFlow.leviesCurrency : "",
+                                        leviesValue: newValue ? fundFlow.leviesValue : "",
                                     });
                                 }}
-                                disableClearable
-                            />
-                            {error && error.additonalCharges && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.additonalCharges}</span>}
-                        </Col>
+                                disabled={isView}
+                                value={fundFlow.additonalCharges.toString()}
+                                defaultValue="Choose...">
+                                <option>Choose...</option>
+                                {additonalChargesOption.map((item) => (
+                                    <option value={item.value}>{item.label}</option>
+                                ))}
+
+                            </Form.Select>
+                            {error && error?.additonalCharges && <span style={{ color: 'red' }}>{error.additonalCharges}</span>}
+                        </Form.Group>
+
                     </Row>
                 </div>
                 {
@@ -585,152 +573,150 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
                     <>
                         <div className='add-edit-product p-0'>
                             <div className='form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
-                                <h2 className='mb-3'>Additional Charges</h2>
+                                <h3 className='fs-5 fw-bold mb-4'>ADDITIONAL CHARGES</h3>
                                 <div>
                                     <Row>
-                                        <Col lg={3}>
-                                            <Autocomplete
-                                                options={beneficiary}
-                                                getOptionLabel={(option) => option?.details?.name}
-                                                id="disable-clearable"
-                                                label="Payer"
-                                                renderInput={(params) => (
-                                                    <TextField {...params} label="Payer" variant="standard" />
-                                                )}
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Payer</Form.Label>
+                                            <Form.Select
                                                 onChange={(event, newValue) => {
-                                                    setFundFlow({ ...fundFlow, payer: newValue._id });
-                                                }}
-                                                value={(beneficiary.length > 0 && fundFlow.payer) && beneficiary.find((ele) => ele._id === fundFlow.payer)}
-                                                disableClearable
-                                                disabled={isView}
-                                            />
-                                            {error && error.payer && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.payer}</span>}
-                                        </Col>
-                                        <Col lg={3}>
-                                            <Autocomplete
-                                                options={CurrencyOptions}
-                                                getOptionLabel={(option) => option?.label}
-                                                id="disable-clearable"
-                                                label="Duties Currency"
-                                                renderInput={(params) => (
-                                                    <TextField {...params} label="Duties Currency" variant="standard" />
-                                                )}
-                                                onChange={(event, newValue) => {
-                                                    setFundFlow({ ...fundFlow, dutiesCurrency: newValue.label });
+                                                    setFundFlow({ ...fundFlow, payer: event.target.value });
                                                 }}
                                                 disabled={isView}
-                                                value={(CurrencyOptions.length > 0 && fundFlow.dutiesCurrency) && CurrencyOptions.find((ele) => ele.label === fundFlow.dutiesCurrency)}
-                                                disableClearable
-                                            />
-                                            {error && error.dutiesCurrency && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.dutiesCurrency}</span>}
-                                        </Col>
-                                        <Col lg={3}>
-                                            <TextField
-                                                label="Duties Value"
-                                                variant="standard"
-                                                color="warning"
+                                                value={fundFlow.payer}
+                                                defaultValue="Choose...">
+                                                <option>Choose...</option>
+                                                {beneficiary.map((item) => (
+                                                    <option value={item._id}>{item.details?.name}</option>
+                                                ))}
+
+                                            </Form.Select>
+                                            {error && error?.payer && <span style={{ color: 'red' }}>{error.payer}</span>}
+                                        </Form.Group>
+
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Duties Currency</Form.Label>
+                                            <Form.Select
+                                                onChange={(e, newVal) => {
+                                                    setFundFlow({ ...fundFlow, dutiesCurrency: e.target.value });
+                                                }}
+                                                value={fundFlow.dutiesCurrency}
+                                                disabled={isView}
+                                                defaultValue="Choose...">
+                                                <option>Choose...</option>
+                                                {CurrencyOptions.map((item) => (
+                                                    <option value={item.label}>{item.label}</option>
+                                                ))}
+
+                                            </Form.Select>
+                                            {error && error?.dutiesCurrency && <span style={{ color: 'red' }}>{error.dutiesCurrency}</span>}
+                                        </Form.Group>
+
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Duties Value</Form.Label>
+                                            <Form.Control
                                                 name="dutiesValue"
                                                 value={formateCurrencyValue(fundFlow.dutiesValue)}
                                                 onChange={(e) => handleChange(e)}
-                                                disabled={isView}
-                                            />
-                                            {error && error.dutiesValue && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.dutiesValue}</span>}
-                                        </Col>
-                                        <Col lg={3}>
-                                            <Autocomplete
-                                                options={CurrencyOptions}
-                                                getOptionLabel={(option) => option?.label}
-                                                id="disable-clearable"
-                                                label="Taxes currency"
-                                                renderInput={(params) => (
-                                                    <TextField {...params} label="Taxes Currency" variant="standard" />
-                                                )}
-                                                onChange={(event, newValue) => {
-                                                    setFundFlow({ ...fundFlow, taxesCurrency: newValue?.label });
+                                                disabled={isView} />
+                                            {error?.dutiesValue && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.dutiesValue}</span>)}
+                                        </Form.Group>
+
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Taxes currency</Form.Label>
+                                            <Form.Select
+                                                onChange={(e, newVal) => {
+                                                    setFundFlow({ ...fundFlow, taxesCurrency: e.target.value });
                                                 }}
+                                                value={fundFlow.taxesCurrency}
                                                 disabled={isView}
-                                                value={(CurrencyOptions.length > 0 && fundFlow.taxesCurrency) && CurrencyOptions.find((ele) => ele.label === fundFlow.taxesCurrency)}
-                                                disableClearable
-                                            />
-                                            {error && error.taxesCurrency && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.taxesCurrency}</span>}
-                                        </Col>
+                                                defaultValue="Choose...">
+                                                <option>Choose...</option>
+                                                {CurrencyOptions.map((item) => (
+                                                    <option value={item.label}>{item.label}</option>
+                                                ))}
+
+                                            </Form.Select>
+                                            {error && error?.taxesCurrency && <span style={{ color: 'red' }}>{error.taxesCurrency}</span>}
+                                        </Form.Group>
+
                                     </Row>
+
+
+
                                     <Row className='mt-3'>
-                                        <Col lg={3}>
-                                            <TextField
-                                                label="Taxes Value"
-                                                variant="standard"
-                                                color="warning"
+
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Taxes Value</Form.Label>
+                                            <Form.Control
                                                 name="taxesValue"
                                                 value={formateCurrencyValue(fundFlow.taxesValue)}
                                                 onChange={(e) => handleChangeNumber(e, 'taxesValue')}
-                                                disabled={isView}
-                                            />
-                                            {error && error.taxesValue && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.taxesValue}</span>}
-                                        </Col>
-                                        <Col lg={3}>
-                                            <Autocomplete
-                                                options={CurrencyOptions}
-                                                getOptionLabel={(option) => option?.label}
-                                                id="disable-clearable"
-                                                label="Certification currency"
-                                                renderInput={(params) => (
-                                                    <TextField {...params} label="Certification Currency" variant="standard" />
-                                                )}
-                                                onChange={(event, newValue) => {
-                                                    setFundFlow({ ...fundFlow, certificationCurrency: newValue?.label });
+                                                disabled={isView} />
+                                            {error?.taxesValue && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.taxesValue}</span>)}
+                                        </Form.Group>
+
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Certification Currency</Form.Label>
+                                            <Form.Select
+                                                onChange={(e, newVal) => {
+                                                    setFundFlow({ ...fundFlow, certificationCurrency: e.target.value });
                                                 }}
+                                                value={fundFlow.certificationCurrency}
                                                 disabled={isView}
-                                                value={(CurrencyOptions.length > 0 && fundFlow.certificationCurrency) && CurrencyOptions.find((ele) => ele.label === fundFlow.certificationCurrency)}
-                                                disableClearable
-                                            />
-                                            {error && error.certificationCurrency && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.certificationCurrency}</span>}
-                                        </Col>
-                                        <Col lg={3}>
-                                            <TextField
-                                                label="Certification Value"
-                                                variant="standard"
-                                                color="warning"
+                                                defaultValue="Choose...">
+                                                <option>Choose...</option>
+                                                {CurrencyOptions.map((item) => (
+                                                    <option value={item.label}>{item.label}</option>
+                                                ))}
+
+                                            </Form.Select>
+                                            {error && error?.certificationCurrency && <span style={{ color: 'red' }}>{error.certificationCurrency}</span>}
+                                        </Form.Group>
+
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Certification Value</Form.Label>
+                                            <Form.Control
                                                 name='certificationValue'
                                                 value={formateCurrencyValue(fundFlow.certificationValue)}
                                                 onChange={(e) => handleChangeNumber(e, 'certificationValue')}
                                                 disabled={isView}
                                             />
-                                            {error && error.certificationValue && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.certificationValue}</span>}
-                                        </Col>
-                                        <Col lg={3}>
-                                            <Autocomplete
-                                                options={CurrencyOptions}
-                                                getOptionLabel={(option) => option?.label}
-                                                id="disable-clearable"
-                                                label="Levies currency"
-                                                renderInput={(params) => (
-                                                    <TextField {...params} label="Levies Currency" variant="standard" />
-                                                )}
-                                                onChange={(event, newValue) => {
-                                                    setFundFlow({ ...fundFlow, leviesCurrency: newValue?.label });
+                                            {error?.certificationValue && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.certificationValue}</span>)}
+                                        </Form.Group>
+
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Levies Currency</Form.Label>
+                                            <Form.Select
+                                                onChange={(e, newVal) => {
+                                                    setFundFlow({ ...fundFlow, leviesCurrency: e.target.value });
                                                 }}
+                                                value={fundFlow.leviesCurrency}
                                                 disabled={isView}
-                                                value={(CurrencyOptions.length > 0 && fundFlow.leviesCurrency) && CurrencyOptions.find((ele) => ele.label === fundFlow.leviesCurrency)}
-                                                disableClearable
-                                            />
-                                            {error && error.leviesCurrency && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.leviesCurrency}</span>}
-                                        </Col>
+                                                defaultValue="Choose...">
+                                                <option>Choose...</option>
+                                                {CurrencyOptions.map((item) => (
+                                                    <option value={item.label}>{item.label}</option>
+                                                ))}
+
+                                            </Form.Select>
+                                            {error && error?.leviesCurrency && <span style={{ color: 'red' }}>{error.leviesCurrency}</span>}
+                                        </Form.Group>
+
+
                                     </Row>
 
                                     <Row className='mt-3'>
-                                        <Col>
-                                            <TextField
-                                                label="Levies Value"
-                                                variant="standard"
-                                                color="warning"
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Levies Value</Form.Label>
+                                            <Form.Control
                                                 name='leviesValue'
                                                 value={formateCurrencyValue(fundFlow.leviesValue)}
                                                 onChange={(e) => handleChangeNumber(e, 'leviesValue')}
-                                                disabled={isView}
-                                            />
-                                            {error && error.leviesValue && <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error.leviesValue}</span>}
-                                        </Col>
+                                                disabled={isView} />
+                                            {error?.leviesValue && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.leviesValue}</span>)}
+                                        </Form.Group>
+
                                     </Row>
                                 </div>
                             </div>
@@ -738,45 +724,37 @@ const FundFlow = ({ hendelCancel, hendelNext, getTrans }) => {
 
                         <div className='add-edit-product p-0'>
                             <div className='form'>
-                                <h2 className='mb-3'>Taxes Computation</h2>
+                                <h3 className='fs-5 fw-bold mb-4'>TAXES COMPUTATION</h3>
                                 <div>
                                     <Row>
-                                        <Col lg={3}>
-                                            <TextField
-                                                label="Taxes Value"
-                                                variant="standard"
-                                                color="warning"
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label className='text-muted'>Taxes Value</Form.Label>
+                                            <Form.Control className='text-muted'
                                                 value={fundFlow.dutiesValue ? fundFlow.taxesValue ? formateCurrencyValue(JSON.stringify(parseInt(fundFlow.taxesValue.replace(",", "")) + parseInt(fundFlow.dutiesValue.replace(",", "")))) : formateCurrencyValue(fundFlow.dutiesValue) : (fundFlow.taxesValue ? formateCurrencyValue(fundFlow.taxesValue) : formateCurrencyValue(fundFlow.dutiesValue))}
-                                                disabled
-                                            />
-                                        </Col>
-                                        <Col lg={3}>
-                                            <TextField
-                                                label="Taxes Currency"
-                                                variant="standard"
-                                                color="warning"
-                                                value={fundFlow.taxesCurrency}
-                                                disabled
-                                            />
-                                        </Col>
-                                        <Col lg={3}>
-                                            <TextField
-                                                label="Receiver Payout"
-                                                variant="standard"
-                                                color="warning"
-                                                value={fundFlow.certificationValue ? fundFlow.leviesValue ? formateCurrencyValue(JSON.stringify(parseInt(fundFlow.leviesValue.replace(",", "")) + parseInt(fundFlow.certificationValue.replace(",", "")))) : formateCurrencyValue(fundFlow.certificationValue) : (fundFlow.leviesValue ? formateCurrencyValue(fundFlow.leviesValue) : formateCurrencyValue(fundFlow.certificationValue))}
-                                                disabled
-                                            />
-                                        </Col>
-                                        <Col lg={3}>
-                                            <TextField
-                                                label="Receiver Payout Currency"
-                                                variant="standard"
-                                                color="warning"
-                                                value={fundFlow.certificationCurrency}
-                                                disabled
-                                            />
-                                        </Col>
+                                                disabled />
+                                        </Form.Group>
+
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                                <Form.Label className='text-muted'>Taxes Currency</Form.Label>
+                                                <Form.Control className='text-muted'
+                                                    value={fundFlow.taxesCurrency}
+                                                    disabled />
+                                            </Form.Group>
+
+                                            <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label className='text-muted'>Receiver Payout</Form.Label>
+                                            <Form.Control className='text-muted'
+                                                 value={fundFlow.certificationValue ? fundFlow.leviesValue ? formateCurrencyValue(JSON.stringify(parseInt(fundFlow.leviesValue.replace(",", "")) + parseInt(fundFlow.certificationValue.replace(",", "")))) : formateCurrencyValue(fundFlow.certificationValue) : (fundFlow.leviesValue ? formateCurrencyValue(fundFlow.leviesValue) : formateCurrencyValue(fundFlow.certificationValue))}
+                                                 disabled />
+                                        </Form.Group>
+                                       
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                                <Form.Label className='text-muted'>Receiver Payout Currency</Form.Label>
+                                                <Form.Control className='text-muted'
+                                                    value={fundFlow.certificationCurrency}
+                                                    disabled />
+                                            </Form.Group>
+                                        
                                     </Row>
                                 </div>
                             </div>

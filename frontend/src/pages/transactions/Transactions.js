@@ -200,13 +200,6 @@ const Transactions = () => {
     setSortConfig({ key, direction });
   };
 
-  const sortedData = transaction.sort((a, b) => {
-    if (sortConfig.direction === 'ascending') {
-      return a[sortConfig.key] - b[sortConfig.key];
-    }
-    return b[sortConfig.key] - a[sortConfig.key];
-  });
-
   return (
     <>
 
@@ -278,23 +271,23 @@ const Transactions = () => {
 
 
                   </div>
-                  <div class="table-responsive">
+                  <div class="table-responsive form">
                     <table class="table border-light border-5 table-nowrap caption-top table-hover">
 
                       <thead>
                         <tr className="bg-light text-center">
-                          <th  className='fs-normal' onClick={() => handleSort('createdAt')} style={{ cursor: 'pointer' }} scope="col" width="5%">Date {' '}
+                          <th  className='fw-bold fs-normal' onClick={() => handleSort('createdAt')} style={{ cursor: 'pointer' }} scope="col" width="5%">Date {' '}
                             {sortConfig.key === 'createdAt' && (
                               <i className={`bi bi-arrow-${sortConfig.direction === 'ascending' ? 'up' : 'down'}`}></i>
                             )}
                           </th>
-                          <th className=' fs-normal' scope="col" width="15%">Transaction Number</th>
-                          <th className=' fs-normal' scope="col" width="10%">Borrower</th>
-                          <th className=' fs-normal' scope="col" width="15%">Lender</th>
-                          <th className=' fs-normal' scope="col" width="10%">Contract Value</th>
-                          <th className=' fs-normal' scope="col" width="20%">Product</th>
-                          <th className=' fs-normal' scope="col" width="20%">Termsheet</th>
-                          <th className=' fs-normal' scope="col" width="20%"><span>Actions</span></th>
+                          <th className='fw-bold fs-normal' scope="col" width="15%">Transaction Number</th>
+                          <th className='fw-bold fs-normal' scope="col" width="10%">Borrower</th>
+                          <th className='fw-bold fs-normal' scope="col" width="15%">Lender</th>
+                          <th className='fw-bold fs-normal' scope="col" width="10%">Contract Value</th>
+                          <th className='fw-bold fs-normal' scope="col" width="20%">Product</th>
+                          <th className='fw-bold fs-normal' scope="col" width="20%">Termsheet</th>
+                          <th className='fw-bold fs-normal' scope="col" width="20%"><span>Actions</span></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -353,44 +346,6 @@ const Transactions = () => {
                                         <Dropdown.Item onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}><FileDownloadIcon className="me-2 mb-1" size={15} />Download Termsheet</Dropdown.Item>
                                       </Dropdown.Menu>
                                     </Dropdown>
-
-                                    {/* <div class=''>
-                                        <MdEdit onClick={() => { navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], }) }}
-                                          data-tooltip-id='edit-id'
-                                          data-tooltip-content='Edit Transaction'
-                                          className='cursor-pointer'
-                                          size={18} />
-                                        <Tooltip id='edit-id' place='top' effect='solid' />
-                                      </div>
-                                      <div class=''>
-                                        <MdPreview data-tooltip-id='preview-id' data-tooltip-content='Preview Transaction'
-                                          onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}
-                                          className='cursor-pointer'
-                                          size={18}
-                                        />
-                                        <Tooltip id='preview-id' place='top' effect='solid' />
-                                      </div>
-                                      <div class=''>
-                                        {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ? <MdAssessment data-tooltip-id='riskassesment-id' data-tooltip-content='Risk Assesment' onClick={() => {
-                                          dispatch(getRiskAssessment(data._id)); setSelected(data._id)
-                                        }} className='cursor-pointer'
-                                          size={18}
-                                        /> : ""}
-
-                                        <Tooltip id='riskassesment-id' place='top' effect='solid' />
-                                      </div>
-                                      <div class=''>
-                                          <MdVisibility  onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "view") : ViewRiskAssessment() }}data-tooltip-id='viewriskassesment' data-tooltip-content='View Termsheet' size={18} />
-                                          <Tooltip id='viewriskassesment' place='top' effect='solid' />
-                                      
-                                      </div>
-                                      <div class=''>
-                                        <FileDownloadIcon data-tooltip-id='termsheet' data-tooltip-content='Download Termsheet' onClick={() => { data.termSheet === "Not Signed" ? downloadTermSheet(data._id, "download") : converBase64toBlob(data.termSheetUrl) }}
-                                          className='cursor-pointer'
-                                          size={18}
-                                        />
-                                        <Tooltip id='termsheet' place='top' effect='solid' />
-                                      </div> */}
                                   </div>
                                 </div>
                               </td>
@@ -406,7 +361,6 @@ const Transactions = () => {
                       </div>
                     </div>}
                     {transaction.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>}
-                    {/* {getAlltransactionData?.data?.length < 1 && <div className='text-center mx-auto container py-5 my-5 m-5'> No records were found</div>} */}
                     <div class="card-footer border-0 py-2 mb-5">
 
                       <span class="text-muted text-sm">

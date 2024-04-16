@@ -14,7 +14,7 @@ const AuthLayOut = ({ children, ...props }) => {
                         {/* <Sidebar /> */}
                         <div style={{ width: "100%" }}>
                             <AuthHeader showSidebar={showSidebar} setSidebar={setSidebar} />
-                            <div className="" style={{ height: "93vh", overflow: "auto" }} {...props}>{children}</div>
+                            <div className="" style={{ height: "91vh", overflow: "auto" }} {...props}>{children}</div>
                         </div>
                     </div>
                     {/* <AuthFooter /> */}

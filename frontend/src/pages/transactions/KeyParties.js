@@ -36,7 +36,10 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
         'party_relation': '', 'buyer': '', 'shipper': '', 'upload_evidence': ''
     }])
     const [relatedPartyDetails, setRelatedPartyDetails] = useState([{
-        'buyer': '', 'shipper': '', 'party_relation': '', 'upload_evidence': ''
+        'buyer': '',
+        'shipper': '',
+        'party_relation': '',
+        'upload_evidence': ''
     }])
 
     const [apiFetched, setApiFetched] = useState(false);
@@ -48,25 +51,12 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
         name: "",
         type: ""
     })
-    const parties = [{
-        label: 'Subsidiary',
-        value: 'subsidiary',
-        prefix: ''
-    }, {
-        label: 'Owners',
-        value: 'owners',
-        prefix: ''
-    }, {
-        label: 'Associate',
-        value: 'associate',
-        prefix: ''
-    },
-    {
-        label: 'None',
-        value: 'none',
-        prefix: ''
-    }
-    ];
+    const parties = [
+        "Subsidiary",
+        "Owners",
+        "Associate",
+        "None",
+    ]
     const transactionData = useSelector((state) => state.transactionData.transactionData)
     const getTransactionByIdData = useSelector((state) => state.transactionData.getTransactionById)
 
@@ -87,7 +77,6 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
     }, []);
 
     useEffect(() => {
-        // console.log('getTransactionByIdData.data?.keyparties',getTransactionByIdData.data?.keyParties[0].relatedParties);
         if (getTransactionByIdData && getTransactionByIdData.data) {
             setTableData(getTransactionByIdData.data.keyParties[0].parties.map((ele) => {
                 console.log(ele);
@@ -100,15 +89,11 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
             setEditId(getTransactionByIdData?.data?.keyParties[0]?._id)
             setBorrower_Applicant(getLender.borrower_Applicant)
             setLenders(getBorrower.lenders)
-            // setWarehouseComp(getWarehouseCompany?.warehouses[0]?.warehouseCompany?.label)
-
             setCounterPart(getTransactionByIdData?.data?.details?.pricingDetails
                 ?.pricingCounterParty?.details.name)
             setShippingComp(getTransactionByIdData?.data?.details?.shippingOptions
                 ?.shippingCompany?.details.name)
-            // setCounterPart(getCounterParty?.pricingCounterParty?.details?.name)
-            // setShippingComp(getShippingCompany?.shippingCompany?.details?.name)
-            // console.log('check warehouse', getTransactionByIdData.details.shippingOptions?.warehouses[0]?.warehouseCompany?.details.name)
+            
             if (getTransactionByIdData.data?.keyParties[0].relatedParties != undefined && getTransactionByIdData.data?.keyParties[0].relatedParties.length > 0) {
                 // console.log('keyparties at useEffect', keyParties);
                 setkeyParties(getTransactionByIdData.data?.keyParties[0].relatedParties);
@@ -125,7 +110,6 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
             console.log('RELATEDPARTIES FROM API', relatedPartyDetails);
             setRelatedPartyDetails(getTransactionByIdData.data?.keyParties[0].relatedParties);
         }
-        // alert('getTransactionByIdData');
     }, [getTransactionByIdData])
 
     useEffect(() => {
@@ -337,6 +321,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
         setpartiesData(storeData);
     }, [tableData])
     console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCompany?.label)
+    console.log('Shipping company', getWarehouseCompany.warehouses[0]?.warehouseCompany?.label)
     useEffect(() => {
         AddUpParties()
     }, [AddUpParties])
@@ -345,13 +330,13 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
         <>
             <div className='product'>
                 <div className='mb-3 d-flex justify-content-between align-items-center'>
-                    <h6 className="fs-5 fw-bold title-admin">PARTIES</h6>
+                    <h6 className="fs-5 fw-bold title-admin text-muted">PARTIES</h6>
                 </div>
                 <Form>
                     <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-                        <Form.Label column sm={2}> Borrower/Applicant </Form.Label>
+                        <Form.Label column sm={2} className='text-muted'> Borrower/Applicant </Form.Label>
                         <Col lg={4} sm={10}>
-                            <Form.Control type="text"
+                            <Form.Control className='text-muted no-border' type="text"
                                 name='borrower_Applicant'
                                 value={getBorrower}
                                 disabled={true} />
@@ -359,9 +344,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                     </Form.Group>
 
                     <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-                        <Form.Label column sm={2}>Lender</Form.Label>
+                        <Form.Label column sm={2} className='text-muted'>Lender</Form.Label>
                         <Col lg={4} sm={10}>
-                            <Form.Control
+                            <Form.Control className='text-muted no-border'
                                 name='lenders'
                                 value={getLender}
                                 disabled={true} />
@@ -369,9 +354,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                     </Form.Group>
 
                     <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-                        <Form.Label column sm={2}>Shipping Company</Form.Label>
+                        <Form.Label column sm={2} className='text-muted'>Shipping Company</Form.Label>
                         <Col lg={4} sm={10}>
-                            <Form.Control
+                            <Form.Control className='text-muted no-border'
                                 name='lenders'
                                 value={getShippingCompany}
                                 disabled={true} />
@@ -380,9 +365,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
 
                     {warehouseStatus &&
                         <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-                            <Form.Label column sm={2}>Warehouse Company</Form.Label>
+                            <Form.Label column sm={2} className='text-muted'>Warehouse Company</Form.Label>
                             <Col lg={4} sm={10}>
-                                <Form.Control name='warehouse company'
+                                <Form.Control className='text-muted no-border' name='warehouse company'
                                     value={warehouseCo}
                                     disabled={true} />
                             </Col>
@@ -391,9 +376,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
 
                     {pricingHedgingStatus &&
                         <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-                            <Form.Label column sm={2}>Hedging Counterparty</Form.Label>
+                            <Form.Label column sm={2} className='text-muted'>Hedging Counterparty</Form.Label>
                             <Col lg={4} sm={10}>
-                                <Form.Control
+                                <Form.Control className='text-muted no-border'
                                     name='Counterparty'
                                     value={getCounterParty}
                                     disabled={true} />
@@ -408,7 +393,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
 
                     <Button onClick={() => { setShowEditModal(!showEditModal) }} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-1'>
                         <span class=' pe-2'><i class="bi bi-plus pe-1 "></i></span>
-                        <span className='fw-bold'>Add Party</span>
+                        <span className='fw-bold'>Add</span>
                     </Button>
                 </div>
                 <MaterialTable
@@ -453,9 +438,9 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                         }
                     ]}
                     options={{
-                        filtering: true,
+                        filtering: false,
                         actionsColumnIndex: -1,
-                        sorting: true,
+                        sorting: false,
                         pageSize: 10,
                         search: false,
                         emptyRowsWhenPaging: false,
@@ -463,28 +448,31 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                 />
             </div>
             <div className='add-edit-product parties_main mb-4'>
-                <div className='p-4 mb-3 pb-4' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
+                <div className='p-4 mb-3 pb-4'>
                     <div className='mb-3 d-flex justify-content-between align-items-center'>
                         <h6 className="fs-5 fw-bold title-admin">RELATED PARTIES</h6>
                         <Button onClick={handleRelatedParties} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-1'>
                             <span class=' pe-2'><i class="bi bi-plus pe-1 "></i></span>
-                            <span className='fw-bold'>Add Related Parties</span>
+                            <span className='fw-bold'>Add</span>
                         </Button>
                     </div>
 
                     <>
-                        {apiFetched && relatedPartyDetails?.map((party, index) => (
+                        {apiFetched && relatedPartyDetails && relatedPartyDetails.map((party, index) => (
                             <Row key={index}>
                                 <>
-                                    <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Group as={Col} lg={3}>
                                         <Form.Label>Party 1</Form.Label>
                                         <Form.Select
-                                            onChange={(event, newValue) => {
+                                            onChange={(event) => {
+                                                const newValue = event.target.value;
                                                 handleParties(event, newValue, index, 'buyer');
                                             }}
                                             disabled={isView}
                                             value={party.buyer}
+                                            className='no-border'
                                         >
+                                            <option value="">Choose...</option>
                                             {partiesData.map((item) => (
                                                 <option key={item} value={item}>
                                                     {item}
@@ -493,6 +481,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                         </Form.Select>
                                         {error && error?.buyer && <span style={{ color: 'red' }}>{error.buyer}</span>}
                                     </Form.Group>
+
 
                                     {/* <Col lg={3}>
                                         <Autocomplete
@@ -513,15 +502,18 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                         />
                                         {error && error?.buyer && <span style={{ color: 'red' }}>{error?.buyer}</span>}
                                     </Col> */}
-                                    <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Group as={Col} lg={3}>
                                         <Form.Label>Party 2</Form.Label>
                                         <Form.Select
-                                            onChange={(event, newValue) => {
+                                            onChange={(event) => {
+                                                const newValue = event.target.value;
                                                 handleParties(event, newValue, index, 'shipper');
                                             }}
                                             disabled={isView}
                                             value={party.shipper}
+                                            className='no-border'
                                         >
+                                            <option value="">Choose...</option>
                                             {partiesData.map((item) => (
                                                 <option key={item} value={item}>
                                                     {item}
@@ -530,6 +522,7 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                         </Form.Select>
                                         {error && error?.shipper && <span style={{ color: 'red' }}>{error.shipper}</span>}
                                     </Form.Group>
+
 
                                     {/* <Col lg={3}>
                                         <Autocomplete
@@ -551,7 +544,40 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                         {error && error?.shipper && <span style={{ color: 'red' }}>{error?.shipper}</span>}
                                     </Col> */}
 
-                                    <Col lg={4}>
+                                    <Form.Group as={Col} controlId="formGridZip">
+                                        <Form.Label>Relation</Form.Label>
+                                        <Form.Select
+                                            onChange={(e) => {
+                                                const updatedPartyDetails = relatedPartyDetails.map((ele) => {
+                                                    if (ele.party_relation === party.party_relation) {
+                                                        return {
+                                                            ...ele,
+                                                            party_relation: e.target.value,
+                                                        };
+                                                    }
+                                                    return ele;
+                                                });
+
+                                                setRelatedPartyDetails(updatedPartyDetails);
+                                                setRelation(parties);
+                                            }}
+                                            disabled={isView}
+                                            value={party.party_relation || 'Choose...'} // Ensure that the initial value is set to 'Choose...' or the correct default
+                                        >
+                                            <option disabled>Choose...</option>
+                                            {parties.map((item) => (
+                                                <option key={item} value={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                        {error && error?.party_relation && (
+                                            <span style={{ color: 'red' }}>{error.party_relation}</span>
+                                        )}
+                                    </Form.Group>
+
+
+                                    {/* <Col lg={4}>
                                         <div className='d-flex align-items-center Related_parties'>
                                             <p className='mb-0 title-color'>Relation</p>
                                             <Autocomplete
@@ -567,14 +593,14 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
                                                 getOptionSelected={(option) => option.label === 'test'}
                                                 onChange={(event, newValue) => {
                                                     handleRelation(event, newValue, index);
-                                                    setRelation(parties); console.log('parties', parties); console.log('party', party);
+                                                    setRelation(parties);
                                                 }}
                                                 value={parties.find((ele) => ele.value == party.party_relation)}
                                                 disableClearable
                                             />
                                         </div>
                                         {error && error?.party_relation && <span style={{ color: 'red' }}>{error?.party_relation}</span>}
-                                    </Col>
+                                    </Col> */}
                                     {relation && <Col lg={2}>
                                         <div className='drag-and-drop'>
                                             <DropzoneArea

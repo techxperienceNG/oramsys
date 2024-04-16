@@ -16228,3 +16228,8 @@ div#wrapper.open>.offcanvas-mask {
   margin: 0px;
   font-weight: 700;
 }
+.no-border {
+  border-left: none !important;
+  border-top: none !important;
+  border-right: none !important;
+}

@@ -19,6 +19,8 @@ jobs:
         ssh-private-key: ${{ secrets.PRIVATEKEY }}
         exclude: |
           **/files/**
+
+
     - name: run commands to ec2 instance
       run:
         ssh -i $SSH_AUTH_SOCK -o StrictHostKeyChecking=no ubuntu@3.9.96.120 "cd /data/oramsys/backend && git pull && npm i -f && pm2 restart 0" 

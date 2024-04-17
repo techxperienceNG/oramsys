@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { registerAction } from '../../redux/actions/registerAction';
 import { toast } from 'react-toastify'
-import svgIcon from '../../css/undraw_remotely_2j6y.svg'
+import svgIcon from '../../css/signup.svg'
 import '../../css/login.css'
 import '../../css/bootstrap.min.css'
 

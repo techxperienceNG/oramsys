@@ -384,10 +384,7 @@ const HomeLanding = () => {
                 }
               </div>
 
-              <div className="container mt-5">
-                <h2>My Graph</h2>
-                <Bar data={data} />
-              </div>
+            
 
               <Slide up>
                 <div className='card shadow border-0 mb-7'>
@@ -481,6 +478,10 @@ const HomeLanding = () => {
                 </div>
               </Slide>
             </div>
+            <div className="container mt-5">
+                <h2>My Graph</h2>
+                <Bar data={data} />
+              </div>
           </main>
         </div>
       </div>

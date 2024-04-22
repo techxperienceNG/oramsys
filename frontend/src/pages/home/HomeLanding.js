@@ -20,7 +20,7 @@ import { entityGetAction } from "../../redux/actions/entityAction"
 import { userGetAction } from "../../redux/actions/userAction"
 import { ApiGet, ApiGet2 } from "../../helper/API/ApiData"
 import Slide from 'react-reveal/Slide';
-import { Chart as ChartJS } from 'chart.js/auto'
+// import { Chart as ChartJS } from 'chart.js/auto'
 import { Bar } from 'react-chartjs-2';
 
 const HomeLanding = () => {
@@ -478,10 +478,10 @@ const HomeLanding = () => {
                 </div>
               </Slide>
             </div>
-            <div className="container mt-5">
+            {/* <div className="container mt-5">
                 <h2>My Graph</h2>
                 <Bar data={data} />
-              </div>
+              </div> */}
           </main>
         </div>
       </div>

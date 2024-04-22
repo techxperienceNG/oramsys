@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { FaPowerOff } from "react-icons/fa";
 import { HiOutlineLogout } from 'react-icons/hi';
 import { IoSettingsOutline } from "react-icons/io5";
+import { Link } from 'react-router-dom';
+import LogoutModal from '../../component/Modal/LogoutModal'
 
 const AuthHeader = ({ showSidebar, setSidebar }) => {
   const [showspan, setShowspan] = useState(false)
   const [showSubData, setShowSubData] = useState(false)
+  const [showModal, setshowModal] = useState(false)
   return (
     <>
       {/* <div className='authheader_main'>
@@ -52,16 +55,18 @@ const AuthHeader = ({ showSidebar, setSidebar }) => {
           </div>
 
           <div className='ms-2 mx-auto'>
+           
+            <Link onClick={() => setshowModal(true)} className="nav-link" href="#">
             <HiOutlineLogout className='me-1' size={15} />
             <span>Logout</span>
+              {/* <HiOutlineLogout className='text-white' size={22} /><span className='ps-3 fw-semibold text-danger'>Logout</span> */}
+            </Link>
           </div>
 
         </div>
-        {/* <div className="d-flex align-items-center ms-auto">
-      <FaPowerOff size={30} />
-        <span>Logout</span>
-    </div> */}
+        
       </div>
+      {showModal && <LogoutModal show={showModal} onHide={() => setshowModal(false)} />}
     </>
   )
 }

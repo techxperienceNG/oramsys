@@ -19,7 +19,7 @@ import { useDispatch } from 'react-redux';
 import { FaCheckCircle, FaUser, FaFileAlt, FaDollarSign, FaWarehouse } from 'react-icons/fa'; // Import Bootstrap icons
 
 
-const stepsforexport = ['TransactionDetails', 'Key Parties', 'Document Flow', 'Fund Flow', 'Facility'];
+const stepsforexport = ['Transaction Details', 'Key Parties', 'Document Flow', 'Fund Flow', 'Facility'];
 const stepsforimport = ['Key Parties', 'Document Flow', 'Fund Flow', 'Facility'];
 
 const Edit_Transactions = () => {

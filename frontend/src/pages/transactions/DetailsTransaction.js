@@ -1,5 +1,6 @@
 import { InputAdornment, TextField } from "@material-ui/core"
-import React, { useCallback, useEffect, useState } from "react"
+import Choices from 'choices.js';
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { Col, Row, Button, Form, InputGroup } from 'react-bootstrap'
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import AddWareHouseModal from "../../component/Modal/AddWareHouseModal"
@@ -23,11 +24,12 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { DatePicker, Space } from 'antd';
 dayjs.extend(customParseFormat);
 
+
 const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalCounterParty, signalShippingCompany, signalWarehouseCompany, signalWarehouseStatus, signalContract, signalBorrower, signalLender, transaction_id, signalPricingHedgingStatus }) => {
     const navigate = useNavigate()
-
-    // let numberReg = /^[0-9\b]+$/;
+    let numberReg = /^[0-9\b]+$/;
     const [isLoading, setIsLoading] = useState(true);
+
     const [productDetails, setProductDetails] = useState({
         nature: "",
         type: "",
@@ -61,13 +63,13 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         destinationPort: "",
         destinationAirbase: "",
         shipmentFrequency: "",
-        warehouseRequired: "",
+        warehouseRequired: false,
         warehouses: [],
         shippingCompany: "",
     })
 
     const [transShipmentOptions, setTransShipmentOptions] = useState({
-        tranShipmentRequired: "",
+        tranShipmentRequired: false,
         street: "",
         city: "",
         country: "",
@@ -81,13 +83,12 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
         pricingUnit: "",
         previousDayClosingAmount: "",
         pricingFormula: "",
-        pricingHedgingStatus: "",
+        pricingHedgingStatus: false,
         pricingHedgingMethod: "",
         pricingCounterParty: "",
     })
 
     const [loading, setLoading] = useState(false)
-    const [borrower_Applicant, setBorrower_Applicant] = useState("")
     const [shipping_company, setShippingCompany] = useState("")
     const [hedging_party, setHedgingParty] = useState("")
     const [hedging_status, setHedgingStatus] = useState(false)
@@ -116,6 +117,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     const [editId, setEditId] = useState("")
     const [portsOptions, setPortsOptions] = useState([])
     const [originCountry, setOriginCountry] = useState([])
+    const [borrower_Applicant, setBorrower_Applicant] = useState("")
     // const [airPort, setAirPort] = useState([])
 
     const productData = useSelector((state) => state.product.product)
@@ -612,9 +614,9 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     }
 
     let options = [
-        { label: 'Select Option', value: '', },
-        { label: "Yes", value: true },
-        { label: "No", value: false },
+        { value: '', label: 'Select Option' },
+        { value: true, label: "Yes" },
+        { value: false, label: "No" },
     ]
 
     const productTypesOption = ["Commodity"]
@@ -892,10 +894,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
             error.tranShipmentRequired = "Please enter transhipment required!"
         }
 
-        if (
-            transShipmentOptions.tranShipmentRequired &&
-            !transShipmentOptions.street
-        ) {
+        if (transShipmentOptions.tranShipmentRequired && !transShipmentOptions.street) {
             flag = true
             error.street = "Please enter street!"
         }
@@ -1100,86 +1099,88 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
     };
     const dateFormat = 'DD/MM/YYYY'
 
+    // const togref = useRef()
+    // const [view, setView] = useState(false)
 
+    // this function toggles the selection box on and off on outside clicks
+    // useEffect(() => {
+    //     togref && window.addEventListener('click', e => { togref.current !== null && !togref.current.contains(e.target) && setView(false) }, true)
+    // }, [])
+
+    // const HandleSelection = (val) => {
+    //     const findData = borrower_Applicant.find(ele => ele === val)
+    //     if (!findData) {
+    //         // add the data
+    //         setBorrower_Applicant([...borrower_Applicant, val])
+    //     } else {
+    //         //remove the data
+    //         const filters = borrower_Applicant.filter(ele => ele !== val)
+    //         setBorrower_Applicant(filters)
+    //     }
+    // }
+
+    // const RemoveContent = val => {
+    //     const filters = borrower_Applicant.filter(ele => ele !== val)
+    //     setBorrower_Applicant(filters)
+    //     setView(false)
+    // }
     return (
         <>
             {isLoading && productDetails.length > 0 ? <LoadingSpinner /> :
                 <>
                     <div className='add-edit-product'>
                         <div className=''>
+
                             <Row>
-                                <Form.Group as={Col} controlId="formGridZip">
-                                    <Form.Label>Borrower/Appliciant</Form.Label>
-                                    <Form.Select
+
+
+                                {/* <Form.Group className="col-md-6">
+                                    <Form.Label>Select up to 5 tags</Form.Label>
+                                    <Form.Select id="choices-multiple-remove-button" multiple
                                         onChange={(e, newVal) => {
                                             setBorrower_Applicant(e.target.value)
                                         }}
                                         disabled={isView}
                                         value={borrower_Applicant}
                                     >
-                                        <option>Choose...</option>
+                                        
                                         {borrowerOption.map((item) => (
-                                            <option value={item.label}>{item.label}</option>
+                                            <option key={item.label} value={item.label}>{item.label}</option>
                                         ))}
-
                                     </Form.Select>
-                                    {error?.borrower_Applicant && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.borrower_Applicant}</span>
+                                </Form.Group> */}
+                                <Form.Group as={Col} controlId="formGridZip">
+                                    <Form.Label>Borrower/Applicant</Form.Label>
+                                    <Form.Select
+                                        className='no-border'
+                                        onChange={(e, newVal) => {
+                                            setBorrower_Applicant(e.target.value);
+                                        }}
+                                        disabled={isView}
+                                        value={borrower_Applicant}
+                                    >
+                                        <option value="" disabled selected>Choose...</option>
+                                        {borrowerOption.map((item) => (
+                                            <option key={item.label} value={item.label}>{item.label}</option>
+                                        ))}
+                                    </Form.Select>
+                                    {error?.borrower_Applicant && (
+                                        <span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.borrower_Applicant}</span>
                                     )}
                                 </Form.Group>
-                                {/* 
-                                <Col lg={6}>
-                                    <Autocomplete
-                                        label='Borrower/Applicant'
-                                        id='disable-clearable'
-                                        onChange={(e, newVal) => {
-                                            setBorrower_Applicant(newVal.label)
-                                        }}
-                                        getOptionLabel={(option) => option.label || ""}
-                                        options={borrowerOption}
-                                        disableClearable
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label='Borrower/Applicant'
-                                                variant='standard'
-                                            />
-                                        )}
-                                        disabled={isView}
-                                        value={
-                                            borrowerOption.length > 0 &&
-                                            borrower_Applicant !==
-                                            undefined &&
-                                            borrower_Applicant &&
-                                            borrowerOption.find(
-                                                (ele) =>
-                                                    ele.label ===
-                                                    borrower_Applicant
-                                            )
-                                        }
-                                    />
-                                    {error?.borrower_Applicant && (
-                                        <span
-                                            style={{
-                                                color: "#da251e",
-                                                width: "100%",
-                                                textAlign: "start",
-                                            }}
-                                        >
-                                            {error?.borrower_Applicant}
-                                        </span>
-                                    )}
-                                </Col> */}
+
+
 
                                 <Form.Group as={Col} controlId="formGridZip">
                                     <Form.Label>Lender</Form.Label>
-                                    <Form.Select
+                                    <Form.Select className='no-border'
                                         onChange={(e, newVal) => {
                                             setLenders(e.target.value);
                                             console.log(e, newVal, 'coming home')
                                         }}
                                         disabled={isView}
                                         value={lenders}>
-                                        <option>Choose...</option>
+                                        <option value="" disabled selected>Choose...</option>
                                         {lenderOption.map((item) => (
                                             <option value={item.label}>{item.label}</option>
                                         ))}
@@ -1189,70 +1190,27 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                     )}
                                 </Form.Group>
 
-                                {/* <Col lg={6}>
-                                    <Autocomplete
-                                        label='Lender'
-                                        id='disable-clearable'
-                                        onChange={(e, newVal) =>
-                                            setLenders(newVal.label)
-                                        }
-                                        getOptionLabel={(option) => option.label || ""}
-                                        options={lenderOption}
-                                        disableClearable
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label='Lender'
-                                                variant='standard'
-                                            />
-                                        )}
-                                        disabled={isView}
-                                        value={
-                                            lenderOption.length > 0 &&
-                                            lenders !==
-                                            undefined &&
-                                            lenders &&
-                                            lenderOption.find(
-                                                (ele) =>
-                                                    ele.label ===
-                                                    lenders
-                                            )
-                                        }
-                                    />
-                                    {error?.lenders && (
-                                        <span
-                                            style={{
-                                                color: "#da251e",
-                                                width: "100%",
-                                                textAlign: "start",
-                                            }}
-                                        >
-                                            {error?.lenders}
-                                        </span>
-                                    )}
-                                </Col> */}
                             </Row>
 
                         </div>
                     </div>
                     <div className='m-3' />
                     <div className='add-edit-product'>
-                        <div className=''>
+                        <div className='form'>
                             <h4 className='fw-bold fs-5 mb-3 title-admin'>PRODUCT DETAILS</h4>
                             <div>
                                 <Row>
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Product Nature</Form.Label>
-                                        <Form.Control
+                                        <Form.Control className='no-border mb-3'
                                             name='Product_nature'
-                                            className='mb-3'
                                             value={productDetails.nature}
                                             disabled={true} />
                                     </Form.Group>
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Product Type</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) =>
                                                 setProductDetails({ ...productDetails, type: e.target.value })
                                             }
@@ -1264,8 +1222,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                     (ele) => ele === productDetails.type
                                                 )
                                             }
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                        >
+                                            <option value="" disabled selected>Choose...</option>
                                             {productTypesOption.map((item) => (
                                                 <option value={item}>{item}</option>
                                             ))}
@@ -1276,14 +1234,14 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Commodity Type</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => {
                                                 handleCommodityTypeChange(e.target.value, newVal);
                                             }}
                                             disabled={isView}
-                                            value={productDetails.commodityType}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                            value={productDetails.commodityType}>
+
+                                            <option value="" disabled selected>Choose...</option>
                                             {commodityTypeOption.map((item) => (
                                                 <option value={item}>{item}</option>
                                             ))}
@@ -1293,14 +1251,13 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Commodity Sub-Type</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) =>
                                                 handleCommoditySubtypeChange(e.target.value, newVal)
                                             }
                                             disabled={isView}
-                                            value={productDetails.commoditySubType}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                            value={productDetails.commoditySubType}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {commoditySubTypeOption.map((item) => (
                                                 <option key={item} value={item}>{item}</option>
                                             ))}
@@ -1314,15 +1271,14 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                 <Row>
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Product Name</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => {
                                                 setProductDetails({ ...productDetails, name: e.target.value })
                                                 setSelectedProduct(newVal?.unit ? newVal.unit : "")
                                             }}
                                             disabled={isView}
-                                            value={productDetails.name}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                            value={productDetails.name}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {productName.map((item) => (
                                                 <option value={item._id}>{item.name}</option>
                                             ))}
@@ -1333,7 +1289,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Product Quantity</Form.Label>
-                                        <Form.Control
+                                        <Form.Control className='no-border'
                                             name='Product_nature'
                                             value={formateCurrencyValue(productDetails.quantity)}
                                             onChange={(e) =>
@@ -1353,22 +1309,23 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         )}
                                     </Form.Group>
 
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                        <Form.Label>Product Unit</Form.Label>
-                                        <Form.Control
-                                            name='netMetric'
-                                            value={productDetails.metric}
-                                            onChange={(e) => handleChnage(e, "metric", "productDetails")}
-                                            disabled={true} />
-                                        {error?.metric && (
-                                            <span style={{ color: "#da251e", width: "100%", textAlign: "start", }}>
-                                                {error?.metric}
-                                            </span>
-                                        )}
-                                    </Form.Group>
-                                    {/* <Col lg={3} className='mb-3'>
 
-                                        <TextField
+                                    <Col lg={3} className='mb-3'>
+                                        <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Product Unit</Form.Label>
+                                            <Form.Control className='no-border'
+                                                name='netMetric'
+                                                value={productDetails.metric}
+                                                onChange={(e) => handleChnage(e, "metric", "productDetails")}
+                                                disabled={true} />
+                                            {error?.metric && (
+                                                <span style={{ color: "#da251e", width: "100%", textAlign: "start", }}>
+                                                    {error?.metric}
+                                                </span>
+                                            )}
+                                        </Form.Group>
+
+                                        {/* <TextField
                                             label='Product Unit'
                                             variant='standard'
                                             color='warning'
@@ -1376,7 +1333,24 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             value={productDetails.metric}
                                             onChange={(e) => handleChnage(e, "metric", "productDetails")}
                                             disabled={true}
-                                        />
+                                        /> */}
+                                        {/* <Form.Group as={Col} controlId="formGridZip">
+                                            <Form.Label>Metric</Form.Label>
+                                            <Form.Select className='no-border'
+                                                onChange={(e, newValue) => {
+                                                    setProductDetails({ ...productDetails, metric: e.target.value });
+                                                }}
+                                                value={productDetails.metric}
+                                                defaultValue="Choose...">
+                                                <option disabled>Choose...</option>
+                                                {metricOptions.map((item) => (
+                                                    <option value={item}>{item}</option>
+                                                ))}
+
+                                            </Form.Select>
+                                            {error && error?.metric && <span style={{ color: 'red' }}>{error.metric}</span>}
+                                        </Form.Group> */}
+                                        {/* 
                                         <Autocomplete
                                             options={metricOptions}
                                             getOptionLabel={(option) => option}
@@ -1391,30 +1365,20 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             disabled={isView}
                                             disableClearable
                                             value={productDetails.metric}
-                                        />
-                                        {error?.metric && (
-                                            <span
-                                                style={{
-                                                    color: "#da251e",
-                                                    width: "100%",
-                                                    textAlign: "start",
-                                                }}
-                                            >
-                                                {error?.metric}
-                                            </span>
+                                        /> */}
+                                        {error?.metric && (<span style={{ color: "#da251e", width: "100%", textAlign: "start", }}>{error?.metric}</span>
                                         )}
-                                    </Col> */}
+                                    </Col>
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Product Quality</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => {
                                                 setProductDetails({ ...productDetails, quality: e.target.value })
                                             }}
                                             disabled={isView}
-                                            value={productDetails.quality}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                            value={productDetails.quality}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {productQualityOption.map((item) => (
                                                 <option value={item}>{item}</option>
                                             ))}
@@ -1432,20 +1396,20 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     <div className='m-3' />
 
                     <div className='add-edit-product pt-0 pb-0'>
-                        <div className=''>
+                        <div className='form'>
                             <h4 className='fw-bold mb-3 title-admin fs-5'>CONTRACT DETAILS</h4>
                             <div>
                                 <Row>
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Contract Currency</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => {
                                                 setContractDetails({ ...contractDetails, currency: e.target.value, })
                                             }}
                                             value={contractDetails.currency}
                                             disabled={isView}
                                             defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                            <option value="" disabled selected>Choose...</option>
                                             {CurrencyOptions.map((item) => (
                                                 <option value={item.label}>{item.label}</option>
                                             ))}
@@ -1456,7 +1420,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Contract Value</Form.Label>
-                                        <Form.Control
+                                        <Form.Control className='no-border'
                                             value={formateCurrencyValue(contractDetails.value)}
                                             onChange={(e) => handleChnage(e, "value", "contractDetails")}
                                             disabled={isView} />
@@ -1466,7 +1430,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Contract Date</Form.Label>
-                                        <Form.Control
+                                        <Form.Control className='no-border'
                                             type="date"
                                             name="contractDate"
                                             placeholder="dd-mm-yyyy"
@@ -1481,7 +1445,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Expiry Date</Form.Label>
-                                        <Form.Control
+                                        <Form.Control className='no-border'
                                             type="date"
                                             name="expiryDate"
                                             placeholder="dd-mm-yyyy"
@@ -1499,7 +1463,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Conditions of Contract</Form.Label>
-                                        <Form.Control
+                                        <Form.Control className='no-border'
                                             name='conditionsOfContract'
                                             value={contractDetails.conditionsOfContract}
                                             onChange={(e) => handleChnages(e)}
@@ -1510,7 +1474,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Description of Contract</Form.Label>
-                                        <Form.Control
+                                        <Form.Control className='no-border'
                                             name='descriptionOfContract'
                                             value={contractDetails.descriptionOfContract}
                                             onChange={(e) => handleChnages(e)}
@@ -1525,24 +1489,23 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                     <div className='m-3' />
                     <div className='add-edit-product'>
-                        <div className='p-2 m-0' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
+                        <div className='p-2 m-0 form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
                             <h4 className='fw-bold fs-5 mb-3 title-admin'>SHIPPING OPTIONS</h4>
                             <div>
                                 <Row>
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Shipping Company</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => {
                                                 setShippingOptions({ ...shippingOptions, shippingCompany: e.target.value });
                                                 setShippingCompany(e.target.value)
                                             }
                                             }
                                             disabled={isView}
-                                            value={shippingOptions.shippingCompany}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                            value={shippingOptions.shippingCompany}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {shippingCompanyOption.map((item) => (
-                                                <option key={item} value={item.label}>{item.label}</option>
+                                                <option key={item} value={item.value}>{item.label}</option>
                                             ))}
 
                                         </Form.Select>
@@ -1551,13 +1514,12 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Shipment Mode</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, shipmentMode: e.target.value })}
                                             disabled={isView}
                                             disableClearable
-                                            value={shippingOptions.shipmentMode}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                            value={shippingOptions.shipmentMode}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {shipmentModeOptions.map((item) => (
                                                 <option value={item}>{item}</option>
                                             ))}
@@ -1568,21 +1530,29 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Country of Origin</Form.Label>
-                                        <Form.Select
-                                            onChange={(e, newVal) => {
-                                                setShippingOptions({ ...shippingOptions, countryOfOrigin: e.target.value })
-                                                setPorts(newVal.name)
+                                        <Form.Select className='no-border'
+                                            onChange={(e) => {
+                                                const selectedValue = e.target.value;
+                                                setShippingOptions({ ...shippingOptions, countryOfOrigin: selectedValue });
+
+                                                // Check if newVal is defined before accessing its properties
+                                                if (selectedValue) {
+                                                    const selectedCountry = countries.find(country => country._id === selectedValue);
+                                                    if (selectedCountry) {
+                                                        setPorts(selectedCountry.name);
+                                                    }
+                                                }
                                             }}
                                             disabled={isView}
-                                            value={shippingOptions.countryOfOrigin}
-                                            defaultValue="Select...">
-                                            <option>Select...</option>
+                                            value={shippingOptions.countryOfOrigin}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {countries.map((item) => (
-                                                <option value={item._id}>{item.name}</option>
+                                                <option key={item._id} value={item._id}>{item.name}</option>
                                             ))}
                                         </Form.Select>
                                         {error && error?.countryOfOrigin && <span style={{ color: 'red' }}>{error.countryOfOrigin}</span>}
                                     </Form.Group>
+
 
                                 </Row>
 
@@ -1591,7 +1561,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Port of Origin</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => {
                                                 const mode = shippingOptions.shipmentMode
                                                 if (mode === "SEA") {
@@ -1604,9 +1574,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             value={
                                                 (shippingOptions.shipmentMode === "SEA" && shippingOptions.portOfOrigin) ||
                                                 (shippingOptions.shipmentMode === "AIR" && shippingOptions.airbaseOfOrigin)
-                                            }
-                                            defaultValue="Select...">
-                                            <option>Select...</option>
+                                            }>
+                                            <option value="" disabled selected>Choose...</option>
                                             {originCountry.map((item) => (
                                                 <option value={item._id}>{item.name}</option>
                                             ))}
@@ -1616,7 +1585,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Shipment  Date</Form.Label>
-                                        <Form.Control
+                                        <Form.Control className='no-border'
                                             type="date"
                                             name="contractDate"
                                             placeholder="DD/MM/YYYY"
@@ -1632,12 +1601,11 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Shipment Terms</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => setShippingOptions({ ...shippingOptions, shipmentTerms: e.target.value })}
                                             disabled={isView}
-                                            value={shippingOptions.shipmentTerms}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                            value={shippingOptions.shipmentTerms}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {shipmentTermsOptions.map((item) => (
                                                 <option value={item}>{item}</option>
                                             ))}
@@ -1653,7 +1621,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         <Form.Label>Net Shipped Weights</Form.Label>
                                         <InputGroup>
 
-                                            <Form.Control
+                                            <Form.Control className='no-border'
                                                 name='netShippedWeights'
                                                 value={formateCurrencyValue(shippingOptions.shippedWeights)}
                                                 onChange={(e) =>
@@ -1668,20 +1636,23 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Destination country</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => {
-                                                setShippingOptions({
-                                                    ...shippingOptions,
-                                                    destinationCountry: e.target.value,
-                                                })
-                                                setPorts(newVal.name)
+                                                const selectedValue = e.target.value;
+                                                setShippingOptions({ ...shippingOptions, destinationCountry: selectedValue, })
+
+                                                if(selectedValue) {
+                                                    const selectCountry = countries.find(country => country._id === selectedValue)
+                                                    if(selectCountry) {
+                                                        setPorts(selectCountry.name)
+                                                    }
+                                                }  
                                             }}
                                             disabled={isView}
-                                            value={shippingOptions.destinationCountry}
-                                            defaultValue="Select...">
-                                            <option>Select...</option>
+                                            value={shippingOptions.destinationCountry}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {countries.map((item) => (
-                                                <option value={item._id}>{item.name}</option>
+                                                <option key={item._id} value={item._id}>{item.name}</option>
                                             ))}
                                         </Form.Select>
                                         {error && error?.destinationCountry && <span style={{ color: 'red' }}>{error.destinationCountry}</span>}
@@ -1689,7 +1660,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Destination Port</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => {
                                                 const mode = shippingOptions.shipmentMode
                                                 if (mode === "SEA") {
@@ -1708,9 +1679,8 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                             value={
                                                 (shippingOptions.shipmentMode === "SEA" && shippingOptions.destinationPort) ||
                                                 (shippingOptions.shipmentMode === "AIR" && shippingOptions.destinationAirbase)
-                                            }
-                                            defaultValue="Select...">
-                                            <option>Select...</option>
+                                            }>
+                                            <option value="" disabled selected>Choose...</option>
                                             {portsOptions.map((item) => (
                                                 <option value={item._id}>{item.name}</option>
                                             ))}
@@ -1724,14 +1694,13 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Shipment Frequency</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) =>
                                                 setShippingOptions({ ...shippingOptions, shipmentFrequency: e.target.value })}
                                             disabled={isView}
                                             disableClearable
-                                            value={shippingOptions.shipmentFrequency}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                            value={shippingOptions.shipmentFrequency}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {shipmentFrequencyOptions.map((item) => (
                                                 <option value={item}>{item}</option>
                                             ))}
@@ -1742,82 +1711,27 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Warehouse required?</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e) => {
                                                 const newValue = e.target.value === 'true'; // Convert to boolean
-                                                setShippingOptions({
-                                                    ...shippingOptions,
-                                                    warehouseRequired: newValue,
-                                                });
+                                                setShippingOptions({ ...shippingOptions, warehouseRequired: newValue });
                                                 setWarehouseStatus(newValue);
-                                                console.log(newValue, 'from boots', typeof (newValue));
                                             }}
                                             disabled={isView}
-                                            value={shippingOptions.warehouseRequired.toString()} // Convert to string
-                                            defaultValue={'Choose...'}
-                                        >
-                                            <option>Choose...</option>
+                                            value={shippingOptions.warehouseRequired.toString()}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {warehouseRequiredOptions.map((item, i) => (
                                                 <option key={i} value={item.value}>{item.label}</option>
                                             ))}
                                         </Form.Select>
                                         {error && error?.warehouseRequired && <span style={{ color: 'red' }}>{error.warehouseRequired}</span>}
                                     </Form.Group>
-                                    {/* 
-                                    <Col lg={6}>
-                                        <Autocomplete
-                                            label='Warehouse required?'
-                                            id='disable-clearable'
-                                            onChange={(e, newVal) => {
-                                                setShippingOptions({
-                                                    ...shippingOptions,
-                                                    warehouseRequired: newVal.value,
-                                                })
-                                                setWarehouseStatus(newVal.value)
-                                                console.log(newVal.value, 'from mui')
-                                            }
-                                            }
-                                            getOptionLabel={(option) => option.label || ""}
-                                            options={warehouseRequiredOptions}
-                                            disableClearable
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    label='Warehouse Required?'
-                                                    variant='standard'
-                                                />
-                                            )}
-                                            disabled={isView}
-                                            value={
-                                                ((warehouseRequiredOptions.length > 0 &&
-                                                    shippingOptions.warehouseRequired === true) ||
-                                                    shippingOptions.warehouseRequired === false) ?
-                                                    warehouseRequiredOptions.find(
-                                                        (ele) => ele.value === shippingOptions.warehouseRequired
-                                                    ) : warehouseRequiredOptions = ''
-                                            }
-                                        />
-                                        {error?.warehouseRequired && (
-                                            <span
-                                                style={{
-                                                    color: "#da251e",
-                                                    width: "100%",
-                                                    textAlign: "start",
-                                                }}
-                                            >
-                                                {error?.warehouseRequired}
-                                            </span>
-                                        )}
-                                    </Col> */}
+
                                 </Row>
                                 {shippingOptions.warehouseRequired && (
                                     <div className='product p-0'>
                                         <div className='d-flex justify-content-between mt-5 mb-3 align-items-center'>
                                             <h2 className='m-0 fw-bold title-admin fs-5'>WAREHOUSE</h2>
-                                            {/* <button className={`add_btn me-3 ${isView ? "d-none" : "d-block"}`} onClick={() => { setAddWarehouseModal(true) }}>
-                                                {" "}
-                                                <img src='../../assets/img/about/plus.png' className='me-2' /> Add
-                                            </button> */}
                                             <Button onClick={() => { setAddWarehouseModal(true) }} class='btn d-inline-flex btn-md btn-light border-base mx-1 me-3'>
                                                 <span class=' pe-2'><i class="bi bi-plus pe-2 "></i></span>
                                                 <span className='fw-bold'>Add</span>
@@ -1828,42 +1742,37 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                 <MaterialTable
                                                     title=''
                                                     columns={[
-                                                        {
-                                                            title: "Warehouse Company",
-                                                            field: "warehouseCompany.label",
-                                                        },
+                                                        { title: "Warehouse Company", field: "warehouseCompany.label" },
                                                         { title: "Warehouse", field: "warehouse.label" },
                                                     ]}
                                                     data={shippingOptions.warehouses}
-                                                    actions={
-                                                        isView
-                                                            ? [
-                                                                {
-                                                                    icon: "preview",
-                                                                    tooltip: "View Entities",
-                                                                    onClick: (e, rowData) => { },
+                                                    actions={isView ? [
+                                                        {
+                                                            icon: "preview",
+                                                            tooltip: "View Entities",
+                                                            onClick: (e, rowData) => { },
+                                                        },
+                                                    ]
+                                                        : [
+                                                            {
+                                                                icon: "edit",
+                                                                tooltip: "Edit Entities",
+                                                                onClick: (e, rowData) => {
+                                                                    setAddWarehouseModal(true)
+                                                                    setWareHouseId(rowData)
                                                                 },
-                                                            ]
-                                                            : [
-                                                                {
-                                                                    icon: "edit",
-                                                                    tooltip: "Edit Entities",
-                                                                    onClick: (e, rowData) => {
-                                                                        setAddWarehouseModal(true)
-                                                                        setWareHouseId(rowData)
-                                                                    },
-                                                                },
-                                                                {
-                                                                    icon: "preview",
-                                                                    tooltip: "View Entities",
-                                                                    onClick: (e, rowData) => { },
-                                                                },
-                                                            ]
+                                                            },
+                                                            {
+                                                                icon: "preview",
+                                                                tooltip: "View Entities",
+                                                                onClick: (e, rowData) => { },
+                                                            },
+                                                        ]
                                                     }
                                                     options={{
-                                                        filtering: true,
+                                                        filtering: false,
                                                         actionsColumnIndex: -1,
-                                                        sorting: true,
+                                                        sorting: false,
                                                         pageSize: 10,
                                                         search: false,
                                                         emptyRowsWhenPaging: false,
@@ -1882,37 +1791,40 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     <div className='m-3' />
 
                     <div className='add-edit-product pt-0 pb-0'>
-                        <div className='mb-3'>
+                        <div className='mb-3 form'>
                             <h4 className='fw-bold mb-3 fs-5 title-admin'>TRANSHIPMENT OPTIONS</h4>
                             <div>
                                 <Row>
                                     <Form.Group as={Col} lg={3} controlId="formGridZip">
                                         <Form.Label>Transhipment required?</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) => {
                                                 const newValue = e.target.value === 'true'; // Convert to boolean
 
-                                                    setTransShipmentOptions({ ...transShipmentOptions, tranShipmentRequired: newValue })
-                                               
+                                                setTransShipmentOptions({
+                                                    ...transShipmentOptions, tranShipmentRequired: newValue,
+                                                })
+
+
                                             }}
                                             disabled={isView}
-                                            value={transShipmentOptions.tranShipmentRequired.toString()}
-                                            defaultValue={'Choose...'}>
-                                            <option>Choose..</option>
-                                            {options.map((item, i) => (
-                                                <option key={i} value={item.value}>{item.label}</option>
+                                            value={transShipmentOptions.tranShipmentRequired.toString()}>
+                                            <option value="" disabled selected>Choose...</option>
+                                            {options.map((item) => (
+                                                <option key={item} value={item.value}>{item.label}</option>
                                             ))}
 
                                         </Form.Select>
                                         {error && error?.tranShipmentRequired && <span style={{ color: 'red' }}>{error.tranShipmentRequired}</span>}
                                     </Form.Group>
                                 </Row>
-                                <Row className='mt-4'>
-                                    {transShipmentOptions.tranShipmentRequired && (
-                                        <>
+
+                                {transShipmentOptions.tranShipmentRequired && (
+                                    <>
+                                        <Row className='mt-4'>
                                             <Form.Group as={Col} controlId="formGridZip">
                                                 <Form.Label>Street</Form.Label>
-                                                <Form.Control
+                                                <Form.Control className='no-border'
                                                     value={transShipmentOptions.street}
                                                     name='street'
                                                     onChange={(e) =>
@@ -1923,7 +1835,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                             <Form.Group as={Col} controlId="formGridZip">
                                                 <Form.Label>City</Form.Label>
-                                                <Form.Control
+                                                <Form.Control className='no-border'
                                                     value={transShipmentOptions.city}
                                                     name='city'
                                                     onChange={(e) =>
@@ -1935,14 +1847,13 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                             <Form.Group as={Col} controlId="formGridZip">
                                                 <Form.Label>Country</Form.Label>
-                                                <Form.Select
+                                                <Form.Select className='no-border'
                                                     onChange={(e, newVal) =>
                                                         setTransShipmentOptions({ ...transShipmentOptions, country: e.target.value })
                                                     }
                                                     disabled={isView}
-                                                    value={transShipmentOptions.country}
-                                                    defaultValue="Select...">
-                                                    <option>Select...</option>
+                                                    value={transShipmentOptions.country}>
+                                                    <option value="" disabled selected>Choose...</option>
                                                     {countries.map((item) => (
                                                         <option value={item._id}>{item.name}</option>
                                                     ))}
@@ -1950,49 +1861,50 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                 {error && error?.country && <span style={{ color: 'red' }}>{error.country}</span>}
                                             </Form.Group>
 
+                                        </Row>
+
+                                        <Row className='mt-4'>
+                                            <Form.Group as={Col} controlId="formGridZip">
+                                                <Form.Label>Transshipment Quantity</Form.Label>
+                                                <Form.Control className='no-border'
+                                                    name='conditions_of_contract'
+                                                    value={formateCurrencyValue(transShipmentOptions.transShipmentQuantity)}
+                                                    disabled={isView}
+                                                    onChange={(e) => handleChnage(e, "transShipmentQuantity", "transShipmentOptions")} />
+                                                {error?.transShipmentQuantity && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.transShipmentQuantity}</span>)}
+                                            </Form.Group>
+
+                                            <Form.Group as={Col} controlId="formGridZip">
+                                                <Form.Label>Transhipment Unit</Form.Label>
+                                                <Form.Control className='no-border'
+                                                    name='conditions_of_contract'
+                                                    value={transShipmentOptions.tranShipmentRequired && productDetails.metric}
+
+                                                    disabled={isView || productDetails.metric} />
+                                                {error?.transShipmentUnit && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.transShipmentUnit}</span>)}
+                                            </Form.Group>
+
+                                            <Form.Group as={Col} controlId="formGridZip">
+                                                <Form.Label>Transshipment Date</Form.Label>
+                                                <Form.Control className='no-border'
+                                                    type="date"
+                                                    name="contract_date"
+                                                    placeholder="dd-mm-yyyy"
+                                                    min={shippingOptions.shipmentDate}
+                                                    max={contractDetails.expiryDate}
+                                                    value={transShipmentOptions.transShipmentDate}
+                                                    onChange={(e) => setTransShipmentOptions({ ...transShipmentOptions, transShipmentDate: e.target.value })}
+                                                    required
+                                                />
+                                                {error && error?.transShipmentDate && <span style={{ color: 'red' }}>{error.transShipmentDate}</span>}
+                                            </Form.Group>
 
 
-                                            <Row className='mt-4'>
-                                                <Form.Group as={Col} controlId="formGridZip">
-                                                    <Form.Label>Transshipment Quantity</Form.Label>
-                                                    <Form.Control
-                                                        name='conditions_of_contract'
-                                                        value={formateCurrencyValue(transShipmentOptions.transShipmentQuantity)}
-                                                        disabled={isView}
-                                                        onChange={(e) => handleChnage(e, "transShipmentQuantity", "transShipmentOptions")} />
-                                                    {error?.transShipmentQuantity && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.transShipmentQuantity}</span>)}
-                                                </Form.Group>
+                                        </Row>
 
-                                                <Form.Group as={Col} controlId="formGridZip">
-                                                    <Form.Label>Transhipment Unit</Form.Label>
-                                                    <Form.Control
-                                                        name='conditions_of_contract'
-                                                        value={transShipmentOptions.tranShipmentRequired && productDetails.metric}
+                                    </>
+                                )}
 
-                                                        disabled={isView || productDetails.metric} />
-                                                    {error?.transShipmentUnit && (<span style={{ color: "#da251e", width: "100%", textAlign: "start" }}>{error?.transShipmentUnit}</span>)}
-                                                </Form.Group>
-
-                                                <Form.Group as={Col} controlId="formGridZip">
-                                                    <Form.Label>Transshipment Date</Form.Label>
-                                                    <Form.Control
-                                                        type="date"
-                                                        name="contract_date"
-                                                        placeholder="dd-mm-yyyy"
-                                                        min={shippingOptions.shipmentDate}
-                                                        max={contractDetails.expiryDate}
-                                                        value={transShipmentOptions.transShipmentDate}
-                                                        onChange={(e) => setTransShipmentOptions({ ...transShipmentOptions, transShipmentDate: e.target.value })}
-                                                        required
-                                                    />
-                                                    {error && error?.transShipmentDate && <span style={{ color: 'red' }}>{error.transShipmentDate}</span>}
-                                                </Form.Group>
-
-
-                                            </Row>
-                                        </>
-                                    )}
-                                </Row>
                             </div>
                         </div>
                     </div>
@@ -2036,22 +1948,20 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                     />
                 </div> */}
                     <div className='add-edit-product pt-1 pb-5'>
-                        <div className='p-2 mb-3 pb-4' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
-                            <h2 className='mb-3 fs-5 fw-bold title-admin'>PRICING DETAILS</h2>
+                        <div className='p-2 mb-3 pb-4 form' style={{ backgroundColor: "rgb(243, 243, 243)", border: "none" }}>
+                            <h4 className='mb-3 fs-5 fw-bold title-admin'>PRICING DETAILS</h4>
                             <div>
                                 <Row>
                                     <Form.Group as={Col} lg={pricingDetails.pricingType === "Firm fixed price"
                                         ? 3 : 4 || pricingDetails.pricingHedgingStatus === "Yes" ? 3 : 4} controlId="formGridZip">
                                         <Form.Label>Pricing Type</Form.Label>
-                                        <Form.Select
+                                        <Form.Select className='no-border'
                                             onChange={(e, newVal) =>
                                                 setPricingDetails({ ...pricingDetails, pricingType: e.target.value })
                                             }
                                             disabled={isView}
-                                            disableClearable
-                                            value={pricingDetails.pricingType}
-                                            defaultValue="Choose...">
-                                            <option>Choose...</option>
+                                            value={pricingDetails.pricingType}>
+                                            <option value="" disabled selected>Choose...</option>
                                             {pricingTypeOption.map((item) => (
                                                 <option value={item}>{item}</option>
                                             ))}
@@ -2065,7 +1975,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         <>
                                             <Form.Group as={Col} lg={pricingDetails.pricingType === "Firm fixed price" ? 3 : 4} controlId="formGridZip">
                                                 <Form.Label>Pricing Amount</Form.Label>
-                                                <Form.Control
+                                                <Form.Control className='no-border'
                                                     value={formateCurrencyValue(pricingDetails.pricingAmount)}
                                                     name='contract_value'
                                                     onChange={(e) =>
@@ -2079,7 +1989,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                             <Form.Group as={Col} lg={pricingDetails.pricingType === "Firm fixed price" ? 3 : 4} controlId="formGridZip">
                                                 <Form.Label>Pricing Unit</Form.Label>
-                                                <Form.Control
+                                                <Form.Control className='no-border'
                                                     value={productDetails.unit}
                                                     onChange={(e) => handleChnage(e, "unit", "productDetails")}
                                                     disabled={true} />
@@ -2088,7 +1998,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                             <Form.Group as={Col} lg={pricingDetails.pricingType === "Firm fixed price" ? 3 : 4} controlId="formGridZip">
                                                 <Form.Label>Previous Day Closing Amount</Form.Label>
-                                                <Form.Control
+                                                <Form.Control className='no-border'
                                                     value={pricingDetails.previousDayClosingAmount}
                                                     name='previous_day_closing_amount'
                                                     onChange={(e) =>
@@ -2110,15 +2020,14 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         <>
                                             <Form.Group as={Col} lg={pricingDetails.pricingHedgingStatus ? 3 : 4} controlId="formGridZip">
                                                 <Form.Label>Pricing Formula</Form.Label>
-                                                <Form.Select
+                                                <Form.Select className='no-border'
                                                     onChange={(e, newVal) =>
                                                         setPricingDetails({ ...pricingDetails, pricingFormula: e.target.value })
                                                     }
                                                     disabled={isView}
                                                     disableClearable
-                                                    value={pricingDetails.pricingFormula}
-                                                    defaultValue="Choose...">
-                                                    <option>Choose...</option>
+                                                    value={pricingDetails.pricingFormula}>
+                                                    <option value="" disabled selected>Choose...</option>
                                                     {pricingFormulaOption.map((item) => (
                                                         <option value={item}>{item}</option>
                                                     ))}
@@ -2130,7 +2039,7 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                             <Form.Group as={Col} lg={pricingDetails.pricingHedgingStatus ? 3 : 4} controlId="formGridZip">
                                                 <Form.Label>Pricing Hedging status</Form.Label>
-                                                <Form.Select
+                                                <Form.Select className='no-border'
                                                     onChange={(e, newVal) => {
                                                         const newValue = e.target.value === 'true'; // Convert to boolean
                                                         setPricingDetails({ ...pricingDetails, pricingHedgingStatus: newValue, })
@@ -2138,11 +2047,10 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                     }}
                                                     disabled={isView}
 
-                                                    value={pricingDetails.pricingHedgingStatus.toString()}
-                                                    defaultValue={'Choose...'}>
-                                                    <option>Choose...</option>
-                                                    {warehouseRequiredOptions.map((item, i) => (
-                                                        <option key={i} value={item.value}>{item.label}</option>
+                                                    value={pricingDetails.pricingHedgingStatus.toString()}>
+                                                    <option value="" disabled selected>Choose...</option>
+                                                    {warehouseRequiredOptions.map((item) => (
+                                                        <option key={item} value={item.value}>{item.label}</option>
                                                     ))}
 
                                                 </Form.Select>
@@ -2155,13 +2063,12 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                                     <Row className="mt-4">
                                                         <Form.Group as={Col} controlId="formGridZip">
                                                             <Form.Label>Hedging Method</Form.Label>
-                                                            <Form.Select
+                                                            <Form.Select className='no-border'
                                                                 onChange={(e, newVal) => setPricingDetails({ ...pricingDetails, pricingHedgingMethod: e.target.value })}
                                                                 disabled={isView}
                                                                 disableClearable
-                                                                value={pricingDetails.pricingHedgingMethod}
-                                                                defaultValue="Choose...">
-                                                                <option>Choose...</option>
+                                                                value={pricingDetails.pricingHedgingMethod}>
+                                                                <option value="" disabled selected>Choose...</option>
                                                                 {hedgingMethodOption.map((item) => (
                                                                     <option value={item}>{item}</option>
                                                                 ))}
@@ -2172,18 +2079,17 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
                                                         <Form.Group as={Col} controlId="formGridZip">
                                                             <Form.Label>CounterParty</Form.Label>
-                                                            <Form.Select
+                                                            <Form.Select className='no-border'
                                                                 onChange={(e, newVal) => {
                                                                     setPricingDetails({ ...pricingDetails, pricingCounterParty: e.target.value });
                                                                     setHedgingParty(e.target.value)
                                                                 }}
                                                                 disabled={isView}
                                                                 disableClearable
-                                                                value={pricingDetails.pricingCounterParty}
-                                                                defaultValue="Choose...">
-                                                                <option>Choose...</option>
+                                                                value={pricingDetails.pricingCounterParty}>
+                                                                <option value="" disabled selected>Choose...</option>
                                                                 {counterPartyOption.map((item) => (
-                                                                    <option value={item.label}>{item.label}</option>
+                                                                    <option value={item.value}>{item.label}</option>
                                                                 ))}
 
                                                             </Form.Select>
@@ -2282,3 +2188,63 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
 
 
 export default DetailsTransaction
+
+const StyleSheet = {
+    container: {
+    },
+    closeView: { display: 'none' },
+    overall: {
+        width: '95%',
+        margin: '0 auto',
+        height: '30rem',
+        backgroundColor: '#fff',
+        position: 'absolute',
+        border: '1px solid lightgrey',
+        top: '5rem',
+        left: 0,
+        right: 0,
+        overflowY: 'auto',
+        display: 'block',
+        zIndex: '3',
+    },
+    data: {
+        padding: '0.5rem',
+        fontSize: '0.9rem',
+        cursor: 'pointer',
+    },
+    datashown: {
+        padding: '0.3rem',
+        borderBottom: '1px solid lightgrey',
+        cursor: 'pointer',
+        backgroundColor: 'blue',
+        color: 'white',
+    },
+    input: {
+        width: '100%',
+        border: '1px solid lightgrey',
+        padding: '1rem'
+    },
+    showRoom: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: 10,
+    },
+    roomItem: {
+        padding: '0.3rem 0.4rem',
+        border: '1px solid lightgrey',
+        borderRadius: '999px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        fontSize: '0.9rem',
+        backgroundColor: '#00BCD4',
+        color: 'white'
+    },
+    cancelButton: {
+        borderRadius: '999px',
+        backgroundColor: '#00BCD4',
+        color: 'white',
+        padding: '0.01rem 0.5rem',
+        cursor: 'pointer'
+    },
+}

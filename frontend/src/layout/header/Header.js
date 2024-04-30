@@ -46,9 +46,9 @@ const Header = () => {
           <div className="row align-items-center">
             <div className="col-lg-6">
               <div className="topbar-left">
-                <p className="item-paragraph">Are you ready to grow up your business?</p>
+                <p className="item-paragraph">Not a User?</p>
                 <div className="header-button">
-                  <a href="/">Join our team <FontAwesomeIcon icon={faArrowRightLong} style={{ color: "#da251e" }}></FontAwesomeIcon></a>
+                  <a href="/">Sign up or Register <FontAwesomeIcon icon={faArrowRightLong} style={{ color: "#da251e" }}></FontAwesomeIcon></a>
                 </div>
               </div>
             </div>
@@ -67,7 +67,7 @@ const Header = () => {
                 </ul> */}
                 <div className="header-right-button">
                   <a onClick={() =>navigate('/signup') } className="header-btn">Register Now</a>
-                  <a onClick={() =>navigate('/') } className="header-btn s-up">sign In</a>
+                  <a onClick={() =>navigate('/') } className="header-btn s-up">Sign In</a>
                 </div>
               </div>
             </div>
@@ -92,7 +92,7 @@ const Header = () => {
             <div className="col-xl-7 col-lg-7 d-flex justify-content-center position-static">
               <nav id="dropdown" className="template-main-menu">
                 <ul>
-                  <li>
+                  {/* <li>
                     <a href="/">Home</a>
                   </li>
                   <li>
@@ -100,7 +100,7 @@ const Header = () => {
                   </li>
                   <li>
                     <a href="/">Contact</a>
-                  </li>
+                  </li> */}
                 </ul>
               </nav>
             </div>
@@ -114,7 +114,7 @@ const Header = () => {
                       </div>
                       <div className="media-body">
                         <div className="item-label">Hotline Number</div>
-                        <div className="item-number">001234 4567</div>
+                        <div className="item-number">0904567987</div>
                       </div>
                     </div>
                   </li>

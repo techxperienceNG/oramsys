@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from 'react-router-dom'
 import { loginAction } from '../../redux/actions/loginAction';
 import { useDispatch, useSelector } from 'react-redux';
@@ -113,7 +115,7 @@ const SignIn = () => {
                                             <div className='col-12 text-center'>
                                                 <label class="control control--checkbox mb-0">
                                                     <span class="caption">Don't Have an account? {" "}
-                                                        <a className='fw-semibold' onClick={() => navigate('/signup')}>Register here{" "}<i className='fa-1.5x bi bi-arrow-right'></i></a></span>
+                                                        <a className='fw-semibold' onClick={() => navigate('/signup')}>Register here{" "}<FontAwesomeIcon icon={faArrowRightLong} style={{ color: "#da251e" }}></FontAwesomeIcon></a></span>
                                                 </label>
                                             </div>
                                             <div className='col-12 text-center mt-4'>

@@ -1531,19 +1531,28 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                     <Form.Group as={Col} controlId="formGridZip">
                                         <Form.Label>Country of Origin</Form.Label>
                                         <Form.Select className='no-border'
-                                            onChange={(e, newVal) => {
-                                                setShippingOptions({ ...shippingOptions, countryOfOrigin: e.target.value })
-                                                setPorts(newVal.name)
+                                            onChange={(e) => {
+                                                const selectedValue = e.target.value;
+                                                setShippingOptions({ ...shippingOptions, countryOfOrigin: selectedValue });
+
+                                                // Check if newVal is defined before accessing its properties
+                                                if (selectedValue) {
+                                                    const selectedCountry = countries.find(country => country._id === selectedValue);
+                                                    if (selectedCountry) {
+                                                        setPorts(selectedCountry.name);
+                                                    }
+                                                }
                                             }}
                                             disabled={isView}
                                             value={shippingOptions.countryOfOrigin}>
                                             <option value="" disabled selected>Choose...</option>
                                             {countries.map((item) => (
-                                                <option value={item._id}>{item.name}</option>
+                                                <option key={item._id} value={item._id}>{item.name}</option>
                                             ))}
                                         </Form.Select>
                                         {error && error?.countryOfOrigin && <span style={{ color: 'red' }}>{error.countryOfOrigin}</span>}
                                     </Form.Group>
+
 
                                 </Row>
 
@@ -1629,17 +1638,21 @@ const DetailsTransaction = ({ hendelNext, onHide, show, transactionType, signalC
                                         <Form.Label>Destination country</Form.Label>
                                         <Form.Select className='no-border'
                                             onChange={(e, newVal) => {
-                                                setShippingOptions({
-                                                    ...shippingOptions,
-                                                    destinationCountry: e.target.value,
-                                                })
-                                                setPorts(newVal.name)
+                                                const selectedValue = e.target.value;
+                                                setShippingOptions({ ...shippingOptions, destinationCountry: selectedValue, })
+
+                                                if(selectedValue) {
+                                                    const selectCountry = countries.find(country => country._id === selectedValue)
+                                                    if(selectCountry) {
+                                                        setPorts(selectCountry.name)
+                                                    }
+                                                }  
                                             }}
                                             disabled={isView}
                                             value={shippingOptions.destinationCountry}>
                                             <option value="" disabled selected>Choose...</option>
                                             {countries.map((item) => (
-                                                <option value={item._id}>{item.name}</option>
+                                                <option key={item._id} value={item._id}>{item.name}</option>
                                             ))}
                                         </Form.Select>
                                         {error && error?.destinationCountry && <span style={{ color: 'red' }}>{error.destinationCountry}</span>}

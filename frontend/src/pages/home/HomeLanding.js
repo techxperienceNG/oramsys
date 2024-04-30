@@ -384,7 +384,7 @@ const HomeLanding = () => {
                 }
               </div>
 
-            
+
 
               <Slide up>
                 <div className='card shadow border-0 mb-7'>
@@ -414,7 +414,7 @@ const HomeLanding = () => {
                             getAlltransactionData?.data?.filter((item) => {
                               return search.toLowerCase() === '' ? item : item.borrower_Applicant.toLowerCase().includes(search)
                             }).map((data, i) => (
-                              <tr key={data.id} >
+                              <tr key={data} >
                                 <td>
                                   {new Date(data.createdAt).toLocaleDateString("en-US", DATE_OPTIONS)}
                                 </td>

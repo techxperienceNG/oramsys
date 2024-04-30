@@ -321,7 +321,8 @@ const KeyParties = ({ hendelCancel, hendelNext, transactionType, getShippingComp
         setpartiesData(storeData);
     }, [tableData])
     console.log('warehouse company', getWarehouseCompany.warehouses[0]?.warehouseCompany?.label)
-    console.log('Shipping company', getWarehouseCompany.warehouses[0]?.warehouseCompany?.label)
+    console.log('Shipping company', getShippingCompany.shippingCompany?.label)
+    console.log('Hedging Counterparty', getCounterParty.pricingCounterParty?.details?.name)
     useEffect(() => {
         AddUpParties()
     }, [AddUpParties])

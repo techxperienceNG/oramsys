@@ -293,7 +293,7 @@ const Transactions = () => {
                       <tbody>
                         {currentTrans?.length > 0 &&
                           currentTrans?.map((data) => (
-                            <tr className='text-center'>
+                            <tr key={data} className='text-center'>
                               <td style={{ fontSize: "0.9rem" }} className='py-4 fst-normal'>
                                 {new Date(data.createdAt).toLocaleDateString("en-US", DATE_OPTIONS)}
                               </td>
@@ -335,7 +335,7 @@ const Transactions = () => {
                                         <FcSettings size={17} />
                                       </Dropdown.Toggle>
 
-                                      <Dropdown.Menu variant="light" className="text-white" active>
+                                      <Dropdown.Menu variant="light" className="text-white" active="true">
                                         <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "" }, { isView: false },], })}><MdEdit className="me-2 mb-1" size={15} />Edit</Dropdown.Item>
                                         <Dropdown.Item onClick={() => navigate(`/edit-transactions?id=${data?._id}`, { state: [{ type: data.type }, { type: data?.details?.productDetails?.nature ? data.details.productDetails.nature : "", }, { isView: true },], })}><MdPreview className="me-2 mb-1" size={15} />Preview</Dropdown.Item>
                                         {AuthStorage.getStorageData(STORAGEKEY.roles) === "user" ?
